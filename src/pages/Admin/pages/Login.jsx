@@ -33,10 +33,10 @@ export default function Login() {
         
         {/* logo and header banner */}
         <div className="text-center">
-          <div className="inline-flex w-12 h-12 rounded-full bg-[#0A4D27] dark:bg-emerald-900 items-center justify-center text-[#D4AF37] dark:text-[#EAD075] shadow-md mb-4">
+          <div className="inline-flex w-12 h-12 rounded-full bg-[#2F241C] dark:bg-emerald-900 items-center justify-center text-[#8A6F52] dark:text-[#EAD075] shadow-md mb-4">
             <Lock className="w-5 h-5" />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#0A4D27] dark:text-emerald-400 font-serif uppercase tracking-wider">
+          <h1 className="text-2xl font-extrabold text-[#2F241C] dark:text-emerald-400 font-serif uppercase tracking-wider">
             Admin Access Portal
           </h1>
           <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Single administrator dashboard authentication</p>
@@ -65,7 +65,7 @@ export default function Login() {
                   placeholder="Enter administrator username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 />
                 <User className="absolute left-3 top-3.5 w-4 h-4 text-slate-400 dark:text-slate-500" />
               </div>
@@ -81,7 +81,7 @@ export default function Login() {
                   placeholder="Enter administrator password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 />
                 <Lock className="absolute left-3 top-3.5 w-4 h-4 text-slate-400 dark:text-slate-500" />
               </div>
@@ -92,7 +92,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-[#0A4D27] hover:bg-emerald-950 dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                className="w-full py-2.5 bg-[#2F241C] hover:bg-[#1E1915] dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
               >
                 {loading ? 'Authenticating Admin...' : 'Sign In'}
               </button>
@@ -104,7 +104,7 @@ export default function Login() {
 
         {/* Back to Homepage */}
         <div className="text-center">
-          <a href="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#0A4D27] dark:text-emerald-400 hover:text-[#D4AF37] dark:hover:text-[#EAD075] transition-all">
+          <a href="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#2F241C] dark:text-emerald-400 hover:text-[#8A6F52] dark:hover:text-[#EAD075] transition-all">
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Visitor Portal
           </a>
         </div>

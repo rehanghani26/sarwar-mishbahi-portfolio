@@ -58,8 +58,8 @@ export default function ContactPage() {
         {/* Left Side: Contact Information Cards (5 columns) */}
         <div className="lg:col-span-5 space-y-6">
           <div>
-            <span className="text-xs font-bold text-[#C5A85C] dark:text-amber-500 uppercase tracking-widest block mb-1 font-serif">Get In Touch</span>
-            <h1 className="text-3xl font-extrabold text-[#0A4D27] dark:text-emerald-450 font-serif tracking-wide">Contact Details</h1>
+            <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest block mb-1 font-serif">Get In Touch</span>
+            <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">Contact Details</h1>
             <p className="text-slate-500 dark:text-slate-400 text-sm font-light mt-2 leading-relaxed">
               If you have inquiries regarding fatwas, books, invitations, or lectures, reach out through the official contact portal.
             </p>
@@ -69,7 +69,7 @@ export default function ContactPage() {
             
             {/* Address */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/20 text-[#0A4D27] dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/60 shrink-0">
+              <div className="p-2.5 rounded bg-[#2F241C]/5 dark:bg-amber-950/20 text-[#2F241C] dark:text-[#8A6F52] border border-[#2F241C]/10 dark:border-[#8A6F52]/20 shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
@@ -80,19 +80,19 @@ export default function ContactPage() {
 
             {/* Phone */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/20 text-[#0A4D27] dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/60 shrink-0">
+              <div className="p-2.5 rounded bg-[#2F241C]/5 dark:bg-amber-950/20 text-[#2F241C] dark:text-[#8A6F52] border border-[#2F241C]/10 dark:border-[#8A6F52]/20 shrink-0">
                 <Phone className="w-5 h-5" />
               </div>
               <div>
                 <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Phone Numbers</span>
                 <p className="text-slate-700 dark:text-slate-350 text-sm mt-1 font-light">Office: {phone}</p>
-                {whatsapp && <p className="text-emerald-700 dark:text-emerald-400 text-xs font-semibold mt-1">WhatsApp Quick Link: {whatsapp}</p>}
+                {whatsapp && <p className="text-[#8A6F52] dark:text-amber-400 text-xs font-semibold mt-1">WhatsApp Quick Link: {whatsapp}</p>}
               </div>
             </div>
 
             {/* Email */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/20 text-[#0A4D27] dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/60 shrink-0">
+              <div className="p-2.5 rounded bg-[#2F241C]/5 dark:bg-amber-950/20 text-[#2F241C] dark:text-[#8A6F52] border border-[#2F241C]/10 dark:border-[#8A6F52]/20 shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
@@ -104,27 +104,27 @@ export default function ContactPage() {
           </div>
 
           {/* Social icons */}
-          <div className="bg-[#0A4D27] islamic-pattern text-white p-6 rounded-lg border border-[#D4AF37]/35 relative overflow-hidden shadow-sm">
+          <div className="bg-[#2F241C] islamic-pattern text-white p-6 rounded-lg border border-[#8A6F52]/35 relative overflow-hidden shadow-sm">
             <h3 className="font-bold text-md mb-3 font-serif">Connect on Social Channels</h3>
-            <p className="text-xs text-emerald-200/80 mb-4 font-light">Follow the scholar for regular video reminders and quote updates.</p>
+            <p className="text-xs text-slate-300 mb-4 font-light">Follow the scholar for regular video reminders and quote updates.</p>
             <div className="flex items-center gap-2.5 relative z-10">
               {socialLinks.facebook && (
-                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-emerald-950 text-[#D4AF37] hover:bg-emerald-900 border border-emerald-900/60 transition-colors">
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#1E1915] text-[#8A6F52] hover:bg-[#2F241C] border border-[#8A6F52]/30 transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.youtube && (
-                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-emerald-950 text-[#D4AF37] hover:bg-emerald-900 border border-emerald-900/60 transition-colors">
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#1E1915] text-[#8A6F52] hover:bg-[#2F241C] border border-[#8A6F52]/30 transition-colors">
                   <Youtube className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.twitter && (
-                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-emerald-950 text-[#D4AF37] hover:bg-emerald-900 border border-emerald-900/60 transition-colors">
+                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#1E1915] text-[#8A6F52] hover:bg-[#2F241C] border border-[#8A6F52]/30 transition-colors">
                   <Twitter className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.instagram && (
-                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-emerald-950 text-[#D4AF37] hover:bg-emerald-900 border border-emerald-900/60 transition-colors">
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#1E1915] text-[#8A6F52] hover:bg-[#2F241C] border border-[#8A6F52]/30 transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
               )}
@@ -137,14 +137,14 @@ export default function ContactPage() {
         <div className="lg:col-span-7">
           {success ? (
             <div className="premium-card p-10 shadow-sm text-center flex flex-col items-center justify-center min-h-[400px]">
-              <CheckCircle2 className="w-16 h-16 text-emerald-600 dark:text-emerald-400 mb-4" />
-              <h2 className="text-2xl font-bold text-[#0A4D27] dark:text-emerald-450 font-serif mb-3">Message Logged</h2>
+              <CheckCircle2 className="w-16 h-16 text-[#8A6F52] dark:text-[#8A6F52] mb-4" />
+              <h2 className="text-2xl font-bold text-[#2F241C] dark:text-[#8A6F52] font-serif mb-3">Message Logged</h2>
               <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed max-w-sm font-light mb-6">
                 {successMsg} Our admin office will review it and reply as soon as possible.
               </p>
               <button
                 onClick={() => setSuccess(false)}
-                className="px-5 py-2.5 bg-[#0A4D27] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-emerald-950 transition-colors"
+                className="px-5 py-2.5 bg-[#2F241C] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-[#1E1915] transition-colors"
               >
                 Send Another Message
               </button>
@@ -152,7 +152,7 @@ export default function ContactPage() {
           ) : (
             <div className="premium-card shadow-sm p-6 sm:p-8">
               <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif mb-6 border-b border-slate-100 dark:border-slate-750 pb-3 flex items-center gap-2">
-                <MessageSquareCode className="w-5 h-5 text-[#C5A85C] dark:text-amber-500" />
+                <MessageSquareCode className="w-5 h-5 text-[#8A6F52] dark:text-amber-500" />
                 Send a Message
               </h2>
 
@@ -177,7 +177,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="e.g. Abdullah"
-                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                     />
                   </div>
                   <div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="abdullah@example.com"
-                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                     />
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Invitation to Seminar / Fiqh Question"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                   />
                 </div>
 
@@ -218,7 +218,7 @@ export default function ContactPage() {
                     required
                     placeholder="Write your message here..."
                     rows={6}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400"
                   ></textarea>
                 </div>
 
@@ -227,9 +227,9 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#0A4D27] hover:bg-emerald-950 dark:bg-[#0A4D27] dark:hover:bg-emerald-950 text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#2F241C] hover:bg-[#1E1915] dark:bg-[#2F241C] dark:hover:bg-[#1E1915] text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                   >
-                    <Send className="w-4 h-4 text-[#D4AF37]" />
+                    <Send className="w-4 h-4 text-[#8A6F52]" />
                     {actionLoading ? 'Sending message...' : 'Send Message'}
                   </button>
                 </div>

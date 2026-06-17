@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
 import { fetchEvents, createEvent, updateEvent, deleteEvent, clearContentErrors } from '../../../store/slices/contentSlice';
+import useTranslate from '../../../hooks/useTranslate';
 
 export default function ManageEvents() {
   const dispatch = useDispatch();
+  const { t, isUrdu } = useTranslate();
 
   const { list: events, loading } = useSelector((state) => state.content.events);
   const { actionLoading, actionError } = useSelector((state) => state.content);
@@ -105,28 +107,28 @@ export default function ManageEvents() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]">
+    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5">
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#0A4D27] shrink-0">
-              <ArrowLeft className="w-4.5 h-4.5" />
+            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
+              <ArrowLeft className={`w-4.5 h-4.5 ${isUrdu ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#0A4D27] font-serif">Manage Events</h1>
-              <p className="text-xs text-slate-400 font-light">Add, update, or remove scheduled programs and gatherings</p>
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{t('Manage Events')}</h1>
+              <p className="text-xs text-slate-400 font-light">{t('Add, update, or remove scheduled programs and gatherings')}</p>
             </div>
           </div>
 
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0A4D27] hover:bg-emerald-950 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#D4AF37]" />
-              Add Event
+              <Plus className="w-4 h-4 text-[#8A6F52]" />
+              {t('Add Event')}
             </button>
           )}
         </div>
@@ -142,16 +144,16 @@ export default function ManageEvents() {
         {/* Form vs List Routing */}
         {isFormOpen ? (
           <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#0A4D27] islamic-pattern text-white px-6 py-4 border-b border-[#D4AF37]/35 flex items-center justify-between">
+            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId ? 'Edit Event Details' : 'Add New Event Program'}
+                {editingId ? t('Edit Event Details') : t('Add New Event Program')}
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-emerald-200 hover:text-white underline font-light"
+                className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
               >
-                Cancel
+                {t('Cancel')}
               </button>
             </div>
 
@@ -168,26 +170,26 @@ export default function ManageEvents() {
               {/* Title & Date */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Event Program Title *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Event Program Title *')}</label>
                   <input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g. Halal Investment Workshop Seminar"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all"
+                    placeholder={t('e.g. Halal Investment Workshop Seminar')}
+                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Event Date & Time *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Event Date & Time *')}</label>
                   <input
                     type="datetime-local"
                     name="eventDate"
                     value={formFields.eventDate}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#0A4D27]"
+                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
                   />
                 </div>
               </div>
@@ -195,60 +197,60 @@ export default function ManageEvents() {
               {/* Location & Poster Image */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Program Location *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Program Location *')}</label>
                   <input
                     type="text"
                     name="location"
                     value={formFields.location}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g. Masjid Al-Noor, Seminar Room A"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all"
+                    placeholder={t('e.g. Masjid Al-Noor, Seminar Room A')}
+                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Poster Image URL (Optional)</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Poster Image URL (Optional)')}</label>
                   <input
                     type="text"
                     name="posterImage"
                     value={formFields.posterImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/poster.jpg"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
                   />
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Brief Description *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Brief Description *')}</label>
                 <textarea
                   name="description"
                   value={formFields.description}
                   onChange={handleInputChange}
                   required
-                  placeholder="Provide details about the gathering topics, timings, registration fee if any..."
+                  placeholder={t('Provide details about the gathering topics, timings, registration fee if any...')}
                   rows={5}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y"
                 ></textarea>
               </div>
 
               {/* Form Action Buttons */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <div className={`pt-4 border-t border-slate-100 flex items-center ${isUrdu ? 'justify-start' : 'justify-end'} gap-3`}>
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
                   className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
-                  Cancel
+                  {t('Cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#0A4D27] hover:bg-emerald-950 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#D4AF37]" />
-                  {actionLoading ? 'Saving...' : 'Save Event'}
+                  <Save className="w-4 h-4 text-[#8A6F52]" />
+                  {actionLoading ? t('Saving...') : t('Save Event')}
                 </button>
               </div>
 
@@ -259,17 +261,17 @@ export default function ManageEvents() {
           <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0A4D27]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
               </div>
             ) : events && events.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
-                      <th className="px-6 py-4">Title</th>
-                      <th className="px-6 py-4">Event Date</th>
-                      <th className="px-6 py-4">Location</th>
-                      <th className="px-6 py-4 text-right">Actions</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Title')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Event Date')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Location')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-left text-left' : 'text-right'}`}>{t('Actions')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -280,19 +282,19 @@ export default function ManageEvents() {
                           {new Date(ev.eventDate).toLocaleString()}
                         </td>
                         <td className="px-6 py-4 text-xs font-light max-w-xs truncate text-slate-500">{ev.location}</td>
-                        <td className="px-6 py-4 text-right">
+                        <td className={`px-6 py-4 ${isUrdu ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
                             <button
                               onClick={() => openEditForm(ev)}
-                              className="p-1.5 text-[#0A4D27] hover:bg-emerald-50 rounded transition-colors"
-                              title="Edit Event"
+                              className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
+                              title={t('Edit Event')}
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(ev._id)}
                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title="Delete Event"
+                              title={t('Delete Event')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -305,9 +307,9 @@ export default function ManageEvents() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Calendar className="w-12 h-12 text-[#C5A85C] mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">No Events Scheduled</h3>
-                <p className="text-slate-400 text-xs mt-1">Click the "Add Event" button to schedule your first program.</p>
+                <Calendar className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-slate-700 font-serif">{t('No Events Scheduled')}</h3>
+                <p className="text-slate-400 text-xs mt-1">{t('Click the "Add Event" button to schedule your first program.')}</p>
               </div>
             )}
           </div>

@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Bookmark, CheckCircle } from 'lucide-react';
 import { fetchFatwas, createFatwa, updateFatwa, deleteFatwa, clearContentErrors } from '../../../store/slices/contentSlice';
 import RichTextEditor from '../../../components/RichTextEditor';
+import useTranslate from '../../../hooks/useTranslate';
 
 export default function ManageFatwas() {
   const dispatch = useDispatch();
+  const { t, isUrdu } = useTranslate();
 
   const { list: fatwas, loading } = useSelector((state) => state.content.fatwas);
   const { actionLoading, actionError } = useSelector((state) => state.content);
@@ -122,28 +124,28 @@ export default function ManageFatwas() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]">
+    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5">
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#0A4D27] shrink-0">
-              <ArrowLeft className="w-4.5 h-4.5" />
+            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
+              <ArrowLeft className={`w-4.5 h-4.5 ${isUrdu ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#0A4D27] font-serif">Manage Fatwas</h1>
-              <p className="text-xs text-slate-400 font-light">Add, update, or remove rulings and fatwas</p>
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{t('Manage Fatwas')}</h1>
+              <p className="text-xs text-slate-400 font-light">{t('Add, update, or remove rulings and fatwas') || 'Add, update, or remove rulings and fatwas'}</p>
             </div>
           </div>
 
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0A4D27] hover:bg-emerald-950 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#D4AF37]" />
-              Add Fatwa
+              <Plus className="w-4 h-4 text-[#8A6F52]" />
+              {t('Add Fatwa')}
             </button>
           )}
         </div>
@@ -159,16 +161,16 @@ export default function ManageFatwas() {
         {/* Form vs List Routing */}
         {isFormOpen ? (
           <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#0A4D27] islamic-pattern text-white px-6 py-4 border-b border-[#D4AF37]/35 flex items-center justify-between">
+            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId ? 'Edit Shariah Ruling' : 'Add New Shariah Ruling'}
+                {editingId ? t('Edit Jurisprudence Fatwa') : t('Add New Jurisprudence Fatwa')}
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-emerald-200 hover:text-white underline font-light"
+                className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
               >
-                Cancel
+                {t('Cancel')}
               </button>
             </div>
 
@@ -193,7 +195,7 @@ export default function ManageFatwas() {
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Rulings on Commercial Insurance Contracts"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
                   />
                 </div>
                 <div>
@@ -203,7 +205,7 @@ export default function ManageFatwas() {
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#0A4D27]"
+                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
@@ -224,7 +226,7 @@ export default function ManageFatwas() {
                   required
                   placeholder="Enter the detailed question query submitted..."
                   rows={4}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y"
                 ></textarea>
               </div>
 
@@ -247,26 +249,26 @@ export default function ManageFatwas() {
                   onChange={handleInputChange}
                   placeholder="e.g. Fath al-Bari by Ibn Hajar&#10;Al-Fatawa al-Hindiyyah"
                   rows={3}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#0A4D27] focus:bg-white transition-all resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y"
                 ></textarea>
               </div>
 
               {/* Form Action Controls */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <div className={`pt-4 border-t border-slate-100 flex items-center ${isUrdu ? 'justify-start' : 'justify-end'} gap-3`}>
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
                   className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
-                  Cancel
+                  {t('Cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#0A4D27] hover:bg-emerald-950 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#D4AF37]" />
-                  {actionLoading ? 'Saving...' : 'Save Fatwa'}
+                  <Save className="w-4 h-4 text-[#8A6F52]" />
+                  {actionLoading ? t('Saving...') : t('Save Fatwa')}
                 </button>
               </div>
 
@@ -277,18 +279,18 @@ export default function ManageFatwas() {
           <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0A4D27]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
               </div>
             ) : fatwas && fatwas.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
-                      <th className="px-6 py-4">Title / Issue</th>
-                      <th className="px-6 py-4">Category</th>
-                      <th className="px-6 py-4">Publish Date</th>
-                      <th className="px-6 py-4 text-center">Views</th>
-                      <th className="px-6 py-4 text-right">Actions</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Title')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Category')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Publish Date')}</th>
+                      <th className="px-6 py-4 text-center">{t('Views')}</th>
+                      <th className={`px-6 py-4 ${isUrdu ? 'text-left text-left' : 'text-right'}`}>{t('Actions')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -296,32 +298,32 @@ export default function ManageFatwas() {
                       <tr key={fatwa._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4 font-bold font-serif max-w-xs truncate">{fatwa.title}</td>
                         <td className="px-6 py-4">
-                          <span className="bg-[#0A4D27]/10 text-[#0A4D27] text-[10px] font-bold px-2 py-0.5 rounded">
+                          <span className="bg-[#2F241C]/10 text-[#2F241C] text-[10px] font-bold px-2 py-0.5 rounded">
                             {fatwa.category}
                           </span>
                         </td>
                         <td className="px-6 py-4 font-light text-xs font-light">
                           {new Date(fatwa.publishDate).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 text-center font-semibold text-xs text-[#C5A85C]">
+                        <td className="px-6 py-4 text-center font-semibold text-xs text-[#8A6F52]">
                           {fatwa.viewCount || 0}
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className={`px-6 py-4 ${isUrdu ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
-                            <button
-                              onClick={() => openEditForm(fatwa)}
-                              className="p-1.5 text-[#0A4D27] hover:bg-emerald-50 rounded transition-colors"
-                              title="Edit Fatwa"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(fatwa._id)}
-                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title="Delete Fatwa"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                             <button
+                               onClick={() => openEditForm(fatwa)}
+                               className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
+                               title={t('Edit Fatwa')}
+                             >
+                               <Edit2 className="w-4 h-4" />
+                             </button>
+                             <button
+                               onClick={() => handleDelete(fatwa._id)}
+                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                               title={t('Delete Fatwa')}
+                             >
+                               <Trash2 className="w-4 h-4" />
+                             </button>
                           </div>
                         </td>
                       </tr>
@@ -331,7 +333,7 @@ export default function ManageFatwas() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Bookmark className="w-12 h-12 text-[#C5A85C] mx-auto mb-4" />
+                <Bookmark className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">No Fatwas Uploaded</h3>
                 <p className="text-slate-400 text-xs mt-1">Click the "Add Fatwa" button to publish your first ruling.</p>
               </div>

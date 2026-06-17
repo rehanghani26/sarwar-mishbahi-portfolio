@@ -2,7 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import API from '../../services/api';
 
 const initialState = {
-  settings: null,
+  settings: {
+    language: localStorage.getItem('site_language') || 'English',
+    englishFont: localStorage.getItem('site_english_font') || 'Inter',
+    urduFont: localStorage.getItem('site_urdu_font') || 'Noto Nastaliq Urdu',
+  },
   stats: null,
   loading: false,
   statsLoading: false,
@@ -53,6 +57,18 @@ const settingsSlice = createSlice({
     clearSettingsErrors: (state) => {
       state.error = null;
       state.updateSuccess = false;
+    },
+    setLocalLanguage: (state, action) => {
+      if (!state.settings) state.settings = {};
+      state.settings.language = action.payload;
+    },
+    setLocalEnglishFont: (state, action) => {
+      if (!state.settings) state.settings = {};
+      state.settings.englishFont = action.payload;
+    },
+    setLocalUrduFont: (state, action) => {
+      if (!state.settings) state.settings = {};
+      state.settings.urduFont = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -64,7 +80,12 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchSettings.fulfilled, (state, action) => {
         state.loading = false;
-        state.settings = action.payload;
+        state.settings = {
+          ...action.payload,
+          language: localStorage.getItem('site_language') || action.payload?.language || 'English',
+          englishFont: localStorage.getItem('site_english_font') || action.payload?.englishFont || 'Inter',
+          urduFont: localStorage.getItem('site_urdu_font') || action.payload?.urduFont || 'Noto Nastaliq Urdu',
+        };
       })
       .addCase(fetchSettings.rejected, (state, action) => {
         state.loading = false;
@@ -78,7 +99,12 @@ const settingsSlice = createSlice({
       })
       .addCase(updateSettings.fulfilled, (state, action) => {
         state.loading = false;
-        state.settings = action.payload;
+        state.settings = {
+          ...action.payload,
+          language: localStorage.getItem('site_language') || action.payload?.language || 'English',
+          englishFont: localStorage.getItem('site_english_font') || action.payload?.englishFont || 'Inter',
+          urduFont: localStorage.getItem('site_urdu_font') || action.payload?.urduFont || 'Noto Nastaliq Urdu',
+        };
         state.updateSuccess = true;
       })
       .addCase(updateSettings.rejected, (state, action) => {
@@ -101,5 +127,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { clearSettingsErrors } = settingsSlice.actions;
+export const { clearSettingsErrors, setLocalLanguage, setLocalEnglishFont, setLocalUrduFont } = settingsSlice.actions;
 export default settingsSlice.reducer;

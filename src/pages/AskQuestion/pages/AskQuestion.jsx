@@ -68,11 +68,11 @@ export default function AskQuestion() {
         {success ? (
           <div className="premium-card p-8 shadow-sm text-center">
             <CheckCircle className="w-16 h-16 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-[#0A4D27] dark:text-emerald-400 font-serif mb-3">Submission Received</h2>
+            <h2 className="text-2xl font-bold text-[#2F241C] dark:text-emerald-400 font-serif mb-3">Submission Received</h2>
             <p className="text-slate-700 dark:text-slate-350 text-sm leading-relaxed mb-6 font-light">{successMsg}</p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-5 py-2.5 bg-[#0A4D27] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-emerald-950 transition-colors"
+              className="px-5 py-2.5 bg-[#2F241C] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-[#1E1915] transition-colors"
             >
               Ask Another Question
             </button>
@@ -81,11 +81,11 @@ export default function AskQuestion() {
           <div className="premium-card shadow-sm overflow-hidden">
             
             {/* Header Title */}
-            <div className="bg-[#0A4D27] islamic-pattern text-white p-6 relative border-b border-[#D4AF37]/35 flex items-center gap-3">
-              <HelpCircle className="w-8 h-8 text-[#D4AF37] shrink-0" />
+            <div className="bg-[#2F241C] islamic-pattern text-white p-6 relative border-b border-[#8A6F52]/35 flex items-center gap-3">
+              <HelpCircle className="w-8 h-8 text-[#8A6F52] shrink-0" />
               <div>
                 <h1 className="text-xl font-bold text-white font-serif">Ask a Question</h1>
-                <p className="text-[10px] text-emerald-200 mt-0.5">Submit your query directly to the scholar</p>
+                <p className="text-[10px] text-[#EAE3CF] mt-0.5">Submit your query directly to the scholar</p>
               </div>
             </div>
  
@@ -110,7 +110,7 @@ export default function AskQuestion() {
                   onChange={handleInputChange}
                   required
                   placeholder="Enter your name"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                 />
               </div>
  
@@ -125,7 +125,7 @@ export default function AskQuestion() {
                     onChange={handleInputChange}
                     required
                     placeholder="name@example.com"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                   />
                 </div>
                 <div>
@@ -136,7 +136,7 @@ export default function AskQuestion() {
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                     placeholder="+1 (555) 123-4567"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                   />
                 </div>
               </div>
@@ -149,7 +149,7 @@ export default function AskQuestion() {
                   value={formData.category}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#0A4D27] dark:focus:border-emerald-500 rounded outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-emerald-500 rounded outline-none"
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -169,7 +169,7 @@ export default function AskQuestion() {
                   onChange={handleInputChange}
                   required
                   placeholder="e.g., Calculation of Zakat on Retirement Funds"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
                 />
               </div>
 
@@ -183,7 +183,7 @@ export default function AskQuestion() {
                   required
                   placeholder="Provide all relevant details to help the scholar understand your query..."
                   rows={6}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400"
                 ></textarea>
               </div>
 
@@ -192,7 +192,7 @@ export default function AskQuestion() {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-[#E5C05E] hover:bg-[#D4AF37] text-slate-900 font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-[#8A6F52] hover:bg-[#725B43] text-white font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   {actionLoading ? 'Submitting Question...' : 'Submit to Scholar'}

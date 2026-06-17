@@ -17,8 +17,8 @@ export default function ArticleDetail() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#FAF9F5] dark:bg-slate-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0A4D27] dark:border-emerald-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-site-bg">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brown-dark"></div>
       </div>
     );
   }
@@ -27,8 +27,8 @@ export default function ArticleDetail() {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
         <h2 className="text-2xl font-bold text-red-700 font-serif">Error Loading Article</h2>
-        <p className="text-slate-500 text-sm mt-2">{error || 'Article not found.'}</p>
-        <Link to="/articles" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#0A4D27] text-white rounded font-semibold text-sm hover:bg-emerald-950">
+        <p className="text-slate-550 text-sm mt-2">{error || 'Article not found.'}</p>
+        <Link to="/articles" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#2F241C] text-white rounded font-semibold text-sm hover:bg-[#1E1915]">
           <ArrowLeft className="w-4.5 h-4.5" /> Back to Articles
         </Link>
       </div>
@@ -67,11 +67,11 @@ export default function ArticleDetail() {
   const placeholderImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200';
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
+    <div className="bg-site-bg py-12 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         
         {/* Navigation Breadcrumb back button */}
-        <Link to="/articles" className="inline-flex items-center gap-1 text-sm font-bold text-[#0A4D27] dark:text-emerald-450 hover:text-[#D4AF37] dark:hover:text-amber-400 mb-6">
+        <Link to="/articles" className="inline-flex items-center gap-1 text-sm font-bold text-text-primary hover:text-[#8A6F52] dark:hover:text-amber-400 mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Articles
         </Link>
 
@@ -85,7 +85,7 @@ export default function ArticleDetail() {
               alt={title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute top-4 left-4 bg-[#0A4D27] dark:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded shadow-md">
+            <div className="absolute top-4 left-4 bg-[#2F241C] dark:bg-[#8A6F52] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded shadow-md">
               {category}
             </div>
           </div>
@@ -94,26 +94,26 @@ export default function ArticleDetail() {
             {/* Metadata bar */}
             <div className="flex flex-wrap items-center gap-6 text-xs text-slate-500 dark:text-slate-400 mb-6 pb-4 border-b border-slate-100 dark:border-slate-700">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[#C5A85C] dark:text-amber-500" />
+                <Calendar className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
                 {formattedDate}
               </span>
               <span className="flex items-center gap-1.5">
-                <Eye className="w-4 h-4 text-[#C5A85C] dark:text-amber-500" />
+                <Eye className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
                 {viewCount} views
               </span>
             </div>
 
             {/* Title & Summary */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4D27] dark:text-emerald-400 font-serif leading-tight mb-4 tracking-wide">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-text-primary font-serif leading-tight mb-4 tracking-wide">
               {title}
             </h1>
-            <p className="text-slate-700 dark:text-slate-300 text-md font-light leading-relaxed italic border-l-4 border-[#C5A85C] dark:border-amber-500 pl-4 mb-8">
+            <p className="text-slate-700 dark:text-slate-300 text-md font-light leading-relaxed italic border-l-4 border-[#8A6F52] dark:border-amber-500 pl-4 mb-8">
               {summary}
             </p>
 
             {/* Rich Content rendering */}
             <div
-              className="prose prose-emerald dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-5"
+              className="prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-5"
               dangerouslySetInnerHTML={{ __html: fullContent }}
             ></div>
 
@@ -121,7 +121,7 @@ export default function ArticleDetail() {
             {references && references.length > 0 && (
               <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700">
                 <h3 className="text-sm font-bold text-slate-850 dark:text-slate-205 uppercase tracking-widest font-serif mb-3 flex items-center gap-1.5">
-                  <Bookmark className="w-4 h-4 text-[#C5A85C] dark:text-amber-500" /> References / Classical Sources
+                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> References / Classical Sources
                 </h3>
                 <ul className="list-decimal list-inside text-xs text-slate-600 dark:text-slate-400 space-y-1">
                   {references.map((ref, idx) => (
@@ -147,25 +147,25 @@ export default function ArticleDetail() {
               {/* Share actions */}
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 shrink-0">
-                  <Share2 className="w-4 h-4 text-[#C5A85C] dark:text-amber-500" /> Share:
+                  <Share2 className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> Share:
                 </span>
                 <button
                   onClick={() => handleShareClick('facebook')}
-                  className="p-2 rounded bg-slate-100 dark:bg-slate-850 text-[#0A4D27] dark:text-emerald-400 hover:bg-[#0A4D27] dark:hover:bg-emerald-700 hover:text-white dark:hover:text-white transition-colors"
+                  className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
                   title="Share on Facebook"
                 >
                   <Facebook className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => handleShareClick('twitter')}
-                  className="p-2 rounded bg-slate-100 dark:bg-slate-850 text-[#0A4D27] dark:text-emerald-400 hover:bg-[#0A4D27] dark:hover:bg-emerald-700 hover:text-white dark:hover:text-white transition-colors"
+                  className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
                   title="Share on Twitter"
                 >
                   <Twitter className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => handleShareClick('whatsapp')}
-                  className="p-2 rounded bg-slate-100 dark:bg-slate-850 text-[#0A4D27] dark:text-emerald-400 hover:bg-[#0A4D27] dark:hover:bg-emerald-700 hover:text-white dark:hover:text-white transition-colors"
+                  className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
                   title="Share on WhatsApp"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
@@ -181,7 +181,7 @@ export default function ArticleDetail() {
         {/* Related Articles Section */}
         {related && related.length > 0 && (
           <div>
-            <h3 className="text-xl font-bold text-[#0A4D27] dark:text-emerald-450 font-serif mb-6 pb-2 border-b border-[#EAE3CF]/50 dark:border-slate-800">
+            <h3 className="text-xl font-bold text-text-primary font-serif mb-6 pb-2 border-b border-site-border">
               Related Articles
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

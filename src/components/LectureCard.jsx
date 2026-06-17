@@ -1,10 +1,12 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
+import useTranslate from '../hooks/useTranslate';
 
 export default function LectureCard({ lecture, onPlay }) {
   const { title, description, category, videoUrl, thumbnail, publishDate } = lecture;
+  const { t, isUrdu } = useTranslate();
 
-  const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
+  const formattedDate = new Date(publishDate).toLocaleDateString(isUrdu ? 'ur-PK' : 'en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -14,9 +16,9 @@ export default function LectureCard({ lecture, onPlay }) {
     switch (category) {
       case 'Audio Lectures':
       case 'Bayan Recordings':
-        return <Music className="w-4 h-4 text-[#D4AF37]" />;
+        return <Music className="w-4 h-4 text-[#8A6F52]" />;
       default:
-        return <Video className="w-4 h-4 text-[#D4AF37]" />;
+        return <Video className="w-4 h-4 text-[#8A6F52]" />;
     }
   };
 
@@ -39,7 +41,7 @@ export default function LectureCard({ lecture, onPlay }) {
   };
 
   return (
-    <div className="premium-card rounded-lg shadow-sm overflow-hidden flex flex-col h-full group">
+    <div className="premium-card rounded-lg shadow-sm overflow-hidden flex flex-col h-full group text-start">
       
       {/* Thumbnail with Play Overlay */}
       <div className="relative h-44 w-full bg-slate-800 shrink-0 overflow-hidden">
@@ -54,7 +56,7 @@ export default function LectureCard({ lecture, onPlay }) {
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-all">
           <button
             onClick={() => onPlay(lecture)}
-            className="w-12 h-12 rounded-full bg-[#D4AF37] hover:bg-[#B89047] text-slate-900 flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 focus:outline-none"
+            className="w-12 h-12 rounded-full bg-[#8A6F52] hover:bg-[#2F241C] text-white flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 focus:outline-none"
             aria-label="Play Lecture"
           >
             <Play className="w-5 h-5 fill-current ml-0.5" />
@@ -62,9 +64,9 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Media Type Badge */}
-        <div className="absolute bottom-3 left-3 bg-[#0A4D27] dark:bg-emerald-700 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
+        <div className="absolute bottom-3 left-3 bg-[#2F241C] dark:bg-[#8A6F52] text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
           {getMediaIcon()}
-          {category}
+          {t(category)}
         </div>
       </div>
 
@@ -72,13 +74,13 @@ export default function LectureCard({ lecture, onPlay }) {
       <div className="p-4 flex flex-col flex-grow">
         
         {/* Date */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-2">
-          <Calendar className="w-3.5 h-3.5 text-[#C5A85C] dark:text-amber-500" />
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-2 justify-start">
+          <Calendar className="w-3.5 h-3.5 text-[#8A6F52] dark:text-amber-500" />
           {formattedDate}
         </div>
 
         {/* Title */}
-        <h3 className="text-md font-bold text-slate-900 dark:text-white group-hover:text-[#0A4D27] dark:group-hover:text-emerald-450 transition-colors leading-snug mb-2 font-serif line-clamp-2">
+        <h3 className="text-md font-bold text-slate-900 dark:text-white group-hover:text-[#2F241C] dark:group-hover:text-[#8A6F52] transition-colors leading-snug mb-2 font-serif line-clamp-2">
           {title}
         </h3>
 
@@ -91,9 +93,9 @@ export default function LectureCard({ lecture, onPlay }) {
         <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100 dark:border-slate-700">
           <button
             onClick={() => onPlay(lecture)}
-            className="text-xs font-bold text-[#0A4D27] dark:text-emerald-450 hover:text-[#D4AF37] dark:hover:text-amber-400 transition-colors"
+            className="text-xs font-bold text-[#2F241C] dark:text-[#8A6F52] hover:text-[#8A6F52] dark:hover:text-amber-400 transition-colors"
           >
-            Watch/Listen Now
+            {t('Watch/Listen Now')}
           </button>
           
           <a
@@ -102,7 +104,7 @@ export default function LectureCard({ lecture, onPlay }) {
             rel="noopener noreferrer"
             className="text-[10px] text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white underline"
           >
-            Open Original Link
+            {t('Open Original Link')}
           </a>
         </div>
 

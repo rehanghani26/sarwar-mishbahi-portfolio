@@ -45,14 +45,14 @@ export default function FatwasList() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
+    <div className="bg-site-bg py-12 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Titles */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#C5A85C] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Authentic Islamic Jurisprudence</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0A4D27] dark:text-emerald-400 font-serif tracking-wide font-semibold">Fatwas & Rulings</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Authentic Islamic Jurisprudence</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide font-semibold">Fatwas & Rulings</h1>
+          <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
             Browse official Shariah rulings on everyday life queries, compiled by traditional Islamic jurists.
           </p>
         </div>
@@ -66,9 +66,9 @@ export default function FatwasList() {
               placeholder="Search fatwas..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#0A4D27] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
             />
-            <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#0A4D27] dark:hover:text-emerald-450">
+            <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -79,7 +79,7 @@ export default function FatwasList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#0A4D27] dark:focus:border-emerald-500"
+              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52]"
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -97,8 +97,8 @@ export default function FatwasList() {
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
               selectedCategory === ''
-                ? 'bg-[#0A4D27] border-[#0A4D27] text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#0A4D27] dark:hover:border-emerald-500 hover:text-[#0A4D27] dark:hover:text-emerald-400'
+                ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
             }`}
           >
             All Subjects
@@ -109,8 +109,8 @@ export default function FatwasList() {
               onClick={() => handleCategoryChange(cat)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
                 selectedCategory === cat
-                  ? 'bg-[#0A4D27] border-[#0A4D27] text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#0A4D27] dark:hover:border-emerald-500 hover:text-[#0A4D27] dark:hover:text-emerald-400'
+                  ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
               }`}
             >
               {cat}
@@ -121,7 +121,7 @@ export default function FatwasList() {
         {/* Content list Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0A4D27]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : fatwas && fatwas.length > 0 ? (
           <>
@@ -147,7 +147,7 @@ export default function FatwasList() {
                     onClick={() => handlePageChange(pNum + 1)}
                     className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${
                       page === pNum + 1
-                        ? 'bg-[#0A4D27] border-[#0A4D27] text-white'
+                        ? 'bg-[#2F241C] border-[#2F241C] text-white'
                         : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
@@ -166,9 +166,9 @@ export default function FatwasList() {
           </>
         ) : (
           <div className="text-center py-16 premium-card">
-            <ShieldAlert className="w-12 h-12 text-[#C5A85C] mx-auto mb-4" />
+            <ShieldAlert className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">No Rulings Found</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">Try refining your keyword search terms.</p>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">Try refining your keyword search terms.</p>
           </div>
         )}
 

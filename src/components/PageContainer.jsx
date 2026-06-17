@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function PageContainer({ title, subtitle, children }) {
   return (
-    <div className="bg-[#EFEFEF] min-h-[60vh] py-10 px-4 md:px-7 font-serif">
-      <div className="max-w-[1100px] mx-auto bg-white border border-[#D9D9D9] shadow-[0_4px_20px_rgba(60,30,10,0.05)] rounded-sm overflow-hidden">
+    <div className="bg-site-bg min-h-[60vh] py-10 px-4 md:px-7 font-serif">
+      <div className="max-w-[1100px] mx-auto bg-card-bg border border-site-border shadow-[0_4px_20px_rgba(60,30,10,0.05)] rounded-sm overflow-hidden">
         
         {/* Banner Header */}
         <div className="pattern-bg p-8 md:p-12 text-center relative border-b border-[#8A6F52]">
@@ -19,7 +19,7 @@ export default function PageContainer({ title, subtitle, children }) {
         </div>
 
         {/* Page Content */}
-        <div className="p-6 md:p-10 text-[17px] md:text-[19px] text-[#3A2C23] leading-[2.1] text-right space-y-6 direction-rtl">
+        <div className="p-6 md:p-10 text-[17px] md:text-[19px] text-text-primary leading-[2.1] text-right space-y-6 direction-rtl">
           {children}
         </div>
 

@@ -2,9 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-brown-dark: #2F241C;
+  --color-brown-mid: #8A6F52;
+  --color-brown-light: #A08060;
+  --color-cream: #EAE3CF;
+  --color-cream-light: #F2EDD8;
+  --color-site-bg: #FAF9F5;
+  --color-card-bg: #FFFFFF;
+  --color-text-primary: #2F241C;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+  --color-site-border: #EAE3CF;
+  --color-footer-bg: #28190E;
+  --color-section-hdr: #3D2E1E;
+  --color-gold: #B8963E;
+}
+
+.dark {
+  --color-site-bg: #0F172A;
+  --color-card-bg: #1E293B;
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-site-border: #334155;
+  --color-section-hdr: #1E293B;
+}
+
 @layer base {
   body {
-    @apply bg-[#FAF9F5] dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased;
+    @apply bg-site-bg text-text-primary antialiased;
     font-family: 'Inter', sans-serif;
   }
   
@@ -16,28 +43,33 @@
 
 /* Custom premium styles */
 .scholar-gradient-bg {
-  background: linear-gradient(135deg, #0A4D27 0%, #063018 100%);
+  background: linear-gradient(135deg, #2F241C 0%, #1E1915 100%);
 }
 
 .gold-gradient-bg {
-  background: linear-gradient(135deg, #E5C05E 0%, #B89047 100%);
+  background: linear-gradient(135deg, #8A6F52 0%, #5E4B38 100%);
 }
 
 .gold-text-glow {
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 10px rgba(138, 111, 82, 0.3);
 }
 
 .gold-border {
-  border-color: #D4AF37;
+  border-color: #8A6F52;
 }
 
 .gold-accent-hover {
-  @apply hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all duration-300;
+  @apply hover:text-[#8A6F52] hover:border-[#8A6F52] transition-all duration-300;
+}
+
+.pattern-bg {
+  background-color: var(--color-brown-dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%238a6f52' stroke-opacity='0.15' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Islamic pattern overlay */
 .islamic-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23d4af37' stroke-opacity='0.08' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%238a6f52' stroke-opacity='0.08' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .islamic-pattern-dark {
@@ -62,10 +94,15 @@
   background: #FAF9F5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C5A85C;
+  background: #8A6F52;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0A4D27;
+  background: #2F241C;
+}
+
+/* Urdu/RTL typography overrides to inherit body font selection instead of Cinzel/Playfair Display */
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6, [dir="rtl"] .title-serif {
+  font-family: inherit !important;
 }
 

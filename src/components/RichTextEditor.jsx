@@ -100,7 +100,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             type="button"
             onClick={() => setIsPreview(false)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold ${
-              !isPreview ? 'bg-[#0A4D27] text-white' : 'text-slate-600 hover:bg-slate-200'
+              !isPreview ? 'bg-[#2F241C] text-white' : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <Code className="w-3.5 h-3.5" /> Write
@@ -109,7 +109,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             type="button"
             onClick={() => setIsPreview(true)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold ${
-              isPreview ? 'bg-[#0A4D27] text-white' : 'text-slate-600 hover:bg-slate-200'
+              isPreview ? 'bg-[#2F241C] text-white' : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <Eye className="w-3.5 h-3.5" /> Preview
