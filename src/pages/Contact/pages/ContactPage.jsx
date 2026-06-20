@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Mail, Phone, MapPin, Send, MessageSquareCode, CheckCircle2, AlertTriangle, Facebook, Youtube, Twitter, Instagram } from 'lucide-react';
 import { submitContact, clearContentErrors } from '../../../store/slices/contentSlice';
+import { Input } from '../../../components/Input';
 
 export default function ContactPage() {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ export default function ContactPage() {
   return (
     <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
-        
+
         {/* Left Side: Contact Information Cards (5 columns) */}
         <div className="lg:col-span-5 space-y-6">
           <div>
@@ -66,7 +67,7 @@ export default function ContactPage() {
           </div>
 
           <div className="premium-card p-6 space-y-6">
-            
+
             {/* Address */}
             <div className="flex gap-4 items-start">
               <div className="p-2.5 rounded bg-[#2F241C]/5 dark:bg-amber-950/20 text-[#2F241C] dark:text-[#8A6F52] border border-[#2F241C]/10 dark:border-[#8A6F52]/20 shrink-0">
@@ -157,7 +158,7 @@ export default function ContactPage() {
               </h2>
 
               <form onSubmit={handleFormSubmit} className="space-y-4">
-                
+
                 {/* Alert error */}
                 {actionError && (
                   <div className="bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 dark:text-red-400 text-xs shrink-0">
@@ -170,26 +171,28 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Your Name *</label>
-                    <input
+                    <Input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
                       placeholder="e.g. Abdullah"
-                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      border=""
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Your Email Address *</label>
-                    <input
+                    <Input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
                       placeholder="abdullah@example.com"
-                      className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                      border=""
                     />
                   </div>
                 </div>
@@ -197,14 +200,15 @@ export default function ContactPage() {
                 {/* Subject */}
                 <div>
                   <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Subject *</label>
-                  <input
+                  <Input
                     type="text"
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Invitation to Seminar / Fiqh Question"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    border=""
                   />
                 </div>
 

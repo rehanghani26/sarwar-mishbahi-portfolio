@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
 import { fetchEvents, createEvent, updateEvent, deleteEvent, clearContentErrors } from '../../../store/slices/contentSlice';
 import useTranslate from '../../../hooks/useTranslate';
+import { Input } from '../../../components/Input';
 
 export default function ManageEvents() {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ export default function ManageEvents() {
   const openEditForm = (ev) => {
     dispatch(clearContentErrors());
     setEditingId(ev._id);
-    
+
     // Format date string for datetime-local input (YYYY-MM-DDTHH:MM)
     const formattedDate = ev.eventDate
       ? new Date(ev.eventDate).toISOString().slice(0, 16)
@@ -109,7 +110,7 @@ export default function ManageEvents() {
   return (
     <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        
+
         {/* Module Header */}
         <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
@@ -158,7 +159,7 @@ export default function ManageEvents() {
             </div>
 
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              
+
               {/* Alert error */}
               {actionError && (
                 <div className="bg-red-50 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0">
@@ -171,25 +172,27 @@ export default function ManageEvents() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Event Program Title *')}</label>
-                  <input
+                  <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
                     placeholder={t('e.g. Halal Investment Workshop Seminar')}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Event Date & Time *')}</label>
-                  <input
+                  <Input
                     type="datetime-local"
                     name="eventDate"
                     value={formFields.eventDate}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
+                    border=""
                   />
                 </div>
               </div>
@@ -198,25 +201,27 @@ export default function ManageEvents() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Program Location *')}</label>
-                  <input
+                  <Input
                     type="text"
                     name="location"
                     value={formFields.location}
                     onChange={handleInputChange}
                     required
                     placeholder={t('e.g. Masjid Al-Noor, Seminar Room A')}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Poster Image URL (Optional)')}</label>
-                  <input
+                  <Input
                     type="text"
                     name="posterImage"
                     value={formFields.posterImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/poster.jpg"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
               </div>

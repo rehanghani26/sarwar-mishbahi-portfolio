@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { NAV_ITEMS } from '../constants/navigation'
 import { SITE } from '../data/siteData'
 import LogoSeal from './LogoSeal'
+import { Input } from './Input'
 
 export default function Header() {
   const location = useLocation()
@@ -44,11 +45,12 @@ export default function Header() {
           <button className="bg-white border-none border-l md:border-r border-[#ccc] w-[36px] md:w-[38px] h-[36px] md:h-[38px] flex items-center justify-center text-[15px] text-[#777] hover:bg-gray-50">
             🔍
           </button>
-          <input
+          <Input
             type="text"
             placeholder="تلاش..."
-            className="border-none outline-none px-2 md:px-3.5 text-[13px] md:text-[14px] text-[#3A2C23] w-[80px] sm:w-[120px] md:w-[170px] direction-rtl bg-transparent font-[inherit] placeholder:text-[#aaa]"
+            inputClassName="border-none outline-none px-2 md:px-3.5 text-[13px] md:text-[14px] text-[#3A2C23] w-[80px] sm:w-[120px] md:w-[170px] direction-rtl bg-transparent font-[inherit] placeholder:text-[#aaa]"
             aria-label="تلاش"
+            border=""
           />
         </div>
 

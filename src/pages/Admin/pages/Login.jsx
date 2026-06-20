@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { login, clearAuthError } from '../../../store/slices/authSlice';
+import { Input } from '../../../components/Input';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -59,13 +60,14 @@ export default function Login() {
             <div>
               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Username</label>
               <div className="relative">
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="Enter administrator username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  inputClassName="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  border=""
                 />
                 <User className="absolute left-3 top-3.5 w-4 h-4 text-slate-400 dark:text-slate-500" />
               </div>
@@ -75,13 +77,14 @@ export default function Login() {
             <div>
               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Password</label>
               <div className="relative">
-                <input
+                <Input
                   type="password"
                   required
                   placeholder="Enter administrator password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  inputClassName="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-[#EAE3CF] dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                  border=""
                 />
                 <Lock className="absolute left-3 top-3.5 w-4 h-4 text-slate-400 dark:text-slate-500" />
               </div>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Play, CheckCircle } from 'lucide-react';
 import { fetchLectures, createLecture, updateLecture, deleteLecture, clearContentErrors } from '../../../store/slices/contentSlice';
 import useTranslate from '../../../hooks/useTranslate';
+import { Input } from '../../../components/Input';
 
 export default function ManageLectures() {
   const dispatch = useDispatch();
@@ -172,14 +173,15 @@ export default function ManageLectures() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Lecture Title *')}</label>
-                  <input
+                  <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
                     placeholder={t('e.g. Purifying the Heart: The Islamic Path')}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
@@ -204,25 +206,27 @@ export default function ManageLectures() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Media URL (YouTube/Facebook/MP3 Link) *')}</label>
-                  <input
+                  <Input
                     type="url"
                     name="videoUrl"
                     value={formFields.videoUrl}
                     onChange={handleInputChange}
                     required
                     placeholder="https://www.youtube.com/watch?v=..."
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Custom Thumbnail Image URL (Optional)')}</label>
-                  <input
+                  <Input
                     type="text"
                     name="thumbnail"
                     value={formFields.thumbnail}
                     onChange={handleInputChange}
                     placeholder="https://example.com/thumbnail.jpg"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
               </div>

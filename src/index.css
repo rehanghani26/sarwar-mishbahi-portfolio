@@ -6,39 +6,31 @@
   .text-text-primary {
     color: var(--color-text-primary);
   }
+
   .text-text-secondary {
     color: var(--color-text-secondary);
   }
+
   .text-text-muted {
     color: var(--color-text-muted);
   }
 }
 
 :root {
-  --color-brown-dark: #2F241C;
-  --color-brown-mid: #8A6F52;
-  --color-brown-light: #A08060;
-  --color-cream: #EAE3CF;
-  --color-cream-light: #F2EDD8;
-  --color-site-bg: #FAF9F5;
+  --color-brown-dark: #1F3A5F;
+  --color-brown-mid: #B08D57;
+  --color-brown-light: #E5D8CA;
+  --color-cream: #E5D8CA;
+  --color-cream-light: #FAF7F2;
+  --color-site-bg: #FAF7F2;
   --color-card-bg: #FFFFFF;
-  --color-text-primary: #2F241C;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94A3B8;
-  --color-site-border: #EAE3CF;
-  --color-footer-bg: #28190E;
-  --color-section-hdr: #3D2E1E;
-  --color-gold: #B8963E;
-}
-
-.dark {
-  --color-site-bg: #0F172A;
-  --color-card-bg: #1E293B;
-  --color-text-primary: #F1F5F9;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
-  --color-site-border: #334155;
-  --color-section-hdr: #1E293B;
+  --color-text-primary: #2C2C2C;
+  --color-text-secondary: #7B654D;
+  --color-text-muted: #8A8A8A;
+  --color-site-border: #E5D8CA;
+  --color-footer-bg: #FAF7F2;
+  --color-section-hdr: #1F3A5F;
+  --color-gold: #B08D57;
 }
 
 @layer base {
@@ -46,51 +38,60 @@
     @apply bg-site-bg text-text-primary antialiased;
     font-family: 'Inter', sans-serif;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Cinzel', serif;
-    @apply font-semibold tracking-wide;
+    @apply font-semibold tracking-wide text-section-hdr;
   }
 }
 
 /* Custom premium styles */
 .scholar-gradient-bg {
-  background: linear-gradient(135deg, #2F241C 0%, #1E1915 100%);
+  background-color: #FAF7F2;
+  background-image: 
+    url("/patterns/islamic-pattern.svg"),
+    linear-gradient(135deg, #FAF7F2 0%, #F5EEE5 100%);
+  background-repeat: repeat;
 }
 
 .gold-gradient-bg {
-  background: linear-gradient(135deg, #8A6F52 0%, #5E4B38 100%);
+  background: linear-gradient(135deg, #B08D57 0%, #947547 100%);
 }
 
 .gold-text-glow {
-  text-shadow: 0 0 10px rgba(138, 111, 82, 0.3);
+  text-shadow: 0 0 10px rgba(176, 141, 87, 0.3);
 }
 
 .gold-border {
-  border-color: #8A6F52;
+  border-color: #B08D57;
 }
 
 .gold-accent-hover {
-  @apply hover:text-[#8A6F52] hover:border-[#8A6F52] transition-all duration-300;
+  @apply hover:text-[#B08D57] hover:border-[#B08D57] transition-all duration-300;
 }
 
 .pattern-bg {
-  background-color: var(--color-brown-dark);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%238a6f52' stroke-opacity='0.15' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: #FAF7F2;
+  background-image: url("/patterns/islamic-pattern.svg");
 }
 
 /* Islamic pattern overlay */
 .islamic-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%238a6f52' stroke-opacity='0.08' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("/patterns/islamic-pattern.svg");
 }
 
 .islamic-pattern-dark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate%2845 30 30%29'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("/patterns/islamic-pattern.svg");
 }
 
 /* Card hover animation */
 .premium-card {
-  @apply bg-white dark:bg-slate-800 border border-[#EAE3CF] dark:border-slate-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 overflow-hidden;
+  @apply bg-white border border-[#E5D8CA] rounded-[20px] shadow-sm hover:shadow-md hover:border-[#B08D57] transition-all duration-300 transform hover:-translate-y-0.5 overflow-hidden;
 }
 
 .title-serif {
@@ -102,19 +103,27 @@
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #FAF9F5;
+  background: #FAF7F2;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #8A6F52;
+  background: #B08D57;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #2F241C;
+  background: #1F3A5F;
 }
 
 /* Urdu/RTL typography overrides to inherit body font selection instead of Cinzel/Playfair Display */
-[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6, [dir="rtl"] .title-serif {
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] .title-serif {
   font-family: inherit !important;
 }
-

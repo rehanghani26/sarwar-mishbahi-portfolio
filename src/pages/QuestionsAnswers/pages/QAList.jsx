@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { fetchPublicQuestions } from '../../../store/slices/contentSlice';
+import { Input } from '../../../components/Input';
 
 export default function QAList() {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ export default function QAList() {
   return (
     <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        
+
         {/* Header Title */}
         <div className="mb-10 text-center">
           <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Interactive Learning</span>
@@ -64,18 +65,19 @@ export default function QAList() {
         {/* Search & Filter Toolbar */}
         <div className="premium-card p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-80">
-            <input
+            <Input
               type="text"
               placeholder="Search Q&As..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              border=""
             />
             <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
- 
+
           <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
             <SlidersHorizontal className="w-4.5 h-4.5 text-slate-400" />
             <select
@@ -104,7 +106,7 @@ export default function QAList() {
               const isExpanded = expandedId === q._id;
               return (
                 <div key={q._id} className="premium-card rounded shadow-xs overflow-hidden transition-all duration-300">
-                  
+
                   {/* Collapsible Header */}
                   <button
                     onClick={() => toggleExpand(q._id)}
@@ -123,7 +125,7 @@ export default function QAList() {
                         {q.questionTitle}
                       </h3>
                     </div>
- 
+
                     <div className="text-slate-500 dark:text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52] mt-1 shrink-0">
                       {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                     </div>
@@ -132,7 +134,7 @@ export default function QAList() {
                   {/* Collapsible Content */}
                   {isExpanded && (
                     <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10">
-                      
+
                       {/* Detailed Question */}
                       <div className="bg-slate-50 dark:bg-slate-900 border-l-2 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs">
                         <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5">QUESTION DETAILS:</span>
@@ -179,11 +181,10 @@ export default function QAList() {
               <button
                 key={pNum + 1}
                 onClick={() => handlePageChange(pNum + 1)}
-                className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${
-                  page === pNum + 1
+                className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
                     ? 'bg-[#2F241C] border-[#2F241C] text-white'
                     : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
+                  }`}
               >
                 {pNum + 1}
               </button>

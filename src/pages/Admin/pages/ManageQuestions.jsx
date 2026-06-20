@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2, ShieldQuestion, HelpCircle, CheckCircle, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { fetchAdminQuestions, answerQuestion, deleteQuestion, clearContentErrors } from '../../../store/slices/contentSlice';
 import useTranslate from '../../../hooks/useTranslate';
+import { Input } from '../../../components/Input';
 
 export default function ManageQuestions() {
   const dispatch = useDispatch();
@@ -216,12 +217,13 @@ export default function ManageQuestions() {
 
                 {/* Make Public check box */}
                 <div className={`flex items-center gap-2 ${isUrdu ? 'flex-row-reverse' : ''}`}>
-                  <input
+                  <Input
                     type="checkbox"
                     id="isPublic"
                     checked={isPublic}
                     onChange={(e) => setIsPublic(e.target.checked)}
-                    className="w-4 h-4 text-[#8A6F52] border-[#EAE3CF] rounded focus:ring-[#8A6F52]"
+                    inputClassName="w-4 h-4 text-[#8A6F52] border-[#EAE3CF] rounded focus:ring-[#8A6F52]"
+                    border=""
                   />
                   <label htmlFor="isPublic" className="text-xs font-bold text-slate-600 cursor-pointer">
                     {t('Approve and Make Public on Q&A Page') || 'Approve and Make Public on Q&A Page'}

@@ -20,7 +20,7 @@ export default function EventsList() {
   return (
     <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        
+
         {/* Header Title */}
         <div className="mb-12 text-center">
           <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Programs & Gatherings</span>
@@ -37,7 +37,7 @@ export default function EventsList() {
           </div>
         ) : (
           <div className="space-y-12">
-            
+
             {/* Section 1: Upcoming Programs */}
             <div>
               <h2 className="text-lg font-bold text-[#2F241C] dark:text-[#8A6F52] font-serif mb-6 pb-2 border-b border-[#EAE3CF]/50 dark:border-slate-800 uppercase tracking-wider">

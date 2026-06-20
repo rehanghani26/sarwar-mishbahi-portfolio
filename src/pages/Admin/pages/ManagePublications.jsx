@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Book, CheckCircle } from 'lucide-react';
 import { fetchPublications, createPublication, updatePublication, deletePublication, clearContentErrors } from '../../../store/slices/contentSlice';
 import useTranslate from '../../../hooks/useTranslate';
+import { Input } from '../../../components/Input';
 
 export default function ManagePublications() {
   const dispatch = useDispatch();
@@ -179,26 +180,28 @@ export default function ManagePublications() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Resource Title *</label>
-                  <input
+                  <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Guidance on Fiqh Principles"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Author Name *</label>
-                  <input
+                  <Input
                     type="text"
                     name="author"
                     value={formFields.author}
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Dr. Islamic Scholar"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
               </div>
@@ -223,14 +226,15 @@ export default function ManagePublications() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Language *</label>
-                  <input
+                  <Input
                     type="text"
                     name="language"
                     value={formFields.language}
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. English / Arabic / Urdu"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
               </div>
@@ -238,14 +242,15 @@ export default function ManagePublications() {
               {/* Drive Link */}
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Google Drive Share Link *</label>
-                <input
+                <Input
                   type="url"
                   name="googleDriveLink"
                   value={formFields.googleDriveLink}
                   onChange={handleInputChange}
                   required
                   placeholder="https://drive.google.com/file/d/..."
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                  border=""
                 />
               </div>
 

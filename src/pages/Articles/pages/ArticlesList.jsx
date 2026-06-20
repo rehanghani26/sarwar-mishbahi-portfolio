@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
 import { fetchArticles } from '../../../store/slices/contentSlice';
 import ArticleCard from '../../../components/ArticleCard';
+import { Input } from '../../../components/Input';
 
 export default function ArticlesList() {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export default function ArticlesList() {
   return (
     <div className="bg-site-bg py-12 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header Title */}
         <div className="mb-10 text-center">
           <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Authentic Guidance</span>
@@ -61,18 +62,19 @@ export default function ArticlesList() {
         <div className="premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5">
           {/* Search Form */}
           <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
-            <input
+            <Input
               type="text"
               placeholder="Search articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              border=""
             />
             <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
- 
+
           {/* Category Dropdown & Quick Badges */}
           <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
             <SlidersHorizontal className="w-4.5 h-4.5 text-slate-400" />
@@ -95,11 +97,10 @@ export default function ArticlesList() {
         <div className="flex flex-wrap items-center justify-center gap-2 mb-10 shrink-0">
           <button
             onClick={() => handleCategoryChange('')}
-            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
-              selectedCategory === ''
+            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
                 ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
                 : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
-            }`}
+              }`}
           >
             All Topic Areas
           </button>
@@ -107,11 +108,10 @@ export default function ArticlesList() {
             <button
               key={cat}
               onClick={() => handleCategoryChange(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
-                selectedCategory === cat
+              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
                   ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
                   : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -145,11 +145,10 @@ export default function ArticlesList() {
                   <button
                     key={pNum + 1}
                     onClick={() => handlePageChange(pNum + 1)}
-                    className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${
-                      page === pNum + 1
+                    className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
                         ? 'bg-[#2F241C] border-[#2F241C] text-white'
                         : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                    }`}
+                      }`}
                   >
                     {pNum + 1}
                   </button>

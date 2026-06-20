@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HelpCircle, CheckCircle, AlertTriangle, Send } from 'lucide-react';
 import { submitQuestion, clearContentErrors } from '../../../store/slices/contentSlice';
+import { Input } from '../../../components/Input';
 
 export default function AskQuestion() {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ export default function AskQuestion() {
   return (
     <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
       <div className="max-w-xl mx-auto px-4 sm:px-6">
-        
+
         {/* Success Banner */}
         {success ? (
           <div className="premium-card p-8 shadow-sm text-center">
@@ -79,7 +80,7 @@ export default function AskQuestion() {
           </div>
         ) : (
           <div className="premium-card shadow-sm overflow-hidden">
-            
+
             {/* Header Title */}
             <div className="bg-[#2F241C] islamic-pattern text-white p-6 relative border-b border-[#8A6F52]/35 flex items-center gap-3">
               <HelpCircle className="w-8 h-8 text-[#8A6F52] shrink-0" />
@@ -88,10 +89,10 @@ export default function AskQuestion() {
                 <p className="text-[10px] text-[#EAE3CF] mt-0.5">Submit your query directly to the scholar</p>
               </div>
             </div>
- 
+
             {/* Form Fields */}
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              
+
               {/* Alert Message */}
               {actionError && (
                 <div className="bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 dark:text-red-400 text-xs shrink-0">
@@ -103,40 +104,43 @@ export default function AskQuestion() {
               {/* Full Name */}
               <div>
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Full Name *</label>
-                <input
+                <Input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
                   placeholder="Enter your name"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  border=""
                 />
               </div>
- 
+
               {/* Email & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Email Address *</label>
-                  <input
+                  <Input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
                     placeholder="name@example.com"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    border=""
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Phone Number (Optional)</label>
-                  <input
+                  <Input
                     type="text"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                     placeholder="+1 (555) 123-4567"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    border=""
                   />
                 </div>
               </div>
@@ -162,14 +166,15 @@ export default function AskQuestion() {
               {/* Question Title */}
               <div>
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Question Title *</label>
-                <input
+                <Input
                   type="text"
                   name="questionTitle"
                   value={formData.questionTitle}
                   onChange={handleInputChange}
                   required
                   placeholder="e.g., Calculation of Zakat on Retirement Funds"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  border=""
                 />
               </div>
 

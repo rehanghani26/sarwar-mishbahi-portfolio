@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Bookmark, CheckCir
 import { fetchFatwas, createFatwa, updateFatwa, deleteFatwa, clearContentErrors } from '../../../store/slices/contentSlice';
 import RichTextEditor from '../../../components/RichTextEditor';
 import useTranslate from '../../../hooks/useTranslate';
+import { Input } from '../../../components/Input';
 
 export default function ManageFatwas() {
   const dispatch = useDispatch();
@@ -188,14 +189,15 @@ export default function ManageFatwas() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Fatwa Title / Issue *</label>
-                  <input
+                  <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Rulings on Commercial Insurance Contracts"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    border=""
                   />
                 </div>
                 <div>
