@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-text-primary {
+    color: var(--color-text-primary);
+  }
+  .text-text-secondary {
+    color: var(--color-text-secondary);
+  }
+  .text-text-muted {
+    color: var(--color-text-muted);
+  }
+}
+
 :root {
   --color-brown-dark: #2F241C;
   --color-brown-mid: #8A6F52;
