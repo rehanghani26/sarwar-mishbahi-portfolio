@@ -18,10 +18,6 @@ export default function Navbar() {
   const { t, isUrdu } = useTranslate();
 
   useEffect(() => {
-    if (!settings) {
-      dispatch(fetchSettings());
-    }
-
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -32,7 +28,7 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [dispatch, settings]);
+  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -54,8 +50,8 @@ export default function Navbar() {
     { label: 'Contact', href: '/contact' },
   ];
 
-  const scholarName = t(settings?.scholarInfo?.fullName || 'Dr. Islamic Scholar');
-  const scholarTitle = t(settings?.scholarInfo?.title || 'Mufti & Shariah Educator');
+  const scholarName = t(settings?.scholarInfo?.fullName || '');
+  const scholarTitle = t(settings?.scholarInfo?.title || '');
 
   return (
     <header

@@ -9,13 +9,13 @@ export default function Footer() {
   const { settings } = useSelector((state) => state.settings);
   const { t, isUrdu } = useTranslate();
 
-  const scholarName = settings?.scholarInfo?.fullName || 'Dr. Islamic Scholar';
-  const scholarTitle = settings?.scholarInfo?.title || 'Mufti & Educator';
+  const scholarName = settings?.scholarInfo?.fullName || '';
+  const scholarTitle = settings?.scholarInfo?.title || '';
   
-  const address = settings?.contactInfo?.address || 'Islamic Center, Knowledge Dist.';
-  const phone = settings?.contactInfo?.phone || '+1 (800) 555-ISLAM';
-  const whatsapp = settings?.contactInfo?.whatsapp || '+1 (800) 555-WHATS';
-  const email = settings?.contactInfo?.email || 'scholar@islamicknowledge.com';
+  const address = settings?.contactInfo?.address || '';
+  const phone = settings?.contactInfo?.phone || '';
+  const whatsapp = settings?.contactInfo?.whatsapp || '';
+  const email = settings?.contactInfo?.email || '';
 
   const socialLinks = settings?.socialLinks || {};
 
@@ -35,7 +35,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="text-sm text-[#7B654D] leading-relaxed mb-4 font-light">
-            {settings?.homepageSettings?.heroMission || t('Dedicated to making authentic Islamic knowledge accessible, accurate, and actionable in accordance with traditional classical scholarship.')}
+            {settings?.homepageSettings?.heroMission || ''}
           </p>
           <div className="flex items-center gap-2.5 justify-start">
             {socialLinks.facebook && (

@@ -9,6 +9,7 @@ const initialState = {
   },
   stats: null,
   loading: false,
+  isSettingsLoaded: false,
   statsLoading: false,
   error: null,
   updateSuccess: false,
@@ -80,6 +81,7 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchSettings.fulfilled, (state, action) => {
         state.loading = false;
+        state.isSettingsLoaded = true;
         state.settings = {
           ...action.payload,
           language: localStorage.getItem('site_language') || action.payload?.language || 'English',
@@ -89,7 +91,8 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchSettings.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.isSettingsLoaded = false;
+        state.error = action.payload || 'Server is under maintenance';
       })
       // Update Settings
       .addCase(updateSettings.pending, (state) => {

@@ -5,27 +5,13 @@ import { fetchSettings } from '../../../store/slices/settingsSlice';
 
 export default function About() {
   const dispatch = useDispatch();
-  const { settings, loading } = useSelector((state) => state.settings);
-
-  useEffect(() => {
-    if (!settings) {
-      dispatch(fetchSettings());
-    }
-  }, [dispatch, settings]);
-
-  if (loading && !settings) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-site-bg">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brown-dark"></div>
-      </div>
-    );
-  }
+  const { settings } = useSelector((state) => state.settings);
 
   // Fallback defaults
   const scholar = settings?.scholarInfo || {};
-  const fullName = scholar.fullName || 'Dr. Islamic Scholar';
-  const title = scholar.title || 'Mufti & Educator';
-  const bio = scholar.bio || 'Sharing authentic Islamic guidance.';
+  const fullName = scholar.fullName || '';
+  const title = scholar.title || '';
+  const bio = scholar.bio || '';
   const education = scholar.education || { madrasah: 'N/A', university: 'N/A' };
   const qualifications = scholar.qualifications || [];
   const expertise = scholar.areasOfExpertise || [];

@@ -116,7 +116,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   // Redux Selectors
-  const { settings, loading: settingsLoading } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
   const { list: articles } = useSelector((state) => state.content.articles);
   const { list: fatwas } = useSelector((state) => state.content.fatwas);
   const { publicList: questions } = useSelector((state) => state.content.questions);
@@ -125,7 +125,6 @@ export default function Home() {
   const { list: events } = useSelector((state) => state.content.events);
 
   useEffect(() => {
-    dispatch(fetchSettings());
     dispatch(fetchArticles({ limit: 3 }));
     dispatch(fetchFatwas({ limit: 3 }));
     dispatch(fetchPublicQuestions({ limit: 3 }));
@@ -134,24 +133,15 @@ export default function Home() {
     dispatch(fetchEvents());
   }, [dispatch]);
 
-  // Loading indicator for initial settings fetch
-  if (settingsLoading && !settings) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-site-bg">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brown-dark dark:border-brown-mid"></div>
-      </div>
-    );
-  }
-
   // Fallback defaults
-  const heroName = settings?.homepageSettings?.heroName || 'Dr. Islamic Scholar';
-  const heroTitle = settings?.homepageSettings?.heroTitle || 'Sheikh & Educator';
-  const heroIntro = settings?.homepageSettings?.heroIntroduction || 'Welcome to the official portal.';
-  const heroMission = settings?.homepageSettings?.heroMission || 'Spreading verified teachings.';
+  const heroName = settings?.homepageSettings?.heroName || '';
+  const heroTitle = settings?.homepageSettings?.heroTitle || '';
+  const heroIntro = settings?.homepageSettings?.heroIntroduction || '';
+  const heroMission = settings?.homepageSettings?.heroMission || '';
 
-  const address = settings?.contactInfo?.address || '100 Minaret Road';
-  const phone = settings?.contactInfo?.phone || '+1 (555) 123-4567';
-  const email = settings?.contactInfo?.email || 'scholar@example.com';
+  const address = settings?.contactInfo?.address || '';
+  const phone = settings?.contactInfo?.phone || '';
+  const email = settings?.contactInfo?.email || '';
 
   return (
     <div className="bg-site-bg min-h-screen">

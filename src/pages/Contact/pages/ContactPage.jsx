@@ -46,10 +46,10 @@ export default function ContactPage() {
   };
 
   // Contacts fallback defaults
-  const address = settings?.contactInfo?.address || '100 Minaret Road, Knowledge District, Islamic Center';
-  const phone = settings?.contactInfo?.phone || '+1 (800) 555-ISLAM';
-  const whatsapp = settings?.contactInfo?.whatsapp || '+1 (800) 555-WHATS';
-  const email = settings?.contactInfo?.email || 'scholar@islamicknowledge.com';
+  const address = settings?.contactInfo?.address || '';
+  const phone = settings?.contactInfo?.phone || '';
+  const whatsapp = settings?.contactInfo?.whatsapp || '';
+  const email = settings?.contactInfo?.email || '';
   const socialLinks = settings?.socialLinks || {};
 
   return (
