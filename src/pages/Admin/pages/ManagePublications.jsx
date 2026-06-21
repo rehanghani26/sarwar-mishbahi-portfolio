@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, Book, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle } from 'lucide-react';
 import { fetchPublications, createPublication, updatePublication, deletePublication, clearContentErrors } from '../../../store/slices/contentSlice';
-import useTranslate from '../../../hooks/useTranslate';
 import { Input } from '../../../components/Input';
+
+const categoryTranslations = {
+  'Quran Studies': 'علوم قرآن',
+  'Hadith': 'حدیث',
+  'Fiqh': 'فقہ',
+  'Aqeedah': 'عقیدہ',
+  'Seerah': 'سیرت',
+  'Islamic History': 'اسلامی تاریخ',
+  'Fatwa Collections': 'مجموعہ فتاویٰ',
+  'Research Papers': 'تحقیقی مقالات',
+};
+
+const languageTranslations = {
+  'English': 'انگریزی',
+  'Urdu': 'اردو',
+  'Arabic': 'عربی',
+  'Persian': 'فارسی',
+};
 
 export default function ManagePublications() {
   const dispatch = useDispatch();
-  const { t, isUrdu } = useTranslate();
 
   const { list: publications, loading } = useSelector((state) => state.content.publications);
   const { actionLoading, actionError } = useSelector((state) => state.content);
@@ -29,14 +45,14 @@ export default function ManagePublications() {
   });
 
   const categories = [
-    'Quran Studies',
-    'Hadith',
-    'Fiqh',
-    'Aqeedah',
-    'Seerah',
-    'Islamic History',
-    'Fatwa Collections',
-    'Research Papers',
+    { value: 'Quran Studies', label: 'علوم قرآن' },
+    { value: 'Hadith', label: 'حدیث' },
+    { value: 'Fiqh', label: 'فقہ' },
+    { value: 'Aqeedah', label: 'عقیدہ' },
+    { value: 'Seerah', label: 'سیرت' },
+    { value: 'Islamic History', label: 'اسلامی تاریخ' },
+    { value: 'Fatwa Collections', label: 'مجموعہ فتاویٰ' },
+    { value: 'Research Papers', label: 'تحقیقی مقالات' },
   ];
 
   useEffect(() => {
@@ -86,22 +102,22 @@ export default function ManagePublications() {
     if (editingId) {
       result = await dispatch(updatePublication({ id: editingId, pubData: formFields }));
       if (updatePublication.fulfilled.match(result)) {
-        showSuccess('Publication updated successfully.');
+        showSuccess('مطبوعہ کامیابی سے اپ ڈیٹ ہو گئی۔');
       }
     } else {
       result = await dispatch(createPublication(formFields));
       if (createPublication.fulfilled.match(result)) {
-        showSuccess('Publication created successfully.');
+        showSuccess('مطبوعہ کامیابی سے شامل ہو گئی۔');
       }
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this publication?')) {
+    if (window.confirm('کیا آپ واقعی اس مطبوعہ کو حذف کرنا چاہتے ہیں؟')) {
       dispatch(clearContentErrors());
       const result = await dispatch(deletePublication(id));
       if (deletePublication.fulfilled.match(result)) {
-        showSuccess('Publication removed successfully.');
+        showSuccess('مطبوعہ کامیابی سے حذف کر دی گئی۔');
       }
     }
   };
@@ -116,18 +132,18 @@ export default function ManagePublications() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
+    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 text-right">
           <div className="flex items-center gap-3">
             <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
-              <ArrowLeft className={`w-4.5 h-4.5 ${isUrdu ? 'rotate-180' : ''}`} />
+              <ArrowRight className="w-4.5 h-4.5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{t('Manage Publications')}</h1>
-              <p className="text-xs text-slate-400 font-light">{t('Add, update, or remove books and research papers') || 'Add, update, or remove books and research papers'}</p>
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">مطبوعات کا انتظام</h1>
+              <p className="text-xs text-slate-400 font-light">کتابیں اور تحقیقی مقالات شامل کریں، اپ ڈیٹ کریں یا حذف کریں</p>
             </div>
           </div>
 
@@ -137,14 +153,14 @@ export default function ManagePublications() {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
               <Plus className="w-4 h-4 text-[#8A6F52]" />
-              {t('Add Publication')}
+              مطبوعہ شامل کریں
             </button>
           )}
         </div>
 
         {/* Success alert */}
         {success && (
-          <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
+          <div className="bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{successMsg}</span>
           </div>
@@ -152,17 +168,17 @@ export default function ManagePublications() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
             <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId ? t('Edit Publication Details') : t('Add New Google Drive Publication')}
+                {editingId ? 'مطبوعہ کی تفصیلات میں ترمیم کریں' : 'گوگل ڈرائیو کی نئی مطبوعہ شامل کریں'}
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
                 className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
               >
-                {t('Cancel')}
+                منسوخ کریں
               </button>
             </div>
 
@@ -170,7 +186,7 @@ export default function ManagePublications() {
               
               {/* Alert error */}
               {actionError && (
-                <div className="bg-red-50 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0">
+                <div className="bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0">
                   <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
                   <span>{actionError}</span>
                 </div>
@@ -179,28 +195,28 @@ export default function ManagePublications() {
               {/* Title & Author */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Resource Title *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مطبوعہ کا عنوان *</label>
                   <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g. Guidance on Fiqh Principles"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    placeholder="مثال: اصول فقہ کی رہنمائی"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Author Name *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مصنف کا نام *</label>
                   <Input
                     type="text"
                     name="author"
                     value={formFields.author}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g. Dr. Islamic Scholar"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    placeholder="مثال: مفتی صاحب / ڈاکٹر صاحب"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
@@ -209,7 +225,7 @@ export default function ManagePublications() {
               {/* Category & Language */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">زمرہ *</label>
                   <select
                     name="category"
                     value={formFields.category}
@@ -218,22 +234,22 @@ export default function ManagePublications() {
                     className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
                   >
                     {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                      <option key={cat.value} value={cat.value}>
+                        {cat.label}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Language *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">زبان *</label>
                   <Input
                     type="text"
                     name="language"
                     value={formFields.language}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g. English / Arabic / Urdu"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    placeholder="مثال: Urdu / Arabic / English"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
@@ -241,7 +257,7 @@ export default function ManagePublications() {
 
               {/* Drive Link */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Google Drive Share Link *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">گوگل ڈرائیو شیئر لنک *</label>
                 <Input
                   type="url"
                   name="googleDriveLink"
@@ -249,33 +265,33 @@ export default function ManagePublications() {
                   onChange={handleInputChange}
                   required
                   placeholder="https://drive.google.com/file/d/..."
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                   border=""
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Brief Description *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مختصر تفصیل *</label>
                 <textarea
                   name="description"
                   value={formFields.description}
                   onChange={handleInputChange}
                   required
-                  placeholder="Provide a short synopsis overview of this publication file..."
+                  placeholder="اس مطبوعہ فائل کا مختصر جائزہ فراہم کریں..."
                   rows={4}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y text-right"
                 ></textarea>
               </div>
 
               {/* Action operations */}
-              <div className={`pt-4 border-t border-slate-100 flex items-center ${isUrdu ? 'justify-start' : 'justify-end'} gap-3`}>
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-start gap-3">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
                   className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
-                  {t('Cancel')}
+                  منسوخ کریں
                 </button>
                 <button
                   type="submit"
@@ -283,7 +299,7 @@ export default function ManagePublications() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-[#8A6F52]" />
-                  {actionLoading ? t('Saving...') : t('Save Publication')}
+                  {actionLoading ? 'محفوظ ہو رہا ہے...' : 'مطبوعہ محفوظ کریں'}
                 </button>
               </div>
 
@@ -291,21 +307,21 @@ export default function ManagePublications() {
           </div>
         ) : (
           /* Publications List Table */
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
               </div>
             ) : publications && publications.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full text-right border-collapse">
                   <thead>
                     <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Title')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Author')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Category')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Language')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-left text-left' : 'text-right'}`}>{t('Actions')}</th>
+                      <th className="px-6 py-4 text-right">عنوان</th>
+                      <th className="px-6 py-4 text-right">مصنف</th>
+                      <th className="px-6 py-4 text-right">زمرہ</th>
+                      <th className="px-6 py-4 text-right">زبان</th>
+                      <th className="px-6 py-4 text-left">اقدامات</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -315,23 +331,25 @@ export default function ManagePublications() {
                         <td className="px-6 py-4 font-light text-xs">{pub.author}</td>
                         <td className="px-6 py-4">
                           <span className="bg-[#2F241C]/10 text-[#2F241C] text-[10px] font-bold px-2 py-0.5 rounded">
-                            {pub.category}
+                            {categoryTranslations[pub.category] || pub.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-xs font-semibold text-slate-500">{pub.language}</td>
-                        <td className={`px-6 py-4 ${isUrdu ? 'text-left' : 'text-right'}`}>
+                        <td className="px-6 py-4 text-xs font-semibold text-slate-500">
+                          {languageTranslations[pub.language] || pub.language}
+                        </td>
+                        <td className="px-6 py-4 text-left">
                           <div className="inline-flex items-center gap-2">
                             <button
                               onClick={() => openEditForm(pub)}
                               className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
-                              title={t('Edit Publication')}
+                              title="ترمیم کریں"
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(pub._id)}
                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title={t('Delete Publication')}
+                              title="حذف کریں"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -345,8 +363,8 @@ export default function ManagePublications() {
             ) : (
               <div className="text-center py-20">
                 <Book className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">No Publications Logged</h3>
-                <p className="text-slate-400 text-xs mt-1">Click the "Add Publication" button to create your first item.</p>
+                <h3 className="text-lg font-bold text-slate-700 font-serif">کوئی مطبوعہ درج نہیں ہے</h3>
+                <p className="text-slate-400 text-xs mt-1">اپنی پہلی مطبوعہ تخلیق کرنے کے لیے "مطبوعہ شامل کریں" بٹن پر کلک کریں۔</p>
               </div>
             )}
           </div>
@@ -356,3 +374,4 @@ export default function ManagePublications() {
     </div>
   );
 }
+

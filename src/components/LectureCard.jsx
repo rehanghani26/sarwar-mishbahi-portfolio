@@ -1,12 +1,19 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
-import useTranslate from '../hooks/useTranslate';
+
+const categoryTranslations = {
+  'Audio Lectures': 'آڈیو خطابات',
+  'Bayan Recordings': 'آڈیو بیانات',
+  'Video Lectures': 'ویڈیو خطابات',
+  'Friday Sermons': 'خطبات جمعہ',
+  'Short Clips': 'مختصر کلپس',
+  'Sermons': 'بیانات',
+};
 
 export default function LectureCard({ lecture, onPlay }) {
   const { title, description, category, videoUrl, thumbnail, publishDate } = lecture;
-  const { t, isUrdu } = useTranslate();
 
-  const formattedDate = new Date(publishDate).toLocaleDateString(isUrdu ? 'ur-PK' : 'en-US', {
+  const formattedDate = new Date(publishDate).toLocaleDateString('ur-PK', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -41,7 +48,7 @@ export default function LectureCard({ lecture, onPlay }) {
   };
 
   return (
-    <div className="premium-card shadow-sm overflow-hidden flex flex-col h-full group text-start">
+    <div className="premium-card shadow-sm overflow-hidden flex flex-col h-full group text-right">
       
       {/* Thumbnail with Play Overlay */}
       <div className="relative h-44 w-full bg-slate-800 shrink-0 overflow-hidden">
@@ -64,9 +71,9 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Media Type Badge */}
-        <div className="absolute bottom-3 left-3 bg-[#E5D8CA] text-[#7B654D] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+        <div className="absolute bottom-3 right-3 bg-[#E5D8CA] text-[#7B654D] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
           {getMediaIcon("text-[#7B654D]")}
-          {t(category)}
+          {categoryTranslations[category] || category}
         </div>
       </div>
 
@@ -80,22 +87,22 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2">
+        <h3 className="text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2 text-right">
           {title}
         </h3>
 
         {/* Description */}
-        <p className="text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-2">
+        <p className="text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-2 text-right">
           {description}
         </p>
 
         {/* Play Link Actions */}
-        <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100">
+        <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100 text-right">
           <button
             onClick={() => onPlay(lecture)}
             className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
           >
-            {t('Watch/Listen Now')}
+            ابھی سنیں/دیکھیں
           </button>
           
           <a
@@ -104,7 +111,7 @@ export default function LectureCard({ lecture, onPlay }) {
             rel="noopener noreferrer"
             className="text-[10px] text-slate-500 hover:text-slate-700 underline"
           >
-            {t('Open Original Link')}
+            اصل لنک کھولیں
           </a>
         </div>
 

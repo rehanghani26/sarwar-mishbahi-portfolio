@@ -1,9 +1,22 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Calendar, Eye, ArrowLeft, Bookmark, HelpCircle, FileText } from 'lucide-react';
+import { Calendar, Eye, ArrowRight, Bookmark, HelpCircle, FileText } from 'lucide-react';
 import { fetchFatwaById } from '../../../store/slices/contentSlice';
 import FatwaCard from '../../../components/FatwaCard';
+
+const categoryTranslations = {
+  'Salah': 'نماز',
+  'Fasting': 'روزه',
+  'Zakat': 'زکوٰۃ',
+  'Hajj & Umrah': 'حج اور عمرہ',
+  'Marriage': 'نکاح / شادی',
+  'Divorce': 'طلاق',
+  'Business': 'تجارت / کاروبار',
+  'Family Issues': 'خاندانی مسائل',
+  'Education': 'تعلیم',
+  'General Questions': 'عام مسائل',
+};
 
 export default function FatwaDetail() {
   const { id } = useParams();
@@ -26,10 +39,10 @@ export default function FatwaDetail() {
   if (error || !current) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl font-bold text-red-700 font-serif">Error Loading Fatwa</h2>
-        <p className="text-slate-550 text-sm mt-2">{error || 'Fatwa not found.'}</p>
+        <h2 className="text-2xl font-bold text-red-700 font-serif">فتویٰ لوڈ کرنے میں خرابی</h2>
+        <p className="text-slate-555 text-sm mt-2">{error || 'فتویٰ نہیں ملا۔'}</p>
         <Link to="/fatwas" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#2F241C] text-white rounded font-semibold text-sm hover:bg-[#1E1915]">
-          <ArrowLeft className="w-4.5 h-4.5" /> Back to Fatwas
+          <ArrowRight className="w-4.5 h-4.5" /> فتاویٰ پر واپس جائیں
         </Link>
       </div>
     );
@@ -38,28 +51,28 @@ export default function FatwaDetail() {
   const { fatwa, related } = current;
   const { title, category, question, detailedAnswer, references, publishDate, viewCount } = fatwa;
 
-  const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
+  const formattedDate = new Date(publishDate).toLocaleDateString('ur-PK', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
   return (
-    <div className="bg-site-bg py-12 min-h-screen">
+    <div className="bg-site-bg py-12 min-h-screen text-right">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         
         {/* Navigation Breadcrumb back button */}
         <Link to="/fatwas" className="inline-flex items-center gap-1 text-sm font-bold text-text-primary hover:text-[#8A6F52] dark:hover:text-amber-400 mb-6">
-          <ArrowLeft className="w-4 h-4" /> Back to Fatwas
+          <ArrowRight className="w-4 h-4" /> فتاویٰ پر واپس جائیں
         </Link>
  
         {/* Fatwa Details Container */}
         <div className="premium-card overflow-hidden mb-12">
           
           {/* Header Banner */}
-          <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-8 sm:px-10 relative border-b border-[#8A6F52]/35">
+          <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-8 sm:px-10 relative border-b border-[#8A6F52]/35 text-right">
             <span className="bg-[#8A6F52] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded shadow-sm inline-block mb-3 font-serif">
-              {category}
+              {categoryTranslations[category] || category}
             </span>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight font-serif tracking-wide">
               {title}
@@ -71,19 +84,19 @@ export default function FatwaDetail() {
             <div className="flex flex-wrap items-center gap-6 text-xs text-slate-500 dark:text-slate-400 mb-8 pb-4 border-b border-slate-100 dark:border-slate-700">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
-                Published on {formattedDate}
+                شائع ہوا: {formattedDate}
               </span>
               <span className="flex items-center gap-1.5">
                 <Eye className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
-                {viewCount} views
+                {viewCount} بار دیکھا گیا
               </span>
             </div>
  
             {/* 1. Original Question block */}
-            <div className="mb-8 bg-slate-50 dark:bg-slate-800/60 border-l-4 border-[#8A6F52] dark:border-amber-500 rounded-r p-5 sm:p-6 shadow-xs">
+            <div className="mb-8 bg-slate-50 dark:bg-slate-800/60 border-r-4 border-[#8A6F52] dark:border-amber-500 rounded-l p-5 sm:p-6 shadow-xs text-right">
               <h2 className="text-sm font-bold text-text-primary font-serif flex items-center gap-2 mb-3 tracking-wide">
                 <HelpCircle className="w-5 h-5 text-[#8A6F52] dark:text-amber-500 shrink-0" />
-                Submitted Question Details
+                پوچھا گیا سوال
               </h2>
               <p className="text-slate-700 dark:text-slate-300 text-sm italic leading-relaxed font-light">
                 "{question}"
@@ -91,22 +104,22 @@ export default function FatwaDetail() {
             </div>
  
             {/* 2. Scholar Answer block */}
-            <div className="mb-8">
+            <div className="mb-8 text-right">
               <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 font-serif flex items-center gap-2 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2 tracking-wide">
                 <FileText className="w-5 h-5 text-[#8A6F52] dark:text-amber-500 shrink-0" />
-                Shariah Verdict & Detailed Ruling
+                شرعی حکم اور تفصیلی فتویٰ
               </h2>
               <div
-                className="prose max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-4"
+                className="prose max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-4 text-right"
                 dangerouslySetInnerHTML={{ __html: detailedAnswer }}
               ></div>
             </div>
 
             {/* 3. Classical References list */}
             {references && references.length > 0 && (
-              <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
+              <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-right">
                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest font-serif mb-3 flex items-center gap-1.5">
-                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> Scholarly References / Textual Sources
+                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> علمی حوالہ جات / کتب کے مراجع
                 </h3>
                 <ul className="list-decimal list-inside text-xs text-slate-600 dark:text-slate-400 space-y-1">
                   {references.map((ref, idx) => (
@@ -122,9 +135,9 @@ export default function FatwaDetail() {
 
         {/* Related Fatwas Grid */}
         {related && related.length > 0 && (
-          <div>
+          <div className="text-right">
             <h3 className="text-xl font-bold text-text-primary font-serif mb-6 pb-2 border-b border-site-border">
-              Related Fatwas
+              متعلقہ فتاویٰ
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {related.map((rel) => (

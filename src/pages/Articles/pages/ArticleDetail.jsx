@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Calendar, Eye, ArrowLeft, Bookmark, Hash, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
+import { Calendar, Eye, ArrowRight, Bookmark, Hash, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
 import { fetchArticleBySlug } from '../../../store/slices/contentSlice';
 import ArticleCard from '../../../components/ArticleCard';
 
@@ -26,10 +26,10 @@ export default function ArticleDetail() {
   if (error || !current) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl font-bold text-red-700 font-serif">Error Loading Article</h2>
-        <p className="text-slate-550 text-sm mt-2">{error || 'Article not found.'}</p>
+        <h2 className="text-2xl font-bold text-red-700">مضمون لوڈ کرنے میں خرابی</h2>
+        <p className="text-slate-550 text-sm mt-2">{error || 'مضمون نہیں ملا۔'}</p>
         <Link to="/articles" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#2F241C] text-white rounded font-semibold text-sm hover:bg-[#1E1915]">
-          <ArrowLeft className="w-4.5 h-4.5" /> Back to Articles
+          <ArrowRight className="w-4.5 h-4.5" /> مقالات پر واپس جائیں
         </Link>
       </div>
     );
@@ -38,7 +38,7 @@ export default function ArticleDetail() {
   const { article, related } = current;
   const { title, summary, category, tags, featuredImage, fullContent, references, publishDate, viewCount } = article;
 
-  const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
+  const formattedDate = new Date(publishDate).toLocaleDateString('ur-PK', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -72,7 +72,7 @@ export default function ArticleDetail() {
         
         {/* Navigation Breadcrumb back button */}
         <Link to="/articles" className="inline-flex items-center gap-1 text-sm font-bold text-text-primary hover:text-[#8A6F52] dark:hover:text-amber-400 mb-6">
-          <ArrowLeft className="w-4 h-4" /> Back to Articles
+          <ArrowRight className="w-4 h-4" /> مقالات پر واپس جائیں
         </Link>
 
         {/* Article Details Container */}
@@ -99,7 +99,7 @@ export default function ArticleDetail() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Eye className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
-                {viewCount} views
+                {viewCount} بار دیکھا گیا
               </span>
             </div>
 
@@ -107,7 +107,7 @@ export default function ArticleDetail() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-text-primary font-serif leading-tight mb-4 tracking-wide">
               {title}
             </h1>
-            <p className="text-slate-700 dark:text-slate-300 text-md font-light leading-relaxed italic border-l-4 border-[#8A6F52] dark:border-amber-500 pl-4 mb-8">
+            <p className="text-slate-700 dark:text-slate-300 text-md font-light leading-relaxed italic border-r-4 border-[#8A6F52] dark:border-amber-500 pr-4 mb-8 text-right">
               {summary}
             </p>
 
@@ -120,8 +120,8 @@ export default function ArticleDetail() {
             {/* Reference section */}
             {references && references.length > 0 && (
               <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700">
-                <h3 className="text-sm font-bold text-slate-850 dark:text-slate-205 uppercase tracking-widest font-serif mb-3 flex items-center gap-1.5">
-                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> References / Classical Sources
+                <h3 className="text-sm font-bold text-slate-850 dark:text-slate-205 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> حوالہ جات / مراجع
                 </h3>
                 <ul className="list-decimal list-inside text-xs text-slate-600 dark:text-slate-400 space-y-1">
                   {references.map((ref, idx) => (
@@ -147,26 +147,26 @@ export default function ArticleDetail() {
               {/* Share actions */}
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 shrink-0">
-                  <Share2 className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> Share:
+                  <Share2 className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> شیئر کریں:
                 </span>
                 <button
                   onClick={() => handleShareClick('facebook')}
                   className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
-                  title="Share on Facebook"
+                  title="فیس بک پر شیئر کریں"
                 >
                   <Facebook className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => handleShareClick('twitter')}
                   className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
-                  title="Share on Twitter"
+                  title="ٹویٹر پر شیئر کریں"
                 >
                   <Twitter className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => handleShareClick('whatsapp')}
                   className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-text-primary hover:bg-[#2F241C] dark:hover:bg-[#8A6F52] hover:text-white dark:hover:text-white transition-colors"
-                  title="Share on WhatsApp"
+                  title="واٹس ایپ پر شیئر کریں"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                 </button>
@@ -181,8 +181,8 @@ export default function ArticleDetail() {
         {/* Related Articles Section */}
         {related && related.length > 0 && (
           <div>
-            <h3 className="text-xl font-bold text-text-primary font-serif mb-6 pb-2 border-b border-site-border">
-              Related Articles
+            <h3 className="text-xl font-bold text-text-primary mb-6 pb-2 border-b border-site-border">
+              متعلقہ مقالات
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {related.map((rel) => (

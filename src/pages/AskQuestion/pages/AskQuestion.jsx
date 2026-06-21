@@ -4,6 +4,19 @@ import { HelpCircle, CheckCircle, AlertTriangle, Send } from 'lucide-react';
 import { submitQuestion, clearContentErrors } from '../../../store/slices/contentSlice';
 import { Input } from '../../../components/Input';
 
+const categoryTranslations = {
+  'Salah': 'نماز',
+  'Fasting': 'روزه',
+  'Zakat': 'زکوٰۃ',
+  'Hajj & Umrah': 'حج اور عمرہ',
+  'Marriage': 'نکاح / شادی',
+  'Divorce': 'طلاق',
+  'Business': 'تجارت / کاروبار',
+  'Family Issues': 'خاندانی مسائل',
+  'Education': 'تعلیم',
+  'General Questions': 'عام مسائل',
+};
+
 export default function AskQuestion() {
   const dispatch = useDispatch();
   const { actionLoading, actionError } = useSelector((state) => state.content);
@@ -49,7 +62,7 @@ export default function AskQuestion() {
     const result = await dispatch(submitQuestion(formData));
     if (submitQuestion.fulfilled.match(result)) {
       setSuccess(true);
-      setSuccessMsg(result.payload.message || 'Your question has been submitted successfully.');
+      setSuccessMsg(result.payload.message || 'آپ کا سوال کامیابی کے ساتھ جمع کرا دیا گیا ہے۔');
       setFormData({
         fullName: '',
         email: '',
@@ -62,40 +75,40 @@ export default function AskQuestion() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
+    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
       <div className="max-w-xl mx-auto px-4 sm:px-6">
 
         {/* Success Banner */}
         {success ? (
           <div className="premium-card p-8 shadow-sm text-center">
             <CheckCircle className="w-16 h-16 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-[#2F241C] dark:text-emerald-400 font-serif mb-3">Submission Received</h2>
+            <h2 className="text-2xl font-bold text-[#2F241C] dark:text-emerald-400 font-serif mb-3">سوال موصول ہو گیا</h2>
             <p className="text-slate-700 dark:text-slate-350 text-sm leading-relaxed mb-6 font-light">{successMsg}</p>
             <button
               onClick={() => setSuccess(false)}
               className="px-5 py-2.5 bg-[#2F241C] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-[#1E1915] transition-colors"
             >
-              Ask Another Question
+              ایک اور سوال پوچھیں
             </button>
           </div>
         ) : (
-          <div className="premium-card shadow-sm overflow-hidden">
+          <div className="premium-card shadow-sm overflow-hidden text-right">
 
             {/* Header Title */}
-            <div className="bg-[#2F241C] islamic-pattern text-white p-6 relative border-b border-[#8A6F52]/35 flex items-center gap-3">
+            <div className="bg-[#2F241C] islamic-pattern text-white p-6 relative border-b border-[#8A6F52]/35 flex items-center gap-3 text-right">
               <HelpCircle className="w-8 h-8 text-[#8A6F52] shrink-0" />
               <div>
-                <h1 className="text-xl font-bold text-white font-serif">Ask a Question</h1>
-                <p className="text-[10px] text-[#EAE3CF] mt-0.5">Submit your query directly to the scholar</p>
+                <h1 className="text-xl font-bold text-white font-serif">سوال پوچھیں</h1>
+                <p className="text-[10px] text-[#EAE3CF] mt-0.5">اپنا سوال براہِ راست عالم/مفتی صاحب کو ارسال کریں</p>
               </div>
             </div>
 
             {/* Form Fields */}
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-4 text-right">
 
               {/* Alert Message */}
               {actionError && (
-                <div className="bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 dark:text-red-400 text-xs shrink-0">
+                <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 dark:text-red-400 text-xs shrink-0 text-right">
                   <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
                   <span>{actionError}</span>
                 </div>
@@ -103,15 +116,15 @@ export default function AskQuestion() {
 
               {/* Full Name */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Full Name *</label>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">مکمل نام *</label>
                 <Input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
-                  placeholder="Enter your name"
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  placeholder="اپنا نام لکھیں"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
                   border=""
                 />
               </div>
@@ -119,7 +132,7 @@ export default function AskQuestion() {
               {/* Email & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Email Address *</label>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">ای میل ایڈریس *</label>
                   <Input
                     type="email"
                     name="email"
@@ -127,19 +140,19 @@ export default function AskQuestion() {
                     onChange={handleInputChange}
                     required
                     placeholder="name@example.com"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Phone Number (Optional)</label>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">فون نمبر (اختیاری)</label>
                   <Input
                     type="text"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
-                    placeholder="+1 (555) 123-4567"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                    placeholder="+92 300 1234567"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
                     border=""
                   />
                 </div>
@@ -147,17 +160,17 @@ export default function AskQuestion() {
 
               {/* Category */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Select Category *</label>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">زمرہ منتخب کریں *</label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-emerald-500 rounded outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-emerald-500 rounded outline-none text-right"
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
-                      {cat}
+                      {categoryTranslations[cat] || cat}
                     </option>
                   ))}
                 </select>
@@ -165,30 +178,30 @@ export default function AskQuestion() {
 
               {/* Question Title */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Question Title *</label>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">سوال کا عنوان *</label>
                 <Input
                   type="text"
                   name="questionTitle"
                   value={formData.questionTitle}
                   onChange={handleInputChange}
                   required
-                  placeholder="e.g., Calculation of Zakat on Retirement Funds"
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                  placeholder="مثال: ریٹائرمنٹ فنڈز پر زکوٰۃ کا حساب"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
                   border=""
                 />
               </div>
 
               {/* Question Detail */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Detailed Question *</label>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1 text-right">تفصیلی سوال *</label>
                 <textarea
                   name="detailedQuestion"
                   value={formData.detailedQuestion}
                   onChange={handleInputChange}
                   required
-                  placeholder="Provide all relevant details to help the scholar understand your query..."
+                  placeholder="عالم صاحب کو اپنا مسئلہ سمجھانے کے لیے تمام متعلقہ تفصیلات فراہم کریں..."
                   rows={6}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 text-right"
                 ></textarea>
               </div>
 
@@ -200,7 +213,7 @@ export default function AskQuestion() {
                   className="w-full flex items-center justify-center gap-2 py-3 bg-[#8A6F52] hover:bg-[#725B43] text-white font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
-                  {actionLoading ? 'Submitting Question...' : 'Submit to Scholar'}
+                  {actionLoading ? 'سوال جمع کیا جا رہا ہے...' : 'عالم صاحب کو بھیجیں'}
                 </button>
               </div>
 

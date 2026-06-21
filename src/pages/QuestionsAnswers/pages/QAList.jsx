@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp, Eye } from 'lucide-react';
+import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
 import { fetchPublicQuestions } from '../../../store/slices/contentSlice';
 import { Input } from '../../../components/Input';
+
+const categoryTranslations = {
+  'Salah': 'نماز',
+  'Fasting': 'روزه',
+  'Zakat': 'زکوٰۃ',
+  'Hajj & Umrah': 'حج اور عمرہ',
+  'Marriage': 'نکاح / شادی',
+  'Divorce': 'طلاق',
+  'Business': 'تجارت / کاروبار',
+  'Family Issues': 'خاندانی مسائل',
+  'Education': 'تعلیم',
+  'General Questions': 'عام مسائل',
+};
 
 export default function QAList() {
   const dispatch = useDispatch();
@@ -50,45 +63,45 @@ export default function QAList() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
+    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Interactive Learning</span>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">Questions & Answers</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            Review public questions answered by the scholar, addressing practical issues in light of traditional Islamic jurisprudence.
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">باہمی گفتگو</span>
+          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">سوالات اور جوابات</h1>
+          <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
+            عوام کی طرف سے پوچھے گئے اور مفتی صاحب کے جواب دیے گئے دینی و فقہی مسائل کا مطالعہ کریں۔
           </p>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="premium-card p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="premium-card p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-right">
           <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-80">
             <Input
               type="text"
-              placeholder="Search Q&As..."
+              placeholder="سوال و جواب تلاش کریں..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              inputClassName="w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
               border=""
             />
-            <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
+            <button type="submit" className="absolute right-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
+          <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-start sm:justify-end">
             <SlidersHorizontal className="w-4.5 h-4.5 text-slate-400" />
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52]"
+              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] text-right"
             >
-              <option value="">All Categories</option>
+              <option value="">تمام زمرے</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {categoryTranslations[cat] || cat}
                 </option>
               ))}
             </select>
@@ -101,27 +114,27 @@ export default function QAList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : questions && questions.length > 0 ? (
-          <div className="space-y-4 mb-10">
+          <div className="space-y-4 mb-10 text-right">
             {questions.map((q) => {
               const isExpanded = expandedId === q._id;
               return (
-                <div key={q._id} className="premium-card rounded shadow-xs overflow-hidden transition-all duration-300">
+                <div key={q._id} className="premium-card rounded shadow-xs overflow-hidden transition-all duration-300 text-right">
 
                   {/* Collapsible Header */}
                   <button
                     onClick={() => toggleExpand(q._id)}
-                    className="w-full p-5 text-left flex items-start justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                    className="w-full p-5 text-right flex items-start justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-right"
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-2 text-right">
                       <div className="flex flex-wrap items-center gap-3">
                         <span className="bg-[#2F241C]/10 dark:bg-amber-950/30 text-[#2F241C] dark:text-[#8A6F52] text-[10px] font-bold px-2 py-0.5 rounded">
-                          {q.category}
+                          {categoryTranslations[q.category] || q.category}
                         </span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                          {new Date(q.answeredAt || q.updatedAt).toLocaleDateString()}
+                          {new Date(q.answeredAt || q.updatedAt).toLocaleDateString('ur-PK')}
                         </span>
                       </div>
-                      <h3 className="text-sm sm:text-md font-bold text-slate-900 dark:text-white leading-snug font-serif">
+                      <h3 className="text-sm sm:text-md font-bold text-slate-900 dark:text-white leading-snug font-serif text-right">
                         {q.questionTitle}
                       </h3>
                     </div>
@@ -133,21 +146,21 @@ export default function QAList() {
 
                   {/* Collapsible Content */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10">
+                    <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10 text-right">
 
                       {/* Detailed Question */}
-                      <div className="bg-slate-50 dark:bg-slate-900 border-l-2 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs">
-                        <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5">QUESTION DETAILS:</span>
-                        <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">
+                      <div className="bg-slate-50 dark:bg-slate-900 border-r-2 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs text-right">
+                        <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5 text-right">سوال کی تفصیل:</span>
+                        <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed text-right">
                           "{q.detailedQuestion}"
                         </p>
                       </div>
 
                       {/* Detailed Answer */}
-                      <div className="text-sm leading-relaxed">
-                        <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">SCHOLAR ANSWER:</span>
+                      <div className="text-sm leading-relaxed text-right">
+                        <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 text-right">عالم کا جواب:</span>
                         <div
-                          className="prose prose-sm dark:prose-invert text-slate-800 dark:text-slate-200 leading-relaxed font-light whitespace-pre-line"
+                          className="prose prose-sm dark:prose-invert text-slate-800 dark:text-slate-200 leading-relaxed font-light whitespace-pre-line text-right"
                           dangerouslySetInnerHTML={{ __html: q.answerContent }}
                         ></div>
                       </div>
@@ -162,8 +175,8 @@ export default function QAList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <MessageSquare className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">No Answered Questions</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">Try resetting search keywords or category filters.</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">کوئی جواب شدہ سوال نہیں ملا</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">براہ کرم تلاش کے الفاظ یا زمرے کے فلٹرز تبدیل کریں۔</p>
           </div>
         )}
 
@@ -175,7 +188,7 @@ export default function QAList() {
               disabled={page === 1}
               className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
-              Previous
+              پچھلا
             </button>
             {[...Array(pages).keys()].map((pNum) => (
               <button
@@ -194,7 +207,7 @@ export default function QAList() {
               disabled={page === pages}
               className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
-              Next
+              اگلا
             </button>
           </div>
         )}

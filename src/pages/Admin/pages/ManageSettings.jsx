@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search } from 'lucide-react';
+import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search } from 'lucide-react';
 import { fetchSettings, updateSettings, clearSettingsErrors } from '../../../store/slices/settingsSlice';
-import useTranslate from '../../../hooks/useTranslate';
 import { Input } from '../../../components/Input';
 
 export default function ManageSettings() {
   const dispatch = useDispatch();
-  const { settings, loading, error, updateSuccess } = useSelector((state) => state.settings);
-  const { t, isUrdu } = useTranslate();
+  const { settings, loading, error, updateSuccess, isSettingsLoaded } = useSelector((state) => state.settings);
 
   const [activeTab, setActiveTab] = useState('bio');
 
@@ -56,8 +54,10 @@ export default function ManageSettings() {
   });
 
   useEffect(() => {
-    dispatch(fetchSettings());
-  }, [dispatch]);
+    if (!isSettingsLoaded) {
+      dispatch(fetchSettings());
+    }
+  }, [dispatch, isSettingsLoaded]);
 
   // Load database settings into local state inputs
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function ManageSettings() {
           .split(',')
           .map((s) => s.trim())
           .filter((s) => s)
-        : [];
+          : [];
 
     const payload = {
       scholarInfo: {
@@ -155,39 +155,39 @@ export default function ManageSettings() {
   }
 
   const tabs = [
-    { id: 'bio', label: t('Biography Details'), icon: <Info className="w-4 h-4" /> },
-    { id: 'contact', label: t('Contact Details'), icon: <PhoneCall className="w-4 h-4" /> },
-    { id: 'socials', label: t('Social Networks'), icon: <Globe className="w-4 h-4" /> },
-    { id: 'home', label: t('Home Page Hero'), icon: <Settings className="w-4 h-4" /> },
-    { id: 'seo', label: t('SEO Settings'), icon: <Search className="w-4 h-4" /> },
+    { id: 'bio', label: 'سوانح کی تفصیلات', icon: <Info className="w-4 h-4" /> },
+    { id: 'contact', label: 'رابطے کی تفصیلات', icon: <PhoneCall className="w-4 h-4" /> },
+    { id: 'socials', label: 'سوشل نیٹ ورک', icon: <Globe className="w-4 h-4" /> },
+    { id: 'home', label: 'ہوم پیج ہیرو', icon: <Settings className="w-4 h-4" /> },
+    { id: 'seo', label: 'SEO ترتیبات', icon: <Search className="w-4 h-4" /> },
   ];
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
+    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir="rtl">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 text-right">
           <div className="flex items-center gap-3">
             <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
-              <ArrowLeft className={`w-4.5 h-4.5 ${isUrdu ? 'rotate-180' : ''}`} />
+              <ArrowRight className="w-4.5 h-4.5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{t('Website Settings')}</h1>
-              <p className="text-xs text-slate-400 font-light font-sans">{t('Modify biography profiles, contact numbers, and SEO tags')}</p>
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">ویب سائٹ کی ترتیبات</h1>
+              <p className="text-xs text-slate-400 font-light font-sans">سوانح حیات، رابطے کے نمبرز اور SEO ٹیگز تبدیل کریں</p>
             </div>
           </div>
         </div>
 
         {/* Status Alerts */}
         {updateSuccess && (
-          <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
+          <div className="bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>{t('Website settings updated successfully.') || 'Website settings updated successfully.'}</span>
+            <span>ویب سائٹ کی ترتیبات کامیابی سے اپ ڈیٹ ہو گئیں۔</span>
           </div>
         )}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shadow-xs">
+          <div className="bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shadow-xs">
             <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
             <span>{error}</span>
           </div>
@@ -214,133 +214,133 @@ export default function ManageSettings() {
         </div>
 
         {/* Global Save Form */}
-        <form onSubmit={handleFormSubmit} className="bg-white border border-[#EAE3CF] p-6 rounded-lg shadow-sm space-y-6">
+        <form onSubmit={handleFormSubmit} className="bg-white border border-[#EAE3CF] p-6 rounded-lg shadow-sm space-y-6 text-right">
 
           {/* TAB 1: Biography Details */}
           {activeTab === 'bio' && (
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Scholar Full Name')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">عالم کا مکمل نام</label>
                   <Input
                     type="text"
                     value={scholarInfo.fullName}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, fullName: e.target.value })}
                     border=""
-                  // inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Honorary Islamic Title')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">اعزازی اسلامی لقب/عنوان</label>
                   <Input
                     type="text"
                     value={scholarInfo.title}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, title: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Detailed Biography Statement')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">تفصیلی سوانح عمری</label>
                 <textarea
                   value={scholarInfo.bio}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, bio: e.target.value })}
                   rows={5}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y text-right"
                 ></textarea>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Madrasah Education')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مدرسہ کی تعلیم</label>
                   <Input
                     type="text"
                     value={scholarInfo.madrasah}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, madrasah: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('University Education')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">یونیورسٹی کی تعلیم</label>
                   <Input
                     type="text"
                     value={scholarInfo.university}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, university: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Qualifications (Comma Separated)')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">تعلیمی اسناد (کوما سے الگ کریں)</label>
                 <Input
                   type="text"
                   value={scholarInfo.qualifications}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, qualifications: e.target.value })}
-                  placeholder="PhD in Shariah, Masters in Islamic Law"
+                  placeholder="پی ایچ ڈی شریعہ، ماسٹرز اسلامی قانون"
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Areas of Expertise (Comma Separated)')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مہارت کے شعبے (کوما سے الگ کریں)</label>
                 <Input
                   type="text"
                   value={scholarInfo.areasOfExpertise}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, areasOfExpertise: e.target.value })}
-                  placeholder="Fiqh, Hadith, Islamic Banking"
+                  placeholder="فقہ، حدیث، اسلامی بینکاری"
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Teaching Experience Synopsis')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">تدریسی تجربے کا خلاصہ</label>
                 <Input
                   type="text"
                   value={scholarInfo.teachingExperience}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, teachingExperience: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Research Interests (Comma Separated)')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">تحقیقی دلچسپیاں (کوما سے الگ کریں)</label>
                   <Input
                     type="text"
                     value={scholarInfo.researchInterests}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, researchInterests: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Associated Institutions (Comma Separated)')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">منسلک ادارے (کوما سے الگ کریں)</label>
                   <Input
                     type="text"
                     value={scholarInfo.institutionsAssociatedWith}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, institutionsAssociatedWith: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Key Achievements (Comma Separated)')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">اہم کامیابیاں (کوما سے الگ کریں)</label>
                 <Input
                   type="text"
                   value={scholarInfo.achievements}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, achievements: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
             </div>
@@ -350,47 +350,47 @@ export default function ManageSettings() {
           {activeTab === 'contact' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Office Address')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">دفتر کا پتہ</label>
                 <Input
                   type="text"
                   value={contactInfo.address}
                   onChange={(e) => setContactInfo({ ...contactInfo, address: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Phone Number')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">فون نمبر</label>
                   <Input
                     type="text"
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('WhatsApp Number Link')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">واٹس ایپ نمبر لنک</label>
                   <Input
                     type="text"
                     value={contactInfo.whatsapp}
                     onChange={(e) => setContactInfo({ ...contactInfo, whatsapp: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Email Address')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ای میل ایڈریس</label>
                 <Input
                   type="email"
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
             </div>
@@ -401,50 +401,50 @@ export default function ManageSettings() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Facebook Profile URL')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">فیس بک پروفائل کا لنک</label>
                   <Input
                     type="url"
                     value={socialLinks.facebook}
                     onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
                     placeholder="https://facebook.com/username"
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('YouTube Channel URL')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">یوٹیوب چینل کا لنک</label>
                   <Input
                     type="url"
                     value={socialLinks.youtube}
                     onChange={(e) => setSocialLinks({ ...socialLinks, youtube: e.target.value })}
                     placeholder="https://youtube.com/channel/..."
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Twitter / X URL')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ٹویٹر / X کا لنک</label>
                   <Input
                     type="url"
                     value={socialLinks.twitter}
                     onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
                     placeholder="https://twitter.com/username"
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Instagram URL')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">انسٹاگرام کا لنک</label>
                   <Input
                     type="url"
                     value={socialLinks.instagram}
                     onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
                     placeholder="https://instagram.com/username"
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
@@ -456,45 +456,45 @@ export default function ManageSettings() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Hero Title Name')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ہیرو سیکشن کا نام</label>
                   <Input
                     type="text"
                     value={homepageSettings.heroName}
                     onChange={(e) => setHomepageSettings({ ...homepageSettings, heroName: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Hero Title Designation')}</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ہیرو سیکشن کا لقب/عہدہ</label>
                   <Input
                     type="text"
                     value={homepageSettings.heroTitle}
                     onChange={(e) => setHomepageSettings({ ...homepageSettings, heroTitle: e.target.value })}
                     border=""
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Hero Introduction Paragraph')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ہیرو سیکشن کا تعارفی پیراگراف</label>
                 <textarea
                   value={homepageSettings.heroIntroduction}
                   onChange={(e) => setHomepageSettings({ ...homepageSettings, heroIntroduction: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y text-right"
                 ></textarea>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Scholar Mission Statement Text')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">عالم کا مشن سٹیٹمنٹ</label>
                 <Input
                   type="text"
                   value={homepageSettings.heroMission}
                   onChange={(e) => setHomepageSettings({ ...homepageSettings, heroMission: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
             </div>
@@ -504,23 +504,23 @@ export default function ManageSettings() {
           {activeTab === 'seo' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Default Meta Title Tag')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ڈیفالٹ میٹا ٹائٹل ٹیگ</label>
                 <Input
                   type="text"
                   value={seoSettings.metaTitle}
                   onChange={(e) => setSeoSettings({ ...seoSettings, metaTitle: e.target.value })}
                   border=""
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52]"
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] text-right"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t('Default Meta Description Tag')}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">ڈیفالٹ میٹا ڈسکرپشن ٹیگ</label>
                 <textarea
                   value={seoSettings.metaDescription}
                   onChange={(e) => setSeoSettings({ ...seoSettings, metaDescription: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] resize-y text-right"
                 ></textarea>
               </div>
             </div>
@@ -529,14 +529,14 @@ export default function ManageSettings() {
 
 
           {/* Form Action save control */}
-          <div className={`pt-4 border-t border-slate-100 flex items-center ${isUrdu ? 'justify-start' : 'justify-end'}`}>
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-start">
             <button
               type="submit"
               disabled={loading}
               className="flex items-center gap-1.5 px-6 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
             >
               <Save className="w-4 h-4 text-[#8A6F52]" />
-              {loading ? t('Saving Settings...') : t('Save Configuration')}
+              {loading ? 'ترتیبات محفوظ ہو رہی ہیں...' : 'ترتیبات محفوظ کریں'}
             </button>
           </div>
 
@@ -546,3 +546,4 @@ export default function ManageSettings() {
     </div>
   );
 }
+

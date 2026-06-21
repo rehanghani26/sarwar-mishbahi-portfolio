@@ -10,6 +10,7 @@ import {
   Calendar,
   Play,
   ArrowRight,
+  ArrowLeft,
   Mail,
   Phone,
   MapPin,
@@ -38,26 +39,26 @@ import AnimatedFeatureCard from './Animatedfeaturecard ';
 const FEATURES = [
   {
     icon: BookOpen,
-    title: 'Authentic Knowledge',
-    description: 'Quran, Hadith and Fiqh based scholarly content.',
+    title: 'مستند علم',
+    description: 'قرآن، حدیث اور فقہ پر مبنی علمی مواد۔',
     to: '/articles',
   },
   {
     icon: ShieldCheck,
-    title: 'Verified Fatwas',
-    description: 'Get authentic Fatwas from qualified Islamic scholars.',
+    title: 'تصدیق شدہ فتاویٰ',
+    description: 'مستند علما سے تصدیق شدہ فتاویٰ حاصل کریں۔',
     to: '/fatwas',
   },
   {
     icon: FileText,
-    title: 'Research Based Articles',
-    description: 'In-depth Islamic articles written with research and evidence.',
+    title: 'تحقیقی مقالات',
+    description: 'تحقیق اور دلائل کے ساتھ لکھے گئے تفصیلی اسلامی مقالات۔',
     to: '/articles',
   },
   {
     icon: Users,
-    title: 'Community Guidance',
-    description: 'Guidance and solutions for daily life issues according to Islam.',
+    title: 'معاشرتی رہنمائی',
+    description: 'روزمرہ کے مسائل کے بارے میں شریعت کے مطابق رہنمائی اور حل۔',
     to: '/qa',
   },
 ];
@@ -73,17 +74,17 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       className="flex items-end justify-between mb-10 border-b-2 border-[#E5D8CA] pb-4"
     >
-      <div className="border-l-4 border-[#B08D57] pl-4">
-        <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest font-serif block mb-1">
+      <div className="border-r-4 border-[#B08D57] pr-4 text-right">
+        <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest block mb-1">
           {eyebrow}
         </span>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F3A5F] font-serif leading-none">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F3A5F] leading-none">
           {title}
         </h2>
       </div>
       {linkTo && (
         <Link to={linkTo} className="text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 transition-colors">
-          {linkLabel} <ArrowRight className="w-4 h-4" />
+          {linkLabel} <ArrowLeft className="w-4 h-4" />
         </Link>
       )}
     </motion.div>
@@ -102,11 +103,11 @@ function ScholarPhotoPlaceholder() {
       className="w-full max-w-sm aspect-[4/5] rounded-2xl border-2 border-dashed border-[#B08D57]/50 bg-[#F5EEE5]/40 flex flex-col items-center justify-center text-center p-6"
     >
       <ImageIcon className="w-10 h-10 text-[#B08D57]/60 mb-3" />
-      <p className="text-xs font-bold uppercase tracking-widest text-[#7B654D] font-serif">
-        Scholar Photo
+      <p className="text-xs font-bold uppercase tracking-widest text-[#7B654D]">
+        عالم صاحب کی تصویر
       </p>
       <p className="text-[11px] text-[#7B654D]/70 mt-1">
-        Reserved space — add portrait here
+        مخصوص جگہ — یہاں تصویر لگائیں
       </p>
     </motion.div>
   );
@@ -151,21 +152,21 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
           {/* Hero Left: Text Content */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-6 text-right">
             <motion.span
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-1.5 bg-[#F5EEE5] border border-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full font-serif"
+              className="inline-flex items-center gap-1.5 bg-[#F5EEE5] border border-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full"
             >
-              <span className="text-[#B08D57] text-sm">🌙</span> {heroTitle}
+              <span className="text-[#B08D57] text-sm"></span> {heroTitle}
             </motion.span>
 
             <motion.h1
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.08 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1F3A5F] leading-tight font-serif tracking-wide"
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1F3A5F] leading-tight tracking-wide"
             >
               {heroName}
             </motion.h1>
@@ -183,7 +184,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.24 }}
-              className="border-l-4 border-[#B08D57] pl-4 italic text-sm text-[#7B654D] font-light max-w-lg"
+              className="border-r-4 border-[#B08D57] pr-4 italic text-sm text-[#7B654D] font-light max-w-lg text-right"
             >
               "{heroMission}"
             </motion.div>
@@ -193,28 +194,28 @@ export default function Home() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.32 }}
-              className="flex flex-wrap items-center gap-4 pt-4"
+              className="flex flex-wrap items-center gap-4 pt-4 justify-start"
             >
               <Link
                 to="/ask"
                 className="px-6 py-3 bg-[#1F3A5F] hover:bg-[#162C49] text-white font-bold rounded shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-serif"
               >
                 <HelpCircle className="w-4.5 h-4.5" />
-                Ask a Question
+                سوال پوچھیں
               </Link>
               <Link
                 to="/articles"
                 className="px-6 py-3 bg-transparent border-2 border-[#E5D8CA] text-[#7B654D] hover:bg-[#FAF7F2] font-bold rounded transition-colors flex items-center gap-2 text-sm"
               >
                 <FileText className="w-4.5 h-4.5" />
-                Read Articles
+                مقالات پڑھیں
               </Link>
               <Link
                 to="/fatwas"
                 className="px-6 py-3 bg-transparent hover:underline text-[#7B654D] hover:text-[#1F3A5F] font-bold transition-all text-sm flex items-center gap-1.5"
               >
-                View Fatwas
-                <ArrowRight className="w-4 h-4" />
+                فتاویٰ دیکھیں
+                <ArrowLeft className="w-4 h-4" />
               </Link>
             </motion.div>
           </div>
@@ -245,7 +246,7 @@ export default function Home() {
 
       {/* 2. LATEST ARTICLES */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Knowledge Sharing" title="Latest Articles" linkTo="/articles" linkLabel="All Articles" />
+        <SectionHeading eyebrow="علم کا فروغ" title="تازہ ترین مقالات" linkTo="/articles" linkLabel="تمام مقالات" />
 
         {articles && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -254,14 +255,14 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <p className="text-slate-400 italic text-center py-6">No articles available.</p>
+          <p className="text-slate-400 italic text-center py-6">کوئی مضمون دستیاب نہیں ہے۔</p>
         )}
       </section>
 
       {/* 3. FEATURED FATWAS */}
       <section className="bg-[#FAF7F2] border-y border-[#E5D8CA] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="Guidance & Rulings" title="Featured Fatwas" linkTo="/fatwas" linkLabel="All Rulings" />
+          <SectionHeading eyebrow="رہنمائی اور احکام" title="منتخب فتاویٰ" linkTo="/fatwas" linkLabel="تمام احکام" />
 
           {fatwas && fatwas.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -270,14 +271,14 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <p className="text-slate-400 italic text-center py-6">No fatwas available.</p>
+            <p className="text-slate-400 italic text-center py-6">کوئی فتویٰ دستیاب نہیں ہے۔</p>
           )}
         </div>
       </section>
 
       {/* 4. RECENT Q&A */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Interactive Guidance" title="Recent Q&A" linkTo="/qa" linkLabel="All Questions" />
+        <SectionHeading eyebrow="باہمی رہنمائی" title="حالیہ سوال و جواب" linkTo="/qa" linkLabel="تمام سوالات" />
 
         {questions && questions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -288,14 +289,14 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="premium-card p-6 flex flex-col justify-between h-full bg-white text-left"
+                className="premium-card p-6 flex flex-col justify-between h-full bg-white text-right"
               >
                 <div>
                   <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
                     <span className="bg-[#E5D8CA] text-[#7B654D] font-bold px-2.5 py-1 rounded-full text-[10px]">{q.category}</span>
                     <span>{new Date(q.answeredAt || q.updatedAt).toLocaleDateString()}</span>
                   </div>
-                  <h4 className="text-md font-bold text-slate-900 mb-2 font-serif line-clamp-2">
+                  <h4 className="text-md font-bold text-slate-900 mb-2 line-clamp-2">
                     {q.questionTitle}
                   </h4>
                   <p className="text-slate-700 text-xs italic line-clamp-3 mb-4">
@@ -303,13 +304,13 @@ export default function Home() {
                   </p>
                 </div>
                 <Link to={`/qa`} className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1">
-                  View Scholar's Answer <ArrowRight className="w-3.5 h-3.5" />
+                  مفتی صاحب کا جواب دیکھیں <ArrowLeft className="w-3.5 h-3.5" />
                 </Link>
               </motion.div>
             ))}
           </div>
         ) : (
-          <p className="text-slate-400 italic text-center py-6">No answered questions available.</p>
+          <p className="text-slate-400 italic text-center py-6">کوئی جواب شدہ سوال دستیاب نہیں ہے۔</p>
         )}
       </section>
 
@@ -319,13 +320,13 @@ export default function Home() {
 
           {/* Left: Publications */}
           <div>
-            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-left">
-              <h2 className="text-xl font-bold text-[#1F3A5F] font-serif flex items-center gap-2">
+            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+              <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
                 <Book className="w-5.5 h-5.5 text-[#B08D57]" />
-                Latest Publications
+                تازہ ترین مطبوعات
               </h2>
               <Link to="/publications" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-                View All
+                سب دیکھیں
               </Link>
             </div>
 
@@ -336,19 +337,19 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 italic text-center py-6">No publications available.</p>
+              <p className="text-slate-400 italic text-center py-6">کوئی مطبوعہ دستیاب نہیں ہے۔</p>
             )}
           </div>
 
           {/* Right: Lectures */}
           <div>
-            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-left">
-              <h2 className="text-xl font-bold text-[#1F3A5F] font-serif flex items-center gap-2">
+            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+              <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
                 <Play className="w-5.5 h-5.5 text-[#B08D57] fill-current" />
-                Latest Lectures
+                تازہ ترین بیانات
               </h2>
               <Link to="/lectures" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-                View All
+                سب دیکھیں
               </Link>
             </div>
 
@@ -359,7 +360,7 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 italic text-center py-6">No lectures available.</p>
+              <p className="text-slate-400 italic text-center py-6">کوئی بیان دستیاب نہیں ہے۔</p>
             )}
           </div>
 
@@ -371,13 +372,13 @@ export default function Home() {
 
         {/* Upcoming Programs (8 columns on large screen) */}
         <div className="lg:col-span-8">
-          <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-left">
-            <h2 className="text-xl font-bold text-[#1F3A5F] font-serif flex items-center gap-2">
+          <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+            <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
               <Calendar className="w-5.5 h-5.5 text-[#B08D57]" />
-              Upcoming Programs & Gatherings
+              آنے والے پروگرام اور اجتماعات
             </h2>
             <Link to="/events" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-              View All
+              سب دیکھیں
             </Link>
           </div>
 
@@ -388,30 +389,30 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <p className="text-slate-400 italic text-center py-6">No scheduled events.</p>
+            <p className="text-slate-400 italic text-center py-6">کوئی طے شدہ پروگرام نہیں ہے۔</p>
           )}
         </div>
 
         {/* Contact info card (4 columns on large screen) */}
-        <div className="lg:col-span-4 text-left">
-          <h2 className="text-xl font-bold text-[#1F3A5F] font-serif mb-8 border-b border-[#E5D8CA] pb-3">
-            Contact Details
+        <div className="lg:col-span-4 text-right">
+          <h2 className="text-xl font-bold text-[#1F3A5F] mb-8 border-b border-[#E5D8CA] pb-3">
+            رابطے کی تفصیلات
           </h2>
           <div className="premium-card p-6 space-y-6 bg-white">
             <p className="text-slate-700 text-xs leading-relaxed font-light">
-              Feel free to reach out to the office of {heroName} for appointments, invitations, or queries.
+              ملاقات، دعوت ناموں یا سوالات کے لیے بلا جھجھک {heroName} کے دفتر سے رابطہ کریں۔
             </p>
 
             <ul className="space-y-4.5 text-sm">
-              <li className="flex gap-3 items-start">
+              <li className="flex gap-3 items-start justify-start">
                 <MapPin className="w-5 h-5 text-[#B08D57] shrink-0 mt-0.5" />
                 <span className="text-slate-700 leading-tight font-light">{address}</span>
               </li>
-              <li className="flex gap-3 items-center">
+              <li className="flex gap-3 items-center justify-start">
                 <Phone className="w-4.5 h-4.5 text-[#B08D57] shrink-0" />
                 <span className="text-slate-700 font-light">{phone}</span>
               </li>
-              <li className="flex gap-3 items-center">
+              <li className="flex gap-3 items-center justify-start">
                 <Mail className="w-4.5 h-4.5 text-[#B08D57] shrink-0" />
                 <span className="text-slate-700 font-light">{email}</span>
               </li>
@@ -419,9 +420,9 @@ export default function Home() {
 
             <Link
               to="/contact"
-              className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white text-xs font-bold rounded transition-colors uppercase tracking-wider font-serif"
+              className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white text-xs font-bold rounded transition-colors"
             >
-              Send Message
+              پیغام بھیجیں
             </Link>
           </div>
         </div>

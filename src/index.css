@@ -118,6 +118,11 @@
 }
 
 /* Urdu/RTL typography overrides to inherit body font selection instead of Cinzel/Playfair Display */
+[dir="rtl"] body,
+[dir="rtl"] {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
+}
+
 [dir="rtl"] h1,
 [dir="rtl"] h2,
 [dir="rtl"] h3,
@@ -125,5 +130,5 @@
 [dir="rtl"] h5,
 [dir="rtl"] h6,
 [dir="rtl"] .title-serif {
-  font-family: inherit !important;
+  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
 }

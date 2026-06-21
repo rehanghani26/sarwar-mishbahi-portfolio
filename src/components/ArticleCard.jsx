@@ -1,14 +1,25 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Eye, ArrowRight } from 'lucide-react';
-import useTranslate from '../hooks/useTranslate';
+import { Calendar, Eye, ArrowLeft } from 'lucide-react';
+
+const categoryTranslations = {
+  'Quran': 'قرآن',
+  'Hadith': 'حدیث',
+  'Fiqh': 'فقہ',
+  'Aqeedah': 'عقیدہ',
+  'Seerah': 'سیرت',
+  'Islamic History': 'اسلامی تاریخ',
+  'Family Matters': 'خاندانی معاملات',
+  'Education': 'تعلیم',
+  'Dawah': 'دعوت',
+  'General Islam': 'عام معلوماتِ اسلام',
+};
 
 export default function ArticleCard({ article }) {
   const { title, slug, summary, category, featuredImage, publishDate, viewCount } = article;
-  const { t, isUrdu } = useTranslate();
 
-  const formattedDate = new Date(publishDate).toLocaleDateString(isUrdu ? 'ur-PK' : 'en-US', {
+  const formattedDate = new Date(publishDate).toLocaleDateString('ur-PK', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -28,7 +39,7 @@ export default function ArticleCard({ article }) {
           loading="lazy"
         />
         <div className="absolute top-3 left-3 bg-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
-          {t(category)}
+          {categoryTranslations[category] || category}
         </div>
       </div>
 
@@ -43,12 +54,12 @@ export default function ArticleCard({ article }) {
           </span>
           <span className="flex items-center gap-2">
             <Eye className="w-5 h-5 text-[#B08D57]" />
-            {viewCount} {t('views')}
+            {viewCount} بار دیکھا گیا
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors line-clamp-2 leading-snug mb-4 font-serif">
+        <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors line-clamp-2 leading-snug mb-4">
           {title}
         </h3>
 
@@ -63,8 +74,8 @@ export default function ArticleCard({ article }) {
             to={`/articles/${slug}`}
             className="inline-flex items-center gap-2 text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
           >
-            {t('Read Article')}
-            <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isUrdu ? 'rotate-180' : ''}`} />
+            مضمون پڑھیں
+            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
           </Link>
         </div>
 

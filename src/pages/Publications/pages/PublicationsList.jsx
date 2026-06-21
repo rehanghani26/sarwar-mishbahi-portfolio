@@ -5,6 +5,17 @@ import { fetchPublications } from '../../../store/slices/contentSlice';
 import PublicationCard from '../../../components/PublicationCard';
 import { Input } from '../../../components/Input';
 
+const categoryTranslations = {
+  'Quran Studies': 'قرآنی علوم',
+  'Hadith': 'حدیث',
+  'Fiqh': 'فقہ',
+  'Aqeedah': 'عقائد',
+  'Seerah': 'سیرت النبی',
+  'Islamic History': 'اسلامی تاریخ',
+  'Fatwa Collections': 'فتاویٰ کے مجموعے',
+  'Research Papers': 'تحقیقی مقالات',
+};
+
 export default function PublicationsList() {
   const dispatch = useDispatch();
 
@@ -39,48 +50,48 @@ export default function PublicationsList() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen">
+    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Scholarly Works</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">Books & Publications</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            Access, download, and study books, papers, and notes directly hosted on Google Drive.
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">علمی تصانیف</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">کتب و مطبوعات</h1>
+          <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
+            گوگل ڈرائیو پر موجود کتابیں، مقالات اور تعلیمی نوٹس حاصل کریں اور ان کا مطالعہ کریں۔
           </p>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5">
+        <div className="premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 text-right">
 
           {/* Search Form */}
           <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
             <Input
               type="text"
-              placeholder="Search publications..."
+              placeholder="مطبوعات تلاش کریں..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              inputClassName="w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
               border=""
             />
-            <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
+            <button type="submit" className="absolute right-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
 
           {/* Category Dropdown */}
-          <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+          <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-start md:justify-end">
             <SlidersHorizontal className="w-4.5 h-4.5 text-slate-400" />
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] rounded outline-none"
+              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] rounded outline-none text-right"
             >
-              <option value="">All Categories</option>
+              <option value="">تمام زمرے</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {categoryTranslations[cat] || cat}
                 </option>
               ))}
             </select>
@@ -97,7 +108,7 @@ export default function PublicationsList() {
                 : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
               }`}
           >
-            All Categories
+            تمام زمرے
           </button>
           {categories.map((cat) => (
             <button
@@ -108,7 +119,7 @@ export default function PublicationsList() {
                   : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
                 }`}
             >
-              {cat}
+              {categoryTranslations[cat] || cat}
             </button>
           ))}
         </div>
@@ -119,7 +130,7 @@ export default function PublicationsList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : publications && publications.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
             {publications.map((pub) => (
               <PublicationCard key={pub._id} publication={pub} />
             ))}
@@ -127,8 +138,8 @@ export default function PublicationsList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <BookOpen className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">No Publications Available</h3>
-            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">Try resetting the keyword search query or subject filters.</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">کوئی مطبوعہ دستیاب نہیں ہے</h3>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">براہ کرم تلاش کے الفاظ یا موضوع کے فلٹرز کو تبدیل کرنے کی کوشش کریں۔</p>
           </div>
         )}
 

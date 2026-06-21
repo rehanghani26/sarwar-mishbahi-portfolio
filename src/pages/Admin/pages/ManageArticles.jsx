@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowLeft, Save, AlertTriangle, FileText, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle } from 'lucide-react';
 import { fetchArticles, createArticle, updateArticle, deleteArticle, clearContentErrors } from '../../../store/slices/contentSlice';
-import useTranslate from '../../../hooks/useTranslate';
 import RichTextEditor from '../../../components/RichTextEditor';
 import { Input } from '../../../components/Input';
 
+const categoryTranslations = {
+  'Quran': 'قرآن',
+  'Hadith': 'حدیث',
+  'Fiqh': 'فقہ',
+  'Aqeedah': 'عقیدہ',
+  'Seerah': 'سیرت النبی',
+  'Islamic History': 'اسلامی تاریخ',
+  'Family Matters': 'خاندانی معاملات',
+  'Education': 'تعلیم',
+  'Dawah': 'دعوت',
+  'General Islam': 'عام معلوماتِ اسلام',
+};
+
 export default function ManageArticles() {
   const dispatch = useDispatch();
-  const { t, isUrdu } = useTranslate();
 
   const { list: articles, loading } = useSelector((state) => state.content.articles);
   const { actionLoading, actionError } = useSelector((state) => state.content);
@@ -102,22 +113,22 @@ export default function ManageArticles() {
     if (editingId) {
       result = await dispatch(updateArticle({ id: editingId, articleData: payload }));
       if (updateArticle.fulfilled.match(result)) {
-        showSuccess('Article updated successfully.');
+        showSuccess('مضمون کامیابی کے ساتھ اپ ڈیٹ ہو گیا۔');
       }
     } else {
       result = await dispatch(createArticle(payload));
       if (createArticle.fulfilled.match(result)) {
-        showSuccess('Article created successfully.');
+        showSuccess('مضمون کامیابی کے ساتھ شائع ہو گیا۔');
       }
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this article?')) {
+    if (window.confirm('کیا آپ واقعی اس مضمون کو حذف کرنا چاہتے ہیں؟')) {
       dispatch(clearContentErrors());
       const result = await dispatch(deleteArticle(id));
       if (deleteArticle.fulfilled.match(result)) {
-        showSuccess('Article removed successfully.');
+        showSuccess('مضمون کامیابی کے ساتھ حذف کر دیا گیا۔');
       }
     }
   };
@@ -132,18 +143,18 @@ export default function ManageArticles() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir={isUrdu ? 'rtl' : 'ltr'}>
+    <div className="bg-[#FAF9F5] py-10 min-h-[80vh] text-right" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${isUrdu ? 'text-right' : 'text-left'}`}>
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 text-right">
+          <div className="flex items-center gap-3 text-right">
             <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
-              <ArrowLeft className={`w-4.5 h-4.5 ${isUrdu ? 'rotate-180' : ''}`} />
+              <ArrowRight className="w-4.5 h-4.5" />
             </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{t('Manage Articles')}</h1>
-              <p className="text-xs text-slate-400 font-light">{t('Add, update, or remove scholar articles') || 'Add, update, or remove scholar articles'}</p>
+            <div className="text-right">
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif text-right">مقالات کا انتظام</h1>
+              <p className="text-xs text-slate-400 font-light text-right">عالم صاحب کے مقالات شامل کریں، تبدیل کریں یا حذف کریں۔</p>
             </div>
           </div>
 
@@ -153,14 +164,14 @@ export default function ManageArticles() {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
               <Plus className="w-4 h-4 text-[#8A6F52]" />
-              {t('Write Article')}
+              مضمون لکھیں
             </button>
           )}
         </div>
 
         {/* Action success alert banner */}
         {success && (
-          <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
+          <div className="bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs text-right">
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{successMsg}</span>
           </div>
@@ -168,57 +179,57 @@ export default function ManageArticles() {
 
         {/* Forms vs List router */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
-              <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId ? t('Edit Scholarly Article') : t('Write New Scholarly Article')}
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
+            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between text-right">
+              <h2 className="font-bold text-sm sm:text-md font-serif text-right">
+                {editingId ? 'مضمون کی تدوین کریں' : 'نیا علمی مضمون لکھیں'}
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
                 className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
               >
-                {t('Cancel')}
+                منسوخ کریں
               </button>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-4 text-right">
               
               {/* Form action errors */}
               {actionError && (
-                <div className="bg-red-50 border-l-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0">
+                <div className="bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0 text-right">
                   <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
                   <span>{actionError}</span>
                 </div>
               )}
 
               {/* Title & Category */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Article Title *</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-right">
+                <div className="sm:col-span-2 text-right">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">مضمون کا عنوان *</label>
                   <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
-                    placeholder="Enter article heading title..."
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    placeholder="مضمون کا عنوان درج کریں..."
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category *</label>
+                <div className="text-right">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">زمرہ *</label>
                   <select
                     name="category"
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
+                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52] text-right"
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
-                        {cat}
+                        {categoryTranslations[cat] || cat}
                       </option>
                     ))}
                   </select>
@@ -227,42 +238,42 @@ export default function ManageArticles() {
 
               {/* Summary */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Brief Summary *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">موقع کا مختصر خلاصہ *</label>
                 <Input
                   type="text"
                   name="summary"
                   value={formFields.summary}
                   onChange={handleInputChange}
                   required
-                  placeholder="Enter a 2-3 sentence teaser summary of the article..."
-                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                  placeholder="مضمون کا مختصر خلاصہ درج کریں..."
+                  inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                   border=""
                 />
               </div>
 
               {/* Tags & Featured Image */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-right">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tags (Comma Separated)</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">ٹیگز (کوما سے الگ کریں)</label>
                   <Input
                     type="text"
                     name="tags"
                     value={formFields.tags}
                     onChange={handleInputChange}
-                    placeholder="e.g. Fiqh, Zakat, Modern Business"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    placeholder="مثال: فقہ، زکوٰۃ، جدید کاروبار"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Featured Image URL</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">نمایاں تصویر کا یو آر ایل</label>
                   <Input
                     type="text"
                     name="featuredImage"
                     value={formFields.featuredImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/cover.jpg"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all"
+                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
                     border=""
                   />
                 </div>
@@ -270,35 +281,35 @@ export default function ManageArticles() {
 
               {/* Rich Text Editor */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Article Content (Rich Editor) *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">مکمل مضمون کا مواد (رچ ایڈیٹر) *</label>
                 <RichTextEditor
                   value={formFields.fullContent}
                   onChange={handleEditorChange}
-                  placeholder="Draft your scholarly Islamic content here..."
+                  placeholder="اپنا علمی اسلامی مواد یہاں تحریر کریں..."
                 />
               </div>
 
               {/* References */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">References / Classical Sources (One Per Line)</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1 text-right">حوالہ جات / مراجع (ہر لائن میں ایک)</label>
                 <textarea
                   name="references"
                   value={formFields.references}
                   onChange={handleInputChange}
-                  placeholder="e.g. Sahih al-Bukhari, Hadith 456&#10;Al-Mughni by Ibn Qudamah"
+                  placeholder="مثال: صحیح بخاری، حدیث نمبر 456&#10;المغنی از ابن قدامہ"
                   rows={3}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y text-right"
                 ></textarea>
               </div>
 
               {/* Form CTA buttons */}
-              <div className={`pt-4 border-t border-slate-100 flex items-center ${isUrdu ? 'justify-start' : 'justify-end'} gap-3`}>
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-start gap-3">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
                   className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
-                  {t('Cancel')}
+                  منسوخ کریں
                 </button>
                 <button
                   type="submit"
@@ -306,7 +317,7 @@ export default function ManageArticles() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-[#8A6F52]" />
-                  {actionLoading ? t('Saving...') : t('Save Article')}
+                  {actionLoading ? 'محفوظ کیا جا رہا ہے...' : 'مضمون محفوظ کریں'}
                 </button>
               </div>
 
@@ -314,51 +325,51 @@ export default function ManageArticles() {
           </div>
         ) : (
           /* Articles List Table */
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
               </div>
             ) : articles && articles.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto text-right">
+                <table className="w-full text-right border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Title')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Category')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-right' : 'text-left'}`}>{t('Publish Date')}</th>
-                      <th className="px-6 py-4 text-center">{t('Views')}</th>
-                      <th className={`px-6 py-4 ${isUrdu ? 'text-left text-left' : 'text-right'}`}>{t('Actions')}</th>
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF] text-right">
+                      <th className="px-6 py-4 text-right">عنوان</th>
+                      <th className="px-6 py-4 text-right">زمرہ</th>
+                      <th className="px-6 py-4 text-right">اشاعت کی تاریخ</th>
+                      <th className="px-6 py-4 text-center">مشاہدات</th>
+                      <th className="px-6 py-4 text-left">اقدامات</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
+                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700 text-right">
                     {articles.map((article) => (
-                      <tr key={article._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 font-bold font-serif max-w-xs truncate">{article.title}</td>
-                        <td className="px-6 py-4">
+                      <tr key={article._id} className="hover:bg-slate-50/50 transition-colors text-right">
+                        <td className="px-6 py-4 font-bold font-serif max-w-xs truncate text-right">{article.title}</td>
+                        <td className="px-6 py-4 text-right">
                           <span className="bg-[#2F241C]/10 text-[#2F241C] text-[10px] font-bold px-2 py-0.5 rounded">
-                            {article.category}
+                            {categoryTranslations[article.category] || article.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-light text-xs">
-                          {new Date(article.publishDate).toLocaleDateString()}
+                        <td className="px-6 py-4 font-light text-xs text-right">
+                          {new Date(article.publishDate).toLocaleDateString('ur-PK')}
                         </td>
                         <td className="px-6 py-4 text-center font-semibold text-xs text-[#8A6F52]">
                           {article.viewCount || 0}
                         </td>
-                        <td className={`px-6 py-4 ${isUrdu ? 'text-left' : 'text-right'}`}>
+                        <td className="px-6 py-4 text-left">
                           <div className="inline-flex items-center gap-2">
                              <button
                                onClick={() => openEditForm(article)}
                                className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
-                               title={t('Edit Article')}
+                               title="مضمون کی تدوین کریں"
                              >
                                <Edit2 className="w-4 h-4" />
                              </button>
                              <button
                                onClick={() => handleDelete(article._id)}
                                className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                               title={t('Delete Article')}
+                               title="مضمون حذف کریں"
                              >
                                <Trash2 className="w-4 h-4" />
                              </button>
@@ -372,13 +383,12 @@ export default function ManageArticles() {
             ) : (
               <div className="text-center py-20">
                 <FileText className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">No Articles Written</h3>
-                <p className="text-slate-400 text-xs mt-1">Click the "Write Article" button to publish your first post.</p>
+                <h3 className="text-lg font-bold text-slate-700 font-serif">کوئی مضمون نہیں لکھا گیا</h3>
+                <p className="text-slate-400 text-xs mt-1">اپنا پہلا مضمون شائع کرنے کے لیے "مضمون لکھیں" بٹن پر کلک کریں۔</p>
               </div>
             )}
           </div>
         )}
-
       </div>
     </div>
   );

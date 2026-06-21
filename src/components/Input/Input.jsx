@@ -120,8 +120,8 @@ const Input = forwardRef(
               }`}
           >
             {type === "date"
-              ? getLocaleDateTime(value, "date") || "Not specified"
-              : value || "Not specified"}
+              ? getLocaleDateTime(value, "date") || "مخصوص نہیں"
+              : value || "مخصوص نہیں"}
           </div>
         ) : (
           <input
@@ -153,7 +153,7 @@ const Input = forwardRef(
           !readOnly &&
           limit !== undefined && (
             <div className="text-xs text-gray-500 ">
-              {remainingCharacters} characters left
+              {remainingCharacters} حروف باقی ہیں
             </div>
           )
         )}

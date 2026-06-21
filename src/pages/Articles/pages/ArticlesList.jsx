@@ -5,6 +5,19 @@ import { fetchArticles } from '../../../store/slices/contentSlice';
 import ArticleCard from '../../../components/ArticleCard';
 import { Input } from '../../../components/Input';
 
+const categoryTranslations = {
+  'Quran': 'قرآن',
+  'Hadith': 'حدیث',
+  'Fiqh': 'فقہ',
+  'Aqeedah': 'عقیدہ',
+  'Seerah': 'سیرت',
+  'Islamic History': 'اسلامی تاریخ',
+  'Family Matters': 'خاندانی معاملات',
+  'Education': 'تعلیم',
+  'Dawah': 'دعوت',
+  'General Islam': 'عام معلوماتِ اسلام',
+};
+
 export default function ArticlesList() {
   const dispatch = useDispatch();
 
@@ -51,10 +64,10 @@ export default function ArticlesList() {
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">Authentic Guidance</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">Islamic Articles</h1>
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest block mb-1">مستند رہنمائی</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] tracking-wide">اسلامی مقالات</h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            Explore verified write-ups and scholarly analysis on a variety of classical and contemporary Islamic topics.
+            مختلف موضوعات پر مستند اور تحقیقی اسلامی مقالات کا مطالعہ کریں۔
           </p>
         </div>
 
@@ -64,7 +77,7 @@ export default function ArticlesList() {
           <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
             <Input
               type="text"
-              placeholder="Search articles..."
+              placeholder="مقالات تلاش کریں..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
@@ -83,10 +96,10 @@ export default function ArticlesList() {
               onChange={(e) => handleCategoryChange(e.target.value)}
               className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52]"
             >
-              <option value="">All Categories</option>
+              <option value="">تمام زمرے</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {categoryTranslations[cat] || cat}
                 </option>
               ))}
             </select>
@@ -102,7 +115,7 @@ export default function ArticlesList() {
                 : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
               }`}
           >
-            All Topic Areas
+            تمام موضوعات
           </button>
           {categories.map((cat) => (
             <button
@@ -113,7 +126,7 @@ export default function ArticlesList() {
                   : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
                 }`}
             >
-              {cat}
+              {categoryTranslations[cat] || cat}
             </button>
           ))}
         </div>
@@ -139,7 +152,7 @@ export default function ArticlesList() {
                   disabled={page === 1}
                   className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
-                  Previous
+                  پچھلا
                 </button>
                 {[...Array(pages).keys()].map((pNum) => (
                   <button
@@ -158,7 +171,7 @@ export default function ArticlesList() {
                   disabled={page === pages}
                   className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
-                  Next
+                  اگلا
                 </button>
               </div>
             )}
@@ -166,8 +179,8 @@ export default function ArticlesList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <BookOpen className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">No Articles Found</h3>
-            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">Try resetting your category filters or search inputs.</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white">کوئی مضمون نہیں ملا</h3>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">براہ کرم تلاش کے الفاظ یا زمرے کے فلٹرز تبدیل کریں۔</p>
           </div>
         )}
 

@@ -32,20 +32,21 @@ export default function MainLayout() {
     }
   }, [dispatch, isSettingsLoaded, loading, error]);
 
-  // Apply typography and direction configuration dynamically
+  // Apply typography and direction configuration dynamically for Urdu & RTL
   useEffect(() => {
-    const mappedFont = fontFamilies[englishFont] || fontFamilies['Inter'];
-    
-    document.body.style.fontFamily = mappedFont;
-    document.body.dir = 'ltr';
-  }, [englishFont]);
+    document.body.style.fontFamily = "'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif";
+    document.body.dir = 'rtl';
+  }, []);
 
+  // Form categories options preserve English values for database API queries, but display localized labels.
+  // Resolved an infinite settings API calling loop by restricting the `MainLayout.jsx` global spinner to initial fetches only and checking `isSettingsLoaded` before dispatches on component mount in `ManageSettings.jsx`.
+  
   // If initial API call is in progress, show spinner/loader
-  if (loading || (!isSettingsLoaded && !error)) {
+  if ((loading && !isSettingsLoaded) || (!isSettingsLoaded && !error)) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF7F2] text-[#1F3A5F]">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B08D57]"></div>
-        <p className="mt-4 text-sm font-semibold font-serif tracking-wider text-[#7B654D] uppercase animate-pulse">Loading Scholar Portal...</p>
+        <p className="mt-4 text-sm font-bold tracking-wider text-[#7B654D] animate-pulse">پورٹل لوڈ ہو رہا ہے...</p>
       </div>
     );
   }
@@ -61,15 +62,15 @@ export default function MainLayout() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#1F3A5F] font-serif mb-3">Server Under Maintenance</h1>
+          <h1 className="text-2xl font-bold text-[#1F3A5F] mb-3">سستم کی دیکھ بھال جاری ہے</h1>
           <p className="text-[#7B654D]/80 text-sm leading-relaxed mb-6 font-light">
-            We are currently performing system maintenance or updating our settings. Please try again in a few moments.
+            ہم اس وقت سسٹم کی دیکھ بھال کر رہے ہیں یا اپنی ترتیبات کو اپ ڈیٹ کر رہے ہیں۔ براہ کرم چند لمحوں بعد دوبارہ کوشش کریں۔
           </p>
           <button
             onClick={() => dispatch(fetchSettings())}
-            className="px-6 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white font-semibold rounded shadow-md hover:shadow-lg transition-all text-xs uppercase tracking-wider font-serif"
+            className="px-6 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white font-bold rounded shadow-md hover:shadow-lg transition-all text-xs"
           >
-            Retry Connection
+            دوبارہ کوشش کریں
           </button>
         </div>
       </div>

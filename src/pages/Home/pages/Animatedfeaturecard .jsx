@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 /**
  * AnimatedFeatureCard
@@ -53,7 +53,7 @@ export default function AnimatedFeatureCard({ icon: Icon, title, description, to
                     to={to}
                     className="mt-auto inline-flex items-center gap-1 text-[11px] font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
                 >
-                    Learn More <ArrowRight className="w-3 h-3" />
+                    مزید جانیں <ArrowLeft className="w-3 h-3" />
                 </Link>
             </div>
         </motion.div>
