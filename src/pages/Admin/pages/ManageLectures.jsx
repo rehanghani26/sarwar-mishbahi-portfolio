@@ -17,6 +17,8 @@ export default function ManageLectures() {
 
   const { list: lectures, loading } = useSelector((state) => state.content.lectures);
   const { actionLoading, actionError } = useSelector((state) => state.content);
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -84,22 +86,22 @@ export default function ManageLectures() {
     if (editingId) {
       result = await dispatch(updateLecture({ id: editingId, lectureData: formFields }));
       if (updateLecture.fulfilled.match(result)) {
-        showSuccess('بیان کامیابی سے اپ ڈیٹ ہو گیا۔');
+        showSuccess(language === 'en' ? 'Lecture updated successfully.' : 'بیان کامیابی سے اپ ڈیٹ ہو گیا۔');
       }
     } else {
       result = await dispatch(createLecture(formFields));
       if (createLecture.fulfilled.match(result)) {
-        showSuccess('بیان کامیابی سے شامل ہو گیا۔');
+        showSuccess(language === 'en' ? 'Lecture added successfully.' : 'بیان کامیابی سے شامل ہو گیا۔');
       }
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('کیا آپ واقعی اس بیان کو حذف کرنا چاہتے ہیں؟')) {
+    if (window.confirm(language === 'en' ? 'Are you sure you want to delete this lecture?' : 'کیا آپ واقعی اس بیان کو حذف کرنا چاہتے ہیں؟')) {
       dispatch(clearContentErrors());
       const result = await dispatch(deleteLecture(id));
       if (deleteLecture.fulfilled.match(result)) {
-        showSuccess('بیان کامیابی سے حذف کر دیا گیا۔');
+        showSuccess(language === 'en' ? 'Lecture deleted successfully.' : 'بیان کامیابی سے حذف کر دیا گیا۔');
       }
     }
   };
@@ -114,18 +116,18 @@ export default function ManageLectures() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] py-10 min-h-[80vh]" dir="rtl">
+    <div className={`bg-[#FAF9F5] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 text-right">
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
             <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
-              <ArrowRight className="w-4.5 h-4.5" />
+              <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">بیانات کا انتظام</h1>
-              <p className="text-xs text-slate-400 font-light">آڈیو اور ویڈیو بیانات شامل کریں، اپ ڈیٹ کریں یا حذف کریں</p>
+              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{language === 'en' ? 'Manage Lectures' : 'بیانات کا انتظام'}</h1>
+              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete audio and video lectures.' : 'آڈیو اور ویڈیو بیانات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
             </div>
           </div>
 
@@ -135,14 +137,14 @@ export default function ManageLectures() {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
               <Plus className="w-4 h-4 text-[#8A6F52]" />
-              بیان شامل کریں
+              {language === 'en' ? 'Add Lecture' : 'بیان شامل کریں'}
             </button>
           )}
         </div>
 
         {/* Success Alert banner */}
         {success && (
-          <div className="bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs">
+          <div className={`bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{successMsg}</span>
           </div>
@@ -150,17 +152,20 @@ export default function ManageLectures() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
             <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId ? 'بیان کی تفصیلات میں ترمیم کریں' : 'نیا آڈیو/ویڈیو بیان شامل کریں'}
+                {editingId 
+                  ? (language === 'en' ? 'Edit Lecture Details' : 'بیان کی تفصیلات میں ترمیم کریں') 
+                  : (language === 'en' ? 'Add New Audio/Video Lecture' : 'نیا آڈیو/ویڈیو بیان شامل کریں')
+                }
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
                 className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
               >
-                منسوخ کریں
+                {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
             </div>
 
@@ -168,7 +173,7 @@ export default function ManageLectures() {
               
               {/* Alert error */}
               {actionError && (
-                <div className="bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0">
+                <div className={`bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                   <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
                   <span>{actionError}</span>
                 </div>
@@ -177,30 +182,30 @@ export default function ManageLectures() {
               {/* Title & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">بیان کا عنوان *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Lecture Title *' : 'بیان کا عنوان *'}</label>
                   <Input
                     type="text"
                     name="title"
                     value={formFields.title}
                     onChange={handleInputChange}
                     required
-                    placeholder="مثال: تزکیہ نفس: اسلامی طریقہ کار"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
+                    placeholder={language === 'en' ? 'e.g. Self-Purification: Islamic Methodology' : 'مثال: تزکیہ نفس: اسلامی طریقہ کار'}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">میڈیا فارمیٹ *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Media Format *' : 'میڈیا فارمیٹ *'}</label>
                   <select
                     name="category"
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52]"
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
-                        {cat.label}
+                        {language === 'en' ? cat.value : cat.label}
                       </option>
                     ))}
                   </select>
@@ -210,7 +215,7 @@ export default function ManageLectures() {
               {/* Video URL & Thumbnail URL */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">میڈیا یو آر ایل (یوٹیوب/فیس بک/ایم پی 3 لنک) *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Media URL (YouTube/Facebook/MP3 link) *' : 'میڈیا یو آر ایل (یوٹیوب/فیس بک/ایم پی 3 لنک) *'}</label>
                   <Input
                     type="url"
                     name="videoUrl"
@@ -218,19 +223,19 @@ export default function ManageLectures() {
                     onChange={handleInputChange}
                     required
                     placeholder="https://www.youtube.com/watch?v=..."
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">تھمب نیل امیج یو آر ایل (اختیاری)</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Thumbnail Image URL (Optional)' : 'تھمب نیل امیج یو آر ایل (اختیاری)'}</label>
                   <Input
                     type="text"
                     name="thumbnail"
                     value={formFields.thumbnail}
                     onChange={handleInputChange}
                     placeholder="https://example.com/thumbnail.jpg"
-                    inputClassName="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all text-right"
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -238,15 +243,15 @@ export default function ManageLectures() {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">مختصر تفصیل *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Short Description *' : 'مختصر تفصیل *'}</label>
                 <textarea
                   name="description"
                   value={formFields.description}
                   onChange={handleInputChange}
                   required
-                  placeholder="اس بیان میں زیر بحث موضوعات کا مختصر جائزہ فراہم کریں..."
+                  placeholder={language === 'en' ? 'Provide a brief overview of the topics discussed in this lecture...' : 'اس بیان میں زیر بحث موضوعات کا مختصر جائزہ فراہم کریں...'}
                   rows={4}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y text-right"
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -257,7 +262,7 @@ export default function ManageLectures() {
                   onClick={() => setIsFormOpen(false)}
                   className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
-                  منسوخ کریں
+                  {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
@@ -265,7 +270,10 @@ export default function ManageLectures() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-[#8A6F52]" />
-                  {actionLoading ? 'محفوظ ہو رہا ہے...' : 'بیان محفوظ کریں'}
+                  {actionLoading 
+                    ? (language === 'en' ? 'Saving...' : 'محفوظ ہو رہا ہے...') 
+                    : (language === 'en' ? 'Save Lecture' : 'بیان محفوظ کریں')
+                  }
                 </button>
               </div>
 
@@ -273,45 +281,45 @@ export default function ManageLectures() {
           </div>
         ) : (
           /* Lectures List Table */
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden text-right">
+          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
               </div>
             ) : lectures && lectures.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="w-full text-right border-collapse">
+                <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
-                      <th className="px-6 py-4 text-right">عنوان</th>
-                      <th className="px-6 py-4 text-right">زمرہ</th>
-                      <th className="px-6 py-4 text-right">ویڈیو/آڈیو یو آر ایل</th>
-                      <th className="px-6 py-4 text-left">اقدامات</th>
+                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
+                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
+                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Video/Audio URL' : 'ویڈیو/آڈیو یو آر ایل'}</th>
+                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>{language === 'en' ? 'Actions' : 'اقدامات'}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                     {lectures.map((lec) => (
                       <tr key={lec._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 font-bold font-serif max-w-xs truncate">{lec.title}</td>
-                        <td className="px-6 py-4">
+                        <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.title}</td>
+                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                           <span className="bg-[#2F241C]/10 text-[#2F241C] text-[10px] font-bold px-2 py-0.5 rounded">
-                            {categoryTranslations[lec.category] || lec.category}
+                            {language === 'en' ? lec.category : (categoryTranslations[lec.category] || lec.category)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-xs font-light text-slate-400 max-w-xs truncate select-all">{lec.videoUrl}</td>
-                        <td className="px-6 py-4 text-left">
+                        <td className={`px-6 py-4 text-xs font-light text-slate-400 max-w-xs truncate select-all ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.videoUrl}</td>
+                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
                              <button
                                onClick={() => openEditForm(lec)}
                                className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
-                               title="ترمیم کریں"
+                               title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                              >
                                <Edit2 className="w-4 h-4" />
                              </button>
                              <button
                                onClick={() => handleDelete(lec._id)}
                                className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                               title="حذف کریں"
+                               title={language === 'en' ? 'Delete' : 'حذف کریں'}
                              >
                                <Trash2 className="w-4 h-4" />
                              </button>
@@ -325,8 +333,8 @@ export default function ManageLectures() {
             ) : (
               <div className="text-center py-20">
                 <Play className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">کوئی بیان اپ لوڈ نہیں کیا گیا</h3>
-                <p className="text-slate-400 text-xs mt-1">اپنا پہلا بیان شامل کرنے کے لیے "بیان شامل کریں" بٹن پر کلک کریں۔</p>
+                <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}</h3>
+                <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Lecture" button to publish your first lecture.' : 'اپنا پہلا بیان شامل کرنے کے لیے "بیان شامل کریں" بٹن پر کلک کریں۔'}</p>
               </div>
             )}
           </div>

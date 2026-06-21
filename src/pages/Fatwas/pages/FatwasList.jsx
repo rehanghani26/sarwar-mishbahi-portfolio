@@ -21,6 +21,9 @@ const categoryTranslations = {
 export default function FatwasList() {
   const dispatch = useDispatch();
 
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   const { list: fatwas, loading, page, pages } = useSelector((state) => state.content.fatwas);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,26 +67,30 @@ export default function FatwasList() {
 
         {/* Header Titles */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest block mb-1">مستند اسلامی فقہ</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] tracking-wide">فتاویٰ اور شرعی احکام</h1>
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest block mb-1">
+            {language === 'en' ? 'AUTHENTIC ISLAMIC JURISPRUDENCE' : 'مستند اسلامی فقہ'}
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] tracking-wide">
+            {language === 'en' ? 'Fatwas & Shariah Rulings' : 'فتاویٰ اور شرعی احکام'}
+          </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            روزمرہ کے مسائل کے بارے میں مستند مفتیانِ کرام کے جاری کردہ شرعی احکام حاصل کریں۔
+            {language === 'en' ? 'Get Shariah rulings issued by authentic muftis on daily life matters.' : 'روزمرہ کے مسائل کے بارے میں مستند مفتیانِ کرام کے جاری کردہ شرعی احکام حاصل کریں۔'}
           </p>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 animate-fade-in">
+        <div className={`premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 animate-fade-in ${language === 'ur' ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
           {/* Search Form */}
           <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
             <Input
               type="text"
-              placeholder="فتاویٰ تلاش کریں..."
+              placeholder={language === 'en' ? 'Search fatwas...' : 'فتاویٰ تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+              inputClassName={`w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
               border=""
             />
-            <button type="submit" className="absolute left-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
+            <button type="submit" className={`absolute ${language === 'ur' ? 'left-3' : 'right-3'} top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -96,10 +103,10 @@ export default function FatwasList() {
               onChange={(e) => handleCategoryChange(e.target.value)}
               className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52]"
             >
-              <option value="">تمام زمرے</option>
+              <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {categoryTranslations[cat] || cat}
+                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -115,7 +122,7 @@ export default function FatwasList() {
                 : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
               }`}
           >
-            تمام موضوعات
+            {language === 'en' ? 'All Topics' : 'تمام موضوعات'}
           </button>
           {categories.map((cat) => (
             <button
@@ -126,7 +133,7 @@ export default function FatwasList() {
                   : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
                 }`}
             >
-              {categoryTranslations[cat] || cat}
+              {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -152,7 +159,7 @@ export default function FatwasList() {
                   disabled={page === 1}
                   className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
-                  پچھلا
+                  {language === 'en' ? 'Previous' : 'پچھلا'}
                 </button>
                 {[...Array(pages).keys()].map((pNum) => (
                   <button
@@ -171,7 +178,7 @@ export default function FatwasList() {
                   disabled={page === pages}
                   className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
-                  اگلا
+                  {language === 'en' ? 'Next' : 'اگلا'}
                 </button>
               </div>
             )}
@@ -179,8 +186,12 @@ export default function FatwasList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <ShieldAlert className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white">کوئی فتویٰ نہیں ملا</h3>
-            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">براہ کرم اپنے تلاش کے الفاظ تبدیل کریں۔</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white">
+              {language === 'en' ? 'No fatwas found' : 'کوئی فتویٰ نہیں ملا'}
+            </h3>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">
+              {language === 'en' ? 'Please modify your search terms.' : 'براہ کرم اپنے تلاش کے الفاظ تبدیل کریں۔'}
+            </p>
           </div>
         )}
 

@@ -7,6 +7,9 @@ import EventCard from '../../../components/EventCard';
 export default function EventsList() {
   const dispatch = useDispatch();
 
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   const { list: events, loading } = useSelector((state) => state.content.events);
 
   useEffect(() => {
@@ -18,15 +21,19 @@ export default function EventsList() {
   const pastEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() <= nowTime) : [];
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
+    <div className={`bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-12 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">پروگرام اور اجتماعات</span>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">سیمینارز اور اعلانات</h1>
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+            {language === 'en' ? 'PROGRAMS & GATHERINGS' : 'پروگرام اور اجتماعات'}
+          </span>
+          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">
+            {language === 'en' ? 'Seminars & Announcements' : 'سیمینارز اور اعلانات'}
+          </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            عالم صاحب کی زیر نگرانی ہونے والے تعلیمی سیمینارز، ورکشاپس اور ہفتہ وار علمی مجالس سے باخبر رہیں۔
+            {language === 'en' ? 'Stay informed about educational seminars, workshops, and weekly scientific gatherings under the supervision of the scholar.' : 'عالم صاحب کی زیر نگرانی ہونے والے تعلیمی سیمینارز، ورکشاپس اور ہفتہ وار علمی مجالس سے باخبر رہیں۔'}
           </p>
         </div>
 
@@ -36,12 +43,12 @@ export default function EventsList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : (
-          <div className="space-y-12 text-right">
+          <div className="space-y-12 text-start">
 
             {/* Section 1: Upcoming Programs */}
-            <div className="text-right">
-              <h2 className="text-lg font-bold text-[#2F241C] dark:text-[#8A6F52] font-serif mb-6 pb-2 border-b border-[#EAE3CF]/50 dark:border-slate-800 uppercase tracking-wider text-right">
-                آنے والے پروگرام
+            <div className={language === 'ur' ? 'text-right' : 'text-left'}>
+              <h2 className={`text-lg font-bold text-[#2F241C] dark:text-[#8A6F52] font-serif mb-6 pb-2 border-b border-[#EAE3CF]/50 dark:border-slate-800 uppercase tracking-wider ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+                {language === 'en' ? 'Upcoming Programs' : 'آنے والے پروگرام'}
               </h2>
               {upcomingEvents.length > 0 ? (
                 <div className="space-y-6">
@@ -51,16 +58,16 @@ export default function EventsList() {
                 </div>
               ) : (
                 <div className="premium-card p-6 text-center text-slate-555 dark:text-slate-400 italic text-sm">
-                  آنے والے پروگراموں میں کوئی اجتماع طے شدہ نہیں ہے۔ جلد ہی دوبارہ دیکھیں۔
+                  {language === 'en' ? 'No gatherings are scheduled in upcoming programs. Check back soon.' : 'آنے والے پروگراموں میں کوئی اجتماع طے شدہ نہیں ہے۔ جلد ہی دوبارہ دیکھیں۔'}
                 </div>
               )}
             </div>
 
             {/* Section 2: Past Gatherings */}
             {pastEvents.length > 0 && (
-              <div className="text-right">
-                <h2 className="text-lg font-bold text-slate-450 dark:text-slate-400 font-serif mb-6 pb-2 border-b border-slate-200 dark:border-slate-800 uppercase tracking-wider text-right">
-                  مکمل شدہ پروگرام
+              <div className={language === 'ur' ? 'text-right' : 'text-left'}>
+                <h2 className={`text-lg font-bold text-slate-450 dark:text-slate-400 font-serif mb-6 pb-2 border-b border-slate-200 dark:border-slate-800 uppercase tracking-wider ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+                  {language === 'en' ? 'Completed Programs' : 'مکمل شدہ پروگرام'}
                 </h2>
                 <div className="space-y-6 opacity-75">
                   {pastEvents.map((event) => (
@@ -74,8 +81,12 @@ export default function EventsList() {
             {(!events || events.length === 0) && (
               <div className="text-center py-16 premium-card">
                 <Calendar className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">کوئی پروگرام طے شدہ نہیں ہے</h3>
-                <p className="text-slate-555 dark:text-slate-400 text-xs mt-1">سسٹم میں فی الحال کوئی پروگرام درج نہیں ہے۔</p>
+                <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
+                  {language === 'en' ? 'No programs scheduled' : 'کوئی پروگرام طے شدہ نہیں ہے'}
+                </h3>
+                <p className="text-slate-555 dark:text-slate-400 text-xs mt-1">
+                  {language === 'en' ? 'No programs are currently registered in the system.' : 'سسٹم میں فی الحال کوئی پروگرام درج نہیں ہے۔'}
+                </p>
               </div>
             )}
 

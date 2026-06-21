@@ -1,12 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import API from '../../services/api';
 
+const normalizeLang = (lang) => {
+  if (!lang) return 'ur';
+  const l = lang.toString().toLowerCase();
+  return (l === 'ur' || l === 'urdu') ? 'ur' : 'en';
+};
+
 const initialState = {
   settings: {
-    language: localStorage.getItem('site_language') || 'English',
+    language: normalizeLang(localStorage.getItem('site_language') || 'ur'),
     englishFont: localStorage.getItem('site_english_font') || 'Inter',
     urduFont: localStorage.getItem('site_urdu_font') || 'Noto Nastaliq Urdu',
   },
+  pendingLanguageChange: null,
   stats: null,
   loading: false,
   isSettingsLoaded: false,
@@ -61,7 +68,9 @@ const settingsSlice = createSlice({
     },
     setLocalLanguage: (state, action) => {
       if (!state.settings) state.settings = {};
-      state.settings.language = action.payload;
+      const normalized = normalizeLang(action.payload);
+      state.settings.language = normalized;
+      localStorage.setItem('site_language', normalized);
     },
     setLocalEnglishFont: (state, action) => {
       if (!state.settings) state.settings = {};
@@ -70,6 +79,12 @@ const settingsSlice = createSlice({
     setLocalUrduFont: (state, action) => {
       if (!state.settings) state.settings = {};
       state.settings.urduFont = action.payload;
+    },
+    requestLanguageChange: (state, action) => {
+      state.pendingLanguageChange = normalizeLang(action.payload);
+    },
+    clearLanguageChangeRequest: (state) => {
+      state.pendingLanguageChange = null;
     }
   },
   extraReducers: (builder) => {
@@ -84,7 +99,7 @@ const settingsSlice = createSlice({
         state.isSettingsLoaded = true;
         state.settings = {
           ...action.payload,
-          language: localStorage.getItem('site_language') || action.payload?.language || 'English',
+          language: normalizeLang(localStorage.getItem('site_language') || 'ur'),
           englishFont: localStorage.getItem('site_english_font') || action.payload?.englishFont || 'Inter',
           urduFont: localStorage.getItem('site_urdu_font') || action.payload?.urduFont || 'Noto Nastaliq Urdu',
         };
@@ -104,7 +119,7 @@ const settingsSlice = createSlice({
         state.loading = false;
         state.settings = {
           ...action.payload,
-          language: localStorage.getItem('site_language') || action.payload?.language || 'English',
+          language: normalizeLang(localStorage.getItem('site_language') || 'ur'),
           englishFont: localStorage.getItem('site_english_font') || action.payload?.englishFont || 'Inter',
           urduFont: localStorage.getItem('site_urdu_font') || action.payload?.urduFont || 'Noto Nastaliq Urdu',
         };
@@ -130,5 +145,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { clearSettingsErrors, setLocalLanguage, setLocalEnglishFont, setLocalUrduFont } = settingsSlice.actions;
+export const { clearSettingsErrors, setLocalLanguage, setLocalEnglishFont, setLocalUrduFont, requestLanguageChange, clearLanguageChangeRequest } = settingsSlice.actions;
 export default settingsSlice.reducer;

@@ -7,7 +7,7 @@ import { Input } from './Input';
 
 export default function Footer() {
   const { settings } = useSelector((state) => state.settings);
-
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const scholarName = settings?.scholarInfo?.fullName || '';
   const scholarTitle = settings?.scholarInfo?.title || '';
@@ -24,10 +24,10 @@ export default function Footer() {
       {/* Metallic Gold Accent Top Line */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-[#B08D57]"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" dir="rtl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" dir={language === 'ur' ? 'rtl' : 'ltr'}>
         
         {/* Column 1: Biography / Mission */}
-        <div className="text-right">
+        <div className={language === 'ur' ? 'text-right' : 'text-left'}>
           <div className="flex items-center gap-2 mb-4 justify-start">
             <BookOpen className="w-6 h-6 text-[#1F3A5F]" />
             <span className="text-lg font-bold text-[#1F3A5F] tracking-wide">
@@ -62,48 +62,48 @@ export default function Footer() {
         </div>
 
         {/* Column 2: Sitemap Navigation */}
-        <div className="text-right">
+        <div className={language === 'ur' ? 'text-right' : 'text-left'}>
           <h3 className="text-[#1F3A5F] font-semibold text-md mb-4 border-b border-[#E5D8CA] pb-2 uppercase tracking-wider">
-            فوری لنکس
+            {language === 'en' ? 'Quick Links' : 'فوری لنکس'}
           </h3>
           <ul className="space-y-2.5 text-sm font-light">
             <li>
               <Link to="/about" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> سوانح اور اسناد
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Biography & Credentials' : 'سوانح اور اسناد'}
               </Link>
             </li>
             <li>
               <Link to="/articles" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> علمی مقالات
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Scholarly Articles' : 'علمی مقالات'}
               </Link>
             </li>
             <li>
               <Link to="/fatwas" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> فتاویٰ اور شرعی احکام
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Fatwas & Shariah Rulings' : 'فتاویٰ اور شرعی احکام'}
               </Link>
             </li>
             <li>
               <Link to="/qa" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> سوالات اور جوابات
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Questions & Answers' : 'سوالات اور جوابات'}
               </Link>
             </li>
             <li>
               <Link to="/publications" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> کتب اور مطالعہ
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Books & Library' : 'کتب اور مطالعہ'}
               </Link>
             </li>
             <li>
               <Link to="/lectures" className="text-[#7B654D] hover:text-[#1F3A5F] hover:underline transition-all flex items-center gap-1 justify-start">
-                <span className="text-[#B08D57]">›</span> آڈیو اور ویڈیو بیانات
+                <span className="text-[#B08D57]">›</span> {language === 'en' ? 'Audio & Video Lectures' : 'آڈیو اور ویڈیو بیانات'}
               </Link>
             </li>
           </ul>
         </div>
 
         {/* Column 3: Contact details */}
-        <div className="text-right">
+        <div className={language === 'ur' ? 'text-right' : 'text-left'}>
           <h3 className="text-[#1F3A5F] font-semibold text-md mb-4 border-b border-[#E5D8CA] pb-2 uppercase tracking-wider">
-            عالم صاحب سے رابطہ
+            {language === 'en' ? 'Contact Scholar' : 'عالم صاحب سے رابطہ'}
           </h3>
           <ul className="space-y-3.5 text-sm font-light">
             <li className="flex items-start gap-2.5 justify-start">
@@ -116,7 +116,7 @@ export default function Footer() {
             </li>
             {whatsapp && (
               <li className="flex items-center gap-2.5 justify-start">
-                <span className="text-[#7B654D] font-bold text-xs bg-[#E5D8CA] rounded px-2 py-0.5 border border-[#E5D8CA]">واٹس ایپ</span>
+                <span className="text-[#7B654D] font-bold text-xs bg-[#E5D8CA] rounded px-2 py-0.5 border border-[#E5D8CA]">{language === 'en' ? 'WhatsApp' : 'واٹس ایپ'}</span>
                 <span className="text-[#2C2C2C]">{whatsapp}</span>
               </li>
             )}
@@ -128,17 +128,17 @@ export default function Footer() {
         </div>
 
         {/* Column 4: Newsletter Submission Mock */}
-        <div className="text-right">
+        <div className={language === 'ur' ? 'text-right' : 'text-left'}>
           <h3 className="text-[#1F3A5F] font-semibold text-md mb-4 border-b border-[#E5D8CA] pb-2 uppercase tracking-wider">
-            باخبر رہیں
+            {language === 'en' ? 'Stay Informed' : 'باخبر رہیں'}
           </h3>
           <p className="text-xs text-[#7B654D] mb-4 font-light leading-relaxed">
-            نئے اسلامی مضامین، مطبوعات یا فتاویٰ شائع ہونے پر براہ راست معلومات حاصل کرنے کے لیے سبسکرائب کریں۔
+            {language === 'en' ? 'Subscribe to receive updates about new Islamic articles, publications, or fatwas directly.' : 'نئے اسلامی مضامین، مطبوعات یا فتاویٰ شائع ہونے پر براہ راست معلومات حاصل کرنے کے لیے سبسکرائب کریں۔'}
           </p>
-          <form onSubmit={(e) => e.preventDefault()} className="flex border border-[#E5D8CA] rounded overflow-hidden shadow-xs" dir="rtl">
+          <form onSubmit={(e) => e.preventDefault()} className="flex border border-[#E5D8CA] rounded overflow-hidden shadow-xs" dir={language === 'ur' ? 'rtl' : 'ltr'}>
             <Input
               type="email"
-              placeholder="آپ کا ای میل ایڈریس"
+              placeholder={language === 'en' ? 'Your email address' : 'آپ کا ای میل ایڈریس'}
               border=""
               inputClassName="bg-white text-slate-800 text-xs px-3 py-2 w-full outline-none"
             />
@@ -154,13 +154,13 @@ export default function Footer() {
       </div>
 
       {/* Footer base metadata */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#E5D8CA] flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500" dir="rtl">
-        <p className="mb-4 sm:mb-0 text-center sm:text-right">
-          &copy; {new Date().getFullYear()} {scholarName}۔ جملہ حقوق محفوظ ہیں۔ کلاسیکی رہنمائی سے ماخوذ۔
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#E5D8CA] flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500" dir={language === 'ur' ? 'rtl' : 'ltr'}>
+        <p className={`mb-4 sm:mb-0 text-center ${language === 'ur' ? 'sm:text-right' : 'sm:text-left'}`}>
+          &copy; {new Date().getFullYear()} {scholarName}{language === 'en' ? '. All rights reserved. Derived from classical guidance.' : '۔ جملہ حقوق محفوظ ہیں۔ کلاسیکی رہنمائی سے ماخوذ۔'}
         </p>
         <div className="flex items-center gap-4">
           <Link to="/admin/login" className="hover:text-[#B08D57] transition-colors flex items-center gap-1 font-semibold text-[#1F3A5F]">
-            <Shield className="w-3.5 h-3.5" /> ایڈمن پینل
+            <Shield className="w-3.5 h-3.5" /> {language === 'en' ? 'Admin Panel' : 'ایڈمن پینل'}
           </Link>
         </div>
       </div>

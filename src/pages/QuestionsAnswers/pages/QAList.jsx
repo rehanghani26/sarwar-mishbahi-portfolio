@@ -20,6 +20,9 @@ const categoryTranslations = {
 export default function QAList() {
   const dispatch = useDispatch();
 
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   const { publicList: questions, loading, page, pages } = useSelector((state) => state.content.questions);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,30 +66,34 @@ export default function QAList() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
+    <div className={`bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">باہمی گفتگو</span>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">سوالات اور جوابات</h1>
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+            {language === 'en' ? 'MUTUAL DISCUSSION' : 'باہمی گفتگو'}
+          </span>
+          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">
+            {language === 'en' ? 'Questions & Answers' : 'سوالات اور جوابات'}
+          </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            عوام کی طرف سے پوچھے گئے اور مفتی صاحب کے جواب دیے گئے دینی و فقہی مسائل کا مطالعہ کریں۔
+            {language === 'en' ? 'Read religious and jurisprudential inquiries asked by the public and answered by the Mufti.' : 'عوام کی طرف سے پوچھے گئے اور مفتی صاحب کے جواب دیے گئے دینی و فقہی مسائل کا مطالعہ کریں۔'}
           </p>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="premium-card p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-right">
+        <div className={`premium-card p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 ${language === 'ur' ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
           <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-80">
             <Input
               type="text"
-              placeholder="سوال و جواب تلاش کریں..."
+              placeholder={language === 'en' ? 'Search Q&A...' : 'سوال و جواب تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName="w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
+              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
               border=""
             />
-            <button type="submit" className="absolute right-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
+            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -96,12 +103,12 @@ export default function QAList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] text-right"
+              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
             >
-              <option value="">تمام زمرے</option>
+              <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {categoryTranslations[cat] || cat}
+                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -114,27 +121,27 @@ export default function QAList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : questions && questions.length > 0 ? (
-          <div className="space-y-4 mb-10 text-right">
+          <div className="space-y-4 mb-10 text-start">
             {questions.map((q) => {
               const isExpanded = expandedId === q._id;
               return (
-                <div key={q._id} className="premium-card rounded shadow-xs overflow-hidden transition-all duration-300 text-right">
+                <div key={q._id} className="premium-card rounded shadow-xs overflow-hidden transition-all duration-300 text-start">
 
                   {/* Collapsible Header */}
                   <button
                     onClick={() => toggleExpand(q._id)}
-                    className="w-full p-5 text-right flex items-start justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-right"
+                    className={`w-full p-5 text-start flex items-start justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}
                   >
-                    <div className="space-y-2 text-right">
+                    <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
                         <span className="bg-[#2F241C]/10 dark:bg-amber-950/30 text-[#2F241C] dark:text-[#8A6F52] text-[10px] font-bold px-2 py-0.5 rounded">
-                          {categoryTranslations[q.category] || q.category}
+                          {language === 'ur' ? (categoryTranslations[q.category] || q.category) : q.category}
                         </span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                          {new Date(q.answeredAt || q.updatedAt).toLocaleDateString('ur-PK')}
+                          {new Date(q.answeredAt || q.updatedAt).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}
                         </span>
                       </div>
-                      <h3 className="text-sm sm:text-md font-bold text-slate-900 dark:text-white leading-snug font-serif text-right">
+                      <h3 className={`text-sm sm:text-md font-bold text-slate-900 dark:text-white leading-snug font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                         {q.questionTitle}
                       </h3>
                     </div>
@@ -146,21 +153,25 @@ export default function QAList() {
 
                   {/* Collapsible Content */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10 text-right">
+                    <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10 text-start">
 
                       {/* Detailed Question */}
-                      <div className="bg-slate-50 dark:bg-slate-900 border-r-2 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs text-right">
-                        <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5 text-right">سوال کی تفصیل:</span>
-                        <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed text-right">
+                      <div className={`bg-slate-50 dark:bg-slate-900 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs text-start ${language === 'ur' ? 'border-r-2' : 'border-l-2'}`}>
+                        <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5">
+                          {language === 'en' ? 'Question Detail:' : 'سوال کی تفصیل:'}
+                        </span>
+                        <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">
                           "{q.detailedQuestion}"
                         </p>
                       </div>
 
                       {/* Detailed Answer */}
-                      <div className="text-sm leading-relaxed text-right">
-                        <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 text-right">عالم کا جواب:</span>
+                      <div className="text-sm leading-relaxed">
+                        <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">
+                          {language === 'en' ? 'Scholar Answer:' : 'عالم کا جواب:'}
+                        </span>
                         <div
-                          className="prose prose-sm dark:prose-invert text-slate-800 dark:text-slate-200 leading-relaxed font-light whitespace-pre-line text-right"
+                          className={`prose prose-sm dark:prose-invert text-slate-800 dark:text-slate-200 leading-relaxed font-light whitespace-pre-line ${language === 'ur' ? 'text-right' : 'text-left'}`}
                           dangerouslySetInnerHTML={{ __html: q.answerContent }}
                         ></div>
                       </div>
@@ -175,8 +186,12 @@ export default function QAList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <MessageSquare className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">کوئی جواب شدہ سوال نہیں ملا</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">براہ کرم تلاش کے الفاظ یا زمرے کے فلٹرز تبدیل کریں۔</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
+              {language === 'en' ? 'No answered questions found' : 'کوئی جواب شدہ سوال نہیں ملا'}
+            </h3>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">
+              {language === 'en' ? 'Please modify search terms or category filters.' : 'براہ کرم تلاش کے الفاظ یا زمرے کے فلٹرز تبدیل کریں۔'}
+            </p>
           </div>
         )}
 
@@ -188,7 +203,7 @@ export default function QAList() {
               disabled={page === 1}
               className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
-              پچھلا
+              {language === 'en' ? 'Previous' : 'پچھلا'}
             </button>
             {[...Array(pages).keys()].map((pNum) => (
               <button
@@ -207,7 +222,7 @@ export default function QAList() {
               disabled={page === pages}
               className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
-              اگلا
+              {language === 'en' ? 'Next' : 'اگلا'}
             </button>
           </div>
         )}

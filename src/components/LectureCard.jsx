@@ -1,5 +1,6 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const categoryTranslations = {
   'Audio Lectures': 'آڈیو خطابات',
@@ -11,9 +12,12 @@ const categoryTranslations = {
 };
 
 export default function LectureCard({ lecture, onPlay }) {
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   const { title, description, category, videoUrl, thumbnail, publishDate } = lecture;
 
-  const formattedDate = new Date(publishDate).toLocaleDateString('ur-PK', {
+  const formattedDate = new Date(publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -48,7 +52,7 @@ export default function LectureCard({ lecture, onPlay }) {
   };
 
   return (
-    <div className="premium-card shadow-sm overflow-hidden flex flex-col h-full group text-right">
+    <div className={`premium-card shadow-sm overflow-hidden flex flex-col h-full group ${language === 'ur' ? 'text-right' : 'text-left'}`}>
       
       {/* Thumbnail with Play Overlay */}
       <div className="relative h-44 w-full bg-slate-800 shrink-0 overflow-hidden">
@@ -71,9 +75,9 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Media Type Badge */}
-        <div className="absolute bottom-3 right-3 bg-[#E5D8CA] text-[#7B654D] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+        <div className={`absolute bottom-3 ${language === 'ur' ? 'right-3' : 'left-3'} bg-[#E5D8CA] text-[#7B654D] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow`}>
           {getMediaIcon("text-[#7B654D]")}
-          {categoryTranslations[category] || category}
+          {language === 'ur' ? (categoryTranslations[category] || category) : category}
         </div>
       </div>
 
@@ -87,22 +91,22 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2 text-right">
+        <h3 className={`text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           {title}
         </h3>
 
         {/* Description */}
-        <p className="text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-2 text-right">
+        <p className={`text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           {description}
         </p>
 
         {/* Play Link Actions */}
-        <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100 text-right">
+        <div className={`mt-auto pt-3 flex items-center justify-between border-t border-slate-100 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <button
             onClick={() => onPlay(lecture)}
             className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
           >
-            ابھی سنیں/دیکھیں
+            {language === 'en' ? 'Listen/Watch Now' : 'ابھی سنیں/دیکھیں'}
           </button>
           
           <a
@@ -111,7 +115,7 @@ export default function LectureCard({ lecture, onPlay }) {
             rel="noopener noreferrer"
             className="text-[10px] text-slate-500 hover:text-slate-700 underline"
           >
-            اصل لنک کھولیں
+            {language === 'en' ? 'Open Link' : 'اصل لنک کھولیں'}
           </a>
         </div>
 

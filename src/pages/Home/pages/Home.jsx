@@ -33,39 +33,12 @@ import PublicationCard from '../../../components/PublicationCard';
 import EventCard from '../../../components/EventCard';
 import AnimatedFeatureCard from './Animatedfeaturecard ';
 
-
-// Content for the four small feature cards. Kept as data so the markup
-// below stays a clean .map() instead of four near-identical blocks.
-const FEATURES = [
-  {
-    icon: BookOpen,
-    title: 'مستند علم',
-    description: 'قرآن، حدیث اور فقہ پر مبنی علمی مواد۔',
-    to: '/articles',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'تصدیق شدہ فتاویٰ',
-    description: 'مستند علما سے تصدیق شدہ فتاویٰ حاصل کریں۔',
-    to: '/fatwas',
-  },
-  {
-    icon: FileText,
-    title: 'تحقیقی مقالات',
-    description: 'تحقیق اور دلائل کے ساتھ لکھے گئے تفصیلی اسلامی مقالات۔',
-    to: '/articles',
-  },
-  {
-    icon: Users,
-    title: 'معاشرتی رہنمائی',
-    description: 'روزمرہ کے مسائل کے بارے میں شریعت کے مطابق رہنمائی اور حل۔',
-    to: '/qa',
-  },
-];
-
 // Small helper so every section heading animates in the same way on scroll,
 // without repeating the motion props everywhere.
 function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -74,7 +47,7 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       className="flex items-end justify-between mb-10 border-b-2 border-[#E5D8CA] pb-4"
     >
-      <div className="border-r-4 border-[#B08D57] pr-4 text-right">
+      <div className={`border-[#B08D57] ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'}`}>
         <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest block mb-1">
           {eyebrow}
         </span>
@@ -84,7 +57,7 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
       </div>
       {linkTo && (
         <Link to={linkTo} className="text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 transition-colors">
-          {linkLabel} <ArrowLeft className="w-4 h-4" />
+          {linkLabel} {language === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
         </Link>
       )}
     </motion.div>
@@ -95,6 +68,9 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
 // portrait photo. No artwork here on purpose — swap the contents for an
 // <img> tag once a photo is available.
 function ScholarPhotoPlaceholder() {
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.96 }}
@@ -104,10 +80,10 @@ function ScholarPhotoPlaceholder() {
     >
       <ImageIcon className="w-10 h-10 text-[#B08D57]/60 mb-3" />
       <p className="text-xs font-bold uppercase tracking-widest text-[#7B654D]">
-        عالم صاحب کی تصویر
+        {language === 'en' ? 'Scholar Photograph' : 'عالم صاحب کی تصویر'}
       </p>
       <p className="text-[11px] text-[#7B654D]/70 mt-1">
-        مخصوص جگہ — یہاں تصویر لگائیں
+        {language === 'en' ? 'Reserved Space — Place Image Here' : 'مخصوص جگہ — یہاں تصویر لگائیں'}
       </p>
     </motion.div>
   );
@@ -124,6 +100,8 @@ export default function Home() {
   const { list: publications } = useSelector((state) => state.content.publications);
   const { list: lectures } = useSelector((state) => state.content.lectures);
   const { list: events } = useSelector((state) => state.content.events);
+
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   useEffect(() => {
     dispatch(fetchArticles({ limit: 3 }));
@@ -144,6 +122,33 @@ export default function Home() {
   const phone = settings?.contactInfo?.phone || '';
   const email = settings?.contactInfo?.email || '';
 
+  const FEATURES = [
+    {
+      icon: BookOpen,
+      title: language === 'en' ? 'Authentic Knowledge' : 'مستند علم',
+      description: language === 'en' ? 'Islamic content based on Quran, Hadith, and Fiqh.' : 'قرآن، حدیث اور فقہ پر مبنی علمی مواد۔',
+      to: '/articles',
+    },
+    {
+      icon: ShieldCheck,
+      title: language === 'en' ? 'Verified Fatwas' : 'تصدیق شدہ فتاویٰ',
+      description: language === 'en' ? 'Get verified rulings from trusted scholars.' : 'مستند علما سے تصدیق شدہ فتاویٰ حاصل کریں۔',
+      to: '/fatwas',
+    },
+    {
+      icon: FileText,
+      title: language === 'en' ? 'Scholarly Articles' : 'تحقیقی مقالات',
+      description: language === 'en' ? 'Detailed Islamic research papers written with evidence.' : 'تحقیق اور دلائل کے ساتھ لکھے گئے تفصیلی اسلامی مقالات۔',
+      to: '/articles',
+    },
+    {
+      icon: Users,
+      title: language === 'en' ? 'Social Guidance' : 'معاشرتی رہنمائی',
+      description: language === 'en' ? 'Shariah-compliant guidance and solutions for daily issues.' : 'روزمرہ کے مسائل کے بارے میں شریعت کے مطابق رہنمائی اور حل۔',
+      to: '/qa',
+    },
+  ];
+
   return (
     <div className="bg-site-bg min-h-screen">
 
@@ -152,7 +157,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
           {/* Hero Left: Text Content */}
-          <div className="lg:col-span-7 space-y-6 text-right">
+          <div className={`lg:col-span-7 space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <motion.span
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -184,7 +189,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.24 }}
-              className="border-r-4 border-[#B08D57] pr-4 italic text-sm text-[#7B654D] font-light max-w-lg text-right"
+              className={`border-[#B08D57] ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'} italic text-sm text-[#7B654D] font-light max-w-lg`}
             >
               "{heroMission}"
             </motion.div>
@@ -201,21 +206,21 @@ export default function Home() {
                 className="px-6 py-3 bg-[#1F3A5F] hover:bg-[#162C49] text-white font-bold rounded shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-serif"
               >
                 <HelpCircle className="w-4.5 h-4.5" />
-                سوال پوچھیں
+                {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
               </Link>
               <Link
                 to="/articles"
                 className="px-6 py-3 bg-transparent border-2 border-[#E5D8CA] text-[#7B654D] hover:bg-[#FAF7F2] font-bold rounded transition-colors flex items-center gap-2 text-sm"
               >
                 <FileText className="w-4.5 h-4.5" />
-                مقالات پڑھیں
+                {language === 'en' ? 'Read Articles' : 'مقالات پڑھیں'}
               </Link>
               <Link
                 to="/fatwas"
                 className="px-6 py-3 bg-transparent hover:underline text-[#7B654D] hover:text-[#1F3A5F] font-bold transition-all text-sm flex items-center gap-1.5"
               >
-                فتاویٰ دیکھیں
-                <ArrowLeft className="w-4 h-4" />
+                {language === 'en' ? 'View Fatwas' : 'فتاویٰ دیکھیں'}
+                {language === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
               </Link>
             </motion.div>
           </div>
@@ -246,7 +251,12 @@ export default function Home() {
 
       {/* 2. LATEST ARTICLES */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="علم کا فروغ" title="تازہ ترین مقالات" linkTo="/articles" linkLabel="تمام مقالات" />
+        <SectionHeading 
+          eyebrow={language === 'en' ? 'PROMOTING KNOWLEDGE' : 'علم کا فروغ'} 
+          title={language === 'en' ? 'Latest Articles' : 'تازہ ترین مقالات'} 
+          linkTo="/articles" 
+          linkLabel={language === 'en' ? 'All Articles' : 'تمام مقالات'} 
+        />
 
         {articles && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -255,14 +265,21 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <p className="text-slate-400 italic text-center py-6">کوئی مضمون دستیاب نہیں ہے۔</p>
+          <p className="text-slate-400 italic text-center py-6">
+            {language === 'en' ? 'No articles available.' : 'کوئی مضمون دستیاب نہیں ہے۔'}
+          </p>
         )}
       </section>
 
       {/* 3. FEATURED FATWAS */}
       <section className="bg-[#FAF7F2] border-y border-[#E5D8CA] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="رہنمائی اور احکام" title="منتخب فتاویٰ" linkTo="/fatwas" linkLabel="تمام احکام" />
+          <SectionHeading 
+            eyebrow={language === 'en' ? 'GUIDANCE & RULINGS' : 'رہنمائی اور احکام'} 
+            title={language === 'en' ? 'Featured Fatwas' : 'منتخب فتاویٰ'} 
+            linkTo="/fatwas" 
+            linkLabel={language === 'en' ? 'All Rulings' : 'تمام احکام'} 
+          />
 
           {fatwas && fatwas.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -271,14 +288,21 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <p className="text-slate-400 italic text-center py-6">کوئی فتویٰ دستیاب نہیں ہے۔</p>
+            <p className="text-slate-400 italic text-center py-6">
+              {language === 'en' ? 'No fatwas available.' : 'کوئی فتویٰ دستیاب نہیں ہے۔'}
+            </p>
           )}
         </div>
       </section>
 
       {/* 4. RECENT Q&A */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="باہمی رہنمائی" title="حالیہ سوال و جواب" linkTo="/qa" linkLabel="تمام سوالات" />
+        <SectionHeading 
+          eyebrow={language === 'en' ? 'MUTUAL GUIDANCE' : 'باہمی رہنمائی'} 
+          title={language === 'en' ? 'Recent Q&A' : 'حالیہ سوال و جواب'} 
+          linkTo="/qa" 
+          linkLabel={language === 'en' ? 'All Questions' : 'تمام سوالات'} 
+        />
 
         {questions && questions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -289,12 +313,12 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="premium-card p-6 flex flex-col justify-between h-full bg-white text-right"
+                className={`premium-card p-6 flex flex-col justify-between h-full bg-white ${language === 'ur' ? 'text-right' : 'text-left'}`}
               >
                 <div>
                   <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
                     <span className="bg-[#E5D8CA] text-[#7B654D] font-bold px-2.5 py-1 rounded-full text-[10px]">{q.category}</span>
-                    <span>{new Date(q.answeredAt || q.updatedAt).toLocaleDateString()}</span>
+                    <span>{new Date(q.answeredAt || q.updatedAt).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>
                   </div>
                   <h4 className="text-md font-bold text-slate-900 mb-2 line-clamp-2">
                     {q.questionTitle}
@@ -304,29 +328,32 @@ export default function Home() {
                   </p>
                 </div>
                 <Link to={`/qa`} className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1">
-                  مفتی صاحب کا جواب دیکھیں <ArrowLeft className="w-3.5 h-3.5" />
+                  {language === 'en' ? 'View Answer' : 'مفتی صاحب کا جواب دیکھیں'} 
+                  {language === 'en' ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
                 </Link>
               </motion.div>
             ))}
           </div>
         ) : (
-          <p className="text-slate-400 italic text-center py-6">کوئی جواب شدہ سوال دستیاب نہیں ہے۔</p>
+          <p className="text-slate-400 italic text-center py-6">
+            {language === 'en' ? 'No answered questions available.' : 'کوئی جواب شدہ سوال دستیاب نہیں ہے۔'}
+          </p>
         )}
       </section>
 
       {/* 5. LATEST PUBLICATIONS & LECTURES (SPLIT SECTION) */}
       <section className="bg-[#FAF7F2] border-t border-[#E5D8CA] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12" dir={language === 'ur' ? 'rtl' : 'ltr'}>
 
           {/* Left: Publications */}
-          <div>
-            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+          <div className={language === 'ur' ? 'text-right' : 'text-left'}>
+            <div className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
                 <Book className="w-5.5 h-5.5 text-[#B08D57]" />
-                تازہ ترین مطبوعات
+                {language === 'en' ? 'Latest Publications' : 'تازہ ترین مطبوعات'}
               </h2>
               <Link to="/publications" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-                سب دیکھیں
+                {language === 'en' ? 'View All' : 'سب دیکھیں'}
               </Link>
             </div>
 
@@ -337,19 +364,21 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 italic text-center py-6">کوئی مطبوعہ دستیاب نہیں ہے۔</p>
+              <p className="text-slate-400 italic text-center py-6">
+                {language === 'en' ? 'No publications available.' : 'کوئی مطبوعہ دستیاب نہیں ہے۔'}
+              </p>
             )}
           </div>
 
           {/* Right: Lectures */}
-          <div>
-            <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+          <div className={language === 'ur' ? 'text-right' : 'text-left'}>
+            <div className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
                 <Play className="w-5.5 h-5.5 text-[#B08D57] fill-current" />
-                تازہ ترین بیانات
+                {language === 'en' ? 'Latest Lectures' : 'تازہ ترین بیانات'}
               </h2>
               <Link to="/lectures" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-                سب دیکھیں
+                {language === 'en' ? 'View All' : 'سب دیکھیں'}
               </Link>
             </div>
 
@@ -360,7 +389,9 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 italic text-center py-6">کوئی بیان دستیاب نہیں ہے۔</p>
+              <p className="text-slate-400 italic text-center py-6">
+                {language === 'en' ? 'No bayans available.' : 'کوئی بیان دستیاب نہیں ہے۔'}
+              </p>
             )}
           </div>
 
@@ -368,17 +399,17 @@ export default function Home() {
       </section>
 
       {/* 6. EVENTS & CONTACT INFO (SPLIT) */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12" dir={language === 'ur' ? 'rtl' : 'ltr'}>
 
         {/* Upcoming Programs (8 columns on large screen) */}
         <div className="lg:col-span-8">
-          <div className="flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 text-right">
+          <div className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
               <Calendar className="w-5.5 h-5.5 text-[#B08D57]" />
-              آنے والے پروگرام اور اجتماعات
+              {language === 'en' ? 'Upcoming Programs & Gatherings' : 'آنے والے پروگرام اور اجتماعات'}
             </h2>
             <Link to="/events" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57]">
-              سب دیکھیں
+              {language === 'en' ? 'View All' : 'سب دیکھیں'}
             </Link>
           </div>
 
@@ -389,18 +420,23 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <p className="text-slate-400 italic text-center py-6">کوئی طے شدہ پروگرام نہیں ہے۔</p>
+            <p className="text-slate-400 italic text-center py-6">
+              {language === 'en' ? 'No scheduled programs.' : 'کوئی طے شدہ پروگرام نہیں ہے۔'}
+            </p>
           )}
         </div>
 
         {/* Contact info card (4 columns on large screen) */}
-        <div className="lg:col-span-4 text-right">
+        <div className={`lg:col-span-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <h2 className="text-xl font-bold text-[#1F3A5F] mb-8 border-b border-[#E5D8CA] pb-3">
-            رابطے کی تفصیلات
+            {language === 'en' ? 'Contact Details' : 'رابطے کی تفصیلات'}
           </h2>
           <div className="premium-card p-6 space-y-6 bg-white">
             <p className="text-slate-700 text-xs leading-relaxed font-light">
-              ملاقات، دعوت ناموں یا سوالات کے لیے بلا جھجھک {heroName} کے دفتر سے رابطہ کریں۔
+              {language === 'en' 
+                ? `For meetings, invitations, or inquiries, feel free to contact ${heroName}'s office.`
+                : `ملاقات، دعوت ناموں یا سوالات کے لیے بلا جھجھک ${heroName} کے دفتر سے رابطہ کریں۔`
+              }
             </p>
 
             <ul className="space-y-4.5 text-sm">
@@ -422,7 +458,7 @@ export default function Home() {
               to="/contact"
               className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white text-xs font-bold rounded transition-colors"
             >
-              پیغام بھیجیں
+              {language === 'en' ? 'Send Message' : 'پیغام بھیجیں'}
             </Link>
           </div>
         </div>

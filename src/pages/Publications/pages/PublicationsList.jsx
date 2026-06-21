@@ -19,6 +19,9 @@ const categoryTranslations = {
 export default function PublicationsList() {
   const dispatch = useDispatch();
 
+  const { settings } = useSelector((state) => state.settings);
+  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
   const { list: publications, loading } = useSelector((state) => state.content.publications);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,32 +53,36 @@ export default function PublicationsList() {
   };
 
   return (
-    <div className="bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen text-right">
+    <div className={`bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">علمی تصانیف</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">کتب و مطبوعات</h1>
+          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+            {language === 'en' ? 'SCIENTIFIC WORKS' : 'علمی تصانیف'}
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">
+            {language === 'en' ? 'Books & Publications' : 'کتب و مطبوعات'}
+          </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            گوگل ڈرائیو پر موجود کتابیں، مقالات اور تعلیمی نوٹس حاصل کریں اور ان کا مطالعہ کریں۔
+            {language === 'en' ? 'Access and study books, articles, and educational notes on Google Drive.' : 'گوگل ڈرائیو پر موجود کتابیں، مقالات اور تعلیمی نوٹس حاصل کریں اور ان کا مطالعہ کریں۔'}
           </p>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 text-right">
+        <div className={`premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 ${language === 'ur' ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
 
           {/* Search Form */}
           <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
             <Input
               type="text"
-              placeholder="مطبوعات تلاش کریں..."
+              placeholder={language === 'en' ? 'Search publications...' : 'مطبوعات تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName="w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 text-right"
+              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
               border=""
             />
-            <button type="submit" className="absolute right-3 top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]">
+            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -86,12 +93,12 @@ export default function PublicationsList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] rounded outline-none text-right"
+              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
             >
-              <option value="">تمام زمرے</option>
+              <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {categoryTranslations[cat] || cat}
+                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -108,7 +115,7 @@ export default function PublicationsList() {
                 : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
               }`}
           >
-            تمام زمرے
+            {language === 'en' ? 'All Topics' : 'تمام زمرے'}
           </button>
           {categories.map((cat) => (
             <button
@@ -119,7 +126,7 @@ export default function PublicationsList() {
                   : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
                 }`}
             >
-              {categoryTranslations[cat] || cat}
+              {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -130,7 +137,7 @@ export default function PublicationsList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
           </div>
         ) : publications && publications.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {publications.map((pub) => (
               <PublicationCard key={pub._id} publication={pub} />
             ))}
@@ -138,8 +145,12 @@ export default function PublicationsList() {
         ) : (
           <div className="text-center py-16 premium-card">
             <BookOpen className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">کوئی مطبوعہ دستیاب نہیں ہے</h3>
-            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">براہ کرم تلاش کے الفاظ یا موضوع کے فلٹرز کو تبدیل کرنے کی کوشش کریں۔</p>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
+              {language === 'en' ? 'No publications available' : 'کوئی مطبوعہ دستیاب نہیں ہے'}
+            </h3>
+            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">
+              {language === 'en' ? 'Please try changing the search terms or topic filters.' : 'براہ کرم تلاش کے الفاظ یا موضوع کے فلٹرز کو تبدیل کرنے کی کوشش کریں۔'}
+            </p>
           </div>
         )}
 
