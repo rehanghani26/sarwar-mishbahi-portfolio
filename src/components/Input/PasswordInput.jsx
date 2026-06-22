@@ -1,0 +1,173 @@
+import PropTypes from "prop-types";
+import { memo, useEffect, useState } from "react";
+
+import { validatePassword } from "../../utils";
+
+import { eye, eyeOff } from "../../assets";
+
+import { ErrorMessage, Label } from ".";
+
+const PasswordInput = ({
+  border = "border border-gray-200 focus:border-gray-400 rounded",
+  className = "",
+  inputClassName = "",
+  labelClassName = "",
+  id = "",
+  name = "",
+  label = "",
+  title = "",
+  placeholder = "",
+  required = false,
+  value = "",
+  errorMessage = "",
+  onChange = () => {},
+  setFormError,
+  isPasswordValidationRequired = true,
+  disabled = false,
+  readOnly = false,
+}) => {
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [passwordStrengthScore, setPasswordStrengthScore] = useState(0);
+  const [passwordError, setPasswordError] = useState("");
+
+  let borderClassname = errorMessage ? `${border} border-red-500` : border;
+
+  const strengthColors = [
+    "#E57373", // Weak
+    "#F06292", // Fair
+    "#BA68C8", // Good
+    "#3E8B82", // Strong
+    "#00875A", // Very strong,
+  ];
+  const strengthScore = Math.min(passwordStrengthScore, 4);
+  const progress = (strengthScore / 4) * 100;
+
+  const strengthText =
+    strengthScore === 1
+      ? "Weak"
+      : strengthScore === 2
+      ? "Fair"
+      : strengthScore === 3
+      ? "Good"
+      : strengthScore === 4
+      ? "Strong"
+      : "";
+
+  useEffect(() => {
+    if (!value) return;
+
+    if (isPasswordValidationRequired) {
+      const { score, errors } = validatePassword(value);
+      setPasswordStrengthScore(score);
+      setPasswordError(errors);
+      setFormError?.((prev) => ({
+        ...prev,
+        [name]: errors?.length === 0 ? "" : errors,
+      }));
+    }
+  }, [value, isPasswordValidationRequired]);
+
+  return (
+    <div className={`${label || errorMessage ? "space-y-1" : ""} ${className}`}>
+      {label && (
+        <div className="text-sm flex items-center justify-between">
+          <Label
+            className={labelClassName}
+            id={id}
+            label={label}
+            required={required}
+            readOnly={readOnly}
+          />
+
+          {isPasswordValidationRequired && (
+            <span style={{ color: strengthColors[passwordStrengthScore - 1] }}>
+              {value !== "" && strengthText}
+            </span>
+          )}
+        </div>
+      )}
+      {readOnly ? (
+        <p className={`p-2 bg-gray-50 ${borderClassname}`}>{value}</p>
+      ) : (
+        <div className="flex items-center">
+          <input
+            type={isPasswordShown ? "text" : "password"}
+            id={id}
+            name={name}
+            title={title}
+            placeholder={placeholder}
+            value={value}
+            className={`p-2 max-h-10 w-full outline-0 placeholder-gray-500 bg-inherit ${borderClassname} ${inputClassName}`}
+            required={required}
+            onChange={onChange}
+            disabled={disabled}
+            readOnly={readOnly}
+          />
+          {value?.length > 0 && (
+            <span
+              className="-m-7"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPasswordShown(!isPasswordShown);
+              }}
+            >
+              <img
+                src={isPasswordShown ? eyeOff : eye}
+                alt=""
+                className="size-5"
+              />
+            </span>
+          )}
+        </div>
+      )}
+
+      {typeof errorMessage === "string" && (
+        <ErrorMessage error={errorMessage} />
+      )}
+
+      {value && passwordError?.length > 0 && isPasswordValidationRequired && (
+        <>
+          <div className="h-1 bg-[#E0E0E0] mt-2">
+            <div
+              className="h-full"
+              style={{
+                width: `${progress}%`,
+                backgroundColor: strengthColors[passwordStrengthScore - 1],
+              }}
+            />
+          </div>
+
+          <div className="h-8 text-xs overflow-y-scroll no-scrollbar">
+            {passwordError?.map((e, index) => (
+              <span key={index} className="block text-red-500">
+                {e}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+PasswordInput.propTypes = {
+  border: PropTypes.string,
+  className: PropTypes.string,
+  inputClassName: PropTypes.string,
+  labelClassName: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  onChange: PropTypes.func,
+  setFormError: PropTypes.func,
+  isPasswordValidationRequired: PropTypes.bool,
+  disabled: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  required: PropTypes.bool,
+};
+
+export default memo(PasswordInput);

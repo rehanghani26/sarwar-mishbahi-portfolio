@@ -13,6 +13,7 @@ export default function TopBar() {
           <span>{SITE.gregDate}</span>
         </div>
 
+
         {/* Bismillah — absolute center */}
         <div className="absolute left-1/2 -translate-x-1/2 text-[#e8dfc8] text-[15px] sm:text-[17px] whitespace-nowrap hidden lg:block select-none">
           {SITE.bismillah}

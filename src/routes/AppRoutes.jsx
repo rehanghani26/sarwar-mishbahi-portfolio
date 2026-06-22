@@ -1,77 +1,80 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import MainLayout from '../layout/MainLayout'
-import Home from '../pages/Home/pages/Home'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-// Introduction Page Imports
-import Founder from '../pages/Introduction/pages/Founder'
-import Preface from '../pages/Introduction/pages/Preface'
-import AimsObjectives from '../pages/Introduction/pages/AimsObjectives'
-import Administration from '../pages/Introduction/pages/Administration'
-import Expenses from '../pages/Introduction/pages/Expenses'
-import Profile from '../pages/Introduction/pages/Profile'
-import Branches from '../pages/Introduction/pages/Branches'
+// Layout Imports
+import MainLayout from '../layout/MainLayout';
 
-// Education System Page Imports
-import Syllabus from '../pages/EducationSystem/pages/Syllabus'
-import Rules from '../pages/EducationSystem/pages/Rules'
+// Public Page Imports
+import Home from '../pages/Home/pages/Home';
+import About from '../pages/About/pages/About';
+import ArticlesList from '../pages/Articles/pages/ArticlesList';
+import ArticleDetail from '../pages/Articles/pages/ArticleDetail';
+import FatwasList from '../pages/Fatwas/pages/FatwasList';
+import FatwaDetail from '../pages/Fatwas/pages/FatwaDetail';
+import AskQuestion from '../pages/AskQuestion/pages/AskQuestion';
+import QAList from '../pages/QuestionsAnswers/pages/QAList';
+import PublicationsList from '../pages/Publications/pages/PublicationsList';
+import LecturesList from '../pages/Lectures/pages/LecturesList';
+import EventsList from '../pages/Events/pages/EventsList';
+import ContactPage from '../pages/Contact/pages/ContactPage';
+import PageNotFound from '../pages/PageNotFound/pages/PageNotFound';
 
-// Darul Ifta Page Imports
-import NewQuestions from '../pages/DarulIfta/pages/NewQuestions'
-import IslamicNames from '../pages/DarulIfta/pages/IslamicNames'
-import MasnoonDuas from '../pages/DarulIfta/pages/MasnoonDuas'
-import PrayerTimes from '../pages/DarulIfta/pages/PrayerTimes'
-import PrayerCalendar from '../pages/DarulIfta/pages/PrayerCalendar'
-import QurbaniAbroad from '../pages/DarulIfta/pages/QurbaniAbroad'
+// Admin Page Imports
+import Login from '../pages/Admin/pages/Login';
+import Dashboard from '../pages/Admin/pages/Dashboard';
+import ManageArticles from '../pages/Admin/pages/ManageArticles';
+import ManageFatwas from '../pages/Admin/pages/ManageFatwas';
+import ManageQuestions from '../pages/Admin/pages/ManageQuestions';
+import ManagePublications from '../pages/Admin/pages/ManagePublications';
+import ManageLectures from '../pages/Admin/pages/ManageLectures';
+import ManageEvents from '../pages/Admin/pages/ManageEvents';
+import ManageSettings from '../pages/Admin/pages/ManageSettings';
 
-// Publications Page Imports
-import Bayyinat from '../pages/Publications/pages/Bayyinat'
-import Books from '../pages/Publications/pages/Books'
-
-// Contact Page Import
-import ContactPage from '../pages/Contact/pages/ContactPage'
-
-// 404 Page Import
-import PageNotFound from '../pages/PageNotFound/pages/PageNotFound'
+// Route Guard
+import AdminRoute from '../components/AdminRoute';
 
 export default function AppRoutes() {
   return (
     <Routes>
+      {/* Root Layout wrapper */}
       <Route path="/" element={<MainLayout />}>
-        {/* Home Route */}
+        
+        {/* Public Visitor Routes */}
         <Route index element={<Home />} />
-
-        {/* Introduction Module Routes */}
-        <Route path="introduction/founder" element={<Founder />} />
-        <Route path="introduction/preface" element={<Preface />} />
-        <Route path="introduction/objectives" element={<AimsObjectives />} />
-        <Route path="introduction/administration" element={<Administration />} />
-        <Route path="introduction/expenses" element={<Expenses />} />
-        <Route path="introduction/profile" element={<Profile />} />
-        <Route path="introduction/branches" element={<Branches />} />
-
-        {/* Education System Module Routes */}
-        <Route path="education/syllabus" element={<Syllabus />} />
-        <Route path="education/rules" element={<Rules />} />
-
-        {/* Darul Ifta Module Routes */}
-        <Route path="darulifta/new-questions" element={<NewQuestions />} />
-        <Route path="darulifta/islamic-names" element={<IslamicNames />} />
-        <Route path="darulifta/duas" element={<MasnoonDuas />} />
-        <Route path="darulifta/prayer-times" element={<PrayerTimes />} />
-        <Route path="darulifta/prayer-calendar" element={<PrayerCalendar />} />
-        <Route path="darulifta/qurbani" element={<QurbaniAbroad />} />
-
-        {/* Publications Module Routes */}
-        <Route path="publications/bayyinat" element={<Bayyinat />} />
-        <Route path="publications/books" element={<Books />} />
-
-        {/* Contact Route */}
+        <Route path="about" element={<About />} />
+        
+        <Route path="articles" element={<ArticlesList />} />
+        <Route path="articles/:slug" element={<ArticleDetail />} />
+        
+        <Route path="fatwas" element={<FatwasList />} />
+        <Route path="fatwas/:id" element={<FatwaDetail />} />
+        
+        <Route path="ask" element={<AskQuestion />} />
+        <Route path="qa" element={<QAList />} />
+        <Route path="publications" element={<PublicationsList />} />
+        <Route path="lectures" element={<LecturesList />} />
+        <Route path="events" element={<EventsList />} />
         <Route path="contact" element={<ContactPage />} />
 
-        {/* Page Not Found Route */}
+        {/* Admin Login Route */}
+        <Route path="admin/login" element={<Login />} />
+
+        {/* Protected Admin Console Routes */}
+        <Route element={<AdminRoute />}>
+          <Route path="admin/dashboard" element={<Dashboard />} />
+          <Route path="admin/articles" element={<ManageArticles />} />
+          <Route path="admin/fatwas" element={<ManageFatwas />} />
+          <Route path="admin/questions" element={<ManageQuestions />} />
+          <Route path="admin/publications" element={<ManagePublications />} />
+          <Route path="admin/lectures" element={<ManageLectures />} />
+          <Route path="admin/events" element={<ManageEvents />} />
+          <Route path="admin/settings" element={<ManageSettings />} />
+        </Route>
+
+        {/* 404 Route */}
         <Route path="*" element={<PageNotFound />} />
+
       </Route>
     </Routes>
-  )
+  );
 }

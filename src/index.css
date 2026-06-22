@@ -2,48 +2,133 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Traditional Arabic', serif;
-  direction: rtl;
-  text-align: right;
-  overflow-x: hidden;
+@layer utilities {
+  .text-text-primary {
+    color: var(--color-text-primary);
+  }
+
+  .text-text-secondary {
+    color: var(--color-text-secondary);
+  }
+
+  .text-text-muted {
+    color: var(--color-text-muted);
+  }
 }
 
-/* Slide transition - not doable with Tailwind alone */
-.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease-in-out; }
-.slide.active { opacity: 1; z-index: 1; }
-
-/* Semicircle card decoration */
-.card-circle-side { position: relative; overflow: visible; }
-.card-circle-side::before {
-  content: '';
-  position: absolute;
-  right: -30px;
-  top: -10px;
-  bottom: -10px;
-  width: 130px;
-  background: #EAE3CF;
-  border-radius: 0 50% 50% 0;
+:root {
+  --color-brown-dark: #1F3A5F;
+  --color-brown-mid: #B08D57;
+  --color-brown-light: #E5D8CA;
+  --color-cream: #E5D8CA;
+  --color-cream-light: #FAF7F2;
+  --color-site-bg: #FAF7F2;
+  --color-card-bg: #FFFFFF;
+  --color-text-primary: #2C2C2C;
+  --color-text-secondary: #7B654D;
+  --color-text-muted: #8A8A8A;
+  --color-site-border: #E5D8CA;
+  --color-footer-bg: #FAF7F2;
+  --color-section-hdr: #1F3A5F;
+  --color-gold: #B08D57;
 }
 
-/* Nav underline active */
-.nav-link { border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
-.nav-link:hover, .nav-link.active { color: #8A6F52; border-bottom-color: #8A6F52; }
+@layer base {
+  body {
+    @apply bg-site-bg text-text-primary antialiased;
+    font-family: 'Inter', sans-serif;
+  }
 
-/* Footer arrow bullets */
-.footer-link::before { content: '›'; color: #8A6F52; font-size: 18px; line-height: 1; margin-left: 6px; }
-.footer-link:hover { color: #EAE3CF; }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Cinzel', serif;
+    @apply font-semibold tracking-wide text-section-hdr;
+  }
+}
 
-/* Pattern backgrounds */
+/* Custom premium styles */
+.scholar-gradient-bg {
+  background-color: #FAF7F2;
+  background-image: 
+    url("/patterns/islamic-pattern.svg"),
+    linear-gradient(135deg, #FAF7F2 0%, #F5EEE5 100%);
+  background-repeat: repeat;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #B08D57 0%, #947547 100%);
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 10px rgba(176, 141, 87, 0.3);
+}
+
+.gold-border {
+  border-color: #B08D57;
+}
+
+.gold-accent-hover {
+  @apply hover:text-[#B08D57] hover:border-[#B08D57] transition-all duration-300;
+}
+
 .pattern-bg {
-  background-color: #3D2E1E;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.07)' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' rx='2' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30 M8 8 L52 52 M52 8 L8 52'/%3E%3C/g%3E%3C/svg%3E");
-}
-.footer-pattern-bg {
-  background-color: #28190E;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.8'%3E%3Cpath d='M30 0 L36 12 L48 12 L38 20 L42 32 L30 25 L18 32 L22 20 L12 12 L24 12 Z'/%3E%3Crect x='15' y='15' width='30' height='30' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 4 L30 56 M4 30 L56 30'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: #FAF7F2;
+  background-image: url("/patterns/islamic-pattern.svg");
 }
 
-/* Back to top */
-#back-top { transition: opacity 0.3s; opacity: 0; pointer-events: none; }
-#back-top.show { opacity: 1; pointer-events: all; }
+/* Islamic pattern overlay */
+.islamic-pattern {
+  background-image: url("/patterns/islamic-pattern.svg");
+}
+
+.islamic-pattern-dark {
+  background-image: url("/patterns/islamic-pattern.svg");
+}
+
+/* Card hover animation */
+.premium-card {
+  @apply bg-white border border-[#E5D8CA] rounded-[20px] shadow-sm hover:shadow-md hover:border-[#B08D57] transition-all duration-300 transform hover:-translate-y-0.5 overflow-hidden;
+}
+
+.title-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B08D57;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1F3A5F;
+}
+
+/* Urdu/RTL typography overrides to inherit body font selection instead of Cinzel/Playfair Display */
+[dir="rtl"] body,
+[dir="rtl"] {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] .title-serif {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
+}
