@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle } from 'lucide-react';
-import { fetchLectures, createLecture, updateLecture, deleteLecture, clearContentErrors } from '../../../store/slices/contentSlice';
+import { getLectures, createLecture, updateLecture, deleteLecture } from '../../../services/publication';
+import { useSettings } from '../../../context/SettingsContext';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {
@@ -13,12 +13,13 @@ const categoryTranslations = {
 };
 
 export default function ManageLectures() {
-  const dispatch = useDispatch();
-
-  const { list: lectures, loading } = useSelector((state) => state.content.lectures);
-  const { actionLoading, actionError } = useSelector((state) => state.content);
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
+  const [lectures, setLectures] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState(null);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -41,9 +42,21 @@ export default function ManageLectures() {
     { value: 'Bayan Recordings', label: 'بیانات کی ریکارڈنگز' },
   ];
 
+  const loadLectures = async () => {
+    try {
+      setLoading(true);
+      const data = await getLectures();
+      setLectures(Array.isArray(data) ? data : (data.lectures || []));
+    } catch (err) {
+      console.error('Failed to load lectures:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchLectures());
-  }, [dispatch]);
+    loadLectures();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +64,7 @@ export default function ManageLectures() {
   };
 
   const openCreateForm = () => {
-    dispatch(clearContentErrors());
+    setActionError(null);
     setEditingId(null);
     setFormFields({
       title: '',
@@ -65,7 +78,7 @@ export default function ManageLectures() {
   };
 
   const openEditForm = (lec) => {
-    dispatch(clearContentErrors());
+    setActionError(null);
     setEditingId(lec._id);
     setFormFields({
       title: lec.title,
@@ -80,28 +93,32 @@ export default function ManageLectures() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    dispatch(clearContentErrors());
+    setActionError(null);
+    setActionLoading(true);
 
-    let result;
-    if (editingId) {
-      result = await dispatch(updateLecture({ id: editingId, lectureData: formFields }));
-      if (updateLecture.fulfilled.match(result)) {
+    try {
+      if (editingId) {
+        await updateLecture(editingId, formFields);
         showSuccess(language === 'en' ? 'Lecture updated successfully.' : 'بیان کامیابی سے اپ ڈیٹ ہو گیا۔');
-      }
-    } else {
-      result = await dispatch(createLecture(formFields));
-      if (createLecture.fulfilled.match(result)) {
+      } else {
+        await createLecture(formFields);
         showSuccess(language === 'en' ? 'Lecture added successfully.' : 'بیان کامیابی سے شامل ہو گیا۔');
       }
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to save lecture');
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm(language === 'en' ? 'Are you sure you want to delete this lecture?' : 'کیا آپ واقعی اس بیان کو حذف کرنا چاہتے ہیں؟')) {
-      dispatch(clearContentErrors());
-      const result = await dispatch(deleteLecture(id));
-      if (deleteLecture.fulfilled.match(result)) {
+      setActionError(null);
+      try {
+        await deleteLecture(id);
         showSuccess(language === 'en' ? 'Lecture deleted successfully.' : 'بیان کامیابی سے حذف کر دیا گیا۔');
+      } catch (err) {
+        setActionError(err.response?.data?.message || err.message || 'Failed to delete lecture');
       }
     }
   };
@@ -111,22 +128,22 @@ export default function ManageLectures() {
     setSuccessMsg(msg);
     setIsFormOpen(false);
     setEditingId(null);
-    dispatch(fetchLectures());
+    loadLectures();
     setTimeout(() => setSuccess(false), 3000);
   };
 
   return (
-    <div className={`bg-[#FAF9F5] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{language === 'en' ? 'Manage Lectures' : 'بیانات کا انتظام'}</h1>
+              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Lectures' : 'بیانات کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete audio and video lectures.' : 'آڈیو اور ویڈیو بیانات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
             </div>
           </div>
@@ -134,9 +151,9 @@ export default function ManageLectures() {
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#8A6F52]" />
+              <Plus className="w-4 h-4 text-[#B08D57]" />
               {language === 'en' ? 'Add Lecture' : 'بیان شامل کریں'}
             </button>
           )}
@@ -152,8 +169,8 @@ export default function ManageLectures() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
+          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
                 {editingId 
                   ? (language === 'en' ? 'Edit Lecture Details' : 'بیان کی تفصیلات میں ترمیم کریں') 
@@ -163,7 +180,7 @@ export default function ManageLectures() {
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
+                className="text-xs text-[#E5D8CA] hover:text-white underline font-light"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
@@ -190,7 +207,7 @@ export default function ManageLectures() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Self-Purification: Islamic Methodology' : 'مثال: تزکیہ نفس: اسلامی طریقہ کار'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -201,7 +218,7 @@ export default function ManageLectures() {
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none text-slate-700 focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
@@ -223,7 +240,7 @@ export default function ManageLectures() {
                     onChange={handleInputChange}
                     required
                     placeholder="https://www.youtube.com/watch?v=..."
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -235,7 +252,7 @@ export default function ManageLectures() {
                     value={formFields.thumbnail}
                     onChange={handleInputChange}
                     placeholder="https://example.com/thumbnail.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -251,7 +268,7 @@ export default function ManageLectures() {
                   required
                   placeholder={language === 'en' ? 'Provide a brief overview of the topics discussed in this lecture...' : 'اس بیان میں زیر بحث موضوعات کا مختصر جائزہ فراہم کریں...'}
                   rows={4}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -260,16 +277,16 @@ export default function ManageLectures() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#8A6F52]" />
+                  <Save className="w-4 h-4 text-[#B08D57]" />
                   {actionLoading 
                     ? (language === 'en' ? 'Saving...' : 'محفوظ ہو رہا ہے...') 
                     : (language === 'en' ? 'Save Lecture' : 'بیان محفوظ کریں')
@@ -281,16 +298,16 @@ export default function ManageLectures() {
           </div>
         ) : (
           /* Lectures List Table */
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
               </div>
             ) : lectures && lectures.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#E5D8CA]">
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Video/Audio URL' : 'ویڈیو/آڈیو یو آر ایل'}</th>
@@ -302,7 +319,7 @@ export default function ManageLectures() {
                       <tr key={lec._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.title}</td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-[#2F241C]/10 text-[#2F241C] text-[10px] font-bold px-2 py-0.5 rounded">
+                          <span className="bg-[#1F3A5F]/10 text-[#1F3A5F] text-[10px] font-bold px-2 py-0.5 rounded">
                             {language === 'en' ? lec.category : (categoryTranslations[lec.category] || lec.category)}
                           </span>
                         </td>
@@ -311,7 +328,7 @@ export default function ManageLectures() {
                           <div className="inline-flex items-center gap-2">
                              <button
                                onClick={() => openEditForm(lec)}
-                               className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
+                               className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
                                title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                              >
                                <Edit2 className="w-4 h-4" />
@@ -332,7 +349,7 @@ export default function ManageLectures() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Play className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+                <Play className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}</h3>
                 <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Lecture" button to publish your first lecture.' : 'اپنا پہلا بیان شامل کرنے کے لیے "بیان شامل کریں" بٹن پر کلک کریں۔'}</p>
               </div>

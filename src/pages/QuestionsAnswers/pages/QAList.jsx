@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
-import { fetchPublicQuestions } from '../../../store/slices/contentSlice';
+import { getPublicQuestions } from '../../../services/question';
+import { useSettings } from '../../../context/SettingsContext';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {
@@ -18,12 +18,15 @@ const categoryTranslations = {
 };
 
 export default function QAList() {
-  const dispatch = useDispatch();
-
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { publicList: questions, loading, page, pages } = useSelector((state) => state.content.questions);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -42,22 +45,38 @@ export default function QAList() {
     'General Questions',
   ];
 
+  const loadQuestions = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getPublicQuestions({ category, search, page: pageNum, limit: 6 });
+      setQuestions(data.questions || []);
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to load questions');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchPublicQuestions({ category: selectedCategory, search: searchTerm, page }));
-  }, [dispatch, selectedCategory, page]);
+    loadQuestions(page, selectedCategory, searchTerm);
+  }, [selectedCategory, page]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    dispatch(fetchPublicQuestions({ category: selectedCategory, search: searchTerm, page: 1 }));
+    loadQuestions(1, selectedCategory, searchTerm);
   };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    dispatch(fetchPublicQuestions({ category: category, search: searchTerm, page: 1 }));
+    loadQuestions(1, category, searchTerm);
   };
 
   const handlePageChange = (pageNum) => {
-    dispatch(fetchPublicQuestions({ category: selectedCategory, search: searchTerm, page: pageNum }));
+    loadQuestions(pageNum, selectedCategory, searchTerm);
     window.scrollTo(0, 0);
   };
 
@@ -66,15 +85,15 @@ export default function QAList() {
   };
 
   return (
-    <div className={`bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
             {language === 'en' ? 'MUTUAL DISCUSSION' : 'باہمی گفتگو'}
           </span>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">
+          <h1 className="text-3xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] font-serif tracking-wide">
             {language === 'en' ? 'Questions & Answers' : 'سوالات اور جوابات'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -90,10 +109,10 @@ export default function QAList() {
               placeholder={language === 'en' ? 'Search Q&A...' : 'سوال و جواب تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
+              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
               border=""
             />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]`}>
+            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57]`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -103,7 +122,7 @@ export default function QAList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
@@ -118,7 +137,7 @@ export default function QAList() {
         {/* Content list Accordion */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
           </div>
         ) : questions && questions.length > 0 ? (
           <div className="space-y-4 mb-10 text-start">
@@ -134,7 +153,7 @@ export default function QAList() {
                   >
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="bg-[#2F241C]/10 dark:bg-amber-950/30 text-[#2F241C] dark:text-[#8A6F52] text-[10px] font-bold px-2 py-0.5 rounded">
+                        <span className="bg-[#1F3A5F]/10 dark:bg-amber-950/30 text-[#1F3A5F] dark:text-[#B08D57] text-[10px] font-bold px-2 py-0.5 rounded">
                           {language === 'ur' ? (categoryTranslations[q.category] || q.category) : q.category}
                         </span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -146,7 +165,7 @@ export default function QAList() {
                       </h3>
                     </div>
 
-                    <div className="text-slate-500 dark:text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52] mt-1 shrink-0">
+                    <div className="text-slate-500 dark:text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57] mt-1 shrink-0">
                       {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                     </div>
                   </button>
@@ -156,8 +175,8 @@ export default function QAList() {
                     <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10 text-start">
 
                       {/* Detailed Question */}
-                      <div className={`bg-slate-50 dark:bg-slate-900 border-[#8A6F52] dark:border-amber-500 p-4 rounded mb-5 text-xs text-start ${language === 'ur' ? 'border-r-2' : 'border-l-2'}`}>
-                        <span className="block font-bold text-[#2F241C] dark:text-[#8A6F52] mb-1.5">
+                      <div className={`bg-slate-50 dark:bg-slate-900 border-[#B08D57] dark:border-amber-500 p-4 rounded mb-5 text-xs text-start ${language === 'ur' ? 'border-r-2' : 'border-l-2'}`}>
+                        <span className="block font-bold text-[#1F3A5F] dark:text-[#B08D57] mb-1.5">
                           {language === 'en' ? 'Question Detail:' : 'سوال کی تفصیل:'}
                         </span>
                         <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">
@@ -185,7 +204,7 @@ export default function QAList() {
           </div>
         ) : (
           <div className="text-center py-16 premium-card">
-            <MessageSquare className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+            <MessageSquare className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
               {language === 'en' ? 'No answered questions found' : 'کوئی جواب شدہ سوال نہیں ملا'}
             </h3>
@@ -201,7 +220,7 @@ export default function QAList() {
             <button
               onClick={() => handlePageChange(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               {language === 'en' ? 'Previous' : 'پچھلا'}
             </button>
@@ -210,8 +229,8 @@ export default function QAList() {
                 key={pNum + 1}
                 onClick={() => handlePageChange(pNum + 1)}
                 className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                    ? 'bg-[#2F241C] border-[#2F241C] text-white'
-                    : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white'
+                    : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
               >
                 {pNum + 1}
@@ -220,7 +239,7 @@ export default function QAList() {
             <button
               onClick={() => handlePageChange(Math.min(pages, page + 1))}
               disabled={page === pages}
-              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               {language === 'en' ? 'Next' : 'اگلا'}
             </button>

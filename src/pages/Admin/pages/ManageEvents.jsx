@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
-import { fetchEvents, createEvent, updateEvent, deleteEvent, clearContentErrors } from '../../../store/slices/contentSlice';
+import { getEvents, createEvent, updateEvent, deleteEvent } from '../../../services/event';
+import { useSettings } from '../../../context/SettingsContext';
 import { Input } from '../../../components/Input';
 
 export default function ManageEvents() {
-  const dispatch = useDispatch();
-
-  const { list: events, loading } = useSelector((state) => state.content.events);
-  const { actionLoading, actionError } = useSelector((state) => state.content);
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState(null);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -27,9 +28,21 @@ export default function ManageEvents() {
     posterImage: '',
   });
 
+  const loadEvents = async () => {
+    try {
+      setLoading(true);
+      const data = await getEvents();
+      setEvents(Array.isArray(data) ? data : (data.events || []));
+    } catch (err) {
+      console.error('Failed to load events:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    loadEvents();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +50,7 @@ export default function ManageEvents() {
   };
 
   const openCreateForm = () => {
-    dispatch(clearContentErrors());
+    setActionError(null);
     setEditingId(null);
     setFormFields({
       title: '',
@@ -51,7 +64,7 @@ export default function ManageEvents() {
   };
 
   const openEditForm = (ev) => {
-    dispatch(clearContentErrors());
+    setActionError(null);
     setEditingId(ev._id);
 
     // Format date string for datetime-local input (YYYY-MM-DDTHH:MM)
@@ -72,28 +85,32 @@ export default function ManageEvents() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    dispatch(clearContentErrors());
+    setActionError(null);
+    setActionLoading(true);
 
-    let result;
-    if (editingId) {
-      result = await dispatch(updateEvent({ id: editingId, eventData: formFields }));
-      if (updateEvent.fulfilled.match(result)) {
+    try {
+      if (editingId) {
+        await updateEvent(editingId, formFields);
         showSuccess(language === 'en' ? 'Event updated successfully.' : 'پروگرام کامیابی سے اپ ڈیٹ ہو گیا۔');
-      }
-    } else {
-      result = await dispatch(createEvent(formFields));
-      if (createEvent.fulfilled.match(result)) {
+      } else {
+        await createEvent(formFields);
         showSuccess(language === 'en' ? 'Event added successfully.' : 'پروگرام کامیابی سے شامل ہو گیا۔');
       }
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to save event');
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm(language === 'en' ? 'Are you sure you want to delete this event?' : 'کیا آپ واقعی اس پروگرام کو حذف کرنا چاہتے ہیں؟')) {
-      dispatch(clearContentErrors());
-      const result = await dispatch(deleteEvent(id));
-      if (deleteEvent.fulfilled.match(result)) {
+      setActionError(null);
+      try {
+        await deleteEvent(id);
         showSuccess(language === 'en' ? 'Event deleted successfully.' : 'پروگرام کامیابی سے حذف کر دیا گیا۔');
+      } catch (err) {
+        setActionError(err.response?.data?.message || err.message || 'Failed to delete event');
       }
     }
   };
@@ -103,22 +120,22 @@ export default function ManageEvents() {
     setSuccessMsg(msg);
     setIsFormOpen(false);
     setEditingId(null);
-    dispatch(fetchEvents());
+    loadEvents();
     setTimeout(() => setSuccess(false), 3000);
   };
 
   return (
-    <div className={`bg-[#FAF9F5] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE3CF]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#EAE3CF] bg-white rounded text-slate-500 hover:text-[#8A6F52] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2F241C] font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
+              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scheduled events and gatherings.' : 'طے شدہ پروگرام اور اجتماعات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
             </div>
           </div>
@@ -126,9 +143,9 @@ export default function ManageEvents() {
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#8A6F52]" />
+              <Plus className="w-4 h-4 text-[#B08D57]" />
               {language === 'en' ? 'Add Event' : 'پروگرام شامل کریں'}
             </button>
           )}
@@ -144,8 +161,8 @@ export default function ManageEvents() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#2F241C] islamic-pattern text-white px-6 py-4 border-b border-[#8A6F52]/35 flex items-center justify-between">
+          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
                 {editingId 
                   ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں') 
@@ -155,7 +172,7 @@ export default function ManageEvents() {
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-[#EAE3CF] hover:text-white underline font-light"
+                className="text-xs text-[#E5D8CA] hover:text-white underline font-light"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
@@ -182,7 +199,7 @@ export default function ManageEvents() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Halal Investment Workshop Seminar' : 'مثال: حلال سرمایہ کاری ورکشاپ سیمینار'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -194,7 +211,7 @@ export default function ManageEvents() {
                     value={formFields.eventDate}
                     onChange={handleInputChange}
                     required
-                    inputClassName={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none text-slate-700 focus:border-[#8A6F52] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none text-slate-700 focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -211,7 +228,7 @@ export default function ManageEvents() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Masjid Noor, Seminar Hall A' : 'مثال: مسجد نور، سیمینار ہال الف'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -223,7 +240,7 @@ export default function ManageEvents() {
                     value={formFields.posterImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/poster.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -239,7 +256,7 @@ export default function ManageEvents() {
                   required
                   placeholder={language === 'en' ? 'Provide details about topics, timings, registration fee, etc...' : 'اجتماع کے موضوعات، اوقات اور اگر کوئی رجسٹریشن فیس ہو تو اس کے بارے میں تفصیلات فراہم کریں...'}
                   rows={5}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#EAE3CF] rounded outline-none focus:border-[#8A6F52] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -248,16 +265,16 @@ export default function ManageEvents() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-[#EAE3CF] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#2F241C] hover:bg-[#1E1915] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#8A6F52]" />
+                  <Save className="w-4 h-4 text-[#B08D57]" />
                   {actionLoading ? 'محفوظ ہو رہا ہے...' : 'پروگرام محفوظ کریں'}
                 </button>
               </div>
@@ -266,16 +283,16 @@ export default function ManageEvents() {
           </div>
         ) : (
           /* Events List Table */
-          <div className="bg-white border border-[#EAE3CF] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
               </div>
             ) : events && events.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#EAE3CF]">
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#E5D8CA]">
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Date' : 'تاریخ'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Location' : 'مقام'}</th>
@@ -294,7 +311,7 @@ export default function ManageEvents() {
                           <div className="inline-flex items-center gap-2">
                             <button
                               onClick={() => openEditForm(ev)}
-                              className="p-1.5 text-[#8A6F52] hover:bg-amber-50 rounded transition-colors"
+                              className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
                               title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -315,7 +332,7 @@ export default function ManageEvents() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Calendar className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+                <Calendar className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No events scheduled yet' : 'کوئی پروگرام طے شدہ نہیں ہے'}</h3>
                 <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Event" button to schedule your first event.' : 'اپنا پہلا پروگرام شیڈول کرنے کے لیے "پروگرام شامل کریں" بٹن پر کلک کریں۔'}</p>
               </div>

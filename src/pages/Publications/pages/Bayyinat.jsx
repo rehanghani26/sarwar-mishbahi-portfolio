@@ -1,10 +1,10 @@
 import React from 'react'
 import PageContainer from '../../../components/PageContainer'
 import { ARTICLES } from '../../../data/siteData'
-import { useSelector } from 'react-redux';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function Bayyinat() {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -26,9 +26,9 @@ export default function Bayyinat() {
         
         <div className="space-y-3 my-6">
           {ARTICLES.map((art) => (
-            <div key={art.id} className="bg-[#fcfbf9] border border-[#EAE3CF] p-4 rounded-sm hover:border-[#8A6F52] transition-colors cursor-pointer flex justify-between items-center">
+            <div key={art.id} className="bg-[#fcfbf9] border border-[#E5D8CA] p-4 rounded-sm hover:border-[#B08D57] transition-colors cursor-pointer flex justify-between items-center">
               <span className="font-bold text-[#3A2C23] text-[17px]">{art.title}</span>
-              <span className="text-[#8A6F52] text-[14px]">
+              <span className="text-[#B08D57] text-[14px]">
                 {language === 'en' ? 'Read Article 🗎' : 'مضمون پڑھیں 🗎'}
               </span>
             </div>
@@ -60,7 +60,7 @@ export default function Bayyinat() {
         <div className="text-center pt-6">
           <button
             onClick={() => alert(language === 'en' ? 'The annual subscription form is disabled in this demo version.' : 'سالانہ خریدار بننے کا فارم ڈیمو ورژن میں غیر فعال ہے۔')}
-            className="bg-[#8A6F52] text-white py-3 px-6 text-[16px] font-bold hover:bg-[#2F241C] transition-colors"
+            className="bg-[#1F3A5F] text-white py-3 px-6 text-[16px] font-bold hover:bg-[#1F3A5F] transition-colors"
           >
             {language === 'en' ? '✍️ Become an Annual Subscriber (Get printed copies home-delivered)' : '✍️ سالانہ خریدار بنیں (پرنٹڈ کاپی گھر منگوائیں)'}
           </button>

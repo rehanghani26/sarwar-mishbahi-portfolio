@@ -32,12 +32,12 @@ export default function MasnoonDuas() {
 
         <div className="space-y-6 mt-6">
           {duas.map((dua, i) => (
-            <div key={i} className="bg-[#fdfcf9] border border-[#EAE3CF] p-6 rounded-sm shadow-sm">
-              <h4 className="text-[20px] font-bold text-[#8A6F52] border-b pb-2 mb-3">{dua.title}</h4>
+            <div key={i} className="bg-[#fdfcf9] border border-[#E5D8CA] p-6 rounded-sm shadow-sm">
+              <h4 className="text-[20px] font-bold text-[#B08D57] border-b pb-2 mb-3">{dua.title}</h4>
               <p className="text-[24px] font-serif text-[#3A2C23] text-center my-4 leading-normal select-all">
                 {dua.arabic}
               </p>
-              <p className="text-[16px] text-[#555] leading-relaxed bg-gray-50 p-3.5 border-r-4 border-[#8A6F52] mt-2">
+              <p className="text-[16px] text-[#555] leading-relaxed bg-gray-50 p-3.5 border-r-4 border-[#B08D57] mt-2">
                 {dua.translation}
               </p>
             </div>

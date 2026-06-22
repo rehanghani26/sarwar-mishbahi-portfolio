@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import {
   BookOpen,
@@ -18,13 +17,12 @@ import {
   ShieldCheck,
   Image as ImageIcon,
 } from 'lucide-react';
-import { fetchArticles } from '../../../store/slices/contentSlice';
-import { fetchFatwas } from '../../../store/slices/contentSlice';
-import { fetchPublicQuestions } from '../../../store/slices/contentSlice';
-import { fetchPublications } from '../../../store/slices/contentSlice';
-import { fetchLectures } from '../../../store/slices/contentSlice';
-import { fetchEvents } from '../../../store/slices/contentSlice';
-import { fetchSettings } from '../../../store/slices/settingsSlice';
+import { getArticles } from '../../../services/article';
+import { getFatwas } from '../../../services/fatwa';
+import { getPublicQuestions } from '../../../services/question';
+import { getPublications, getLectures } from '../../../services/publication';
+import { getEvents } from '../../../services/event';
+import { useSettings } from '../../../context/SettingsContext';
 
 import ArticleCard from '../../../components/ArticleCard';
 import FatwaCard from '../../../components/FatwaCard';
@@ -36,7 +34,7 @@ import AnimatedFeatureCard from './Animatedfeaturecard ';
 // Small helper so every section heading animates in the same way on scroll,
 // without repeating the motion props everywhere.
 function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -68,7 +66,7 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
 // portrait photo. No artwork here on purpose — swap the contents for an
 // <img> tag once a photo is available.
 function ScholarPhotoPlaceholder() {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -90,27 +88,39 @@ function ScholarPhotoPlaceholder() {
 }
 
 export default function Home() {
-  const dispatch = useDispatch();
-
-  // Redux Selectors
-  const { settings } = useSelector((state) => state.settings);
-  const { list: articles } = useSelector((state) => state.content.articles);
-  const { list: fatwas } = useSelector((state) => state.content.fatwas);
-  const { publicList: questions } = useSelector((state) => state.content.questions);
-  const { list: publications } = useSelector((state) => state.content.publications);
-  const { list: lectures } = useSelector((state) => state.content.lectures);
-  const { list: events } = useSelector((state) => state.content.events);
+  const { settings } = useSettings();
+  const [articles, setArticles] = useState([]);
+  const [fatwas, setFatwas] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [publications, setPublications] = useState([]);
+  const [lectures, setLectures] = useState([]);
+  const [events, setEvents] = useState([]);
 
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   useEffect(() => {
-    dispatch(fetchArticles({ limit: 3 }));
-    dispatch(fetchFatwas({ limit: 3 }));
-    dispatch(fetchPublicQuestions({ limit: 3 }));
-    dispatch(fetchPublications());
-    dispatch(fetchLectures());
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    const loadHomeData = async () => {
+      try {
+        const [articlesData, fatwasData, questionsData, publicationsData, lecturesData, eventsData] = await Promise.all([
+          getArticles({ limit: 3 }),
+          getFatwas({ limit: 3 }),
+          getPublicQuestions({ limit: 3 }),
+          getPublications(),
+          getLectures(),
+          getEvents()
+        ]);
+        setArticles(articlesData.articles || []);
+        setFatwas(fatwasData.fatwas || []);
+        setQuestions(questionsData.questions || []);
+        setPublications(publicationsData || []);
+        setLectures(lecturesData || []);
+        setEvents(eventsData || []);
+      } catch (err) {
+        console.error('Error loading homepage data:', err);
+      }
+    };
+    loadHomeData();
+  }, []);
 
   // Fallback defaults
   const heroName = settings?.homepageSettings?.heroName || '';

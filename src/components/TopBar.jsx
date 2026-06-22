@@ -24,7 +24,7 @@ export default function TopBar() {
           <button className="bg-[#2d2d2d] text-[#bbb] border-none border-l border-[#3a3a3a] px-3 sm:px-5 h-11 text-[12px] sm:text-[14px] hover:bg-[#3a3a3a] hover:text-white transition-colors">
             لاگ ان
           </button>
-          <button className="bg-[#8A6F52] text-white px-3 sm:px-4 h-11 text-[12px] sm:text-[14px] flex items-center gap-1 hover:bg-[#A08060] transition-colors">
+          <button className="bg-[#1F3A5F] text-white px-3 sm:px-4 h-11 text-[12px] sm:text-[14px] flex items-center gap-1 hover:bg-[#A08060] transition-colors">
             اردو <span className="text-[9px] sm:text-[10px]">▾</span>
           </button>
         </div>

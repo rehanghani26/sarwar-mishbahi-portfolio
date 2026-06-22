@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../../services/api';
+import { loginUser, checkAuthStatus as checkAuthStatusApi } from '../../services/auth';
 
 // Check if token exists in local storage
 const token = localStorage.getItem('adminToken');
@@ -8,8 +8,9 @@ const adminInfo = localStorage.getItem('adminInfo')
   : null;
 
 const initialState = {
-  adminInfo: adminInfo,
+  loggedInUser: adminInfo,
   token: token,
+  userRole: adminInfo ? 'admin' : null,
   isAuthenticated: !!token,
   loading: false,
   error: null,
@@ -19,13 +20,13 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }, thunkAPI) => {
     try {
-      const response = await API.post('/auth/login', { username, password });
+      const data = await loginUser({ username, password });
       
       // Save details to local storage
-      localStorage.setItem('adminToken', response.data.token);
-      localStorage.setItem('adminInfo', JSON.stringify(response.data));
+      localStorage.setItem('adminToken', data.token);
+      localStorage.setItem('adminInfo', JSON.stringify(data));
       
-      return response.data;
+      return data;
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Login failed';
       return thunkAPI.rejectWithValue(message);
@@ -37,8 +38,8 @@ export const checkAuthStatus = createAsyncThunk(
   'auth/checkStatus',
   async (_, thunkAPI) => {
     try {
-      const response = await API.get('/auth/me');
-      return response.data;
+      const data = await checkAuthStatusApi();
+      return data;
     } catch (error) {
       // Token is expired or invalid
       localStorage.removeItem('adminToken');
@@ -55,8 +56,9 @@ const authSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminInfo');
-      state.adminInfo = null;
+      state.loggedInUser = null;
       state.token = null;
+      state.userRole = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
@@ -74,8 +76,9 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminInfo = action.payload;
+        state.loggedInUser = action.payload;
         state.token = action.payload.token;
+        state.userRole = 'admin';
         state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -84,12 +87,14 @@ const authSlice = createSlice({
       })
       // Check Auth Status
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        state.adminInfo = { ...state.adminInfo, ...action.payload };
+        state.loggedInUser = { ...state.loggedInUser, ...action.payload };
+        state.userRole = 'admin';
         state.isAuthenticated = true;
       })
       .addCase(checkAuthStatus.rejected, (state) => {
-        state.adminInfo = null;
+        state.loggedInUser = null;
         state.token = null;
+        state.userRole = null;
         state.isAuthenticated = false;
       });
   },

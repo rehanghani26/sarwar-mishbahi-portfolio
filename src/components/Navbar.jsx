@@ -3,8 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Menu, X, BookOpen, User, HelpCircle, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
-import { fetchSettings, requestLanguageChange } from '../store/slices/settingsSlice';
-
+import { useSettings } from '../context/SettingsContext';
 
 export default function Navbar() {
   const location = useLocation();
@@ -12,9 +11,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const { settings } = useSelector((state) => state.settings);
+  const { settings, requestLanguageChange } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
 
@@ -56,14 +54,13 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled
-          ? 'bg-card-bg shadow-md border-b border-site-border py-2'
-          : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
-      }`}
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled
+        ? 'bg-card-bg shadow-md border-b border-site-border py-2'
+        : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-        
+
         {/* Scholar Branding / Logo */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
           <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md">
@@ -91,11 +88,10 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 to={link.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'text-brown-dark font-bold border-b-2 border-brown-dark'
-                    : 'text-text-secondary hover:text-[#B08D57]'
-                }`}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${isActive
+                  ? 'text-brown-dark font-bold border-b-2 border-brown-dark'
+                  : 'text-text-secondary hover:text-[#B08D57]'
+                  }`}
               >
                 {link.label}
               </Link>
@@ -105,12 +101,12 @@ export default function Navbar() {
 
         {/* Right side CTA & Admin indicators */}
         <div className="hidden lg:flex items-center gap-3">
-          <button
+          {/* <button
             onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
             className="px-3 py-2 text-xs font-bold text-text-primary bg-cream-light hover:bg-[#E5D8CA] rounded transition-all font-serif"
           >
             {language === 'en' ? 'اردو' : 'English'}
-          </button>
+          </button> */}
 
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
@@ -142,12 +138,12 @@ export default function Navbar() {
 
         {/* Mobile Menu Trigger */}
         <div className="flex items-center lg:hidden gap-2">
-          <button
+          {/* <button
             onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
             className="px-2.5 py-1 text-xs font-bold text-text-primary bg-cream-light rounded transition-all font-serif"
           >
             {language === 'en' ? 'اردو' : 'English'}
-          </button>
+          </button> */}
 
           {!isAuthenticated && (
             <Link
@@ -202,11 +198,10 @@ export default function Navbar() {
                       key={link.label}
                       to={link.href}
                       onClick={closeMenu}
-                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${
-                        isActive
-                          ? 'bg-[#E5D8CA] text-[#1F3A5F] font-bold'
-                          : 'text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]'
-                      }`}
+                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${isActive
+                        ? 'bg-[#E5D8CA] text-[#1F3A5F] font-bold'
+                        : 'text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]'
+                        }`}
                     >
                       {link.label}
                     </Link>

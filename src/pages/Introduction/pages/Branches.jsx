@@ -23,8 +23,8 @@ export default function Branches() {
         
         <div className="space-y-4 my-6">
           {branchesList.map((branch, i) => (
-            <div key={i} className="bg-[#fcfbf9] border border-[#EAE3CF] p-5 rounded-sm hover:border-[#8A6F52] transition-all">
-              <h4 className="text-[19px] font-bold text-[#8A6F52] mb-1">{branch.name}</h4>
+            <div key={i} className="bg-[#fcfbf9] border border-[#E5D8CA] p-5 rounded-sm hover:border-[#B08D57] transition-all">
+              <h4 className="text-[19px] font-bold text-[#B08D57] mb-1">{branch.name}</h4>
               <p className="text-[16px] text-[#555]">{branch.desc}</p>
             </div>
           ))}

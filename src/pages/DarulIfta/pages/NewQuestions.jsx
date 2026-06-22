@@ -23,14 +23,14 @@ export default function NewQuestions() {
       subtitle="دارالافتاء بنوری ٹاؤن کے تازہ ترین فتاویٰ اور شرعی مسائل کا حل"
     >
       <div className="space-y-8">
-        <div className="bg-[#fcfbf9] border border-[#EAE3CF] p-6 rounded-sm">
+        <div className="bg-[#fcfbf9] border border-[#E5D8CA] p-6 rounded-sm">
           <h3 className="text-[20px] font-bold text-[#3A2C23] mb-4">آن لائن فتویٰ پوچھیں</h3>
           <p className="text-[16px] text-[#555] mb-4">
             اگر آپ کو کوئی شرعی مسئلہ درپیش ہے، تو آپ نیچے دیے گئے بٹن پر کلک کر کے اپنا سوال براہِ راست دارالافتاء کے مفتیانِ کرام کو بھیج سکتے ہیں۔
           </p>
           <button
             onClick={() => alert('آن لائن فتویٰ فارم ابھی ڈیمو موڈ میں ہے اور جلد فعال کر دیا جائے گا۔')}
-            className="bg-[#8A6F52] text-white py-2 px-5 text-[16px] font-bold hover:bg-[#2F241C] transition-colors"
+            className="bg-[#1F3A5F] text-white py-2 px-5 text-[16px] font-bold hover:bg-[#1F3A5F] transition-colors"
           >
             ✉️ اپنا سوال بھیجیں
           </button>
@@ -41,7 +41,7 @@ export default function NewQuestions() {
         <div className="space-y-6">
           {fatawa.map((fatwa, i) => (
             <div key={i} className="bg-[#fdfcf9] border border-[#D9D9D9] p-6 rounded-sm shadow-sm space-y-3">
-              <div className="font-bold text-[#8A6F52] text-[18px] leading-relaxed">
+              <div className="font-bold text-[#B08D57] text-[18px] leading-relaxed">
                 {fatwa.q}
               </div>
               <div className="text-[16px] text-[#555] leading-[2] bg-gray-50 p-4 border-r-4 border-[#3D2E1E]">

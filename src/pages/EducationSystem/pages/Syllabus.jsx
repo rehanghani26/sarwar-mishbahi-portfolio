@@ -24,10 +24,10 @@ export default function Syllabus() {
 
         <div className="space-y-4 my-6">
           {levels.map((level, index) => (
-            <div key={index} className="bg-[#fcfbf9] border border-[#EAE3CF] p-5 rounded-sm">
+            <div key={index} className="bg-[#fcfbf9] border border-[#E5D8CA] p-5 rounded-sm">
               <div className="flex justify-between items-center border-b pb-2 mb-2">
-                <h4 className="text-[19px] font-bold text-[#8A6F52]">{level.name}</h4>
-                <span className="bg-[#EAE3CF] text-[#3A2C23] px-3 py-1 text-[14px] rounded font-sans font-bold">
+                <h4 className="text-[19px] font-bold text-[#B08D57]">{level.name}</h4>
+                <span className="bg-[#E5D8CA] text-[#3A2C23] px-3 py-1 text-[14px] rounded font-sans font-bold">
                   مدت: {level.duration}
                 </span>
               </div>
@@ -38,7 +38,7 @@ export default function Syllabus() {
           ))}
         </div>
 
-        <div className="bg-[#fcfbf9] border-t-4 border-[#8A6F52] p-5">
+        <div className="bg-[#fcfbf9] border-t-4 border-[#B08D57] p-5">
           <p className="text-[15px] text-[#555] leading-relaxed">
             * تمام تعلیمی مراحل کی کامیاب تکمیل کے بعد وفاق المدارس العربیہ انڈیا کی جانب سے ایم اے علومِ اسلامیہ و عربیہ کی مستند اور منظور شدہ ڈگری جاری کی جاتی ہے، جو ہائر ایجوکیشن کمیشن (HEC) انڈیا سے تسلیم شدہ ہے۔
           </p>

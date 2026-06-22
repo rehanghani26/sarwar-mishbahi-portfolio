@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, HelpCircle, FileText } from 'lucide-react';
-import { fetchFatwaById } from '../../../store/slices/contentSlice';
+import { getFatwaById } from '../../../services/fatwa';
+import { useSettings } from '../../../context/SettingsContext';
 import FatwaCard from '../../../components/FatwaCard';
 
 const categoryTranslations = {
@@ -20,16 +20,29 @@ const categoryTranslations = {
 
 export default function FatwaDetail() {
   const { id } = useParams();
-  const dispatch = useDispatch();
 
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { current, loading, error } = useSelector((state) => state.content.fatwas);
+  const [current, setCurrent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchFatwaById(id));
-  }, [dispatch, id]);
+    const loadFatwa = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getFatwaById(id);
+        setCurrent(data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message || 'Failed to load fatwa');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFatwa();
+  }, [id]);
 
   if (loading) {
     return (
@@ -46,7 +59,7 @@ export default function FatwaDetail() {
           {language === 'en' ? 'Error Loading Fatwa' : 'فتویٰ لوڈ کرنے میں خرابی'}
         </h2>
         <p className="text-slate-555 text-sm mt-2">{error || (language === 'en' ? 'Fatwa not found.' : 'فتویٰ نہیں ملا۔')}</p>
-        <Link to="/fatwas" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#2F241C] text-white rounded font-semibold text-sm hover:bg-[#1E1915]">
+        <Link to="/fatwas" className="inline-flex items-center gap-1.5 mt-6 px-4 py-2 bg-[#1F3A5F] text-white rounded font-semibold text-sm hover:bg-[#162C49]">
           {language === 'en' ? <ArrowLeft className="w-4.5 h-4.5" /> : <ArrowRight className="w-4.5 h-4.5" />}
           {language === 'en' ? 'Back to Fatwas' : 'فتاویٰ پر واپس جائیں'}
         </Link>
@@ -68,7 +81,7 @@ export default function FatwaDetail() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         
         {/* Navigation Breadcrumb back button */}
-        <Link to="/fatwas" className="inline-flex items-center gap-1 text-sm font-bold text-text-primary hover:text-[#8A6F52] dark:hover:text-amber-400 mb-6">
+        <Link to="/fatwas" className="inline-flex items-center gap-1 text-sm font-bold text-text-primary hover:text-[#B08D57] dark:hover:text-amber-400 mb-6">
           {language === 'en' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           {language === 'en' ? 'Back to Fatwas' : 'فتاویٰ پر واپس جائیں'}
         </Link>
@@ -77,8 +90,8 @@ export default function FatwaDetail() {
         <div className="premium-card overflow-hidden mb-12">
           
           {/* Header Banner */}
-          <div className={`bg-[#2F241C] islamic-pattern text-white px-6 py-8 sm:px-10 relative border-b border-[#8A6F52]/35 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-            <span className="bg-[#8A6F52] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded shadow-sm inline-block mb-3 font-serif">
+          <div className={`bg-[#1F3A5F] islamic-pattern text-white px-6 py-8 sm:px-10 relative border-b border-[#B08D57]/35 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <span className="bg-[#1F3A5F] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded shadow-sm inline-block mb-3 font-serif">
               {language === 'ur' ? (categoryTranslations[category] || category) : category}
             </span>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight font-serif tracking-wide">
@@ -90,21 +103,21 @@ export default function FatwaDetail() {
             {/* Metadata bar */}
             <div className="flex flex-wrap items-center gap-6 text-xs text-slate-500 dark:text-slate-400 mb-8 pb-4 border-b border-slate-100 dark:border-slate-700 justify-start">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
+                <Calendar className="w-4 h-4 text-[#B08D57] dark:text-amber-500" />
                 {language === 'en' ? 'Published:' : 'شائع ہوا:'} {formattedDate}
               </span>
               <span className="flex items-center gap-1.5">
-                <Eye className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" />
+                <Eye className="w-4 h-4 text-[#B08D57] dark:text-amber-500" />
                 {viewCount} {language === 'en' ? 'views' : 'بار دیکھا گیا'}
               </span>
             </div>
  
             {/* 1. Original Question block */}
             <div className={`mb-8 bg-slate-50 dark:bg-slate-800/60 rounded p-5 sm:p-6 shadow-xs ${
-              language === 'ur' ? 'border-r-4 border-[#8A6F52] dark:border-amber-500 text-right' : 'border-l-4 border-[#8A6F52] dark:border-amber-500 text-left'
+              language === 'ur' ? 'border-r-4 border-[#B08D57] dark:border-amber-500 text-right' : 'border-l-4 border-[#B08D57] dark:border-amber-500 text-left'
             }`}>
               <h2 className="text-sm font-bold text-text-primary font-serif flex items-center gap-2 mb-3 tracking-wide">
-                <HelpCircle className="w-5 h-5 text-[#8A6F52] dark:text-amber-500 shrink-0" />
+                <HelpCircle className="w-5 h-5 text-[#B08D57] dark:text-amber-500 shrink-0" />
                 {language === 'en' ? 'Question Asked' : 'پوچھا گیا سوال'}
               </h2>
               <p className="text-slate-700 dark:text-slate-300 text-sm italic leading-relaxed font-light">
@@ -115,7 +128,7 @@ export default function FatwaDetail() {
             {/* 2. Scholar Answer block */}
             <div className={language === 'ur' ? 'text-right' : 'text-left'}>
               <h2 className={`text-sm font-bold text-slate-800 dark:text-slate-200 font-serif flex items-center gap-2 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2 tracking-wide ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                <FileText className="w-5 h-5 text-[#8A6F52] dark:text-amber-500 shrink-0" />
+                <FileText className="w-5 h-5 text-[#B08D57] dark:text-amber-500 shrink-0" />
                 {language === 'en' ? 'Shariah Ruling & Detailed Fatwa' : 'شرعی حکم اور تفصیلی فتویٰ'}
               </h2>
               <div
@@ -128,7 +141,7 @@ export default function FatwaDetail() {
             {references && references.length > 0 && (
               <div className={`mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest font-serif mb-3 flex items-center gap-1.5">
-                  <Bookmark className="w-4 h-4 text-[#8A6F52] dark:text-amber-500" /> 
+                  <Bookmark className="w-4 h-4 text-[#B08D57] dark:text-amber-500" /> 
                   {language === 'en' ? 'Academic References / Sources' : 'علمی حوالہ جات / کتب کے مراجع'}
                 </h3>
                 <ul className="list-decimal list-inside text-xs text-slate-600 dark:text-slate-400 space-y-1">

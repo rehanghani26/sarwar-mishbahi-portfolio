@@ -23,8 +23,8 @@ export default function AimsObjectives() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           {objectives.map((obj) => (
-            <div key={obj.num} className="bg-[#fdfcf9] border border-[#EAE3CF] p-5 rounded-sm flex gap-4 hover:shadow-md transition-shadow">
-              <span className="text-[28px] font-bold text-[#8A6F52] select-none leading-none pt-1">
+            <div key={obj.num} className="bg-[#fdfcf9] border border-[#E5D8CA] p-5 rounded-sm flex gap-4 hover:shadow-md transition-shadow">
+              <span className="text-[28px] font-bold text-[#B08D57] select-none leading-none pt-1">
                 {obj.num}
               </span>
               <p className="text-[17px] text-[#3A2C23] leading-relaxed">
@@ -34,7 +34,7 @@ export default function AimsObjectives() {
           ))}
         </div>
 
-        <div className="bg-[#fcfbf9] border-t-4 border-[#8A6F52] p-6 mt-8">
+        <div className="bg-[#fcfbf9] border-t-4 border-[#B08D57] p-6 mt-8">
           <h4 className="text-[20px] font-bold text-[#3A2C23] mb-2">منشورِ جامعہ</h4>
           <p className="text-[16px] text-[#555] leading-relaxed">
             ہمارا مشن ایک سچے، پرامن، اور مستند اسلامی معاشرے کے قیام کے لیے علمی اور فکری قیادت فراہم کرنا ہے۔ ہم مسلکی اعتدال، علمی گہرائی اور اخلاقی طہارت پر مبنی تعلیمات کو عام کرنے کے پابند ہیں۔

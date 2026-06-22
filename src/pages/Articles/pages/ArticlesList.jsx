@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
-import { fetchArticles } from '../../../store/slices/contentSlice';
+import { getArticles } from '../../../services/article';
+import { useSettings } from '../../../context/SettingsContext';
 import ArticleCard from '../../../components/ArticleCard';
 import { Input } from '../../../components/Input';
 
@@ -19,12 +19,15 @@ const categoryTranslations = {
 };
 
 export default function ArticlesList() {
-  const dispatch = useDispatch();
-
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { list: articles, loading, page, pages } = useSelector((state) => state.content.articles);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -42,22 +45,38 @@ export default function ArticlesList() {
     'General Islam',
   ];
 
+  const loadArticles = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getArticles({ category, search, page: pageNum, limit: 6 });
+      setArticles(data.articles || []);
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to load articles');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchArticles({ category: selectedCategory, search: searchTerm, page }));
-  }, [dispatch, selectedCategory, page]);
+    loadArticles(page, selectedCategory, searchTerm);
+  }, [selectedCategory, page]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    dispatch(fetchArticles({ category: selectedCategory, search: searchTerm, page: 1 }));
+    loadArticles(1, selectedCategory, searchTerm);
   };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    dispatch(fetchArticles({ category: category, search: searchTerm, page: 1 }));
+    loadArticles(1, category, searchTerm);
   };
 
   const handlePageChange = (pageNum) => {
-    dispatch(fetchArticles({ category: selectedCategory, search: searchTerm, page: pageNum }));
+    loadArticles(pageNum, selectedCategory, searchTerm);
     window.scrollTo(0, 0);
   };
 
@@ -67,10 +86,10 @@ export default function ArticlesList() {
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest block mb-1">
+          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest block mb-1">
             {language === 'en' ? 'AUTHENTIC GUIDANCE' : 'مستند رہنمائی'}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] tracking-wide">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] tracking-wide">
             {language === 'en' ? 'Islamic Articles' : 'اسلامی مقالات'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -87,10 +106,10 @@ export default function ArticlesList() {
               placeholder={language === 'en' ? 'Search articles...' : 'مقالات تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#8A6F52] dark:focus:border-[#8A6F52] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+              inputClassName={`w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
               border=""
             />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'left-3' : 'right-3'} top-2.5 text-slate-400 hover:text-[#2F241C] dark:hover:text-[#8A6F52]`}>
+            <button type="submit" className={`absolute ${language === 'ur' ? 'left-3' : 'right-3'} top-2.5 text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57]`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -101,7 +120,7 @@ export default function ArticlesList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#EAE3CF] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#8A6F52] dark:focus:border-[#8A6F52]"
+              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-[#B08D57]"
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
@@ -118,8 +137,8 @@ export default function ArticlesList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
+                ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
               }`}
           >
             {language === 'en' ? 'All Topics' : 'تمام موضوعات'}
@@ -129,8 +148,8 @@ export default function ArticlesList() {
               key={cat}
               onClick={() => handleCategoryChange(cat)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
-                  ? 'bg-[#2F241C] border-[#2F241C] text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#8A6F52] dark:hover:border-[#8A6F52] hover:text-[#2F241C] dark:hover:text-[#8A6F52]'
+                  ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
                 }`}
             >
               {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
@@ -141,7 +160,7 @@ export default function ArticlesList() {
         {/* Content list Loader */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
           </div>
         ) : articles && articles.length > 0 ? (
           <>
@@ -157,7 +176,7 @@ export default function ArticlesList() {
                 <button
                   onClick={() => handlePageChange(Math.max(1, page - 1))}
                   disabled={page === 1}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   {language === 'en' ? 'Previous' : 'پچھلا'}
                 </button>
@@ -166,8 +185,8 @@ export default function ArticlesList() {
                     key={pNum + 1}
                     onClick={() => handlePageChange(pNum + 1)}
                     className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                        ? 'bg-[#2F241C] border-[#2F241C] text-white'
-                        : 'bg-white dark:bg-slate-800 border-[#EAE3CF] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                        ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white'
+                        : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                   >
                     {pNum + 1}
@@ -176,7 +195,7 @@ export default function ArticlesList() {
                 <button
                   onClick={() => handlePageChange(Math.min(pages, page + 1))}
                   disabled={page === pages}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#EAE3CF] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   {language === 'en' ? 'Next' : 'اگلا'}
                 </button>
@@ -185,7 +204,7 @@ export default function ArticlesList() {
           </>
         ) : (
           <div className="text-center py-16 premium-card">
-            <BookOpen className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+            <BookOpen className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white">
               {language === 'en' ? 'No articles found' : 'کوئی مضمون نہیں ملا'}
             </h3>

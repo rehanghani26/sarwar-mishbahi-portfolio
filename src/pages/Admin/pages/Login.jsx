@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, User, AlertTriangle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { login, clearAuthError } from '../../../store/slices/authSlice';
+import { useSettings } from '../../../context/SettingsContext';
 import { Input } from '../../../components/Input';
 
 export default function Login() {
@@ -10,7 +11,7 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const [username, setUsername] = useState('');
@@ -31,23 +32,23 @@ export default function Login() {
   };
 
   return (
-    <div className={`bg-[#FAF9F5] dark:bg-slate-950 min-h-[85vh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300 ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-[#FAF7F2] dark:bg-slate-950 min-h-[85vh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300 ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
 
       {/* Background Decorative Gradients */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#8A6F52]/5 dark:bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#2F241C]/5 dark:bg-slate-900/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#1F3A5F]/5 dark:bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#1F3A5F]/5 dark:bg-slate-900/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-md w-full mx-auto space-y-8 relative z-10">
 
         {/* Logo and Header Banner */}
         <div className="text-center">
           <div className="inline-flex relative mb-4">
-            <div className="absolute inset-0 rounded-full bg-[#8A6F52]/10 dark:bg-emerald-500/10 animate-ping" />
-            <div className="relative w-14 h-14 rounded-full bg-[#2F241C] dark:bg-slate-900 border border-[#8A6F52]/60 dark:border-emerald-500/60 flex items-center justify-center text-[#8A6F52] dark:text-[#EAD075]">
+            <div className="absolute inset-0 rounded-full bg-[#1F3A5F]/10 dark:bg-emerald-500/10 animate-ping" />
+            <div className="relative w-14 h-14 rounded-full bg-[#1F3A5F] dark:bg-slate-900 border border-[#B08D57]/60 dark:border-emerald-500/60 flex items-center justify-center text-[#B08D57] dark:text-[#EAD075]">
               <Lock className="w-6 h-6" />
             </div>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-slate-100 font-serif tracking-wider">
+          <h1 className="text-3xl font-extrabold text-[#1F3A5F] dark:text-slate-100 font-serif tracking-wider">
             {language === 'en' ? 'Admin Login Portal' : 'ایڈمن لاگ ان پورٹل'}
           </h1>
           <p className="text-xs text-slate-400 dark:text-slate-400 mt-2 font-light">
@@ -56,7 +57,7 @@ export default function Login() {
         </div>
 
         {/* Login Form Card */}
-        <div className={`bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-[#EAE3CF]/80 dark:border-slate-800 rounded-2xl shadow-xl shadow-slate-100/50 dark:shadow-none p-8 sm:p-10 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-[#E5D8CA]/80 dark:border-slate-800 rounded-2xl shadow-xl shadow-slate-100/50 dark:shadow-none p-8 sm:p-10 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -75,7 +76,7 @@ export default function Login() {
               <label className={`block text-xs font-bold text-[#5C4D3C] dark:text-slate-300 uppercase tracking-wider font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                 {language === 'en' ? 'Username' : 'صارف کا نام (یوزر نیم)'}
               </label>
-              <div className={`flex items-center gap-2.5 rounded-lg bg-slate-50/60 dark:bg-slate-800/40 px-4 py-3 ring-1 ring-transparent focus-within:ring-2 focus-within:ring-[#8A6F52]/15 dark:focus-within:ring-emerald-500/15 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200 ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={`flex items-center gap-2.5 rounded-lg bg-slate-50/60 dark:bg-slate-800/40 px-4 py-3 ring-1 ring-transparent focus-within:ring-2 focus-within:ring-[#B08D57]/15 dark:focus-within:ring-emerald-500/15 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200 ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
                 <User className="w-4.5 h-4.5 text-slate-400 dark:text-slate-500 shrink-0" strokeWidth={2} size={18} />
                 <Input
                   type="text"
@@ -93,7 +94,7 @@ export default function Login() {
               <label className={`block text-xs font-bold text-[#5C4D3C] dark:text-slate-300 uppercase tracking-wider font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                 {language === 'en' ? 'Password' : 'پاس ورڈ'}
               </label>
-              <div className={`flex items-center gap-2.5 rounded-lg bg-slate-50/60 dark:bg-slate-800/40 px-4 py-3 ring-1 ring-transparent focus-within:ring-2 focus-within:ring-[#8A6F52]/15 dark:focus-within:ring-emerald-500/15 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200 ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={`flex items-center gap-2.5 rounded-lg bg-slate-50/60 dark:bg-slate-800/40 px-4 py-3 ring-1 ring-transparent focus-within:ring-2 focus-within:ring-[#B08D57]/15 dark:focus-within:ring-emerald-500/15 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200 ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
                 <Lock className="text-slate-400 dark:text-slate-500 shrink-0" strokeWidth={2} size={18} />
                 <Input
                   type={showPassword ? 'text' : 'password'}
@@ -119,7 +120,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-[#2F241C] hover:bg-[#1E1915] dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 uppercase tracking-wider font-serif text-sm disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#1F3A5F] hover:bg-[#162C49] dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 uppercase tracking-wider font-serif text-sm disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -140,7 +141,7 @@ export default function Login() {
         <div className="text-center pt-2">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 hover:text-[#8A6F52] dark:hover:text-emerald-400 transition-colors group"
+            className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 hover:text-[#B08D57] dark:hover:text-emerald-400 transition-colors group"
           >
             <span>{language === 'en' ? 'Back to Official Portal' : 'سرکاری پورٹل پر واپس جائیں'}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
