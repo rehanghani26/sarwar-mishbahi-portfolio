@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Menu, X, BookOpen, User, HelpCircle, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import { fetchSettings, requestLanguageChange } from '../store/slices/settingsSlice';
+import { motion } from 'framer-motion';
 
 
 export default function Navbar() {
@@ -42,42 +43,33 @@ export default function Navbar() {
   const navLinks = [
     { label: language === 'en' ? 'Home' : 'صفحہ اول', href: '/' },
     { label: language === 'en' ? 'Fatwas' : 'فقہ و فتاویٰ', href: '/fatwas' },
-    { label: language === 'en' ? 'Publications' :' کتب و رسائل', href: '/publications' },
+    { label: language === 'en' ? 'Publications' : ' کتب و رسائل', href: '/publications' },
     { label: language === 'en' ? 'Articles' : 'مضامین و مقالات', href: '/articles' },
-    { label: language === 'en' ? 'Lectures' : 'خطبات و بیانات (ویڈیو / آڈیو)', href: '/lectures' },
-    { label: language === 'en' ? 'Q&A' : 'سوال و جواب (آن لائن)', href: '/qa' },
+    { label: language === 'en' ? 'Lectures' : 'خطبات', href: '/lectures' },
+    { label: language === 'en' ? 'Q&A' : 'سوال و جواب', href: '/qa' },
     { label: language === 'en' ? 'About' : 'تعارف', href: '/about' },
     { label: language === 'en' ? 'Events' : 'پروگرام', href: '/events' },
     { label: language === 'en' ? 'Contact' : 'رابطہ', href: '/contact' },
   ];
 
-  const scholarName = settings?.scholarInfo?.fullName || '';
-  const scholarTitle = settings?.scholarInfo?.title || '';
+
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled
-          ? 'bg-card-bg shadow-md border-b border-site-border py-2'
-          : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
-      }`}
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled
+        ? 'bg-card-bg shadow-md border-b border-site-border py-2'
+        : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
+        }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-        
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
+
         {/* Scholar Branding / Logo */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
           <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md">
             {/* Calligraphy seal or book icon representing knowledge */}
             <BookOpen className="w-5 h-5 text-[#B08D57]" />
           </div>
-          <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-            <span className="block text-lg font-bold text-text-primary leading-none tracking-wide">
-              {scholarName}
-            </span>
-            <span className="block text-[11px] text-brown-mid dark:text-amber-400/90 font-semibold mt-0.5">
-              {scholarTitle}
-            </span>
-          </div>
+
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -91,11 +83,10 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 to={link.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'text-brown-dark font-bold border-b-2 border-brown-dark'
-                    : 'text-text-secondary hover:text-[#B08D57]'
-                }`}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${isActive
+                  ? 'text-brown-dark font-bold border-b-2 border-brown-dark'
+                  : 'text-text-secondary hover:text-[#B08D57]'
+                  }`}
               >
                 {link.label}
               </Link>
@@ -105,49 +96,65 @@ export default function Navbar() {
 
         {/* Right side CTA & Admin indicators */}
         <div className="hidden lg:flex items-center gap-3">
-          <button
+          {/* <button
             onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
             className="px-3 py-2 text-xs font-bold text-text-primary bg-cream-light hover:bg-[#E5D8CA] rounded transition-all font-serif"
           >
             {language === 'en' ? 'اردو' : 'English'}
-          </button>
+          </button> */}
 
           {isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded transition-all"
+            <div className="flex items-center gap-2.5">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
-                {language === 'en' ? 'Dashboard' : 'ڈیش بورڈ'}
-              </Link>
-              <button
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
+                  ڈیش بورڈ
+                </Link>
+              </motion.div>
+
+              <motion.button
                 onClick={handleLogout}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded border border-red-200 dark:border-red-900/30 transition-colors"
-                title={language === 'en' ? 'Logout' : 'لاگ آؤٹ'}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="flex items-center gap-1 px-3 py-2 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md border border-red-200 dark:border-red-900/30 shadow-sm hover:shadow-md transition-colors"
+                title="لاگ آؤٹ"
               >
                 <LogOut className="w-3.5 h-3.5" />
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <Link
-              to="/ask"
-              className="flex items-center gap-1.5 px-4.5 py-2 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-full shadow-sm hover:shadow-md transition-all font-serif"
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <HelpCircle className="w-4 h-4" />
-              {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
-            </Link>
+              <Link
+                to="/ask"
+                className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all font-serif"
+              >
+                <HelpCircle className="w-4 h-4" />
+                سوال پوچھیں
+              </Link>
+            </motion.div>
           )}
         </div>
 
         {/* Mobile Menu Trigger */}
         <div className="flex items-center lg:hidden gap-2">
-          <button
+          {/* <button
             onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
             className="px-2.5 py-1 text-xs font-bold text-text-primary bg-cream-light rounded transition-all font-serif"
           >
             {language === 'en' ? 'اردو' : 'English'}
-          </button>
+          </button> */}
 
           {!isAuthenticated && (
             <Link
@@ -202,11 +209,10 @@ export default function Navbar() {
                       key={link.label}
                       to={link.href}
                       onClick={closeMenu}
-                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${
-                        isActive
-                          ? 'bg-[#E5D8CA] text-[#1F3A5F] font-bold'
-                          : 'text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]'
-                      }`}
+                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${isActive
+                        ? 'bg-[#E5D8CA] text-[#1F3A5F] font-bold'
+                        : 'text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]'
+                        }`}
                     >
                       {link.label}
                     </Link>

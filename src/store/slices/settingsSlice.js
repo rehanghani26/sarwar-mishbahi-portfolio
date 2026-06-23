@@ -2,9 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import API from '../../services/api';
 
 const normalizeLang = (lang) => {
-  if (!lang) return 'ur';
-  const l = lang.toString().toLowerCase();
-  return (l === 'ur' || l === 'urdu') ? 'ur' : 'en';
+  return 'ur';
 };
 
 const initialState = {
