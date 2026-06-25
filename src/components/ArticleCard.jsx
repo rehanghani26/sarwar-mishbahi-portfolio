@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowLeft, ArrowRight } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSettings } from '../context/SettingsContext';
 
 const categoryTranslations = {
   'Quran': 'قرآن',
@@ -18,7 +18,7 @@ const categoryTranslations = {
 };
 
 export default function ArticleCard({ article }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const { title, slug, summary, category, featuredImage, publishDate, viewCount } = article;
@@ -29,7 +29,15 @@ export default function ArticleCard({ article }) {
     day: 'numeric',
   });
 
+  const BACKEND_URL = 'https://jamia-madarsha-server.onrender.com';
   const placeholderImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800';
+
+  const getImageSrc = (url) => {
+    if (!url) return placeholderImage;
+    // If relative path, prepend backend URL
+    if (url.startsWith('/')) return `${BACKEND_URL}${url}`;
+    return url;
+  };
 
   return (
     <div className="premium-card flex flex-col h-full overflow-hidden group">
@@ -37,10 +45,11 @@ export default function ArticleCard({ article }) {
       {/* Featured Image */}
       <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-900 shrink-0">
         <img
-          src={featuredImage || placeholderImage}
+          src={getImageSrc(featuredImage)}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
+          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage; }}
         />
         <div className="absolute top-3 left-3 bg-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
           {language === 'ur' ? (categoryTranslations[category] || category) : category}

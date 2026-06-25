@@ -1,6 +1,6 @@
 import React from 'react';
 import { Book, Download, ExternalLink, Calendar, Languages } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSettings } from '../context/SettingsContext';
 
 const categoryTranslations = {
   'Salah': 'نماز',
@@ -30,7 +30,7 @@ const languageTranslations = {
 };
 
 export default function PublicationCard({ publication }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const { title, description, category, language: pubLanguage, author, publicationDate, googleDriveLink } = publication;

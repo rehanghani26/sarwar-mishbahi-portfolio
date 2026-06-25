@@ -51,8 +51,7 @@ export default function Navbar() {
     { label: language === 'en' ? 'Contact' : 'رابطہ', href: '/contact' },
   ];
 
-  const scholarName = settings?.scholarInfo?.fullName || '';
-  const scholarTitle = settings?.scholarInfo?.title || '';
+
 
   return (
     <header
@@ -61,7 +60,7 @@ export default function Navbar() {
         : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
 
         {/* Scholar Branding / Logo */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
@@ -69,14 +68,7 @@ export default function Navbar() {
             {/* Calligraphy seal or book icon representing knowledge */}
             <BookOpen className="w-5 h-5 text-[#B08D57]" />
           </div>
-          <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-            <span className="block text-lg font-bold text-text-primary leading-none tracking-wide">
-              {scholarName}
-            </span>
-            <span className="block text-[11px] text-brown-mid dark:text-amber-400/90 font-semibold mt-0.5">
-              {scholarTitle}
-            </span>
-          </div>
+
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -103,36 +95,66 @@ export default function Navbar() {
 
         {/* Right side CTA & Admin indicators */}
         <div className="hidden lg:flex items-center gap-3">
+          {/* <button
+            onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
+            className="px-3 py-2 text-xs font-bold text-text-primary bg-cream-light hover:bg-[#E5D8CA] rounded transition-all font-serif"
+          >
+            {language === 'en' ? 'اردو' : 'English'}
+          </button> */}
+
           {isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded transition-all"
+            <div className="flex items-center gap-2.5">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
-                {language === 'en' ? 'Dashboard' : 'ڈیش بورڈ'}
-              </Link>
-              <button
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
+                  ڈیش بورڈ
+                </Link>
+              </motion.div>
+
+              <motion.button
                 onClick={handleLogout}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded border border-red-200 dark:border-red-900/30 transition-colors"
-                title={language === 'en' ? 'Logout' : 'لاگ آؤٹ'}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="flex items-center gap-1 px-3 py-2 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md border border-red-200 dark:border-red-900/30 shadow-sm hover:shadow-md transition-colors"
+                title="لاگ آؤٹ"
               >
                 <LogOut className="w-3.5 h-3.5" />
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <Link
-              to="/ask"
-              className="flex items-center gap-1.5 px-4.5 py-2 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-full shadow-sm hover:shadow-md transition-all font-serif"
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <HelpCircle className="w-4 h-4" />
-              {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
-            </Link>
+              <Link
+                to="/ask"
+                className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all font-serif"
+              >
+                <HelpCircle className="w-4 h-4" />
+                سوال پوچھیں
+              </Link>
+            </motion.div>
           )}
         </div>
 
         {/* Mobile Menu Trigger */}
         <div className="flex items-center lg:hidden gap-2">
+          {/* <button
+            onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
+            className="px-2.5 py-1 text-xs font-bold text-text-primary bg-cream-light rounded transition-all font-serif"
+          >
+            {language === 'en' ? 'اردو' : 'English'}
+          </button> */}
+
           {!isAuthenticated && (
             <Link
               to="/ask"

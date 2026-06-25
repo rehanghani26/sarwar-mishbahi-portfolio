@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, FileText, ArrowLeft, ArrowRight } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSettings } from '../context/SettingsContext';
 
 const categoryTranslations = {
   'Salah': 'نماز',
@@ -17,7 +17,7 @@ const categoryTranslations = {
 };
 
 export default function FatwaCard({ fatwa }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const { _id, title, category, question, detailedAnswer, publishDate, viewCount } = fatwa;

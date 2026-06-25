@@ -17,6 +17,7 @@ export default function ManageSettings() {
   const [scholarInfo, setScholarInfo] = useState({
     fullName: '',
     title: '',
+    photo: '',
     bio: '',
     madrasah: '',
     university: '',
@@ -61,6 +62,7 @@ export default function ManageSettings() {
       setScholarInfo({
         fullName: info.fullName || '',
         title: info.title || '',
+        photo: info.photo || '',
         bio: info.bio || '',
         madrasah: info.education?.madrasah || '',
         university: info.education?.university || '',
@@ -126,6 +128,7 @@ export default function ManageSettings() {
       scholarInfo: {
         fullName: scholarInfo.fullName,
         title: scholarInfo.title,
+        photo: scholarInfo.photo,
         bio: scholarInfo.bio,
         education: {
           madrasah: scholarInfo.madrasah,

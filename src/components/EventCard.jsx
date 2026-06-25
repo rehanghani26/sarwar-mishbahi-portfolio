@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSettings } from '../context/SettingsContext';
 
 export default function EventCard({ event }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const { title, description, eventDate, location, posterImage } = event;
@@ -21,7 +21,14 @@ export default function EventCard({ event }) {
   });
 
   const isUpcoming = parsedDate.getTime() > Date.now();
+  const BACKEND_URL = 'https://jamia-madarsha-server.onrender.com';
   const placeholderPoster = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800';
+
+  const getImageSrc = (url) => {
+    if (!url) return placeholderPoster;
+    if (url.startsWith('/')) return `${BACKEND_URL}${url}`;
+    return url;
+  };
 
   return (
     <div className={`premium-card shadow-sm overflow-hidden flex flex-col h-full md:flex-row group ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -29,10 +36,11 @@ export default function EventCard({ event }) {
       {/* Poster Image */}
       <div className="relative h-48 md:h-auto md:w-48 bg-slate-100 dark:bg-slate-900 shrink-0 overflow-hidden">
         <img
-          src={posterImage || placeholderPoster}
+          src={getImageSrc(posterImage)}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
+          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderPoster; }}
         />
 
         {/* Status Badge */}

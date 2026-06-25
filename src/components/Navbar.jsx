@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { motion } from 'framer-motion';
 import { Menu, X, BookOpen, User, HelpCircle, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import { useSettings } from '../context/SettingsContext';
@@ -49,8 +50,8 @@ export default function Navbar() {
     { label: language === 'en' ? 'Contact' : 'رابطہ', href: '/contact' },
   ];
 
-  const scholarName = settings?.scholarInfo?.fullName || '';
-  const scholarTitle = settings?.scholarInfo?.title || '';
+
+
 
   return (
     <header
@@ -63,18 +64,10 @@ export default function Navbar() {
 
         {/* Scholar Branding / Logo */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
-          <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md">
-            {/* Calligraphy seal or book icon representing knowledge */}
+          <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md shrink-0">
             <BookOpen className="w-5 h-5 text-[#B08D57]" />
           </div>
-          <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-            <span className="block text-lg font-bold text-text-primary leading-none tracking-wide">
-              {scholarName}
-            </span>
-            <span className="block text-[11px] text-brown-mid dark:text-amber-400/90 font-semibold mt-0.5">
-              {scholarTitle}
-            </span>
-          </div>
+
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -109,30 +102,46 @@ export default function Navbar() {
           </button> */}
 
           {isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded transition-all"
+            <div className="flex items-center gap-2.5">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
-                {language === 'en' ? 'Dashboard' : 'ڈیش بورڈ'}
-              </Link>
-              <button
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
+                  ڈیش بورڈ
+                </Link>
+              </motion.div>
+
+              <motion.button
                 onClick={handleLogout}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded border border-red-200 dark:border-red-900/30 transition-colors"
-                title={language === 'en' ? 'Logout' : 'لاگ آؤٹ'}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="flex items-center gap-1 px-3 py-2 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md border border-red-200 dark:border-red-900/30 shadow-sm hover:shadow-md transition-colors"
+                title="لاگ آؤٹ"
               >
                 <LogOut className="w-3.5 h-3.5" />
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <Link
-              to="/ask"
-              className="flex items-center gap-1.5 px-4.5 py-2 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-full shadow-sm hover:shadow-md transition-all font-serif"
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <HelpCircle className="w-4 h-4" />
-              {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
-            </Link>
+              <Link
+                to="/ask"
+                className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all font-serif"
+              >
+                <HelpCircle className="w-4 h-4" />
+                سوال پوچھیں
+              </Link>
+            </motion.div>
           )}
         </div>
 
