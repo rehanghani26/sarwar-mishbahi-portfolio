@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-=======
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
->>>>>>> 2fcdc47b4728aa46d7bc07526600899439db1b84
 import {
   BookOpen,
   Book,
@@ -48,80 +41,24 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{
-        duration: 0.7,
-        delay: delay,
-        ease: [0.16, 1, 0.3, 1],
-        type: "spring",
-        damping: 12,
-        stiffness: 100
-      }}
-      className="flex items-end justify-between mb-10 border-b-2 border-[#E5D8CA] pb-4 relative overflow-hidden"
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="flex items-end justify-between mb-10 border-b-2 border-[#E5D8CA] pb-4"
     >
-      {/* Animated background line */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: delay + 0.2 }}
-        className="absolute bottom-0 left-0 h-[3px] bg-[#B08D57] origin-left"
-        style={{ width: '30%' }}
-      />
-
-      <div className={`border-[#B08D57] ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'} relative`}>
-        <motion.span
-          initial={{ opacity: 0, x: language === 'ur' ? 20 : -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: delay + 0.1 }}
-          className="text-xs font-bold text-[#B08D57] uppercase tracking-widest block mb-1 flex items-center gap-2"
-        >
-          <Sparkles className="w-3 h-3 animate-pulse" />
+      <div className={`border-[#B08D57] ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'}`}>
+        <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest block mb-1">
           {eyebrow}
-        </motion.span>
-
-        <motion.h2
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.6,
-            delay: delay + 0.2,
-            type: "spring",
-            damping: 10,
-            stiffness: 120
-          }}
-          className="text-2xl sm:text-3xl font-extrabold text-[#1F3A5F] leading-none"
-        >
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F3A5F] leading-none">
           {title}
-        </motion.h2>
+        </h2>
       </div>
-
       {linkTo && (
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: delay + 0.3 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link
-            to={linkTo}
-            className="text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 transition-colors group"
-          >
-            {linkLabel}
-            <motion.span
-              animate={{ x: [0, 5, 0] }}
-              transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 1 }}
-            >
-              {language === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            </motion.span>
-          </Link>
-        </motion.div>
+        <Link to={linkTo} className="text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 transition-colors">
+          {linkLabel} {language === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+        </Link>
       )}
     </motion.div>
   );
