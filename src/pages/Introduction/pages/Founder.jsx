@@ -8,8 +8,8 @@ export default function Founder() {
       subtitle="محدث العصر حضرت علامہ سید محمد یوسف بنوری نور اللہ مرقدہ"
     >
       <div className="space-y-6">
-        <div className="bg-[#fcfbf7] border-r-4 border-[#8A6F52] p-5 my-4">
-          <p className="font-bold text-[#8A6F52] text-[20px] mb-2">مختصر سوانح حیات</p>
+        <div className="bg-[#fcfbf7] border-r-4 border-[#B08D57] p-5 my-4">
+          <p className="font-bold text-[#B08D57] text-[20px] mb-2">مختصر سوانح حیات</p>
           <p className="text-[17px] text-[#555]">
             آپ کی ولادت با سعادت 6 ربیع الثانی 1326ھ مطابق 1908ء کو پشاور کے قریب ایک علمی خاندان میں ہوئی۔ آپ کے والد ماجد سید محمد زکریا اپنے وقت کے جید عالم دین تھے۔
           </p>

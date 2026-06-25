@@ -8,7 +8,7 @@ export default function QuestionsSection() {
 
         {/* RIGHT col — New question */}
         <div className="bg-card-bg border-l border-site-border flex flex-col">
-          <div className="h-14 flex items-center justify-center text-[23px] font-bold bg-cream dark:bg-slate-700 text-[#2F241C] dark:text-white">
+          <div className="h-14 flex items-center justify-center text-[23px] font-bold bg-cream dark:bg-slate-700 text-[#1F3A5F] dark:text-white">
             نئے سوالات
           </div>
           <div className="p-5 flex-1">

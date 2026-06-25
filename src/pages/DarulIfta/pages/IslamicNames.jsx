@@ -24,7 +24,7 @@ export default function IslamicNames() {
       subtitle="بچوں کے خوبصورت اور بامعنی اسلامی نام اور ان کا شرعی انتخاب"
     >
       <div className="space-y-6">
-        <div className="bg-[#fcfbf9] border-r-4 border-[#8A6F52] p-5">
+        <div className="bg-[#fcfbf9] border-r-4 border-[#B08D57] p-5">
           <h4 className="text-[19px] font-bold text-[#3A2C23] mb-2">نام رکھنے کے بنیادی شرعی احکام</h4>
           <p className="text-[16px] text-[#555] leading-relaxed">
             اولاد کا اچھا اور بامعنی نام رکھنا والدین کی اہم ذمہ داری ہے۔ شریعتِ مطہرہ میں انبیاء علیہ السلام، صحابہ کرام رضی اللہ عنہم اور نیک بندوں کے ناموں پر نام رکھنے کی ترغیب دی گئی ہے، اور ایسے ناموں سے منع کیا گیا ہے جن کے معانی برے ہوں یا جن میں شرک و غرور کا پہلو نکلتا ہو۔
@@ -34,7 +34,7 @@ export default function IslamicNames() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Boys Names */}
           <div className="bg-white border border-[#D9D9D9] p-6 rounded-sm">
-            <h3 className="text-[21px] font-bold text-[#8A6F52] border-b pb-2 mb-4 text-center">لڑکوں کے نام</h3>
+            <h3 className="text-[21px] font-bold text-[#B08D57] border-b pb-2 mb-4 text-center">لڑکوں کے نام</h3>
             <div className="space-y-3">
               {boyNames.map((n, i) => (
                 <div key={i} className="flex justify-between border-b pb-2">

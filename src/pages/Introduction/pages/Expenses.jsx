@@ -25,14 +25,14 @@ export default function Expenses() {
           <li><strong>وظائف:</strong> نادار اور غریب مستحق طلبہ کو تعلیمی وظائف اور جیب خرچ دیا جاتا ہے۔</li>
         </ul>
 
-        <div className="bg-[#fcfbf9] border-r-4 border-[#8A6F52] p-5 my-6">
+        <div className="bg-[#fcfbf9] border-r-4 border-[#B08D57] p-5 my-6">
           <h4 className="text-[20px] font-bold text-[#3A2C23] mb-2">مالی شفافیت اور آڈٹ</h4>
           <p className="text-[16px] text-[#555] leading-relaxed">
             جامعہ کی مالیاتی آمد و خرچ کا مکمل اور باقاعدہ حساب کتاب (بک کیپنگ) رکھا جاتا ہے۔ ہر سال ایک مصدقہ چارٹرڈ اکاؤنٹنٹ فرم کے ذریعے جامعہ کے کھاتوں کا مکمل اور تفصیلی آڈٹ کروایا جاتا ہے، تاکہ عوام الناس اور اللہ کی بارگاہ میں امانت داری قائم رہے۔
           </p>
         </div>
 
-        <p className="text-center font-bold text-[#8A6F52] mt-4">
+        <p className="text-center font-bold text-[#B08D57] mt-4">
           آپ کی زکاۃ اور صدقات مستحق طلبہ کے روشن مستقبل اور تبلیغِ دین کی محنت میں براہِ راست حصہ بنتے ہیں۔
         </p>
       </div>

@@ -25,8 +25,8 @@ export default function Rules() {
 
         <div className="space-y-5 mt-6">
           {rules.map((rule, index) => (
-            <div key={index} className="bg-[#fdfcf9] border border-[#EAE3CF] p-5 rounded-sm">
-              <h4 className="text-[19px] font-bold text-[#8A6F52] border-b border-dashed pb-2 mb-2">
+            <div key={index} className="bg-[#fdfcf9] border border-[#E5D8CA] p-5 rounded-sm">
+              <h4 className="text-[19px] font-bold text-[#B08D57] border-b border-dashed pb-2 mb-2">
                 {index + 1}. {rule.title}
               </h4>
               <p className="text-[16px] text-[#3A2C23] leading-relaxed">{rule.desc}</p>

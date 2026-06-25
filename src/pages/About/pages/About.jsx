@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Award, BookOpen, GraduationCap, Briefcase, Bookmark, Milestone } from 'lucide-react';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function About() {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   // Fallback defaults
@@ -31,10 +31,10 @@ export default function About() {
           <div className="absolute top-0 left-0 right-0 h-1.5 scholar-gradient-bg"></div>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-24 h-24 rounded-full bg-brown-dark flex items-center justify-center shadow-md shrink-0">
-              <BookOpen className="w-12 h-12 text-[#8A6F52] dark:text-[#EAD075]" />
+              <BookOpen className="w-12 h-12 text-[#B08D57] dark:text-[#EAD075]" />
             </div>
             <div className={`text-center ${language === 'ur' ? 'md:text-right' : 'md:text-left'}`}>
-              <span className="text-xs font-bold text-[#8A6F52] uppercase tracking-widest font-serif block mb-1">
+              <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest font-serif block mb-1">
                 {language === 'en' ? "Scholar's Profile" : "عالم کا پروفائل"}
               </span>
               <h1 className="text-3xl font-extrabold text-text-primary font-serif leading-none tracking-wide">{fullName}</h1>
@@ -55,7 +55,7 @@ export default function About() {
           {/* Qualifications & Education */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-text-primary font-serif flex items-center gap-2 mb-4 border-b border-site-border pb-2">
-              <GraduationCap className="w-5 h-5 text-[#8A6F52]" />
+              <GraduationCap className="w-5 h-5 text-[#B08D57]" />
               {language === 'en' ? 'Education and Credentials' : 'تعلیم اور اسناد'}
             </h2>
             <div className="space-y-4">
@@ -83,7 +83,7 @@ export default function About() {
                   <ul className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300 font-light">
                     {qualifications.map((q, idx) => (
                       <li key={idx} className="flex items-center gap-1.5">
-                        <span className="text-[#8A6F52] text-md leading-none">•</span> {q}
+                        <span className="text-[#B08D57] text-md leading-none">•</span> {q}
                       </li>
                     ))}
                   </ul>
@@ -95,7 +95,7 @@ export default function About() {
           {/* Areas of Expertise */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-text-primary font-serif flex items-center gap-2 mb-4 border-b border-site-border pb-2">
-              <Award className="w-5 h-5 text-[#8A6F52]" />
+              <Award className="w-5 h-5 text-[#B08D57]" />
               {language === 'en' ? 'Areas of Expertise' : 'مہارت کے شعبے'}
             </h2>
             {expertise.length > 0 ? (
@@ -121,7 +121,7 @@ export default function About() {
           {/* Experience */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-text-primary font-serif flex items-center gap-2 mb-4 border-b border-site-border pb-2">
-              <Briefcase className="w-5 h-5 text-[#8A6F52]" />
+              <Briefcase className="w-5 h-5 text-[#B08D57]" />
               {language === 'en' ? 'Experience & Achievements' : 'تجربہ اور کامیابیاں'}
             </h2>
             <div className="space-y-4">
@@ -141,7 +141,7 @@ export default function About() {
                   <ul className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300 font-light">
                     {achievements.map((a, idx) => (
                       <li key={idx} className="flex items-start gap-1.5">
-                        <span className="text-[#8A6F52] text-md leading-none mt-0.5">•</span>
+                        <span className="text-[#B08D57] text-md leading-none mt-0.5">•</span>
                         <span>{a}</span>
                       </li>
                     ))}
@@ -154,7 +154,7 @@ export default function About() {
           {/* Research & Associations */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-text-primary font-serif flex items-center gap-2 mb-4 border-b border-site-border pb-2">
-              <Milestone className="w-5 h-5 text-[#8A6F52]" />
+              <Milestone className="w-5 h-5 text-[#B08D57]" />
               {language === 'en' ? 'Research & Affiliations' : 'تحقیق اور الحاق'}
             </h2>
             <div className="space-y-4">
@@ -166,7 +166,7 @@ export default function About() {
                   <ul className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300 font-light">
                     {researchInterests.map((r, idx) => (
                       <li key={idx} className="flex items-center gap-1.5">
-                        <span className="text-[#8A6F52] text-md leading-none">•</span> {r}
+                        <span className="text-[#B08D57] text-md leading-none">•</span> {r}
                       </li>
                     ))}
                   </ul>
@@ -180,7 +180,7 @@ export default function About() {
                   <ul className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300 font-light">
                     {institutions.map((i, idx) => (
                       <li key={idx} className="flex items-center gap-1.5">
-                        <span className="text-[#8A6F52] text-md leading-none">•</span> {i}
+                        <span className="text-[#B08D57] text-md leading-none">•</span> {i}
                       </li>
                     ))}
                   </ul>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSettings } from '../context/SettingsContext';
 
 const categoryTranslations = {
   'Audio Lectures': 'آڈیو خطابات',
@@ -12,7 +12,7 @@ const categoryTranslations = {
 };
 
 export default function LectureCard({ lecture, onPlay }) {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const { title, description, category, videoUrl, thumbnail, publishDate } = lecture;
@@ -39,16 +39,20 @@ export default function LectureCard({ lecture, onPlay }) {
     return match && match[2].length === 11 ? match[2] : null;
   };
 
+  const BACKEND_URL = 'https://jamia-madarsha-server.onrender.com';
+  const fallbackThumb = 'https://images.unsplash.com/photo-1447069387593-a5de0862481e?auto=format&fit=crop&q=80&w=800';
+
   const getThumbnailUrl = () => {
-    if (thumbnail) return thumbnail;
-    
+    if (thumbnail) {
+      if (thumbnail.startsWith('/')) return `${BACKEND_URL}${thumbnail}`;
+      return thumbnail;
+    }
     // Auto generate YouTube thumbnail if YouTube link is detected
     const ytId = getYoutubeId(videoUrl);
     if (ytId) {
       return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
     }
-
-    return 'https://images.unsplash.com/photo-1447069387593-a5de0862481e?auto=format&fit=crop&q=80&w=800';
+    return fallbackThumb;
   };
 
   return (
@@ -61,6 +65,7 @@ export default function LectureCard({ lecture, onPlay }) {
           alt={title}
           className="w-full h-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
+          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackThumb; }}
         />
         
         {/* Play Button Overlay */}

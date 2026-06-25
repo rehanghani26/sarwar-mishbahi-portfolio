@@ -32,7 +32,7 @@ export default function Header() {
         {/* Hamburger Menu Button (Leftmost in RTL / Visually Left) */}
         <button
           onClick={toggleMobileMenu}
-          className="flex lg:hidden flex-col justify-center items-center w-10 h-10 border border-[#D9D9D9] rounded bg-[#EFEFEF] hover:bg-[#EAE3CF] transition-colors focus:outline-none"
+          className="flex lg:hidden flex-col justify-center items-center w-10 h-10 border border-[#D9D9D9] rounded bg-[#EFEFEF] hover:bg-[#E5D8CA] transition-colors focus:outline-none"
           aria-label="مینو"
         >
           <span className={`block w-6 h-0.5 bg-[#3A2C23] transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
@@ -69,7 +69,7 @@ export default function Header() {
                   >
                     {item.label}
                     {item.hasDropdown && (
-                      <span className="text-[11px] text-[#8A6F52] select-none transition-transform group-hover:rotate-180">
+                      <span className="text-[11px] text-[#B08D57] select-none transition-transform group-hover:rotate-180">
                         ‹
                       </span>
                     )}
@@ -77,7 +77,7 @@ export default function Header() {
 
                   {/* Dropdown menu */}
                   {item.hasDropdown && item.dropdownItems && (
-                    <div className="absolute right-0 top-[100px] hidden group-hover:block bg-[#3D2E1E] border-t-2 border-[#8A6F52] shadow-xl min-w-[320px] z-[100] text-right">
+                    <div className="absolute right-0 top-[100px] hidden group-hover:block bg-[#3D2E1E] border-t-2 border-[#B08D57] shadow-xl min-w-[320px] z-[100] text-right">
                       <ul className="py-1">
                         {item.dropdownItems.map((subItem, idx) => {
                           const isSubActive = location.pathname === subItem.href
@@ -88,8 +88,8 @@ export default function Header() {
                                 to={subItem.href}
                                 className={`block px-6 py-3.5 text-[16px] transition-colors leading-relaxed whitespace-normal ${
                                   isSubActive 
-                                    ? 'bg-[#2F241C] text-[#EAE3CF] font-bold' 
-                                    : 'text-white hover:bg-[#2F241C] hover:text-[#EAE3CF]'
+                                    ? 'bg-[#1F3A5F] text-[#E5D8CA] font-bold' 
+                                    : 'text-white hover:bg-[#1F3A5F] hover:text-[#E5D8CA]'
                                 }`}
                               >
                                 {subItem.label}
@@ -109,10 +109,10 @@ export default function Header() {
         {/* Logo — rightmost in RTL */}
         <Link to="/" className="flex items-center gap-2 md:gap-3.5 shrink-0 hover:opacity-95 transition-opacity max-w-[60%] sm:max-w-none">
           <div className="leading-[1.2] sm:leading-[1.35] text-right">
-            <span className="block text-[18px] sm:text-[24px] md:text-[30px] font-bold text-[#2F241C] leading-[1.2] whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="block text-[18px] sm:text-[24px] md:text-[30px] font-bold text-[#1F3A5F] leading-[1.2] whitespace-nowrap overflow-hidden text-ellipsis">
               {SITE.nameArabic}
             </span>
-            <span className="block text-[9px] sm:text-[11px] md:text-[13px] text-[#8A6F52] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="block text-[9px] sm:text-[11px] md:text-[13px] text-[#B08D57] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
               {SITE.nameUrdu}
             </span>
           </div>
@@ -142,11 +142,11 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Drawer Header */}
-          <div className="flex items-center justify-between p-5 border-b border-[#4d3c2a] bg-[#2F241C]">
-            <span className="font-bold text-[18px] text-[#EAE3CF]">مینو</span>
+          <div className="flex items-center justify-between p-5 border-b border-[#4d3c2a] bg-[#1F3A5F]">
+            <span className="font-bold text-[18px] text-[#E5D8CA]">مینو</span>
             <button
               onClick={closeMobileMenu}
-              className="text-white hover:text-[#8A6F52] text-[24px] leading-none focus:outline-none"
+              className="text-white hover:text-[#B08D57] text-[24px] leading-none focus:outline-none"
             >
               &times;
             </button>
@@ -168,7 +168,7 @@ export default function Header() {
                         <div className="flex items-center justify-between py-3 px-2">
                           <button
                             onClick={(e) => toggleDropdown(index, e)}
-                            className="text-[14px] text-[#8A6F52] bg-[#2F241C] w-8 h-8 flex items-center justify-center rounded focus:outline-none transition-transform"
+                            className="text-[14px] text-[#B08D57] bg-[#1F3A5F] w-8 h-8 flex items-center justify-center rounded focus:outline-none transition-transform"
                             style={{ transform: isDropdownOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
                           >
                             ‹
@@ -177,7 +177,7 @@ export default function Header() {
                             to={item.dropdownItems ? item.dropdownItems[0].href : item.href}
                             onClick={closeMobileMenu}
                             className={`text-[19px] font-semibold text-right flex-1 ${
-                              isActive ? 'text-[#8A6F52]' : 'text-white'
+                              isActive ? 'text-[#B08D57]' : 'text-white'
                             }`}
                           >
                             {item.label}
@@ -186,7 +186,7 @@ export default function Header() {
 
                         {/* Dropdown Items list */}
                         {isDropdownOpen && item.dropdownItems && (
-                          <ul className="mt-2 bg-[#2F241C] p-2 space-y-1 rounded border-r-2 border-[#8A6F52]">
+                          <ul className="mt-2 bg-[#1F3A5F] p-2 space-y-1 rounded border-r-2 border-[#B08D57]">
                             {item.dropdownItems.map((subItem, sIdx) => {
                               const isSubActive = location.pathname === subItem.href
                               return (
@@ -195,7 +195,7 @@ export default function Header() {
                                     to={subItem.href}
                                     onClick={closeMobileMenu}
                                     className={`block p-2 text-[16px] text-right ${
-                                      isSubActive ? 'text-[#EAE3CF] font-bold' : 'text-[#d0d0d0] hover:text-white'
+                                      isSubActive ? 'text-[#E5D8CA] font-bold' : 'text-[#d0d0d0] hover:text-white'
                                     }`}
                                   >
                                     {subItem.label}
@@ -211,7 +211,7 @@ export default function Header() {
                         to={item.href}
                         onClick={closeMobileMenu}
                         className={`block py-3 px-2 text-[19px] font-semibold ${
-                          isActive ? 'text-[#8A6F52]' : 'text-white'
+                          isActive ? 'text-[#B08D57]' : 'text-white'
                         }`}
                       >
                         {item.label}

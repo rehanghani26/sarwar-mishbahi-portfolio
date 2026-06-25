@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+=======
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
+>>>>>>> 2fcdc47b4728aa46d7bc07526600899439db1b84
 import {
   BookOpen,
   Book,
@@ -17,17 +23,14 @@ import {
   Users,
   ShieldCheck,
   Image as ImageIcon,
-  Sparkles,
   ChevronDown,
 } from 'lucide-react';
-import { fetchArticles } from '../../../store/slices/contentSlice';
-import { fetchFatwas } from '../../../store/slices/contentSlice';
-import { fetchPublicQuestions } from '../../../store/slices/contentSlice';
-import { fetchPublications } from '../../../store/slices/contentSlice';
-import { fetchLectures } from '../../../store/slices/contentSlice';
-import { fetchEvents } from '../../../store/slices/contentSlice';
-import { fetchSettings } from '../../../store/slices/settingsSlice';
-import muftiSahed from '../../../asset/muftiSahed.png';
+import { getArticles } from '../../../services/article';
+import { getFatwas } from '../../../services/fatwa';
+import { getPublicQuestions } from '../../../services/question';
+import { getPublications, getLectures } from '../../../services/publication';
+import { getEvents } from '../../../services/event';
+import { useSettings } from '../../../context/SettingsContext';
 
 import ArticleCard from '../../../components/ArticleCard';
 import FatwaCard from '../../../components/FatwaCard';
@@ -35,10 +38,12 @@ import LectureCard from '../../../components/LectureCard';
 import PublicationCard from '../../../components/PublicationCard';
 import EventCard from '../../../components/EventCard';
 import AnimatedFeatureCard from './Animatedfeaturecard ';
+import muftiSahebImg from '../../../assets/images/muftiSaheb.png';
 
-// Enhanced SectionHeading with more animations
-function SectionHeading({ eyebrow, title, linkTo, linkLabel, delay = 0 }) {
-  const { settings } = useSelector((state) => state.settings);
+// Small helper so every section heading animates in the same way on scroll,
+// without repeating the motion props everywhere.
+function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -122,187 +127,158 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel, delay = 0 }) {
   );
 }
 
-// Enhanced ScholarPhotoPlaceholder with floating animation
+// Scholar photo — shows muftiSaheb.png from assets, with fallback to settings URL.
 function ScholarPhotoPlaceholder() {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+  const name = settings?.scholarInfo?.fullName || '';
+  const title = settings?.scholarInfo?.title || '';
+  // Use local asset as primary source; fall back to settings URL if asset fails
+  const settingsPhoto = settings?.scholarInfo?.photo || '';
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        rotateY: 0,
-        y: [0, -10, 0],
-      }}
-      transition={{
-        duration: 1.2,
-        ease: [0.16, 1, 0.3, 1],
-        y: {
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }
-      }}
-      className="relative w-full max-w-sm aspect-[4/5] rounded-2xl overflow-hidden border border-[#E5D8CA] bg-white shadow-2xl"
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full max-w-sm"
     >
-      {/* Animated glow effect */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-          scale: [1, 1.1, 1]
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute inset-0 bg-gradient-to-tr from-[#B08D57]/10 to-[#1F3A5F]/10 rounded-2xl"
-      />
-
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        transition={{ duration: 0.4 }}
-        className="w-full h-full"
-      >
+      {/* Decorative glowing ring */}
+      <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#B08D57]/40 via-[#1F3A5F]/20 to-[#B08D57]/40 blur-sm" />
+      <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-2 border-[#B08D57]/40 shadow-2xl group">
         <img
-          src={muftiSahed}
-          alt={language === 'en' ? 'Scholar Portrait' : 'عالم صاحب کی تصویر'}
-          className="w-full h-full object-cover"
+          src={muftiSahebImg}
+          alt={name || 'Mufti Saheb'}
+          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          onError={(e) => {
+            // Fallback chain: local asset failed → try settings URL → hide
+            if (settingsPhoto && e.currentTarget.src !== settingsPhoto) {
+              e.currentTarget.src = settingsPhoto;
+            } else {
+              e.currentTarget.style.display = 'none';
+            }
+          }}
         />
-      </motion.div>
-
-      {/* Animated border frame */}
-      <motion.div
-        animate={{
-          borderColor: ['#E5D8CA', '#B08D57', '#E5D8CA'],
-        }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute inset-0 rounded-2xl border-2 pointer-events-none"
-      />
+        {/* Bottom gradient name overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1F3A5F]/90 via-[#1F3A5F]/50 to-transparent p-5">
+          {name && <p className="text-white font-extrabold text-lg leading-snug tracking-wide">{name}</p>}
+          {title && <p className="text-[#E5D8CA] text-xs font-semibold mt-0.5">{title}</p>}
+        </div>
+      </div>
     </motion.div>
   );
 }
 
-// Animated background particles component
+// Animated floating particles for hero background
 function AnimatedParticles() {
+  const particles = Array.from({ length: 12 }, (_, i) => i);
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(15)].map((_, i) => (
+      {particles.map((i) => (
         <motion.div
           key={i}
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: -50,
-            opacity: 0
+          className="absolute w-1.5 h-1.5 rounded-full bg-[#B08D57]/20"
+          style={{
+            left: `${(i * 8.33) % 100}%`,
+            top: `${(i * 13.7) % 100}%`,
           }}
           animate={{
-            y: window.innerHeight + 50,
-            opacity: [0, 0.5, 0],
-            x: Math.random() * window.innerWidth
+            y: [0, -30, 0],
+            opacity: [0.2, 0.6, 0.2],
+            scale: [1, 1.4, 1],
           }}
           transition={{
-            duration: 10 + Math.random() * 15,
+            duration: 3 + (i % 3),
             repeat: Infinity,
-            delay: Math.random() * 5,
-            ease: "linear"
+            delay: i * 0.25,
+            ease: 'easeInOut',
           }}
-          className="absolute w-1 h-1 bg-[#B08D57] rounded-full"
         />
       ))}
     </div>
   );
 }
 
-// Animated counter component
+// Animated counter for stats
 function AnimatedCounter({ value, label }) {
-  const [count, setCount] = React.useState(0);
-  const ref = useRef();
-
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        let start = 0;
-        const duration = 2000;
-        const increment = value / (duration / 16);
-
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= value) {
-            setCount(value);
-            clearInterval(timer);
-          } else {
-            setCount(Math.floor(start));
-          }
-        }, 16);
-
-        return () => clearInterval(timer);
-      }
-    }, { threshold: 0.5 });
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
+    let start = 0;
+    const end = parseInt(value, 10);
+    if (isNaN(end)) return;
+    const duration = 1500;
+    const step = Math.ceil(end / (duration / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= end) { setCount(end); clearInterval(timer); }
+      else setCount(start);
+    }, 16);
+    return () => clearInterval(timer);
   }, [value]);
-
   return (
     <motion.div
-      ref={ref}
+      className="text-center"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="text-center"
     >
-      <motion.div
-        animate={{ scale: count > 0 ? [1, 1.1, 1] : 1 }}
-        transition={{ duration: 0.3 }}
-        className="text-3xl font-bold text-[#1F3A5F]"
-      >
-        {count}+
-      </motion.div>
-      <div className="text-sm text-[#7B654D]">{label}</div>
+      <p className="text-3xl font-extrabold text-[#1F3A5F]">{count}+</p>
+      <p className="text-xs text-[#7B654D] font-semibold uppercase tracking-widest mt-1">{label}</p>
     </motion.div>
   );
 }
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const { scrollYProgress } = useScroll();
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  // Transform values for scroll effects
-  const heroOpacity = useTransform(smoothProgress, [0, 0.5], [1, 0.3]);
-  const heroScale = useTransform(smoothProgress, [0, 0.5], [1, 0.95]);
-  const headerY = useTransform(smoothProgress, [0, 0.2], [0, -50]);
-
-  // Redux Selectors
-  const { settings } = useSelector((state) => state.settings);
-  const { list: articles } = useSelector((state) => state.content.articles);
-  const { list: fatwas } = useSelector((state) => state.content.fatwas);
-  const { publicList: questions } = useSelector((state) => state.content.questions);
-  const { list: publications } = useSelector((state) => state.content.publications);
-  const { list: lectures } = useSelector((state) => state.content.lectures);
-  const { list: events } = useSelector((state) => state.content.events);
+  const { settings } = useSettings();
+  const [articles, setArticles] = useState([]);
+  const [fatwas, setFatwas] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [publications, setPublications] = useState([]);
+  const [lectures, setLectures] = useState([]);
+  const [events, setEvents] = useState([]);
 
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
+  // Scroll progress for the top progress bar
+  const { scrollYProgress } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  // Hero parallax
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.97]);
+
+  // Stats data
+  const stats = [
+    { value: 500, label: language === 'en' ? 'Articles' : 'مقالات' },
+    { value: 1000, label: language === 'en' ? 'Fatwas' : 'فتاویٰ' },
+    { value: 300, label: language === 'en' ? 'Lectures' : 'بیانات' },
+    { value: 50, label: language === 'en' ? 'Publications' : 'مطبوعات' },
+  ];
+
   useEffect(() => {
-    dispatch(fetchArticles({ limit: 3 }));
-    dispatch(fetchFatwas({ limit: 3 }));
-    dispatch(fetchPublicQuestions({ limit: 3 }));
-    dispatch(fetchPublications());
-    dispatch(fetchLectures());
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    const loadHomeData = async () => {
+      try {
+        const [articlesData, fatwasData, questionsData, publicationsData, lecturesData, eventsData] = await Promise.all([
+          getArticles({ limit: 3 }),
+          getFatwas({ limit: 3 }),
+          getPublicQuestions({ limit: 3 }),
+          getPublications(),
+          getLectures(),
+          getEvents()
+        ]);
+        setArticles(articlesData.articles || []);
+        setFatwas(fatwasData.fatwas || []);
+        setQuestions(questionsData.questions || []);
+        setPublications(publicationsData || []);
+        setLectures(lecturesData || []);
+        setEvents(eventsData || []);
+      } catch (err) {
+        console.error('Error loading homepage data:', err);
+      }
+    };
+    loadHomeData();
+  }, []);
 
   // Fallback defaults
   const heroName = settings?.homepageSettings?.heroName || '';
@@ -339,13 +315,6 @@ export default function Home() {
       description: language === 'en' ? 'Shariah-compliant guidance and solutions for daily issues.' : 'روزمرہ کے مسائل کے بارے میں شریعت کے مطابق رہنمائی اور حل۔',
       to: '/qa',
     },
-  ];
-
-  const stats = [
-    { value: 50, label: language === 'en' ? 'Articles' : 'مقالات' },
-    { value: 30, label: language === 'en' ? 'Fatwas' : 'فتاویٰ' },
-    { value: 100, label: language === 'en' ? 'Questions' : 'سوالات' },
-    { value: 20, label: language === 'en' ? 'Lectures' : 'بیانات' },
   ];
 
   return (
@@ -488,7 +457,7 @@ export default function Home() {
                 className={`absolute ${language === "ur" ? "right-0" : "left-0"
                   } top-0 w-1 h-full bg-[#B08D57]`}
               />
-              "{heroMission}"
+              {heroMission}
             </motion.div>
 
             {/* CTAs */}

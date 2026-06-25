@@ -31,7 +31,7 @@ export default function Administration() {
           <table className="w-full text-right border-collapse">
             <thead>
               <tr className="bg-[#3D2E1E] text-white">
-                <th className="p-3 border-l border-[#8A6F52]">انتظامی عہدہ</th>
+                <th className="p-3 border-l border-[#B08D57]">انتظامی عہدہ</th>
                 <th className="p-3">ذمہ داری</th>
               </tr>
             </thead>

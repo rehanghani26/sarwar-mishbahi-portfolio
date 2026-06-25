@@ -8,7 +8,7 @@ export default function QurbaniAbroad() {
       subtitle="دوسرے ملک میں رہنے والوں کا گیا انڈیا میں قربانی کرنے کے شرعی مسائل اور طریقہ کار"
     >
       <div className="space-y-6">
-        <div className="bg-[#fcfbf9] border-r-4 border-[#8A6F52] p-5">
+        <div className="bg-[#fcfbf9] border-r-4 border-[#B08D57] p-5">
           <h4 className="text-[19px] font-bold text-[#3A2C23] mb-2">شرعی مسئلہ کیا ہے؟</h4>
           <p className="text-[16px] text-[#555] leading-relaxed">
             مسئلہ یہ ہے کہ جو شخص بیرونِ ملک مقیم ہو، اس کے لیے گیا انڈیا میں اپنی قربانی کا حصہ کرانا شرعاً بالکل جائز ہے، بشرطیکہ ذبح کے وقت کا اعتبار اس مقام کے مطابق کیا جائے جہاں جانور ذبح ہو رہا ہو، نہ کہ اس مقام کا جہاں قربانی کرانے والا شخص مقیم ہو۔
@@ -23,14 +23,14 @@ export default function QurbaniAbroad() {
         </ul>
 
         <div className="bg-gray-50 border border-[#D9D9D9] p-6 rounded-sm my-6">
-          <h4 className="text-[19px] font-bold text-[#8A6F52] mb-3 text-center">جامعہ بنوری ٹاؤن قربانی سروس</h4>
+          <h4 className="text-[19px] font-bold text-[#B08D57] mb-3 text-center">جامعہ بنوری ٹاؤن قربانی سروس</h4>
           <p className="text-[16px] text-[#3A2C23] text-center mb-4 leading-relaxed">
             جامعہ ہر سال بیرونِ ملک مقیم بھائیوں کی طرف سے شرعی حدود و قیود کا پورا خیال رکھتے ہوئے اجتماعی قربانی کا خصوصی انتظام کرتا ہے اور گوشت مستحقینِ گیا میں تقسیم کیا جاتا ہے۔
           </p>
           <div className="text-center">
             <button
               onClick={() => alert('اجتماعی قربانی کے لیے بکنگ کا عمل عید الاضحیٰ سے ایک ماہ قبل شروع ہو جاتا ہے۔')}
-              className="bg-[#8A6F52] text-white py-2.5 px-6 font-bold hover:bg-[#2F241C] transition-colors rounded shadow"
+              className="bg-[#1F3A5F] text-white py-2.5 px-6 font-bold hover:bg-[#1F3A5F] transition-colors rounded shadow"
             >
               🐏 قربانی کے حصوں کی بکنگ معلوم کریں
             </button>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { BookOpen, Mail, Phone, MapPin, Send, Facebook, Youtube, Twitter, Instagram, Shield } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 import { Input } from './Input';
 
 export default function Footer() {
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const scholarName = settings?.scholarInfo?.fullName || '';

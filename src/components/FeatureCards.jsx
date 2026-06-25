@@ -57,7 +57,7 @@ const ICONS = {
     <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="32" height="40" rx="3" fill="none" stroke="#4a3020" strokeWidth="2.5"/>
       <rect x="20" y="6" width="12" height="9" rx="3" fill="#7a5a30" opacity="0.8"/>
-      <rect x="22" y="8" width="8" height="5" rx="2" fill="#EAE3CF"/>
+      <rect x="22" y="8" width="8" height="5" rx="2" fill="#E5D8CA"/>
       <line x1="16" y1="26" x2="36" y2="26" stroke="#7a5a30" strokeWidth="2"/>
       <line x1="16" y1="33" x2="36" y2="33" stroke="#7a5a30" strokeWidth="2"/>
       <line x1="16" y1="40" x2="28" y2="40" stroke="#7a5a30" strokeWidth="2"/>
@@ -79,7 +79,7 @@ export default function FeatureCards() {
             {/* Text side */}
             <div className="flex-1 flex flex-col justify-center px-5 pr-5 text-right">
               <div className="text-[21px] font-bold text-[#3A2C23] leading-[1.5] mb-1">{card.title}</div>
-              <div className="text-[15px] text-[#8A6F52] leading-[1.5]">{card.desc}</div>
+              <div className="text-[15px] text-[#B08D57] leading-[1.5]">{card.desc}</div>
             </div>
             {/* Semicircle icon side */}
             <div className="card-circle-side w-[115px] min-w-[115px] flex items-center justify-center shrink-0">

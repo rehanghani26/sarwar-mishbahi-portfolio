@@ -1,35 +1,47 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
-import { fetchEvents } from '../../../store/slices/contentSlice';
+import { getEvents } from '../../../services/event';
+import { useSettings } from '../../../context/SettingsContext';
 import EventCard from '../../../components/EventCard';
 
 export default function EventsList() {
-  const dispatch = useDispatch();
-
-  const { settings } = useSelector((state) => state.settings);
+  const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { list: events, loading } = useSelector((state) => state.content.events);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    const loadEvents = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getEvents();
+        setEvents(data || []);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message || 'Failed to load events');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadEvents();
+  }, []);
 
   const nowTime = Date.now();
   const upcomingEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() > nowTime) : [];
   const pastEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() <= nowTime) : [];
 
   return (
-    <div className={`bg-[#FAF9F5] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-12 text-center">
-          <span className="text-xs font-bold text-[#8A6F52] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
             {language === 'en' ? 'PROGRAMS & GATHERINGS' : 'پروگرام اور اجتماعات'}
           </span>
-          <h1 className="text-3xl font-extrabold text-[#2F241C] dark:text-[#8A6F52] font-serif tracking-wide">
+          <h1 className="text-3xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] font-serif tracking-wide">
             {language === 'en' ? 'Seminars & Announcements' : 'سیمینارز اور اعلانات'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -40,14 +52,14 @@ export default function EventsList() {
         {/* Content list Loader */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2F241C]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
           </div>
         ) : (
           <div className="space-y-12 text-start">
 
             {/* Section 1: Upcoming Programs */}
             <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-              <h2 className={`text-lg font-bold text-[#2F241C] dark:text-[#8A6F52] font-serif mb-6 pb-2 border-b border-[#EAE3CF]/50 dark:border-slate-800 uppercase tracking-wider ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+              <h2 className={`text-lg font-bold text-[#1F3A5F] dark:text-[#B08D57] font-serif mb-6 pb-2 border-b border-[#E5D8CA]/50 dark:border-slate-800 uppercase tracking-wider ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                 {language === 'en' ? 'Upcoming Programs' : 'آنے والے پروگرام'}
               </h2>
               {upcomingEvents.length > 0 ? (
@@ -80,7 +92,7 @@ export default function EventsList() {
             {/* Empty view case */}
             {(!events || events.length === 0) && (
               <div className="text-center py-16 premium-card">
-                <Calendar className="w-12 h-12 text-[#8A6F52] mx-auto mb-4" />
+                <Calendar className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
                   {language === 'en' ? 'No programs scheduled' : 'کوئی پروگرام طے شدہ نہیں ہے'}
                 </h3>
