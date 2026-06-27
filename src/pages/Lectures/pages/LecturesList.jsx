@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Search, SlidersHorizontal, Play, X, Music } from 'lucide-react';
-import { getLectures } from '../../../services/publication';
-import { useSettings } from '../../../context/SettingsContext';
-import LectureCard from '../../../components/LectureCard';
-import { Input } from '../../../components/Input';
+import { getLectures } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { LectureCard, Input } from '@/components';
 
 const categoryTranslations = {
   'YouTube Videos': 'یوٹیوب ویڈیوز',

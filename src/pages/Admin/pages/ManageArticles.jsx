@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle } from 'lucide-react';
-import { getArticles, createArticle, updateArticle, deleteArticle } from '../../../services/article';
-import { useSettings } from '../../../context/SettingsContext';
-import RichTextEditor from '../../../components/RichTextEditor';
+import { getArticles, createArticle, updateArticle, deleteArticle } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {
@@ -164,7 +164,7 @@ export default function ManageArticles() {
   return (
     <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        
+
         {/* Module Header */}
         <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
@@ -201,8 +201,8 @@ export default function ManageArticles() {
           <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
             <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId 
-                  ? (language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں') 
+                {editingId
+                  ? (language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں')
                   : (language === 'en' ? 'Write New Article' : 'نیا علمی مضمون لکھیں')
                 }
               </h2>
@@ -216,7 +216,7 @@ export default function ManageArticles() {
             </div>
 
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              
+
               {/* Form action errors */}
               {actionError && (
                 <div className={`bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -339,8 +339,8 @@ export default function ManageArticles() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-[#B08D57]" />
-                  {actionLoading 
-                    ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') 
+                  {actionLoading
+                    ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...')
                     : (language === 'en' ? 'Save Article' : 'مضمون محفوظ کریں')
                   }
                 </button>
@@ -384,20 +384,20 @@ export default function ManageArticles() {
                         </td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
-                             <button
-                               onClick={() => openEditForm(article)}
-                               className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
-                               title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
-                             >
-                               <Edit2 className="w-4 h-4" />
-                             </button>
-                             <button
-                               onClick={() => handleDelete(article._id)}
-                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                               title={language === 'en' ? 'Delete Article' : 'مضمون حذف کریں'}
-                             >
-                               <Trash2 className="w-4 h-4" />
-                             </button>
+                            <button
+                              onClick={() => openEditForm(article)}
+                              className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
+                              title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(article._id)}
+                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                              title={language === 'en' ? 'Delete Article' : 'مضمون حذف کریں'}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </td>
                       </tr>

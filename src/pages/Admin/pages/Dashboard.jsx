@@ -14,8 +14,8 @@ import {
   ArrowLeft,
   Plus
 } from 'lucide-react';
-import { getStats } from '../../../services/about';
-import { useSettings } from '../../../context/SettingsContext';
+import { getStats } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function Dashboard() {
   const { settings } = useSettings();

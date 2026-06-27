@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useSettings } from '../context/SettingsContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useSettings } from '@/hooks/useSettings';
+import { Navbar, Footer } from '@/layout';
 
 export const fontFamilies = {
   'Inter': "'Inter', sans-serif",

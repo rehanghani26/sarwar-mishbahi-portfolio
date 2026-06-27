@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
-import { getEvents } from '../../../services/event';
-import { useSettings } from '../../../context/SettingsContext';
-import EventCard from '../../../components/EventCard';
+import { getEvents } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { EventCard } from '@/components';
 
 export default function EventsList() {
   const { settings } = useSettings();

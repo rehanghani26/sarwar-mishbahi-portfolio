@@ -1,43 +1,98 @@
 import API from './api';
+import { PUBLICATIONS, LECTURES } from '@/constants/urls';
 
 // --- Publications (Books) ---
 export const getPublications = async (params) => {
-  const response = await API.get('/publications', { params });
-  return response.data;
+  try {
+    let url = PUBLICATIONS;
+    if (params) {
+      const query = new URLSearchParams(params).toString();
+      if (query) {
+        url += `?${query}`;
+      }
+    }
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Get Publications Error:", error);
+    throw error;
+  }
 };
 
 export const createPublication = async (data) => {
-  const response = await API.post('/publications', data);
-  return response.data;
+  try {
+    const response = await API.post(PUBLICATIONS, data);
+    return response.data;
+  } catch (error) {
+    console.error("Create Publication Error:", error);
+    throw error;
+  }
 };
 
 export const updatePublication = async (id, data) => {
-  const response = await API.put(`/publications/${id}`, data);
-  return response.data;
+  try {
+    const response = await API.put(`${PUBLICATIONS}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Update Publication Error:", error);
+    throw error;
+  }
 };
 
 export const deletePublication = async (id) => {
-  const response = await API.delete(`/publications/${id}`);
-  return response.data;
+  try {
+    const response = await API.delete(`${PUBLICATIONS}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Delete Publication Error:", error);
+    throw error;
+  }
 };
 
 // --- Lectures ---
 export const getLectures = async (params) => {
-  const response = await API.get('/lectures', { params });
-  return response.data;
+  try {
+    let url = LECTURES;
+    if (params) {
+      const query = new URLSearchParams(params).toString();
+      if (query) {
+        url += `?${query}`;
+      }
+    }
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Get Lectures Error:", error);
+    throw error;
+  }
 };
 
 export const createLecture = async (data) => {
-  const response = await API.post('/lectures', data);
-  return response.data;
+  try {
+    const response = await API.post(LECTURES, data);
+    return response.data;
+  } catch (error) {
+    console.error("Create Lecture Error:", error);
+    throw error;
+  }
 };
 
 export const updateLecture = async (id, data) => {
-  const response = await API.put(`/lectures/${id}`, data);
-  return response.data;
+  try {
+    const response = await API.put(`${LECTURES}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Update Lecture Error:", error);
+    throw error;
+  }
 };
 
 export const deleteLecture = async (id) => {
-  const response = await API.delete(`/lectures/${id}`);
-  return response.data;
+  try {
+    const response = await API.delete(`${LECTURES}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Delete Lecture Error:", error);
+    throw error;
+  }
 };

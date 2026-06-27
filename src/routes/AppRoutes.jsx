@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Layout Imports
-import MainLayout from '../layout/MainLayout';
+import { MainLayout } from '@/layout';
 
 // Public Page Imports
 import Home from '../pages/Home/pages/Home';
@@ -31,7 +31,7 @@ import ManageEvents from '../pages/Admin/pages/ManageEvents';
 import ManageSettings from '../pages/Admin/pages/ManageSettings';
 
 // Route Guard
-import AdminRoute from '../components/AdminRoute';
+import { AdminRoute } from '@/components';
 
 export default function AppRoutes() {
   return (

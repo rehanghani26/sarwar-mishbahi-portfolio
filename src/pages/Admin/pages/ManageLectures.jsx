@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle } from 'lucide-react';
-import { getLectures, createLecture, updateLecture, deleteLecture } from '../../../services/publication';
-import { useSettings } from '../../../context/SettingsContext';
+import { getLectures, createLecture, updateLecture, deleteLecture } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {

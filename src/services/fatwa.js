@@ -1,26 +1,59 @@
 import API from './api';
+import { FATWAS } from '@/constants/urls';
 
 export const getFatwas = async (params) => {
-  const response = await API.get('/fatwas', { params });
-  return response.data;
+  try {
+    let url = FATWAS;
+    if (params) {
+      const query = new URLSearchParams(params).toString();
+      if (query) {
+        url += `?${query}`;
+      }
+    }
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Get Fatwas Error:", error);
+    throw error;
+  }
 };
 
 export const getFatwaById = async (id) => {
-  const response = await API.get(`/fatwas/${id}`);
-  return response.data;
+  try {
+    const response = await API.get(`${FATWAS}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Get Fatwa By ID Error:", error);
+    throw error;
+  }
 };
 
 export const createFatwa = async (data) => {
-  const response = await API.post('/fatwas', data);
-  return response.data;
+  try {
+    const response = await API.post(FATWAS, data);
+    return response.data;
+  } catch (error) {
+    console.error("Create Fatwa Error:", error);
+    throw error;
+  }
 };
 
 export const updateFatwa = async (id, data) => {
-  const response = await API.put(`/fatwas/${id}`, data);
-  return response.data;
+  try {
+    const response = await API.put(`${FATWAS}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Update Fatwa Error:", error);
+    throw error;
+  }
 };
 
 export const deleteFatwa = async (id) => {
-  const response = await API.delete(`/fatwas/${id}`);
-  return response.data;
+  try {
+    const response = await API.delete(`${FATWAS}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Delete Fatwa Error:", error);
+    throw error;
+  }
 };

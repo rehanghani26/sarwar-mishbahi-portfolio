@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, User, AlertTriangle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { login, clearAuthError } from '../../../store/slices/authSlice';
-import { useSettings } from '../../../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 export default function Login() {

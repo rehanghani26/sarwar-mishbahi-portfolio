@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Menu, X, BookOpen, User, HelpCircle, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
-import { logout } from '../../store/slices/authSlice';
-import { useSettings } from '../../context/SettingsContext';
-
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { motion } from "framer-motion";
+import {
+  Menu,
+  X,
+  BookOpen,
+  User,
+  HelpCircle,
+  LogOut,
+  LayoutDashboard,
+  ChevronDown,
+} from "lucide-react";
+import { logout } from "@/store/slices/authSlice";
+import { useSettings } from '@/hooks/useSettings';
 
 export default function Navbar() {
   const location = useLocation();
@@ -12,11 +21,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const { settings } = useSettings();
-  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
-
+  const { settings, requestLanguageChange } = useSettings();
+  const language =
+    settings?.language === "ur" || settings?.language === "Urdu" ? "ur" : "en";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,8 +35,8 @@ export default function Navbar() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -40,35 +48,43 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: language === 'en' ? 'Home' : 'صفحہ اول', href: '/' },
-    { label: language === 'en' ? 'About' : 'تعارف', href: '/about' },
-    { label: language === 'en' ? 'Articles' : 'مقالات', href: '/articles' },
-    { label: language === 'en' ? 'Fatwas' : 'فتاویٰ', href: '/fatwas' },
-    { label: language === 'en' ? 'Q&A' : 'سوال و جواب', href: '/qa' },
-    { label: language === 'en' ? 'Publications' : 'کتب و مطبوعات', href: '/publications' },
-    { label: language === 'en' ? 'Lectures' : 'بیانات', href: '/lectures' },
-    { label: language === 'en' ? 'Events' : 'پروگرام', href: '/events' },
-    { label: language === 'en' ? 'Contact' : 'رابطہ', href: '/contact' },
+    { label: language === "en" ? "Home" : "صفحہ اول", href: "/" },
+    { label: language === "en" ? "Fatwas" : "فقہ و فتاویٰ", href: "/fatwas" },
+    {
+      label: language === "en" ? "Publications" : " کتب و رسائل",
+      href: "/publications",
+    },
+    {
+      label: language === "en" ? "Articles" : "مضامین و مقالات",
+      href: "/articles",
+    },
+    { label: language === "en" ? "Lectures" : "خطبات", href: "/lectures" },
+    { label: language === "en" ? "Q&A" : "سوال و جواب", href: "/qa" },
+    { label: language === "en" ? "About" : "تعارف", href: "/about" },
+    { label: language === "en" ? "Events" : "پروگرام", href: "/events" },
+    { label: language === "en" ? "Contact" : "رابطہ", href: "/contact" },
   ];
-
-
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled
-        ? 'bg-card-bg shadow-md border-b border-site-border py-2'
-        : 'bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4'
-        }`}
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-card-bg shadow-md border-b border-site-border py-2"
+          : "bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4"
+      }`}
     >
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between"
+        dir={language === "ur" ? "rtl" : "ltr"}
+      >
         {/* Scholar Branding / Logo */}
-        <Link to="/" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
-          <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md">
-            {/* Calligraphy seal or book icon representing knowledge */}
+        <Link
+          to="/"
+          className="flex items-center gap-3 hover:opacity-95 transition-opacity"
+        >
+          <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md shrink-0">
             <BookOpen className="w-5 h-5 text-[#B08D57]" />
           </div>
-
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -76,16 +92,17 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const isActive =
               location.pathname === link.href ||
-              (link.href !== '/' && location.pathname.startsWith(link.href));
+              (link.href !== "/" && location.pathname.startsWith(link.href));
 
             return (
               <Link
                 key={link.label}
                 to={link.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${isActive
-                  ? 'text-brown-dark font-bold border-b-2 border-brown-dark'
-                  : 'text-text-secondary hover:text-[#B08D57]'
-                  }`}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-brown-dark font-bold border-b-2 border-brown-dark"
+                    : "text-text-secondary hover:text-[#B08D57]"
+                }`}
               >
                 {link.label}
               </Link>
@@ -160,7 +177,7 @@ export default function Navbar() {
               to="/ask"
               className="px-3 py-1.5 text-xs font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-full shadow-sm transition-all"
             >
-              {language === 'en' ? 'Ask Q' : 'سوال پوچھیں'}
+              {language === "en" ? "Ask Q" : "سوال پوچھیں"}
             </Link>
           )}
           <button
@@ -171,16 +188,18 @@ export default function Navbar() {
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-
       </div>
 
       {/* Mobile Menu Drawer Overlay */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300" onClick={closeMenu}>
+        <div
+          className="lg:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300"
+          onClick={closeMenu}
+        >
           <div
-            className={`fixed top-0 ${language === 'ur' ? 'left-0 border-r' : 'right-0 border-l'} h-full w-[280px] bg-card-bg shadow-2xl p-6 flex flex-col justify-between transition-transform duration-300 transform border-site-border`}
+            className={`fixed top-0 ${language === "ur" ? "left-0 border-r" : "right-0 border-l"} h-full w-[280px] bg-card-bg shadow-2xl p-6 flex flex-col justify-between transition-transform duration-300 transform border-site-border`}
             onClick={(e) => e.stopPropagation()}
-            dir={language === 'ur' ? 'rtl' : 'ltr'}
+            dir={language === "ur" ? "rtl" : "ltr"}
           >
             <div>
               {/* Drawer Header */}
@@ -188,10 +207,13 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-text-primary" />
                   <span className="font-bold text-text-primary text-md">
-                    {language === 'en' ? 'Navigation' : 'نیویگیشن'}
+                    {language === "en" ? "Navigation" : "نیویگیشن"}
                   </span>
                 </div>
-                <button onClick={closeMenu} className="p-1 rounded text-text-secondary hover:bg-slate-100 dark:hover:bg-slate-800">
+                <button
+                  onClick={closeMenu}
+                  className="p-1 rounded text-text-secondary hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -201,17 +223,19 @@ export default function Navbar() {
                 {navLinks.map((link) => {
                   const isActive =
                     location.pathname === link.href ||
-                    (link.href !== '/' && location.pathname.startsWith(link.href));
+                    (link.href !== "/" &&
+                      location.pathname.startsWith(link.href));
 
                   return (
                     <Link
                       key={link.label}
                       to={link.href}
                       onClick={closeMenu}
-                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${isActive
-                        ? 'bg-[#E5D8CA] text-[#1F3A5F] font-bold'
-                        : 'text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]'
-                        }`}
+                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${
+                        isActive
+                          ? "bg-[#E5D8CA] text-[#1F3A5F] font-bold"
+                          : "text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]"
+                      }`}
                     >
                       {link.label}
                     </Link>
@@ -230,14 +254,14 @@ export default function Navbar() {
                     className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded"
                   >
                     <LayoutDashboard className="w-4 h-4 text-[#B08D57]" />
-                    {language === 'en' ? 'Admin Dashboard' : 'انتظامی ڈیش بورڈ'}
+                    {language === "en" ? "Admin Dashboard" : "انتظامی ڈیش بورڈ"}
                   </Link>
                   <button
                     onClick={handleLogout}
                     className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded border border-red-200"
                   >
                     <LogOut className="w-4 h-4" />
-                    {language === 'en' ? 'Logout' : 'لاگ آؤٹ'}
+                    {language === "en" ? "Logout" : "لاگ آؤٹ"}
                   </button>
                 </>
               ) : (
@@ -247,11 +271,10 @@ export default function Navbar() {
                   className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-text-secondary bg-slate-100 hover:bg-slate-200 hover:text-[#1F3A5F] rounded border border-site-border"
                 >
                   <User className="w-4 h-4" />
-                  {language === 'en' ? 'Admin Login' : 'ایڈمن لاگ ان'}
+                  {language === "en" ? "Admin Login" : "ایڈمن لاگ ان"}
                 </Link>
               )}
             </div>
-
           </div>
         </div>
       )}

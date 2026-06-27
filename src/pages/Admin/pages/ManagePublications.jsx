@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle } from 'lucide-react';
-import { getPublications, createPublication, updatePublication, deletePublication } from '../../../services/publication';
-import { useSettings } from '../../../context/SettingsContext';
+import { getPublications, createPublication, updatePublication, deletePublication } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {

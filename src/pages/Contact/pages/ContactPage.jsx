@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, MessageSquareCode, CheckCircle2, AlertTriangle, Facebook, Youtube, Twitter, Instagram } from 'lucide-react';
-import { submitContact } from '../../../services/contact';
-import { useSettings } from '../../../context/SettingsContext';
+import { submitContact } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 export default function ContactPage() {

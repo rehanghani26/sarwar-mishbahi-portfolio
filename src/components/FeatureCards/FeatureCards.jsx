@@ -1,5 +1,5 @@
 import React from 'react'
-import { FEATURE_CARDS } from '../data/siteData'
+import { FEATURE_CARDS } from '@/data/siteData'
 
 const ICONS = {
   founder: (

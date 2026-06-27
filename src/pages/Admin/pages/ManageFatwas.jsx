@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Bookmark, CheckCircle } from 'lucide-react';
-import { getFatwas, createFatwa, updateFatwa, deleteFatwa } from '../../../services/fatwa';
-import { useSettings } from '../../../context/SettingsContext';
-import RichTextEditor from '../../../components/RichTextEditor';
+import { getFatwas, createFatwa, updateFatwa, deleteFatwa } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {
@@ -157,7 +157,7 @@ export default function ManageFatwas() {
   return (
     <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        
+
         {/* Module Header */}
         <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
@@ -194,8 +194,8 @@ export default function ManageFatwas() {
           <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
             <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId 
-                  ? (language === 'en' ? 'Edit Fatwa' : 'فتویٰ کی تدوین کریں') 
+                {editingId
+                  ? (language === 'en' ? 'Edit Fatwa' : 'فتویٰ کی تدوین کریں')
                   : (language === 'en' ? 'Add New Fatwa' : 'نیا شرعی فتویٰ شامل کریں')
                 }
               </h2>
@@ -209,7 +209,7 @@ export default function ManageFatwas() {
             </div>
 
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              
+
               {/* Form action errors */}
               {actionError && (
                 <div className={`bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -303,8 +303,8 @@ export default function ManageFatwas() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-[#B08D57]" />
-                  {actionLoading 
-                    ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') 
+                  {actionLoading
+                    ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...')
                     : (language === 'en' ? 'Save Fatwa' : 'فتویٰ محفوظ کریں')
                   }
                 </button>
@@ -348,20 +348,20 @@ export default function ManageFatwas() {
                         </td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
-                             <button
-                               onClick={() => openEditForm(fatwa)}
-                               className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
-                               title={language === 'en' ? 'Edit Fatwa' : 'فتویٰ کی تدوین کریں'}
-                             >
-                               <Edit2 className="w-4 h-4" />
-                             </button>
-                             <button
-                               onClick={() => handleDelete(fatwa._id)}
-                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                               title={language === 'en' ? 'Delete Fatwa' : 'فتویٰ حذف کریں'}
-                             >
-                               <Trash2 className="w-4 h-4" />
-                             </button>
+                            <button
+                              onClick={() => openEditForm(fatwa)}
+                              className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
+                              title={language === 'en' ? 'Edit Fatwa' : 'فتویٰ کی تدوین کریں'}
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(fatwa._id)}
+                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                              title={language === 'en' ? 'Delete Fatwa' : 'فتویٰ حذف کریں'}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </td>
                       </tr>

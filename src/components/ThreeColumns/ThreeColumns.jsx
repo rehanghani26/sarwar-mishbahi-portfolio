@@ -1,5 +1,5 @@
 import React from 'react'
-import { ARTICLES, PRAYER_TIMES, BOOKS } from '../data/siteData'
+import { ARTICLES, PRAYER_TIMES, BOOKS } from '@/data/siteData'
 
 function ColHeader({ title }) {
   return (
@@ -21,7 +21,7 @@ function ArticlesCol() {
               <span>›</span> پڑھنے کے لیے کلک کریں
             </a>
           </div>
-          <div className="w-[58px] min-w-[58px] h-11 bg-gradient-to-br from-[#ddd5be] to-[#c8bfa8] dark:from-slate-700 dark:to-slate-800 border border-site-border shrink-0"/>
+          <div className="w-[58px] min-w-[58px] h-11 bg-gradient-to-br from-[#ddd5be] to-[#c8bfa8] dark:from-slate-700 dark:to-slate-800 border border-site-border shrink-0" />
         </div>
       ))}
     </div>
@@ -46,7 +46,7 @@ function PrayerCol() {
                   <td className="py-[13px] px-2.5 text-center align-middle font-mono text-[17px] text-slate-800 dark:text-slate-200" dir="ltr">{p.time}</td>
                   <td className="py-[13px] px-2.5 text-center align-middle text-[18px] font-semibold text-text-primary">{p.name}</td>
                   <td className="py-[13px] px-2.5 text-center align-middle text-[22px]">{p.icon}</td>
-                  {ci === 0 && <td className="w-px bg-site-border p-0"/>}
+                  {ci === 0 && <td className="w-px bg-site-border p-0" />}
                 </React.Fragment>
               ))}
             </tr>
@@ -71,8 +71,8 @@ function BooksCol() {
           </div>
           <div className="w-11 min-w-[44px] h-[60px] border border-site-border shrink-0 overflow-hidden" style={{ background: b.gradient }}>
             <svg width="44" height="60" viewBox="0 0 44 60">
-              <rect x="4" y="4" width="36" height="52" rx="1" fill="rgba(255,255,255,0.1)"/>
-              <rect x="2" y="0" width="6" height="60" fill="rgba(0,0,0,0.2)"/>
+              <rect x="4" y="4" width="36" height="52" rx="1" fill="rgba(255,255,255,0.1)" />
+              <rect x="2" y="0" width="6" height="60" fill="rgba(0,0,0,0.2)" />
             </svg>
           </div>
         </div>

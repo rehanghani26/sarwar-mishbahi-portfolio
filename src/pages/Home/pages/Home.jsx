@@ -18,18 +18,10 @@ import {
   Image as ImageIcon,
   ChevronDown,
 } from 'lucide-react';
-import { getArticles } from '../../../services/article';
-import { getFatwas } from '../../../services/fatwa';
-import { getPublicQuestions } from '../../../services/question';
-import { getPublications, getLectures } from '../../../services/publication';
-import { getEvents } from '../../../services/event';
-import { useSettings } from '../../../context/SettingsContext';
+import { getArticles, getFatwas, getPublicQuestions, getPublications, getLectures, getEvents } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 
-import ArticleCard from '../../../components/ArticleCard';
-import FatwaCard from '../../../components/FatwaCard';
-import LectureCard from '../../../components/LectureCard';
-import PublicationCard from '../../../components/PublicationCard';
-import EventCard from '../../../components/EventCard';
+import { ArticleCard, FatwaCard, LectureCard, PublicationCard, EventCard } from '@/components';
 import AnimatedFeatureCard from './Animatedfeaturecard ';
 import muftiSahebImg from '../../../assets/images/muftiSaheb.png';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, FileText, ArrowLeft, ArrowRight } from 'lucide-react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 const categoryTranslations = {
   'Salah': 'نماز',

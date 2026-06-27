@@ -1,5 +1,5 @@
 import React from 'react'
-import PageContainer from '../../../components/PageContainer'
+import PageContainer from '../../../components/PageContainer/PageContainer'
 
 export default function Profile() {
   return (
@@ -13,7 +13,7 @@ export default function Profile() {
         </p>
 
         <h3 className="text-[22px] font-bold text-[#1F3A5F] border-b border-[#E5D8CA] pb-2 font-serif">نمایاں تعلیمی اعداد و شمار</h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-6 text-center">
           <div className="bg-white border border-[#E5D8CA] p-6 rounded-[20px] shadow-sm">
             <div className="text-[36px] font-bold text-[#B08D57]">12,000+</div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Book, Download, ExternalLink, Calendar, Languages } from 'lucide-react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 const categoryTranslations = {
   'Salah': 'نماز',

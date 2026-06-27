@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { HelpCircle, CheckCircle, AlertTriangle, Send } from 'lucide-react';
-import { submitQuestion } from '../../../services/question';
-import { useSettings } from '../../../context/SettingsContext';
+import { submitQuestion } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {

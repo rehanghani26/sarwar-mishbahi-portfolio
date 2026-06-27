@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowLeft, ArrowRight } from 'lucide-react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 const categoryTranslations = {
   'Quran': 'قرآن',

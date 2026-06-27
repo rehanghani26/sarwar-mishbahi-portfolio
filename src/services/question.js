@@ -1,31 +1,69 @@
 import API from './api';
+import { QUESTIONS } from '@/constants/urls';
 
 export const submitQuestion = async (data) => {
-  const response = await API.post('/questions/ask', data);
-  return response.data;
+  try {
+    const response = await API.post(`${QUESTIONS}/ask`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Submit Question Error:", error);
+    throw error;
+  }
 };
 
 export const getPublicQuestions = async (params) => {
-  const response = await API.get('/questions/public', { params });
-  return response.data;
+  try {
+    let url = `${QUESTIONS}/public`;
+    if (params) {
+      const query = new URLSearchParams(params).toString();
+      if (query) {
+        url += `?${query}`;
+      }
+    }
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Get Public Questions Error:", error);
+    throw error;
+  }
 };
 
 export const getPublicQuestionById = async (id) => {
-  const response = await API.get(`/questions/public/${id}`);
-  return response.data;
+  try {
+    const response = await API.get(`${QUESTIONS}/public/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Get Public Question By ID Error:", error);
+    throw error;
+  }
 };
 
 export const getAdminQuestions = async () => {
-  const response = await API.get('/questions');
-  return response.data;
+  try {
+    const response = await API.get(QUESTIONS);
+    return response.data;
+  } catch (error) {
+    console.error("Get Admin Questions Error:", error);
+    throw error;
+  }
 };
 
 export const answerQuestion = async (id, data) => {
-  const response = await API.put(`/questions/answer/${id}`, data);
-  return response.data;
+  try {
+    const response = await API.put(`${QUESTIONS}/answer/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Answer Question Error:", error);
+    throw error;
+  }
 };
 
 export const deleteQuestion = async (id) => {
-  const response = await API.delete(`/questions/${id}`);
-  return response.data;
+  try {
+    const response = await API.delete(`${QUESTIONS}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Delete Question Error:", error);
+    throw error;
+  }
 };

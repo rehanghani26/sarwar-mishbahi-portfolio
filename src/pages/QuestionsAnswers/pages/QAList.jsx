@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
-import { getPublicQuestions } from '../../../services/question';
-import { useSettings } from '../../../context/SettingsContext';
-import { Input } from '../../../components/Input';
+import { getPublicQuestions } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { Input } from '@/components';
 
 const categoryTranslations = {
   'Salah': 'نماز',

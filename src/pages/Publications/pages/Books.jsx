@@ -1,7 +1,7 @@
 import React from 'react'
-import PageContainer from '../../../components/PageContainer'
-import { BOOKS } from '../../../data/siteData'
-import { useSettings } from '../../../context/SettingsContext';
+import { PageContainer } from '@/components';
+import { BOOKS } from '@/data/siteData';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function Books() {
   const { settings } = useSettings();

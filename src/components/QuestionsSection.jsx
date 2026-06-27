@@ -1,5 +1,5 @@
 import React from 'react'
-import { NEW_QUESTION, SELECTED_QUESTIONS } from '../data/siteData'
+import { NEW_QUESTION, SELECTED_QUESTIONS } from '@/data/siteData'
 
 export default function QuestionsSection() {
   return (

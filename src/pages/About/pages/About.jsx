@@ -1,6 +1,6 @@
 import React from 'react';
 import { Award, BookOpen, GraduationCap, Briefcase, Bookmark, Milestone } from 'lucide-react';
-import { useSettings } from '../../../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function About() {
   const { settings } = useSettings();

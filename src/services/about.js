@@ -1,16 +1,32 @@
 import API from './api';
+import { SETTINGS } from '@/constants/urls';
 
 export const getSettings = async () => {
-  const response = await API.get('/settings');
-  return response.data;
+  try {
+    const response = await API.get(SETTINGS);
+    return response.data;
+  } catch (error) {
+    console.error("Get Settings Error:", error);
+    throw error;
+  }
 };
 
 export const putSettings = async (settingsData) => {
-  const response = await API.put('/settings', settingsData);
-  return response.data;
+  try {
+    const response = await API.put(SETTINGS, settingsData);
+    return response.data;
+  } catch (error) {
+    console.error("Put Settings Error:", error);
+    throw error;
+  }
 };
 
 export const getStats = async () => {
-  const response = await API.get('/settings/stats');
-  return response.data;
+  try {
+    const response = await API.get(`${SETTINGS}/stats`);
+    return response.data;
+  } catch (error) {
+    console.error("Get Stats Error:", error);
+    throw error;
+  }
 };

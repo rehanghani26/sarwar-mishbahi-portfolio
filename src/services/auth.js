@@ -1,8 +1,14 @@
 import API from './api';
+import { AUTH_LOGIN, AUTH_ME } from '@/constants/urls';
 
 export const loginUser = async (formData) => {
-  const response = await API.post('/auth/login', formData);
-  return response.data;
+  try {
+    const response = await API.post(AUTH_LOGIN, formData);
+    return response.data;
+  } catch (error) {
+    console.error("Login Error:", error);
+    throw error;
+  }
 };
 
 export const logoutUser = async () => {
@@ -11,6 +17,11 @@ export const logoutUser = async () => {
 };
 
 export const checkAuthStatus = async () => {
-  const response = await API.get('/auth/me');
-  return response.data;
+  try {
+    const response = await API.get(AUTH_ME);
+    return response.data;
+  } catch (error) {
+    console.error("Auth Status Error:", error);
+    throw error;
+  }
 };

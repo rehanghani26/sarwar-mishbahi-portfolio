@@ -1,7 +1,7 @@
 import React from 'react'
-import PageContainer from '../../../components/PageContainer'
-import { ARTICLES } from '../../../data/siteData'
-import { useSettings } from '../../../context/SettingsContext';
+import { PageContainer } from '@/components';
+import { ARTICLES } from '@/data/siteData';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function Bayyinat() {
   const { settings } = useSettings();
@@ -23,7 +23,7 @@ export default function Bayyinat() {
         <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">
           {language === 'en' ? 'Selected Articles from the Latest Issue' : 'تازہ ترین شمارے کے منتخب مضامین'}
         </h3>
-        
+
         <div className="space-y-3 my-6">
           {ARTICLES.map((art) => (
             <div key={art.id} className="bg-[#fcfbf9] border border-[#E5D8CA] p-4 rounded-sm hover:border-[#B08D57] transition-colors cursor-pointer flex justify-between items-center">

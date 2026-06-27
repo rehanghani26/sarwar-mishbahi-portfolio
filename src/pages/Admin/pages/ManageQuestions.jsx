@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Save, Trash2, ShieldQuestion, HelpCircle, CheckCircle, AlertTriangle, Eye, EyeOff } from 'lucide-react';
-import { getAdminQuestions, answerQuestion, deleteQuestion } from '../../../services/question';
-import { useSettings } from '../../../context/SettingsContext';
+import { getAdminQuestions, answerQuestion, deleteQuestion } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 const categoryTranslations = {

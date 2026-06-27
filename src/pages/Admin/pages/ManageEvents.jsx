@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
-import { getEvents, createEvent, updateEvent, deleteEvent } from '../../../services/event';
-import { useSettings } from '../../../context/SettingsContext';
+import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 export default function ManageEvents() {

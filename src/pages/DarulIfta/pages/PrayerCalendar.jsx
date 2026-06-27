@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PageContainer from '../../../components/PageContainer'
+import PageContainer from '../../../components/PageContainer/PageContainer'
 
 export default function PrayerCalendar() {
   const [selectedMonth, setSelectedMonth] = useState('شوال')

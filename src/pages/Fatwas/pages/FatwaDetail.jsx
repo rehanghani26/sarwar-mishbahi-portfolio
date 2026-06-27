@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, HelpCircle, FileText } from 'lucide-react';
-import { getFatwaById } from '../../../services/fatwa';
-import { useSettings } from '../../../context/SettingsContext';
-import FatwaCard from '../../../components/FatwaCard';
+import { getFatwaById } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { FatwaCard } from '@/components';
 
 const categoryTranslations = {
   'Salah': 'نماز',

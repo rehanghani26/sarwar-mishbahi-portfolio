@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { NAV_ITEMS } from '../../constants/navigation'
-import { SITE } from '../../constants/siteData'
-import { LogoSeal } from '../LogoSeal'
-import { Input } from '../../components/Input'
+import { NAV_ITEMS } from '@/constants/navigation'
+import { SITE } from '@/data/siteData'
+import { LogoSeal } from '@/layout';
+import { Input } from '@/components';
 
 export default function Header() {
   const location = useLocation()
@@ -40,7 +40,7 @@ export default function Header() {
           <span className={`block w-6 h-0.5 bg-[#3A2C23] transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
         </button>
 
-        {/* Search */}
+        {/* Search — leftmost in Desktop, responsive width on smaller devices */}
         <div className="flex items-center border border-[#ccc] h-[36px] md:h-[38px] bg-white shrink-0 overflow-hidden">
           <button className="bg-white border-none border-l md:border-r border-[#ccc] w-[36px] md:w-[38px] h-[36px] md:h-[38px] flex items-center justify-center text-[15px] text-[#777] hover:bg-gray-50">
             🔍
@@ -164,6 +164,7 @@ export default function Header() {
                   <li key={item.label} className="border-b border-[#4d3c2a] last:border-none pb-2">
                     {item.hasDropdown ? (
                       <div>
+                        {/* Parent trigger link */}
                         <div className="flex items-center justify-between py-3 px-2">
                           <button
                             onClick={(e) => toggleDropdown(index, e)}
@@ -183,6 +184,7 @@ export default function Header() {
                           </Link>
                         </div>
 
+                        {/* Dropdown Items list */}
                         {isDropdownOpen && item.dropdownItems && (
                           <ul className="mt-2 bg-[#1F3A5F] p-2 space-y-1 rounded border-r-2 border-[#B08D57]">
                             {item.dropdownItems.map((subItem, sIdx) => {
@@ -225,3 +227,4 @@ export default function Header() {
     </header>
   )
 }
+

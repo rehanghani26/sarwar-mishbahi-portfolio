@@ -1,5 +1,5 @@
 import React from 'react'
-import PageContainer from '../../../components/PageContainer'
+import PageContainer from '../../../components/PageContainer/PageContainer'
 
 export default function Branches() {
   const branchesList = [
@@ -20,7 +20,7 @@ export default function Branches() {
         </p>
 
         <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">نمایاں شاخیں</h3>
-        
+
         <div className="space-y-4 my-6">
           {branchesList.map((branch, i) => (
             <div key={i} className="bg-[#fcfbf9] border border-[#E5D8CA] p-5 rounded-sm hover:border-[#B08D57] transition-all">

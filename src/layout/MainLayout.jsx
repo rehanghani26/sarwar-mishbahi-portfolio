@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useSettings } from '../context/SettingsContext';
-import Navbar from '../components/Navbar';
+import { useSettings } from '@/hooks/useSettings';
+import Navbar from './Navbar/Navbar';
 import Footer from '../components/Footer';
 
 export const fontFamilies = {
@@ -14,14 +14,14 @@ export const fontFamilies = {
 
 export default function MainLayout() {
   const { pathname } = useLocation();
-  const { 
-    settings, 
-    loading, 
-    error, 
-    pendingLanguageChange, 
-    changeLanguage, 
-    clearLanguageChangeRequest, 
-    refreshSettings 
+  const {
+    settings,
+    loading,
+    error,
+    pendingLanguageChange,
+    changeLanguage,
+    clearLanguageChangeRequest,
+    refreshSettings
   } = useSettings();
 
   const [transitionState, setTransitionState] = useState('idle'); // 'idle', 'leaving', 'entering'
@@ -187,15 +187,15 @@ export default function MainLayout() {
       {pendingLanguageChange && transitionState === 'idle' && (
         <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-slate-900/45 backdrop-blur-xs animate-modal-fade-in cursor-pointer"
             onClick={handleCancel}
           />
-          
+
           {/* Modal Box */}
-          <div 
+          <div
             ref={modalRef}
-            className={`relative bg-white dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transform animate-modal-scale-up ${language === 'ur' ? 'text-right' : 'text-left'}`} 
+            className={`relative bg-white dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transform animate-modal-scale-up ${language === 'ur' ? 'text-right' : 'text-left'}`}
             dir={language === 'ur' ? 'rtl' : 'ltr'}
             role="dialog"
             aria-modal="true"
@@ -208,12 +208,12 @@ export default function MainLayout() {
                   {language === 'en' ? 'Change Language' : 'زبان تبدیل کریں'}
                 </h3>
                 <p id="lang-modal-desc" className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-light">
-                  {language === 'en' 
-                    ? 'Are you sure you want to switch the website language?' 
+                  {language === 'en'
+                    ? 'Are you sure you want to switch the website language?'
                     : 'کیا آپ واقعی ویب سائٹ کی زبان تبدیل کرنا چاہتے ہیں؟'}
                 </p>
               </div>
-              
+
               <div className={`flex items-center gap-3 justify-end ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
                 <button
                   type="button"
@@ -253,7 +253,8 @@ export default function MainLayout() {
       )}
 
       {/* Style block for premium animations, keyframes, transitions */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         /* Reduced-motion fallback */
         @media (prefers-reduced-motion: reduce) {
           .lang-content-transition, .lang-overlay-transition {

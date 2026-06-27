@@ -1,21 +1,49 @@
 import API from './api';
+import { EVENTS } from '@/constants/urls';
 
 export const getEvents = async (params) => {
-  const response = await API.get('/events', { params });
-  return response.data;
+  try {
+    let url = EVENTS;
+    if (params) {
+      const query = new URLSearchParams(params).toString();
+      if (query) {
+        url += `?${query}`;
+      }
+    }
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Get Events Error:", error);
+    throw error;
+  }
 };
 
 export const createEvent = async (data) => {
-  const response = await API.post('/events', data);
-  return response.data;
+  try {
+    const response = await API.post(EVENTS, data);
+    return response.data;
+  } catch (error) {
+    console.error("Create Event Error:", error);
+    throw error;
+  }
 };
 
 export const updateEvent = async (id, data) => {
-  const response = await API.put(`/events/${id}`, data);
-  return response.data;
+  try {
+    const response = await API.put(`${EVENTS}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Update Event Error:", error);
+    throw error;
+  }
 };
 
 export const deleteEvent = async (id) => {
-  const response = await API.delete(`/events/${id}`);
-  return response.data;
+  try {
+    const response = await API.delete(`${EVENTS}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Delete Event Error:", error);
+    throw error;
+  }
 };

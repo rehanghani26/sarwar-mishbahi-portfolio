@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, checkAuthStatus as checkAuthStatusApi } from '../../services/auth';
+import { loginUser, checkAuthStatus as checkAuthStatusApi } from '@/services';
 
 // Check if token exists in local storage
 const token = localStorage.getItem('adminToken');

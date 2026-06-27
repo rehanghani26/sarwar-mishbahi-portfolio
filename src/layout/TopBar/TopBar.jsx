@@ -1,5 +1,5 @@
 import React from 'react'
-import { SITE } from '../../constants/siteData'
+import { SITE } from '@/data/siteData'
 
 export default function TopBar() {
   return (

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, Hash, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
-import { getArticleBySlug } from '../../../services/article';
-import { useSettings } from '../../../context/SettingsContext';
-import ArticleCard from '../../../components/ArticleCard';
+import { getArticleBySlug } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { ArticleCard } from '@/components';
 
 export default function ArticleDetail() {
   const { slug } = useParams();

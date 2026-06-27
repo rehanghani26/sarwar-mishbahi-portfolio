@@ -1,5 +1,5 @@
 import React from 'react'
-import PageContainer from '../../../components/PageContainer'
+import PageContainer from '../../../components/PageContainer/PageContainer'
 import { PRAYER_TIMES } from '../../../data/siteData'
 
 export default function PrayerTimes() {

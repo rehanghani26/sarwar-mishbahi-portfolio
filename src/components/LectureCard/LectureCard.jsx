@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 const categoryTranslations = {
   'Audio Lectures': 'آڈیو خطابات',

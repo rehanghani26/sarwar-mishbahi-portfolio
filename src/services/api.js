@@ -39,9 +39,10 @@
 // export default API;
 
 import axios from "axios";
+import { BASE_URL } from "@/constants/urls";
 
 const API = axios.create({
-  baseURL: "https://jamia-madarsha-server.onrender.com/api",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

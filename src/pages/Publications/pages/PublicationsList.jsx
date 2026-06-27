@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
-import { getPublications } from '../../../services/publication';
-import { useSettings } from '../../../context/SettingsContext';
-import PublicationCard from '../../../components/PublicationCard';
-import { Input } from '../../../components/Input';
+import { getPublications } from '@/services';
+import { useSettings } from '@/hooks/useSettings';
+import { PublicationCard, Input } from '@/components';
 
 const categoryTranslations = {
   'Quran Studies': 'قرآنی علوم',

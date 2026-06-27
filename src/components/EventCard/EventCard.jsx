@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function EventCard({ event }) {
   const { settings } = useSettings();
@@ -44,11 +44,10 @@ export default function EventCard({ event }) {
         />
 
         {/* Status Badge */}
-        <div className={`absolute top-3 right-3 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm ${
-          isUpcoming ? 'bg-[#E5D8CA] text-[#7B654D]' : 'bg-slate-500 text-white'
-        }`}>
-          {isUpcoming 
-            ? (language === 'en' ? 'Upcoming' : 'آنے والا') 
+        <div className={`absolute top-3 right-3 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm ${isUpcoming ? 'bg-[#E5D8CA] text-[#7B654D]' : 'bg-slate-500 text-white'
+          }`}>
+          {isUpcoming
+            ? (language === 'en' ? 'Upcoming' : 'آنے والا')
             : (language === 'en' ? 'Past Program' : 'گزشتہ پروگرام')
           }
         </div>
@@ -58,9 +57,8 @@ export default function EventCard({ event }) {
       <div className={`p-4 flex flex-col flex-grow md:flex-row items-stretch gap-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
 
         {/* Date Stamp Block (Right Side on Desktop in RTL) */}
-        <div className={`flex flex-row md:flex-col items-center justify-center border-b md:border-b-0 ${
-          language === 'ur' ? 'md:border-l md:pl-4' : 'md:border-r md:pr-4'
-        } border-[#E5D8CA] pb-4 md:pb-0 shrink-0 text-center gap-4`}>
+        <div className={`flex flex-row md:flex-col items-center justify-center border-b md:border-b-0 ${language === 'ur' ? 'md:border-l md:pl-4' : 'md:border-r md:pr-4'
+          } border-[#E5D8CA] pb-4 md:pb-0 shrink-0 text-center gap-4`}>
           <div className="w-12 md:w-16 h-12 md:h-16 rounded bg-[#E5D8CA] flex flex-col items-center justify-center text-[#1F3A5F]">
             <span className="text-lg font-bold leading-none">{dayNum}</span>
             <span className="text-xs font-bold uppercase tracking-wider mt-0.5">{monthName}</span>

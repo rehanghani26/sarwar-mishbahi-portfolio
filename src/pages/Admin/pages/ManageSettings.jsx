@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search } from 'lucide-react';
-import { useSettings } from '../../../context/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
 export default function ManageSettings() {
