@@ -1,6 +1,7 @@
 import React from 'react';
 import { Book, Download, ExternalLink, Calendar, Languages } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
+import { COLORS } from '@/utils/themeColors';
 
 const categoryTranslations = {
   'Salah': 'نماز',
@@ -13,13 +14,14 @@ const categoryTranslations = {
   'Family Issues': 'خاندانی مسائل',
   'Education': 'تعلیم',
   'General Questions': 'عام مسائل',
-  'Quran': 'قرآن',
+  'Quran Studies': 'علوم قرآن',
   'Hadith': 'حدیث',
   'Fiqh': 'فقہ',
-  'Seerah': 'سیرت',
   'Aqeedah': 'عقیدہ',
-  'History': 'تاریخ',
-  'Biography': 'سوانح',
+  'Seerah': 'سیرت',
+  'Islamic History': 'اسلامی تاریخ',
+  'Fatwa Collections': 'مجموعہ فتاویٰ',
+  'Research Papers': 'تحقیقی مقالات',
 };
 
 const languageTranslations = {
@@ -29,79 +31,133 @@ const languageTranslations = {
   'Persian': 'فارسی',
 };
 
+function BookCoverPlaceholder({ title, category }) {
+  return (
+    <div 
+      style={{ backgroundColor: COLORS.primary, borderColor: COLORS.accent }}
+      className="w-[110px] h-[150px] shrink-0 border-2 rounded-md shadow-md flex flex-col items-center justify-between p-3 relative overflow-hidden select-none"
+    >
+      {/* Decorative inner gold border frame */}
+      <div 
+        style={{ borderColor: 'rgba(184, 156, 125, 0.25)' }}
+        className="absolute inset-1.5 border rounded"
+      />
+      
+      {/* Mini top tag */}
+      <span className="text-[8px] font-bold text-accent/80 z-10 tracking-widest uppercase text-center line-clamp-1">
+        {category || 'Islamic Book'}
+      </span>
+      
+      {/* Center decoration icon */}
+      <Book className="w-8 h-8 text-accent/50 z-10" />
+      
+      {/* Title snippet */}
+      <span 
+        className="text-[9px] font-semibold text-white/90 z-10 text-center line-clamp-2 leading-tight font-serif"
+        dir="rtl"
+      >
+        {title}
+      </span>
+    </div>
+  );
+}
+
 export default function PublicationCard({ publication }) {
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { title, description, category, language: pubLanguage, author, publicationDate, googleDriveLink } = publication;
+  const { title, description, category, language: pubLanguage, author, publicationDate, googleDriveLink, coverImage } = publication;
 
   const formattedDate = new Date(publicationDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
     month: 'short',
   });
 
+  const isRTL = language === 'ur';
+
   return (
-    <div className={`premium-card p-5 flex flex-col h-full hover:shadow-md transition-all group ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-
-      {/* Category Badge & Book Icon */}
-      <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-100 shrink-0">
-        <span className="bg-[#E5D8CA] text-[#7B654D] text-xs font-bold px-2.5 py-1 rounded-full text-[10px]">
-          {language === 'ur' ? (categoryTranslations[category] || category) : category}
-        </span>
-        <Book className="w-5 h-5 text-[#B08D57]" />
+    <div 
+      style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
+      className={`border rounded-xl p-5 flex flex-col sm:flex-row gap-5 hover:shadow-md transition-all group relative overflow-hidden ${isRTL ? 'text-right' : 'text-left'}`}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* Book Cover Image Container */}
+      <div className="flex justify-center sm:justify-start shrink-0">
+        {coverImage ? (
+          <img 
+            src={coverImage} 
+            alt={title} 
+            className="w-[110px] h-[150px] shrink-0 object-cover rounded-md shadow-md border"
+            style={{ borderColor: COLORS.border }}
+          />
+        ) : (
+          <BookCoverPlaceholder title={title} category={category} />
+        )}
       </div>
 
-      {/* Book Metadata details */}
-      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mb-3 shrink-0 justify-start">
-        <span className="flex items-center gap-1">
-          <Calendar className="w-3.5 h-3.5 text-[#B08D57]" />
-          {formattedDate}
-        </span>
-        <span className="flex items-center gap-1">
-          <Languages className="w-3.5 h-3.5 text-[#B08D57]" />
-          {language === 'ur' ? (languageTranslations[pubLanguage] || pubLanguage) : pubLanguage}
-        </span>
+      {/* Book details container */}
+      <div className="flex flex-col flex-grow min-w-0 justify-between">
+        <div>
+          {/* Category Badge & Language */}
+          <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-100 shrink-0">
+            <span 
+              style={{ backgroundColor: COLORS.secondary, color: COLORS.primary }}
+              className="text-xs font-bold px-2.5 py-1 rounded-full text-[10px]"
+            >
+              {language === 'ur' ? (categoryTranslations[category] || category) : category}
+            </span>
+            <span className="text-[10px] text-slate-500 font-medium">
+              {language === 'ur' ? (languageTranslations[pubLanguage] || pubLanguage) : pubLanguage}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 
+            style={{ color: COLORS.textPrimary }}
+            className={`text-md font-bold leading-snug mb-1 font-serif line-clamp-2 ${isRTL ? 'text-right' : 'text-left'}`}
+          >
+            {title}
+          </h3>
+
+          {/* Author Details & Date */}
+          <div className="flex items-center justify-between mb-2 shrink-0 text-[11px] text-slate-500">
+            <span style={{ color: COLORS.accent }} className="font-semibold">
+              {language === 'en' ? 'Author:' : 'مصنف:'} {author}
+            </span>
+            <span>{formattedDate}</span>
+          </div>
+
+          {/* Description */}
+          <p className={`text-xs font-light leading-relaxed line-clamp-2 ${isRTL ? 'text-right' : 'text-left'} mb-3`} style={{ color: COLORS.textSecondary }}>
+            {description}
+          </p>
+        </div>
+
+        {/* Action Link Buttons */}
+        <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
+          <a
+            href={googleDriveLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ backgroundColor: COLORS.primary }}
+            className="flex-grow flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold text-white rounded hover:opacity-90 transition-opacity decoration-none"
+          >
+            <ExternalLink className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
+            {language === 'en' ? 'View on Drive' : 'ڈرائیو پر دیکھیں'}
+          </a>
+          <a
+            href={googleDriveLink}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ backgroundColor: COLORS.background }}
+            className="flex items-center justify-center p-2 text-slate-600 rounded hover:bg-slate-200 transition-colors"
+            title={language === 'en' ? 'Download Document' : 'دستاویز ڈاؤن لوڈ کریں'}
+          >
+            <Download className="w-4 h-4" />
+          </a>
+        </div>
       </div>
-
-      {/* Title */}
-      <h3 className={`text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-        {title}
-      </h3>
-
-      {/* Author Details */}
-      <span className={`block text-xs font-semibold text-[#B08D57] mb-3 shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-        {language === 'en' ? 'Author:' : 'مصنف:'} {author}
-      </span>
-
-      {/* Description */}
-      <div className={`flex-grow ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-        <p className={`text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-          {description}
-        </p>
-      </div>
-
-      {/* Drive Action link buttons */}
-      <div className={`mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-        <a
-          href={googleDriveLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-[#1F3A5F] hover:bg-[#162C49] rounded transition-colors"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          {language === 'en' ? 'View on Drive' : 'ڈرائیو پر دیکھیں'}
-        </a>
-        <a
-          href={googleDriveLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center p-2 text-slate-600 hover:text-white bg-slate-100 hover:bg-[#B08D57] rounded transition-colors"
-          title={language === 'en' ? 'Download Document' : 'دستاویز ڈاؤن لوڈ کریں'}
-        >
-          <Download className="w-4 h-4" />
-        </a>
-      </div>
-
     </div>
   );
 }

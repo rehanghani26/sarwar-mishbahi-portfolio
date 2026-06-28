@@ -5,12 +5,7 @@ import { getLectures, createLecture, updateLecture, deleteLecture } from '@/serv
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
-const categoryTranslations = {
-  'YouTube Videos': 'یوٹیوب ویڈیوز',
-  'Facebook Videos': 'فیس بک ویڈیوز',
-  'Audio Lectures': 'آڈیو بیانات',
-  'Bayan Recordings': 'بیانات کی ریکارڈنگز',
-};
+import { CATEGORY_MAP, LECTURE_TRANSLATIONS } from '@/utils/categories';
 
 export default function ManageLectures() {
   const { settings } = useSettings();
@@ -35,12 +30,7 @@ export default function ManageLectures() {
     thumbnail: '',
   });
 
-  const categories = [
-    { value: 'YouTube Videos', label: 'یوٹیوب ویڈیوز' },
-    { value: 'Facebook Videos', label: 'فیس بک ویڈیوز' },
-    { value: 'Audio Lectures', label: 'آڈیو بیانات' },
-    { value: 'Bayan Recordings', label: 'بیانات کی ریکارڈنگز' },
-  ];
+  const categories = CATEGORY_MAP.lectures;
 
   const loadLectures = async () => {
     try {
@@ -133,17 +123,17 @@ export default function ManageLectures() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Lectures' : 'بیانات کا انتظام'}</h1>
+              <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Lectures' : 'بیانات کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete audio and video lectures.' : 'آڈیو اور ویڈیو بیانات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
             </div>
           </div>
@@ -151,9 +141,9 @@ export default function ManageLectures() {
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#B08D57]" />
+              <Plus className="w-4 h-4 text-accent" />
               {language === 'en' ? 'Add Lecture' : 'بیان شامل کریں'}
             </button>
           )}
@@ -169,8 +159,8 @@ export default function ManageLectures() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
                 {editingId 
                   ? (language === 'en' ? 'Edit Lecture Details' : 'بیان کی تفصیلات میں ترمیم کریں') 
@@ -180,7 +170,7 @@ export default function ManageLectures() {
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-[#E5D8CA] hover:text-white underline font-light"
+                className="text-xs text-secondary hover:text-white underline font-light"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
@@ -207,7 +197,7 @@ export default function ManageLectures() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Self-Purification: Islamic Methodology' : 'مثال: تزکیہ نفس: اسلامی طریقہ کار'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -218,11 +208,11 @@ export default function ManageLectures() {
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none text-slate-700 focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
-                        {language === 'en' ? cat.value : cat.label}
+                        {language === 'en' ? cat.labelEn : cat.labelUr}
                       </option>
                     ))}
                   </select>
@@ -240,7 +230,7 @@ export default function ManageLectures() {
                     onChange={handleInputChange}
                     required
                     placeholder="https://www.youtube.com/watch?v=..."
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -252,7 +242,7 @@ export default function ManageLectures() {
                     value={formFields.thumbnail}
                     onChange={handleInputChange}
                     placeholder="https://example.com/thumbnail.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -268,7 +258,7 @@ export default function ManageLectures() {
                   required
                   placeholder={language === 'en' ? 'Provide a brief overview of the topics discussed in this lecture...' : 'اس بیان میں زیر بحث موضوعات کا مختصر جائزہ فراہم کریں...'}
                   rows={4}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -277,16 +267,16 @@ export default function ManageLectures() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-4 py-2 border border-border text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#B08D57]" />
+                  <Save className="w-4 h-4 text-accent" />
                   {actionLoading 
                     ? (language === 'en' ? 'Saving...' : 'محفوظ ہو رہا ہے...') 
                     : (language === 'en' ? 'Save Lecture' : 'بیان محفوظ کریں')
@@ -298,16 +288,16 @@ export default function ManageLectures() {
           </div>
         ) : (
           /* Lectures List Table */
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
             ) : lectures && lectures.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#E5D8CA]">
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Video/Audio URL' : 'ویڈیو/آڈیو یو آر ایل'}</th>
@@ -319,8 +309,8 @@ export default function ManageLectures() {
                       <tr key={lec._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.title}</td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-[#1F3A5F]/10 text-[#1F3A5F] text-[10px] font-bold px-2 py-0.5 rounded">
-                            {language === 'en' ? lec.category : (categoryTranslations[lec.category] || lec.category)}
+                          <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                            {language === 'en' ? lec.category : (LECTURE_TRANSLATIONS[lec.category] || lec.category)}
                           </span>
                         </td>
                         <td className={`px-6 py-4 text-xs font-light text-slate-400 max-w-xs truncate select-all ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.videoUrl}</td>
@@ -328,7 +318,7 @@ export default function ManageLectures() {
                           <div className="inline-flex items-center gap-2">
                              <button
                                onClick={() => openEditForm(lec)}
-                               className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
+                               className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
                                title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                              >
                                <Edit2 className="w-4 h-4" />
@@ -349,7 +339,7 @@ export default function ManageLectures() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Play className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+                <Play className="w-12 h-12 text-accent mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}</h3>
                 <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Lecture" button to publish your first lecture.' : 'اپنا پہلا بیان شامل کرنے کے لیے "بیان شامل کریں" بٹن پر کلک کریں۔'}</p>
               </div>

@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, ShieldAlert } from 'lucide-react';
 import { getFatwas } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { FatwaCard, Input } from '@/components';
 
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
+import { FATWA_CATEGORIES, FATWA_TRANSLATIONS } from '@/utils/categories';
 
 export default function FatwasList() {
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+  const [searchParams] = useSearchParams();
+  const queryCategory = searchParams.get('category');
 
   const [fatwas, setFatwas] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,18 +23,15 @@ export default function FatwasList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  const categories = [
-    'Salah',
-    'Fasting',
-    'Zakat',
-    'Hajj & Umrah',
-    'Marriage',
-    'Divorce',
-    'Business',
-    'Family Issues',
-    'Education',
-    'General Questions',
-  ];
+  useEffect(() => {
+    if (queryCategory !== null) {
+      setSelectedCategory(queryCategory);
+    } else {
+      setSelectedCategory('');
+    }
+  }, [queryCategory]);
+
+  const categories = FATWA_CATEGORIES;
 
   const loadFatwas = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
     try {
@@ -80,15 +69,15 @@ export default function FatwasList() {
   };
 
   return (
-    <div className="bg-site-bg py-12 min-h-screen">
+    <div className="bg-background py-12 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Titles */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest block mb-1">
+          <span className="text-xs font-bold text-accent dark:text-amber-500 uppercase tracking-widest block mb-1">
             {language === 'en' ? 'AUTHENTIC ISLAMIC JURISPRUDENCE' : 'مستند اسلامی فقہ'}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] tracking-wide">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-primary dark:text-accent tracking-wide">
             {language === 'en' ? 'Fatwas & Shariah Rulings' : 'فتاویٰ اور شرعی احکام'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -105,10 +94,10 @@ export default function FatwasList() {
               placeholder={language === 'en' ? 'Search fatwas...' : 'فتاویٰ تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+              inputClassName={`w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
               border=""
             />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'left-3' : 'right-3'} top-2.5 text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57]`}>
+            <button type="submit" className={`absolute ${language === 'ur' ? 'left-3' : 'right-3'} top-2.5 text-slate-400 hover:text-primary dark:hover:text-accent`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -119,12 +108,12 @@ export default function FatwasList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-[#B08D57]"
+              className="px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-accent"
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+                  {language === 'ur' ? (FATWA_TRANSLATIONS[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -136,8 +125,8 @@ export default function FatwasList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
+                ? 'bg-primary border-primary text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
               }`}
           >
             {language === 'en' ? 'All Topics' : 'تمام موضوعات'}
@@ -147,11 +136,11 @@ export default function FatwasList() {
               key={cat}
               onClick={() => handleCategoryChange(cat)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
-                  ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
+                  ? 'bg-primary border-primary text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
-              {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+              {language === 'ur' ? (FATWA_TRANSLATIONS[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -159,7 +148,7 @@ export default function FatwasList() {
         {/* Content list Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
         ) : fatwas && fatwas.length > 0 ? (
           <>
@@ -175,7 +164,7 @@ export default function FatwasList() {
                 <button
                   onClick={() => handlePageChange(Math.max(1, page - 1))}
                   disabled={page === 1}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   {language === 'en' ? 'Previous' : 'پچھلا'}
                 </button>
@@ -184,8 +173,8 @@ export default function FatwasList() {
                     key={pNum + 1}
                     onClick={() => handlePageChange(pNum + 1)}
                     className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                        ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white'
-                        : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                        ? 'bg-primary border-primary text-white'
+                        : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                   >
                     {pNum + 1}
@@ -194,7 +183,7 @@ export default function FatwasList() {
                 <button
                   onClick={() => handlePageChange(Math.min(pages, page + 1))}
                   disabled={page === pages}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   {language === 'en' ? 'Next' : 'اگلا'}
                 </button>
@@ -203,7 +192,7 @@ export default function FatwasList() {
           </>
         ) : (
           <div className="text-center py-16 premium-card">
-            <ShieldAlert className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+            <ShieldAlert className="w-12 h-12 text-accent mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white">
               {language === 'en' ? 'No fatwas found' : 'کوئی فتویٰ نہیں ملا'}
             </h3>

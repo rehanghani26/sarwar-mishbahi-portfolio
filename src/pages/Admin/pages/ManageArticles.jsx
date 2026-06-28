@@ -6,18 +6,7 @@ import { useSettings } from '@/hooks/useSettings';
 import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
 import { Input } from '../../../components/Input';
 
-const categoryTranslations = {
-  'Quran': 'قرآن',
-  'Hadith': 'حدیث',
-  'Fiqh': 'فقہ',
-  'Aqeedah': 'عقیدہ',
-  'Seerah': 'سیرت النبی',
-  'Islamic History': 'اسلامی تاریخ',
-  'Family Matters': 'خاندانی معاملات',
-  'Education': 'تعلیم',
-  'Dawah': 'دعوت',
-  'General Islam': 'عام معلوماتِ اسلام',
-};
+import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS } from '@/utils/categories';
 
 export default function ManageArticles() {
   const { settings } = useSettings();
@@ -44,18 +33,7 @@ export default function ManageArticles() {
     references: '',
   });
 
-  const categories = [
-    'Quran',
-    'Hadith',
-    'Fiqh',
-    'Aqeedah',
-    'Seerah',
-    'Islamic History',
-    'Family Matters',
-    'Education',
-    'Dawah',
-    'General Islam',
-  ];
+  const categories = ARTICLE_CATEGORIES;
 
   const loadArticles = async () => {
     try {
@@ -162,17 +140,17 @@ export default function ManageArticles() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Articles' : 'مقالات کا انتظام'}</h1>
+              <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Articles' : 'مقالات کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scholarly articles.' : 'عالم صاحب کے مقالات شامل کریں، تبدیل کریں یا حذف کریں۔'}</p>
             </div>
           </div>
@@ -180,9 +158,9 @@ export default function ManageArticles() {
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#B08D57]" />
+              <Plus className="w-4 h-4 text-accent" />
               {language === 'en' ? 'Write Article' : 'مضمون لکھیں'}
             </button>
           )}
@@ -198,8 +176,8 @@ export default function ManageArticles() {
 
         {/* Forms vs List router */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
                 {editingId
                   ? (language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں')
@@ -209,7 +187,7 @@ export default function ManageArticles() {
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-[#E5D8CA] hover:text-white underline font-light"
+                className="text-xs text-secondary hover:text-white underline font-light"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
@@ -236,7 +214,7 @@ export default function ManageArticles() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'Enter article title...' : 'مضمون کا عنوان درج کریں...'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -247,11 +225,11 @@ export default function ManageArticles() {
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none text-slate-700 focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
-                        {language === 'en' ? cat : (categoryTranslations[cat] || cat)}
+                        {language === 'en' ? cat : (ARTICLE_TRANSLATIONS[cat] || cat)}
                       </option>
                     ))}
                   </select>
@@ -268,7 +246,7 @@ export default function ManageArticles() {
                   onChange={handleInputChange}
                   required
                   placeholder={language === 'en' ? 'Enter short summary...' : 'مضمون کا مختصر خلاصہ درج کریں...'}
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   border=""
                 />
               </div>
@@ -283,7 +261,7 @@ export default function ManageArticles() {
                     value={formFields.tags}
                     onChange={handleInputChange}
                     placeholder={language === 'en' ? 'e.g. Fiqh, Zakat, Modern Business' : 'مثال: فقہ، زکوٰۃ، جدید کاروبار'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -295,7 +273,7 @@ export default function ManageArticles() {
                     value={formFields.featuredImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/cover.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -320,7 +298,7 @@ export default function ManageArticles() {
                   onChange={handleInputChange}
                   placeholder={language === 'en' ? 'e.g. Sahih Bukhari, Hadith No. 456\nAl-Mughni by Ibn Qudamah' : 'مثال: صحیح بخاری، حدیث نمبر 456\nالمغنی از ابن قدامہ'}
                   rows={3}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -329,16 +307,16 @@ export default function ManageArticles() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-4 py-2 border border-border text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#B08D57]" />
+                  <Save className="w-4 h-4 text-accent" />
                   {actionLoading
                     ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...')
                     : (language === 'en' ? 'Save Article' : 'مضمون محفوظ کریں')
@@ -350,16 +328,16 @@ export default function ManageArticles() {
           </div>
         ) : (
           /* Articles List Table */
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
             ) : articles && articles.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#E5D8CA]">
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Publish Date' : 'اشاعت کی تاریخ'}</th>
@@ -372,21 +350,21 @@ export default function ManageArticles() {
                       <tr key={article._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{article.title}</td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-[#1F3A5F]/10 text-[#1F3A5F] text-[10px] font-bold px-2 py-0.5 rounded">
-                            {language === 'en' ? article.category : (categoryTranslations[article.category] || article.category)}
+                          <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                            {language === 'en' ? article.category : (ARTICLE_TRANSLATIONS[article.category] || article.category)}
                           </span>
                         </td>
                         <td className={`px-6 py-4 font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                           {new Date(article.publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}
                         </td>
-                        <td className="px-6 py-4 text-center font-semibold text-xs text-[#B08D57]">
+                        <td className="px-6 py-4 text-center font-semibold text-xs text-accent">
                           {article.viewCount || 0}
                         </td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
                             <button
                               onClick={() => openEditForm(article)}
-                              className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
+                              className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
                               title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -407,7 +385,7 @@ export default function ManageArticles() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <FileText className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+                <FileText className="w-12 h-12 text-accent mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No articles written yet' : 'کوئی مضمون نہیں لکھا گیا'}</h3>
                 <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Write Article" button to publish your first article.' : 'اپنا پہلا مضمون شائع کرنے کے لیے "مضمون لکھیں" بٹن پر کلک کریں۔'}</p>
               </div>

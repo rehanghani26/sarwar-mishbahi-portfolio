@@ -31,10 +31,10 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
   };
 
   return (
-    <div className="border border-[#E5D8CA] rounded bg-white overflow-hidden flex flex-col min-h-[300px]">
+    <div className="border border-border rounded bg-white overflow-hidden flex flex-col min-h-[300px]">
       
       {/* Editor Toolbar */}
-      <div className="bg-slate-50 border-b border-[#E5D8CA] px-3 py-2 flex items-center justify-between shrink-0">
+      <div className="bg-slate-50 border-b border-border px-3 py-2 flex items-center justify-between shrink-0">
         
         {/* Formatting Actions */}
         <div className="flex items-center gap-1.5">
@@ -100,7 +100,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             type="button"
             onClick={() => setIsPreview(false)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold ${
-              !isPreview ? 'bg-[#1F3A5F] text-white' : 'text-slate-600 hover:bg-slate-200'
+              !isPreview ? 'bg-primary text-white' : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <Code className="w-3.5 h-3.5" /> Write
@@ -109,7 +109,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             type="button"
             onClick={() => setIsPreview(true)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold ${
-              isPreview ? 'bg-[#1F3A5F] text-white' : 'text-slate-600 hover:bg-slate-200'
+              isPreview ? 'bg-primary text-white' : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <Eye className="w-3.5 h-3.5" /> Preview

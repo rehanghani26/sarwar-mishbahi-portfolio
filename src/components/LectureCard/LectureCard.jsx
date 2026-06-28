@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
+import { COLORS } from '@/utils/themeColors';
 
 const categoryTranslations = {
   'Audio Lectures': 'آڈیو خطابات',
@@ -23,13 +24,13 @@ export default function LectureCard({ lecture, onPlay }) {
     day: 'numeric',
   });
 
-  const getMediaIcon = (colorClass = "text-[#B08D57]") => {
+  const getMediaIcon = (styleObj = { color: COLORS.accent }) => {
     switch (category) {
       case 'Audio Lectures':
       case 'Bayan Recordings':
-        return <Music className={`w-4 h-4 ${colorClass}`} />;
+        return <Music className="w-4 h-4" style={styleObj} />;
       default:
-        return <Video className={`w-4 h-4 ${colorClass}`} />;
+        return <Video className="w-4 h-4" style={styleObj} />;
     }
   };
 
@@ -56,7 +57,10 @@ export default function LectureCard({ lecture, onPlay }) {
   };
 
   return (
-    <div className={`premium-card shadow-sm overflow-hidden flex flex-col h-full group ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+    <div 
+      onClick={() => onPlay(lecture)}
+      className={`premium-card shadow-sm overflow-hidden flex flex-col h-full group cursor-pointer ${language === 'ur' ? 'text-right' : 'text-left'}`}
+    >
       
       {/* Thumbnail with Play Overlay */}
       <div className="relative h-44 w-full bg-slate-800 shrink-0 overflow-hidden">
@@ -72,7 +76,8 @@ export default function LectureCard({ lecture, onPlay }) {
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-all">
           <button
             onClick={() => onPlay(lecture)}
-            className="w-12 h-12 rounded-full bg-[#1F3A5F] hover:bg-[#162C49] text-white flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 focus:outline-none"
+            style={{ backgroundColor: COLORS.primary }}
+            className="w-12 h-12 rounded-full text-white flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 focus:outline-none theme-hover-bg-accent"
             aria-label="Play Lecture"
           >
             <Play className="w-5 h-5 fill-current ml-0.5" />
@@ -80,8 +85,11 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Media Type Badge */}
-        <div className={`absolute bottom-3 ${language === 'ur' ? 'right-3' : 'left-3'} bg-[#E5D8CA] text-[#7B654D] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow`}>
-          {getMediaIcon("text-[#7B654D]")}
+        <div 
+          style={{ backgroundColor: COLORS.secondary, color: COLORS.textSecondary }}
+          className={`absolute bottom-3 ${language === 'ur' ? 'right-3' : 'left-3'} text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow`}
+        >
+          {getMediaIcon({ color: COLORS.textSecondary })}
           {language === 'ur' ? (categoryTranslations[category] || category) : category}
         </div>
       </div>
@@ -91,17 +99,20 @@ export default function LectureCard({ lecture, onPlay }) {
         
         {/* Date */}
         <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2 justify-start">
-          <Calendar className="w-3.5 h-3.5 text-[#B08D57]" />
+          <Calendar className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
           {formattedDate}
         </div>
 
         {/* Title */}
-        <h3 className={`text-md font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-2 font-serif line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <h3 
+          style={{ color: COLORS.textPrimary }}
+          className={`text-md font-bold transition-colors leading-snug mb-2 font-serif line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'} group-hover:text-[var(--color-primary)]`}
+        >
           {title}
         </h3>
 
         {/* Description */}
-        <p className={`text-[#2C2C2C] text-xs font-light leading-relaxed line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <p className={`text-xs font-light leading-relaxed line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'}`} style={{ color: COLORS.textPrimary }}>
           {description}
         </p>
 
@@ -109,7 +120,8 @@ export default function LectureCard({ lecture, onPlay }) {
         <div className={`mt-auto pt-3 flex items-center justify-between border-t border-slate-100 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <button
             onClick={() => onPlay(lecture)}
-            className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
+            style={{ color: COLORS.primary }}
+            className="text-xs font-bold transition-colors theme-hover-text-accent"
           >
             {language === 'en' ? 'Listen/Watch Now' : 'ابھی سنیں/دیکھیں'}
           </button>
@@ -118,6 +130,7 @@ export default function LectureCard({ lecture, onPlay }) {
             href={videoUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className="text-[10px] text-slate-500 hover:text-slate-700 underline"
           >
             {language === 'en' ? 'Open Link' : 'اصل لنک کھولیں'}

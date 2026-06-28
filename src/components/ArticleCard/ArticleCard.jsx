@@ -40,7 +40,7 @@ export default function ArticleCard({ article }) {
   };
 
   return (
-    <div className="premium-card flex flex-col h-full overflow-hidden group">
+    <Link to={`/articles/${slug}`} className="premium-card flex flex-col h-full overflow-hidden group hover:no-underline text-inherit cursor-pointer">
 
       {/* Featured Image */}
       <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-900 shrink-0">
@@ -51,7 +51,7 @@ export default function ArticleCard({ article }) {
           loading="lazy"
           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage; }}
         />
-        <div className="absolute top-3 left-3 bg-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
+        <div className="absolute top-3 left-3 bg-secondary text-textSecondary text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
           {language === 'ur' ? (categoryTranslations[category] || category) : category}
         </div>
       </div>
@@ -62,30 +62,29 @@ export default function ArticleCard({ article }) {
         {/* Date and View Statistics */}
         <div className="flex items-center gap-4 text-xs text-slate-500 mb-4 justify-start">
           <span className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-[#B08D57]" />
+            <Calendar className="w-5 h-5 text-accent" />
             {formattedDate}
           </span>
           <span className="flex items-center gap-2">
-            <Eye className="w-5 h-5 text-[#B08D57]" />
+            <Eye className="w-5 h-5 text-accent" />
             {viewCount} {language === 'en' ? 'views' : 'بار دیکھا گیا'}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors line-clamp-2 leading-snug mb-4">
+        <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-2 leading-snug mb-4">
           {title}
         </h3>
 
         {/* Summary Description */}
-        <p className="text-[#2C2C2C] text-sm line-clamp-3 leading-relaxed mb-4 font-light">
+        <p className="text-textPrimary text-sm line-clamp-3 leading-relaxed mb-4 font-light">
           {summary}
         </p>
 
         {/* Read More link */}
         <div className="mt-auto pt-2 justify-start flex">
-          <Link
-            to={`/articles/${slug}`}
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors"
+          <span
+            className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent transition-colors"
           >
             {language === 'en' ? 'Read Article' : 'مضمون پڑھیں'}
             {language === 'en' ? (
@@ -93,12 +92,12 @@ export default function ArticleCard({ article }) {
             ) : (
               <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
             )}
-          </Link>
+          </span>
         </div>
 
       </div>
 
-    </div>
+    </Link>
   );
 }
 

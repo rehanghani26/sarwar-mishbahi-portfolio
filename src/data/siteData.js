@@ -1,3 +1,4 @@
+import { COLORS } from '@/utils/themeColors';
 export const SITE = {
   nameArabic: 'جامعة العلوم الإسلامية',
   nameUrdu: 'علامہ محمد یوسف بنوری ٹاؤن گیا بہار انڈیا',
@@ -88,9 +89,9 @@ export const PRAYER_TIMES = {
 }
 
 export const BOOKS = [
-  { id: 1, title: 'تعارف جامعہ (دلیل الجامعہ)', gradient: 'linear-gradient(160deg,#c05020 0%,#8a2808 100%)' },
-  { id: 2, title: 'قربانی کے احکام ومسائل',      gradient: 'linear-gradient(160deg,#2a7040 0%,#145028 100%)' },
-  { id: 3, title: 'بصائر وعبر (جلد اول)',          gradient: 'linear-gradient(160deg,#7040a0 0%,#3a1860 100%)' },
+  { id: 1, title: 'تعارف جامعہ (دلیل الجامعہ)', gradient: `linear-gradient(160deg, ${COLORS.primary} 0%, ${COLORS.accent} 100%)` },
+  { id: 2, title: 'قربانی کے احکام ومسائل',      gradient: `linear-gradient(160deg, ${COLORS.accent} 0%, ${COLORS.secondary} 100%)` },
+  { id: 3, title: 'بصائر وعبر (جلد اول)',          gradient: `linear-gradient(160deg, ${COLORS.primary} 0%, ${COLORS.secondary} 100%)` },
 ]
 
 export const FOOTER_SITEMAP = ['صفحہ اول', 'تعارف', 'دارالافتاء', 'بینات', 'کتابیں', 'اسلامی نام']

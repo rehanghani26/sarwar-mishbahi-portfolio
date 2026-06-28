@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
 import { getPublicQuestions } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '@/components';
 
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
+import { QA_CATEGORIES, QA_TRANSLATIONS } from '@/utils/categories';
 
 export default function QAList() {
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+  const [searchParams] = useSearchParams();
+  const queryCategory = searchParams.get('category');
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,18 +24,15 @@ export default function QAList() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
-  const categories = [
-    'Salah',
-    'Fasting',
-    'Zakat',
-    'Hajj & Umrah',
-    'Marriage',
-    'Divorce',
-    'Business',
-    'Family Issues',
-    'Education',
-    'General Questions',
-  ];
+  useEffect(() => {
+    if (queryCategory !== null) {
+      setSelectedCategory(queryCategory);
+    } else {
+      setSelectedCategory('');
+    }
+  }, [queryCategory]);
+
+  const categories = QA_CATEGORIES;
 
   const loadQuestions = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
     try {
@@ -85,15 +74,15 @@ export default function QAList() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+          <span className="text-xs font-bold text-accent dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
             {language === 'en' ? 'MUTUAL DISCUSSION' : 'باہمی گفتگو'}
           </span>
-          <h1 className="text-3xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] font-serif tracking-wide">
+          <h1 className="text-3xl font-extrabold text-primary dark:text-accent font-serif tracking-wide">
             {language === 'en' ? 'Questions & Answers' : 'سوالات اور جوابات'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -109,10 +98,10 @@ export default function QAList() {
               placeholder={language === 'en' ? 'Search Q&A...' : 'سوال و جواب تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
+              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
               border=""
             />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57]`}>
+            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-primary dark:hover:text-accent`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -122,12 +111,12 @@ export default function QAList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+                  {language === 'ur' ? (QA_TRANSLATIONS[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -137,7 +126,7 @@ export default function QAList() {
         {/* Content list Accordion */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
         ) : questions && questions.length > 0 ? (
           <div className="space-y-4 mb-10 text-start">
@@ -153,8 +142,8 @@ export default function QAList() {
                   >
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="bg-[#1F3A5F]/10 dark:bg-amber-950/30 text-[#1F3A5F] dark:text-[#B08D57] text-[10px] font-bold px-2 py-0.5 rounded">
-                          {language === 'ur' ? (categoryTranslations[q.category] || q.category) : q.category}
+                        <span className="bg-primary/10 dark:bg-amber-950/30 text-primary dark:text-accent text-[10px] font-bold px-2 py-0.5 rounded">
+                          {language === 'ur' ? (QA_TRANSLATIONS[q.category] || q.category) : q.category}
                         </span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400">
                           {new Date(q.answeredAt || q.updatedAt).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}
@@ -165,7 +154,7 @@ export default function QAList() {
                       </h3>
                     </div>
 
-                    <div className="text-slate-500 dark:text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57] mt-1 shrink-0">
+                    <div className="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-accent mt-1 shrink-0">
                       {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                     </div>
                   </button>
@@ -175,8 +164,8 @@ export default function QAList() {
                     <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-700 bg-slate-50/20 dark:bg-slate-900/10 text-start">
 
                       {/* Detailed Question */}
-                      <div className={`bg-slate-50 dark:bg-slate-900 border-[#B08D57] dark:border-amber-500 p-4 rounded mb-5 text-xs text-start ${language === 'ur' ? 'border-r-2' : 'border-l-2'}`}>
-                        <span className="block font-bold text-[#1F3A5F] dark:text-[#B08D57] mb-1.5">
+                      <div className={`bg-slate-50 dark:bg-slate-900 border-accent dark:border-amber-500 p-4 rounded mb-5 text-xs text-start ${language === 'ur' ? 'border-r-2' : 'border-l-2'}`}>
+                        <span className="block font-bold text-primary dark:text-accent mb-1.5">
                           {language === 'en' ? 'Question Detail:' : 'سوال کی تفصیل:'}
                         </span>
                         <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">
@@ -204,7 +193,7 @@ export default function QAList() {
           </div>
         ) : (
           <div className="text-center py-16 premium-card">
-            <MessageSquare className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+            <MessageSquare className="w-12 h-12 text-accent mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
               {language === 'en' ? 'No answered questions found' : 'کوئی جواب شدہ سوال نہیں ملا'}
             </h3>
@@ -220,7 +209,7 @@ export default function QAList() {
             <button
               onClick={() => handlePageChange(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               {language === 'en' ? 'Previous' : 'پچھلا'}
             </button>
@@ -229,8 +218,8 @@ export default function QAList() {
                 key={pNum + 1}
                 onClick={() => handlePageChange(pNum + 1)}
                 className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                    ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white'
-                    : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    ? 'bg-primary border-primary text-white'
+                    : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
               >
                 {pNum + 1}
@@ -239,7 +228,7 @@ export default function QAList() {
             <button
               onClick={() => handlePageChange(Math.min(pages, page + 1))}
               disabled={page === pages}
-              className="px-3.5 py-1.5 rounded text-xs font-bold border border-[#E5D8CA] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               {language === 'en' ? 'Next' : 'اگلا'}
             </button>

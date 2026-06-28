@@ -12,7 +12,7 @@ export default function Expenses() {
           جامعہ العلوم الاسلامیہ بنوری ٹاؤن ایک غیر سرکاری اور خود مختار عوامی دینی تعلیمی ادارہ ہے۔ جامعہ کا تمام تر بجٹ مسلمانوں کے زکاۃ، صدقات اور عطیات کی مدد سے پورا کیا جاتا ہے۔
         </p>
 
-        <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">طلبہ کو فراہم کردہ مفت سہولیات</h3>
+        <h3 className="text-[22px] font-bold text-primary border-b pb-2">طلبہ کو فراہم کردہ مفت سہولیات</h3>
         <p>
           جامعہ میں زیرِ تعلیم ہزاروں ملکی و غیر ملکی طلبہ کو تعلیمی اخراجات کے ساتھ ساتھ درج ذیل سہولیات بالکل مفت فراہم کی جاتی ہیں:
         </p>
@@ -25,14 +25,14 @@ export default function Expenses() {
           <li><strong>وظائف:</strong> نادار اور غریب مستحق طلبہ کو تعلیمی وظائف اور جیب خرچ دیا جاتا ہے۔</li>
         </ul>
 
-        <div className="bg-[#fcfbf9] border-r-4 border-[#B08D57] p-5 my-6">
-          <h4 className="text-[20px] font-bold text-[#3A2C23] mb-2">مالی شفافیت اور آڈٹ</h4>
-          <p className="text-[16px] text-[#555] leading-relaxed">
+        <div className="bg-background border-r-4 border-accent p-5 my-6">
+          <h4 className="text-[20px] font-bold text-primary mb-2">مالی شفافیت اور آڈٹ</h4>
+          <p className="text-[16px] text-textSecondary leading-relaxed">
             جامعہ کی مالیاتی آمد و خرچ کا مکمل اور باقاعدہ حساب کتاب (بک کیپنگ) رکھا جاتا ہے۔ ہر سال ایک مصدقہ چارٹرڈ اکاؤنٹنٹ فرم کے ذریعے جامعہ کے کھاتوں کا مکمل اور تفصیلی آڈٹ کروایا جاتا ہے، تاکہ عوام الناس اور اللہ کی بارگاہ میں امانت داری قائم رہے۔
           </p>
         </div>
 
-        <p className="text-center font-bold text-[#B08D57] mt-4">
+        <p className="text-center font-bold text-accent mt-4">
           آپ کی زکاۃ اور صدقات مستحق طلبہ کے روشن مستقبل اور تبلیغِ دین کی محنت میں براہِ راست حصہ بنتے ہیں۔
         </p>
       </div>

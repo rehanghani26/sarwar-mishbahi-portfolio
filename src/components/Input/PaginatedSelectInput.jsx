@@ -119,7 +119,7 @@ const PaginatedSelectInput = ({
       {/* {label && (
         <label className="mb-0.5 text-sm text-[#272828B2] font-medium">
           {label}
-          <span className="text-[#DE350B]">*</span>
+          <span className="text-error">*</span>
         </label>
       )} */}
       <Label
@@ -145,7 +145,7 @@ const PaginatedSelectInput = ({
             selectedOptions.map((option) => (
               <span
                 key={option.id}
-                className="inline-flex items-center px-2 py-1 bg-[#3E8B8233] text-[#20504E] text-xs rounded mr-1 shrink-0"
+                className="inline-flex items-center px-2 py-1 bg-secondary/40 text-primary text-xs rounded mr-1 shrink-0"
               >
                 {option.label}
                 {!disabled && (
@@ -191,12 +191,12 @@ const PaginatedSelectInput = ({
                     key={option.id}
                     className={`relative flex items-center p-2 rounded-lg my-1 mx-1 ${
                       isSelected
-                        ? `bg-[#3E8B8233] text-[#20504E] ${selectedOptionClassName}`
+                        ? `bg-secondary/40 text-primary ${selectedOptionClassName}`
                         : ""
                     } ${
                       isDisabled
                         ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:bg-[#3E8B8233] hover:text-[#20504E]"
+                        : "cursor-pointer hover:bg-secondary/40 hover:text-primary"
                     } ${optionClassName}`}
                     onClick={() => !isDisabled && handleOptionClick(option)}
                   >
@@ -255,7 +255,7 @@ const PaginatedSelectInput = ({
         </div>
       )}
       {/* {errorMessage && (
-        <span className="text-[#DE350B] mt-1">{errorMessage}</span>
+        <span className="text-error mt-1">{errorMessage}</span>
       )} */}
       <ErrorMessage error={errorMessage} />
     </div>

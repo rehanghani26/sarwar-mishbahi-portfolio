@@ -17,25 +17,34 @@
 }
 
 :root {
-  --color-brown-dark: #1F3A5F;
-  --color-brown-mid: #B08D57;
-  --color-brown-light: #E5D8CA;
-  --color-cream: #E5D8CA;
-  --color-cream-light: #FAF7F2;
-  --color-site-bg: #FAF7F2;
-  --color-card-bg: #FFFFFF;
-  --color-text-primary: #2C2C2C;
-  --color-text-secondary: #7B654D;
-  --color-text-muted: #8A8A8A;
-  --color-site-border: #E5D8CA;
-  --color-footer-bg: #FAF7F2;
-  --color-section-hdr: #1F3A5F;
-  --color-gold: #B08D57;
+  --color-primary: #4A3728;
+  --color-secondary: #D9CFC1;
+  --color-accent: #B89C7D;
+  --color-background: #F7F4EF;
+  --color-text-primary: #2D241D;
+  --color-text-secondary: #6B5B4B;
+  --color-border: #D8CDBF;
+  --color-white: #FFFFFF;
+
+  --color-brown-dark: var(--color-primary);
+  --color-brown-mid: var(--color-accent);
+  --color-brown-light: var(--color-secondary);
+  --color-cream: var(--color-secondary);
+  --color-cream-light: var(--color-background);
+  --color-site-bg: var(--color-background);
+  --color-card-bg: var(--color-white);
+  --color-text-muted: var(--color-text-secondary);
+  --color-site-border: var(--color-border);
+  --color-footer-bg: var(--color-background);
+  --color-section-hdr: var(--color-primary);
+  --color-gold: var(--color-accent);
 }
 
 @layer base {
   body {
-    @apply bg-site-bg text-text-primary antialiased;
+    background-color: var(--color-site-bg);
+    color: var(--color-text-primary);
+    @apply antialiased;
     font-family: 'Inter', sans-serif;
   }
 
@@ -46,37 +55,42 @@
   h5,
   h6 {
     font-family: 'Cinzel', serif;
-    @apply font-semibold tracking-wide text-section-hdr;
+    color: var(--color-section-hdr);
+    @apply font-semibold tracking-wide;
   }
 }
 
 /* Custom premium styles */
 .scholar-gradient-bg {
-  background-color: #FAF7F2;
+  background-color: var(--color-background);
   background-image: 
     url("/patterns/islamic-pattern.svg"),
-    linear-gradient(135deg, #FAF7F2 0%, #F5EEE5 100%);
+    linear-gradient(135deg, var(--color-background) 0%, var(--color-secondary) 100%);
   background-repeat: repeat;
 }
 
 .gold-gradient-bg {
-  background: linear-gradient(135deg, #B08D57 0%, #947547 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
 }
 
 .gold-text-glow {
-  text-shadow: 0 0 10px rgba(176, 141, 87, 0.3);
+  text-shadow: 0 0 10px rgba(184, 156, 125, 0.3);
 }
 
 .gold-border {
-  border-color: #B08D57;
+  border-color: var(--color-accent);
 }
 
 .gold-accent-hover {
-  @apply hover:text-[#B08D57] hover:border-[#B08D57] transition-all duration-300;
+  transition: all 0.3s ease;
+}
+.gold-accent-hover:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .pattern-bg {
-  background-color: #FAF7F2;
+  background-color: var(--color-background);
   background-image: url("/patterns/islamic-pattern.svg");
 }
 
@@ -91,7 +105,21 @@
 
 /* Card hover animation */
 .premium-card {
-  @apply bg-white border border-[#E5D8CA] rounded-[20px] shadow-sm hover:shadow-md hover:border-[#B08D57] transition-all duration-300 transform hover:-translate-y-0.5 overflow-hidden;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+.premium-card:hover {
+  box-shadow: 0 12px 24px -4px rgba(184, 156, 125, 0.18);
+  border-color: var(--color-accent);
 }
 
 .title-serif {
@@ -105,22 +133,31 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAF7F2;
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #B08D57;
+  background: var(--color-accent);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1F3A5F;
+  background: var(--color-primary);
 }
 
-/* Urdu/RTL typography overrides to inherit body font selection instead of Cinzel/Playfair Display */
+/* Hide scrollbar utility for carousels */
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+/* Urdu/RTL typography overrides to inherit Noto Sans Arabic (modern/clean) first */
 [dir="rtl"] body,
 [dir="rtl"] {
-  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
+  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Inter', sans-serif !important;
 }
 
 [dir="rtl"] h1,
@@ -130,5 +167,5 @@
 [dir="rtl"] h5,
 [dir="rtl"] h6,
 [dir="rtl"] .title-serif {
-  font-family: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
+  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Inter', sans-serif !important;
 }

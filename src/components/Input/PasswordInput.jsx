@@ -1,3 +1,4 @@
+import { COLORS } from '@/utils/themeColors';
 import PropTypes from "prop-types";
 import { memo, useEffect, useState } from "react";
 
@@ -33,11 +34,11 @@ const PasswordInput = ({
   let borderClassname = errorMessage ? `${border} border-red-500` : border;
 
   const strengthColors = [
-    "#E57373", // Weak
-    "#F06292", // Fair
-    "#BA68C8", // Good
-    "#3E8B82", // Strong
-    "#00875A", // Very strong,
+    COLORS.error, // Weak
+    COLORS.accent, // Fair
+    COLORS.accent, // Good
+    COLORS.teal, // Strong
+    COLORS.success, // Very strong,
   ];
   const strengthScore = Math.min(passwordStrengthScore, 4);
   const progress = (strengthScore / 4) * 100;
@@ -127,7 +128,7 @@ const PasswordInput = ({
 
       {value && passwordError?.length > 0 && isPasswordValidationRequired && (
         <>
-          <div className="h-1 bg-[#E0E0E0] mt-2">
+          <div className="h-1 bg-grayLight mt-2">
             <div
               className="h-full"
               style={{

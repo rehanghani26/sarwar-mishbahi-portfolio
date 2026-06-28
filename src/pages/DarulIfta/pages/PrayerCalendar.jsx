@@ -25,12 +25,12 @@ export default function PrayerCalendar() {
         </p>
 
         {/* Selection bar */}
-        <div className="flex items-center justify-center gap-4 bg-gray-50 p-4 border border-[#D9D9D9] rounded-sm">
-          <label className="font-bold text-[#3A2C23] text-[18px]">اسلامی مہینہ منتخب کریں:</label>
+        <div className="flex items-center justify-center gap-4 bg-gray-50 p-4 border border-border rounded-sm">
+          <label className="font-bold text-primary text-[18px]">اسلامی مہینہ منتخب کریں:</label>
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="border border-[#ccc] p-2 bg-white text-[#3A2C23] font-bold text-[16px] outline-none min-w-[150px]"
+            className="border border-border p-2 bg-white text-primary font-bold text-[16px] outline-none min-w-[150px]"
           >
             {months.map((m, idx) => (
               <option key={idx} value={m}>{m}</option>
@@ -38,35 +38,35 @@ export default function PrayerCalendar() {
           </select>
         </div>
 
-        <h3 className="text-[20px] font-bold text-[#B08D57] text-center my-4">
+        <h3 className="text-[20px] font-bold text-accent text-center my-4">
           نقشہ اوقات برائے ماہِ {selectedMonth} (کراچی)
         </h3>
 
         {/* Calendar table */}
-        <div className="border border-[#D9D9D9] rounded-sm overflow-x-auto">
+        <div className="border border-border rounded-sm overflow-x-auto">
           <table className="w-full text-center border-collapse min-w-[600px] text-[15px] md:text-[17px]">
             <thead>
-              <tr className="bg-[#3D2E1E] text-white">
-                <th className="p-3 border-l border-[#B08D57]">تاریخ</th>
-                <th className="p-3 border-l border-[#B08D57]">سحری آخری وقت</th>
-                <th className="p-3 border-l border-[#B08D57]">فجر اول وقت</th>
-                <th className="p-3 border-l border-[#B08D57]">اشراق</th>
-                <th className="p-3 border-l border-[#B08D57]">زوال</th>
-                <th className="p-3 border-l border-[#B08D57]">عصر اول وقت</th>
-                <th className="p-3 border-l border-[#B08D57]">غروب / افطار</th>
+              <tr className="bg-primary text-white">
+                <th className="p-3 border-l border-accent">تاریخ</th>
+                <th className="p-3 border-l border-accent">سحری آخری وقت</th>
+                <th className="p-3 border-l border-accent">فجر اول وقت</th>
+                <th className="p-3 border-l border-accent">اشراق</th>
+                <th className="p-3 border-l border-accent">زوال</th>
+                <th className="p-3 border-l border-accent">عصر اول وقت</th>
+                <th className="p-3 border-l border-accent">غروب / افطار</th>
                 <th className="p-3">عشاء اول وقت</th>
               </tr>
             </thead>
             <tbody>
               {calendarData.map((row, idx) => (
-                <tr key={idx} className={`border-b border-[#D9D9D9] ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="p-3 font-bold border-l border-[#D9D9D9] text-[#B08D57]">{row.date}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono">{row.sehri}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono">{row.fajar}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono">{row.ishraq}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono">{row.zohal}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono">{row.asar}</td>
-                  <td className="p-3 border-l border-[#D9D9D9] font-mono text-red-600 font-bold">{row.maghrib}</td>
+                <tr key={idx} className={`border-b border-border ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <td className="p-3 font-bold border-l border-border text-accent">{row.date}</td>
+                  <td className="p-3 border-l border-border font-mono">{row.sehri}</td>
+                  <td className="p-3 border-l border-border font-mono">{row.fajar}</td>
+                  <td className="p-3 border-l border-border font-mono">{row.ishraq}</td>
+                  <td className="p-3 border-l border-border font-mono">{row.zohal}</td>
+                  <td className="p-3 border-l border-border font-mono">{row.asar}</td>
+                  <td className="p-3 border-l border-border font-mono text-red-600 font-bold">{row.maghrib}</td>
                   <td className="p-3 font-mono">{row.isha}</td>
                 </tr>
               ))}

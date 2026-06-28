@@ -8,11 +8,11 @@ export default function PageNotFound() {
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
-    <div className={`bg-[#FAF7F2] dark:bg-slate-900 min-h-[70vh] flex flex-col items-center justify-center p-6 text-center transition-colors duration-200`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="w-16 h-16 rounded-full bg-[#1F3A5F]/10 dark:bg-emerald-900/20 flex items-center justify-center text-[#1F3A5F] dark:text-emerald-400 mb-6 animate-bounce">
-        <HelpCircle className="w-8 h-8 text-[#B08D57] dark:text-[#EAD075]" />
+    <div className={`bg-background dark:bg-slate-900 min-h-[70vh] flex flex-col items-center justify-center p-6 text-center transition-colors duration-200`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+      <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-emerald-900/20 flex items-center justify-center text-primary dark:text-emerald-400 mb-6 animate-bounce">
+        <HelpCircle className="w-8 h-8 text-accent dark:text-accent" />
       </div>
-      <h1 className="text-4xl font-extrabold text-[#1F3A5F] dark:text-emerald-400 font-serif tracking-wider mb-2">404</h1>
+      <h1 className="text-4xl font-extrabold text-primary dark:text-emerald-400 font-serif tracking-wider mb-2">404</h1>
       <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 font-serif mb-4">
         {language === 'en' ? 'Page Not Found' : 'صفحہ نہیں ملا'}
       </h2>
@@ -23,9 +23,9 @@ export default function PageNotFound() {
       </p>
       <Link
         to="/"
-        className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white text-xs font-bold rounded shadow transition-all uppercase tracking-wider font-serif"
+        className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary/90 dark:bg-emerald-800 dark:hover:bg-emerald-700 text-white text-xs font-bold rounded shadow transition-all uppercase tracking-wider font-serif"
       >
-        <ArrowRight className={`w-4 h-4 text-[#B08D57] dark:text-[#EAD075] ${language === 'en' ? 'rotate-180' : ''}`} />
+        <ArrowRight className={`w-4 h-4 text-accent dark:text-accent ${language === 'en' ? 'rotate-180' : ''}`} />
         {language === 'en' ? 'Return to Home Page' : 'صفحہ اول پر واپس جائیں'}
       </Link>
     </div>

@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
 import { getPublications } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { PublicationCard, Input } from '@/components';
 
-const categoryTranslations = {
-  'Quran Studies': 'قرآنی علوم',
-  'Hadith': 'حدیث',
-  'Fiqh': 'فقہ',
-  'Aqeedah': 'عقائد',
-  'Seerah': 'سیرت النبی',
-  'Islamic History': 'اسلامی تاریخ',
-  'Fatwa Collections': 'فتاویٰ کے مجموعے',
-  'Research Papers': 'تحقیقی مقالات',
-};
+import { PUBLICATION_CATEGORIES, PUBLICATION_TRANSLATIONS } from '@/utils/categories';
 
 export default function PublicationsList() {
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+  const [searchParams] = useSearchParams();
+  const queryCategory = searchParams.get('category');
 
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,16 +20,15 @@ export default function PublicationsList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  const categories = [
-    'Quran Studies',
-    'Hadith',
-    'Fiqh',
-    'Aqeedah',
-    'Seerah',
-    'Islamic History',
-    'Fatwa Collections',
-    'Research Papers',
-  ];
+  useEffect(() => {
+    if (queryCategory !== null) {
+      setSelectedCategory(queryCategory);
+    } else {
+      setSelectedCategory('');
+    }
+  }, [queryCategory]);
+
+  const categories = PUBLICATION_CATEGORIES;
 
   const loadPublications = async (category = selectedCategory, search = searchTerm) => {
     try {
@@ -65,15 +58,15 @@ export default function PublicationsList() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
+          <span className="text-xs font-bold text-accent dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
             {language === 'en' ? 'SCIENTIFIC WORKS' : 'علمی تصانیف'}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] font-serif tracking-wide">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-primary dark:text-accent font-serif tracking-wide">
             {language === 'en' ? 'Books & Publications' : 'کتب و مطبوعات'}
           </h1>
           <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
@@ -91,10 +84,10 @@ export default function PublicationsList() {
               placeholder={language === 'en' ? 'Search publications...' : 'مطبوعات تلاش کریں...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
+              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
               border=""
             />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-[#1F3A5F] dark:hover:text-[#B08D57]`}>
+            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-primary dark:hover:text-accent`}>
               <Search className="w-4.5 h-4.5" />
             </button>
           </form>
@@ -105,12 +98,12 @@ export default function PublicationsList() {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+                  {language === 'ur' ? (PUBLICATION_TRANSLATIONS[cat] || cat) : cat}
                 </option>
               ))}
             </select>
@@ -123,8 +116,8 @@ export default function PublicationsList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
+                ? 'bg-primary border-primary text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
               }`}
           >
             {language === 'en' ? 'All Topics' : 'تمام زمرے'}
@@ -134,11 +127,11 @@ export default function PublicationsList() {
               key={cat}
               onClick={() => handleCategoryChange(cat)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
-                  ? 'bg-[#1F3A5F] border-[#1F3A5F] text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-[#E5D8CA] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#B08D57] dark:hover:border-[#B08D57] hover:text-[#1F3A5F] dark:hover:text-[#B08D57]'
+                  ? 'bg-primary border-primary text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
-              {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+              {language === 'ur' ? (PUBLICATION_TRANSLATIONS[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -146,7 +139,7 @@ export default function PublicationsList() {
         {/* Content list Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
         ) : publications && publications.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -156,7 +149,7 @@ export default function PublicationsList() {
           </div>
         ) : (
           <div className="text-center py-16 premium-card">
-            <BookOpen className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+            <BookOpen className="w-12 h-12 text-accent mx-auto mb-4" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
               {language === 'en' ? 'No publications available' : 'کوئی مطبوعہ دستیاب نہیں ہے'}
             </h3>

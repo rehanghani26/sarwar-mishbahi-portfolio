@@ -125,17 +125,17 @@ export default function ManageEvents() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
+              <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scheduled events and gatherings.' : 'طے شدہ پروگرام اور اجتماعات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
             </div>
           </div>
@@ -143,9 +143,9 @@ export default function ManageEvents() {
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
             >
-              <Plus className="w-4 h-4 text-[#B08D57]" />
+              <Plus className="w-4 h-4 text-accent" />
               {language === 'en' ? 'Add Event' : 'پروگرام شامل کریں'}
             </button>
           )}
@@ -161,8 +161,8 @@ export default function ManageEvents() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-[#1F3A5F] islamic-pattern text-white px-6 py-4 border-b border-[#B08D57]/35 flex items-center justify-between">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
                 {editingId 
                   ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں') 
@@ -172,7 +172,7 @@ export default function ManageEvents() {
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-[#E5D8CA] hover:text-white underline font-light"
+                className="text-xs text-secondary hover:text-white underline font-light"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
@@ -199,7 +199,7 @@ export default function ManageEvents() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Halal Investment Workshop Seminar' : 'مثال: حلال سرمایہ کاری ورکشاپ سیمینار'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -211,7 +211,7 @@ export default function ManageEvents() {
                     value={formFields.eventDate}
                     onChange={handleInputChange}
                     required
-                    inputClassName={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none text-slate-700 focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -228,7 +228,7 @@ export default function ManageEvents() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Masjid Noor, Seminar Hall A' : 'مثال: مسجد نور، سیمینار ہال الف'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -240,7 +240,7 @@ export default function ManageEvents() {
                     value={formFields.posterImage}
                     onChange={handleInputChange}
                     placeholder="https://example.com/poster.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -256,7 +256,7 @@ export default function ManageEvents() {
                   required
                   placeholder={language === 'en' ? 'Provide details about topics, timings, registration fee, etc...' : 'اجتماع کے موضوعات، اوقات اور اگر کوئی رجسٹریشن فیس ہو تو اس کے بارے میں تفصیلات فراہم کریں...'}
                   rows={5}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -265,16 +265,16 @@ export default function ManageEvents() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-4 py-2 border border-border text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4 text-[#B08D57]" />
+                  <Save className="w-4 h-4 text-accent" />
                   {actionLoading ? 'محفوظ ہو رہا ہے...' : 'پروگرام محفوظ کریں'}
                 </button>
               </div>
@@ -283,16 +283,16 @@ export default function ManageEvents() {
           </div>
         ) : (
           /* Events List Table */
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
             ) : events && events.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-[#E5D8CA]">
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Date' : 'تاریخ'}</th>
                       <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Location' : 'مقام'}</th>
@@ -311,7 +311,7 @@ export default function ManageEvents() {
                           <div className="inline-flex items-center gap-2">
                             <button
                               onClick={() => openEditForm(ev)}
-                              className="p-1.5 text-[#B08D57] hover:bg-amber-50 rounded transition-colors"
+                              className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
                               title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -332,7 +332,7 @@ export default function ManageEvents() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <Calendar className="w-12 h-12 text-[#B08D57] mx-auto mb-4" />
+                <Calendar className="w-12 h-12 text-accent mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No events scheduled yet' : 'کوئی پروگرام طے شدہ نہیں ہے'}</h3>
                 <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Event" button to schedule your first event.' : 'اپنا پہلا پروگرام شیڈول کرنے کے لیے "پروگرام شامل کریں" بٹن پر کلک کریں۔'}</p>
               </div>

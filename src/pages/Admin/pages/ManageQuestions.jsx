@@ -1,3 +1,4 @@
+import { COLORS } from '@/utils/themeColors';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Save, Trash2, ShieldQuestion, HelpCircle, CheckCircle, AlertTriangle, Eye, EyeOff } from 'lucide-react';
@@ -93,17 +94,17 @@ export default function ManageQuestions() {
   const pendingCount = questions ? questions.filter((q) => q.status === 'pending').length : 0;
 
   return (
-    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Side: Inbox List (5 columns) */}
         <div className={`lg:col-span-5 space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-          <div className={`flex items-center gap-3 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
+          <div className={`flex items-center gap-3 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-xl font-bold text-[#1F3A5F] font-serif">{language === 'en' ? 'Manage Questions' : 'سوالات کا انتظام'}</h1>
+              <h1 className="text-xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Questions' : 'سوالات کا انتظام'}</h1>
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? `${pendingCount} pending in inbox` : `${pendingCount} ان باکس میں زیرِ التوا`}</p>
             </div>
           </div>
@@ -117,15 +118,15 @@ export default function ManageQuestions() {
           )}
 
           {/* Table list */}
-          <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm overflow-hidden">
-            <div className={`bg-slate-50 border-b border-[#E5D8CA] px-4 py-3 flex items-center justify-between text-xs font-bold text-slate-500 uppercase ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
+          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
+            <div className={`bg-slate-50 border-b border-border px-4 py-3 flex items-center justify-between text-xs font-bold text-slate-500 uppercase ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
               <span>{language === 'en' ? 'Question Title' : 'سوال کا عنوان'}</span>
               <span>{language === 'en' ? 'Status' : 'حیثیت'}</span>
             </div>
             
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
               </div>
             ) : questions && questions.length > 0 ? (
               <div className="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
@@ -137,7 +138,7 @@ export default function ManageQuestions() {
                       key={q._id}
                       onClick={() => selectQuestion(q)}
                       className={`p-4 cursor-pointer hover:bg-slate-50/70 transition-colors ${
-                        isSelected ? 'bg-slate-100/80 border-r-4 border-[#B08D57]' : ''
+                        isSelected ? 'bg-slate-100/80 border-r-4 border-accent' : ''
                       }`}
                     >
                       <div className={`flex items-center justify-between gap-3 mb-1.5 text-[10px] text-slate-400 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
@@ -173,7 +174,7 @@ export default function ManageQuestions() {
               </div>
             ) : (
               <div className="text-center py-16 text-slate-400 italic text-xs">
-                <ShieldQuestion className="w-10 h-10 text-[#B08D57] mx-auto mb-3" />
+                <ShieldQuestion className="w-10 h-10 text-accent mx-auto mb-3" />
                 {language === 'en' ? 'No questions submitted yet.' : 'ابھی تک کوئی سوال جمع نہیں کرایا گیا۔'}
               </div>
             )}
@@ -184,11 +185,11 @@ export default function ManageQuestions() {
         {/* Right Side: Answer Form (7 columns) */}
         <div className={`lg:col-span-7 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           {activeQuestion ? (
-            <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm p-6 space-y-5">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-6 space-y-5">
               
               {/* Heading */}
               <div className={`border-b border-slate-100 pb-3 flex items-center justify-between ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
-                <h2 className="text-md font-bold text-[#1F3A5F] font-serif uppercase tracking-wide">
+                <h2 className="text-md font-bold text-primary font-serif uppercase tracking-wide">
                   {language === 'en' ? 'Answer Question' : 'سوال کا جواب دیں'}
                 </h2>
                 <button
@@ -229,7 +230,7 @@ export default function ManageQuestions() {
                 <h3 className="text-sm font-bold text-slate-800 font-serif mb-2">
                   {language === 'en' ? 'Question:' : 'سوال:'} {activeQuestion.questionTitle}
                 </h3>
-                <div className={`bg-[#FAF7F2] p-4 rounded text-xs leading-relaxed text-slate-600 italic border-slate-200 ${language === 'ur' ? 'border-r-2 border-[#B08D57] text-right' : 'border-l-2 border-[#B08D57] text-left'}`}>
+                <div className={`bg-background p-4 rounded text-xs leading-relaxed text-slate-600 italic border-slate-200 ${language === 'ur' ? 'border-r-2 border-accent text-right' : 'border-l-2 border-accent text-left'}`}>
                   "{activeQuestion.detailedQuestion}"
                 </div>
               </div>
@@ -244,7 +245,7 @@ export default function ManageQuestions() {
                     onChange={(e) => setAnswerContent(e.target.value)}
                     placeholder={language === 'en' ? 'Write the Islamic ruling and details here...' : 'شرعی حکم اور جواب کی تفصیلات یہاں لکھیں...'}
                     rows={6}
-                    className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   ></textarea>
                 </div>
 
@@ -255,7 +256,7 @@ export default function ManageQuestions() {
                     id="isPublic"
                     checked={isPublic}
                     onChange={(e) => setIsPublic(e.target.checked)}
-                    inputClassName="w-4 h-4 text-[#B08D57] border-[#E5D8CA] rounded focus:ring-[#B08D57]"
+                    inputClassName="w-4 h-4 text-accent border-border rounded focus:ring-[COLORS.accent]"
                     border=""
                   />
                   <label htmlFor="isPublic" className="text-xs font-bold text-slate-600 cursor-pointer">
@@ -268,16 +269,16 @@ export default function ManageQuestions() {
                   <button
                     type="button"
                     onClick={() => setActiveQuestion(null)}
-                    className="px-4 py-2 border border-[#E5D8CA] text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                    className="px-4 py-2 border border-border text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                   >
                     {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="flex items-center gap-1.5 px-5 py-2 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                   >
-                    <Save className="w-4 h-4 text-[#B08D57]" />
+                    <Save className="w-4 h-4 text-accent" />
                     {actionLoading 
                       ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') 
                       : (language === 'en' ? 'Save Answer' : 'جواب محفوظ کریں')
@@ -289,8 +290,8 @@ export default function ManageQuestions() {
 
             </div>
           ) : (
-            <div className="bg-white border border-[#E5D8CA] rounded-lg shadow-sm p-10 text-center flex flex-col items-center justify-center min-h-[350px]">
-              <HelpCircle className="w-12 h-12 text-[#B08D57] mb-4" />
+            <div className="bg-white border border-border rounded-lg shadow-sm p-10 text-center flex flex-col items-center justify-center min-h-[350px]">
+              <HelpCircle className="w-12 h-12 text-accent mb-4" />
               <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No Question Selected' : 'کوئی سوال منتخب نہیں کیا گیا'}</h3>
               <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
                 {language === 'en' 

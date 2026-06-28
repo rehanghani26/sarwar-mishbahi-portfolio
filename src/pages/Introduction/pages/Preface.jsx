@@ -8,7 +8,7 @@ export default function Preface() {
       subtitle="جامعہ العلوم الاسلامیہ بنوری ٹاؤن کے قیام کے مقاصد اور تاریخی پس منظر"
     >
       <div className="space-y-6">
-        <p className="italic text-[20px] text-[#5c4a3c] font-semibold text-center my-6">
+        <p className="italic text-[20px] text-textSecondary font-semibold text-center my-6">
           "بِسمِ اللہِ الرَّحمٰنِ الرَّحِیمِ · الحمد للہ رب العالمین والصلوٰۃ والسلام علی سید الانبیاء والمرسلین"
         </p>
 
@@ -20,9 +20,9 @@ export default function Preface() {
           چنانچہ 1953ء میں گیا کے قلب میں اس بنوری ٹاؤن کی بنجر زمین پر توکل علی اللہ اس مدرسہ کی بنیاد رکھی گئی۔ ہمارا مقصد محض کتابوں کا پڑھا دینا نہیں تھا بلکہ ایسے نفوس تیار کرنا تھا جو دنیا کے سامنے سچے اسلام کا نمونہ پیش کر سکیں اور باطل نظریات کا مسکت جواب دے سکیں۔
         </p>
 
-        <blockquote className="bg-[#E5D8CA] text-[#3A2C23] p-6 rounded-sm my-6 border-r-8 border-[#B08D57] text-[18px]">
+        <blockquote className="bg-secondary text-primary p-6 rounded-sm my-6 border-r-8 border-accent text-[18px]">
           "ہم چاہتے ہیں کہ یہاں کے فارغ التحصیل علماء علوم نبوت کے امین بنیں، تقویٰ اور للہیت ان کا اوڑھنا بچھونا ہو، اور وہ دینِ مبین کی نشر و اشاعت کے لیے اپنی صلاحیتیں وقف کر دیں۔"
-          <footer className="text-left font-bold mt-2 text-[#B08D57]">— حضرت بنوری رحمہ اللہ</footer>
+          <footer className="text-left font-bold mt-2 text-accent">— حضرت بنوری رحمہ اللہ</footer>
         </blockquote>
 
         <p>

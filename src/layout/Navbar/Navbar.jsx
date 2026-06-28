@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
@@ -10,19 +10,23 @@ import {
   HelpCircle,
   LogOut,
   LayoutDashboard,
-  ChevronDown,
 } from "lucide-react";
 import { logout } from "@/store/slices/authSlice";
 import { useSettings } from '@/hooks/useSettings';
+import { COLORS } from "@/utils/themeColors";
+
+import { CATEGORY_MAP } from "@/utils/categories";
 
 export default function Navbar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [mobileOpenDropdown, setMobileOpenDropdown] = useState(null);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const { settings, requestLanguageChange } = useSettings();
+  const { settings } = useSettings();
   const language =
     settings?.language === "ur" || settings?.language === "Urdu" ? "ur" : "en";
 
@@ -39,150 +43,204 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const closeMenu = () => setIsOpen(false);
+  const closeMenu = () => {
+    setIsOpen(false);
+    setMobileOpenDropdown(null);
+  };
 
   const handleLogout = () => {
     dispatch(logout());
     closeMenu();
   };
 
-  const navLinks = [
-    { label: language === "en" ? "Home" : "صفحہ اول", href: "/" },
-    { label: language === "en" ? "Fatwas" : "فقہ و فتاویٰ", href: "/fatwas" },
-    {
-      label: language === "en" ? "Publications" : " کتب و رسائل",
-      href: "/publications",
-    },
-    {
-      label: language === "en" ? "Articles" : "مضامین و مقالات",
-      href: "/articles",
-    },
-    { label: language === "en" ? "Lectures" : "خطبات", href: "/lectures" },
-    { label: language === "en" ? "Q&A" : "سوال و جواب", href: "/qa" },
-    { label: language === "en" ? "About" : "تعارف", href: "/about" },
-    { label: language === "en" ? "Events" : "پروگرام", href: "/events" },
-    { label: language === "en" ? "Contact" : "رابطہ", href: "/contact" },
+  const allItems = [
+    { label: language === "en" ? "Home" : "صفحہ اول", href: "/", hasDropdown: false },
+    { label: language === "en" ? "About" : "تعارف", href: "/about", hasDropdown: false },
+    { label: language === "en" ? "Fatwas" : "فقہ و فتاویٰ", href: "/fatwas", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.fatwas },
+    { label: language === "en" ? "Publications" : "کتب و رسائل", href: "/publications", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.publications },
+    { label: language === "en" ? "Articles" : "مضامین و مقالات", href: "/articles", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.articles },
+    { label: language === "en" ? "Lectures" : "خطبات", href: "/lectures", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.lectures },
+    { label: language === "en" ? "Q&A" : "سوال و جواب", href: "/qa", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.qa },
+    { label: language === "en" ? "Events" : "پروگرام", href: "/events", hasDropdown: false },
+    { label: language === "en" ? "Contact" : "رابطہ", href: "/contact", hasDropdown: false }
   ];
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled
-          ? "bg-card-bg shadow-md border-b border-site-border py-2"
-          : "bg-site-bg/95 border-b border-site-border/55 backdrop-blur-xs py-4"
-      }`}
+      className={`sticky top-0 z-40 w-full transition-all duration-300 border-b flex items-center ${scrolled
+        ? "h-16 shadow-md"
+        : "h-20"
+        }`}
+      style={{
+        backgroundColor: scrolled ? COLORS.white : `rgba(247, 244, 239, 0.95)`,
+        borderColor: COLORS.border,
+      }}
     >
       <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between"
+        className="mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full h-full"
         dir={language === "ur" ? "rtl" : "ltr"}
       >
-        {/* Scholar Branding / Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 hover:opacity-95 transition-opacity"
+          className="flex items-center gap-3 hover:opacity-95 transition-opacity shrink-0"
         >
-          <div className="w-10 h-10 rounded-full bg-brown-dark flex items-center justify-center shadow-md shrink-0">
-            <BookOpen className="w-5 h-5 text-[#B08D57]" />
+          <div
+            style={{ backgroundColor: COLORS.primary }}
+            className="w-10 h-10 rounded-full flex items-center justify-center shadow-md shrink-0"
+          >
+            <BookOpen className="w-5 h-5" style={{ color: COLORS.accent }} />
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-          {navLinks.map((link) => {
+        <nav className="hidden lg:flex items-stretch h-full gap-0">
+          {allItems.map((item, index) => {
             const isActive =
-              location.pathname === link.href ||
-              (link.href !== "/" && location.pathname.startsWith(link.href));
+              location.pathname === item.href ||
+              (item.href !== "/" && location.pathname.startsWith(item.href));
+            const isHovered = hoveredIndex === index;
 
             return (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-brown-dark font-bold border-b-2 border-brown-dark"
-                    : "text-text-secondary hover:text-[#B08D57]"
-                }`}
-              >
-                {link.label}
-              </Link>
+              <React.Fragment key={item.label}>
+                <div
+                  className="h-full flex items-center relative"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <Link
+                    to={item.href}
+                    style={{
+                      backgroundColor: isHovered ? COLORS.primary : "transparent",
+                      color: isHovered ? COLORS.white : (isActive ? COLORS.primary : COLORS.textSecondary),
+                      borderTop: isHovered ? `3px solid ${COLORS.accent}` : "3px solid transparent",
+                    }}
+                    className={`h-full px-4 xl:px-5 flex items-center gap-1.5 text-[15px] xl:text-[16px] font-semibold transition-all duration-300`}
+                  >
+                    <span>{item.label}</span>
+
+                  </Link>
+
+                  {/* Floating Submenu Dropdown Panel */}
+                  <AnimatePresence>
+                    {isHovered && item.hasDropdown && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
+                        style={{
+                          backgroundColor: COLORS.primary,
+                          borderColor: COLORS.accent,
+                          zIndex: 9999
+                        }}
+                        className={`absolute ${language === "ur" ? "right-0 text-right" : "left-0 text-left"
+                          } top-full w-[360px] shadow-2xl border-x border-b overflow-hidden rounded-none mt-0`}
+                      >
+                        <ul className="divide-y divide-[rgba(184,156,125,0.18)] max-h-[50vh] overflow-y-auto custom-scrollbar">
+                          {item.hasCategories ? (
+                            <>
+                              <li>
+                                <Link
+                                  to={item.href}
+                                  className="flex items-center px-6 h-[64px] text-[15px] font-medium text-white transition-all duration-300 hover:bg-[rgba(255,255,255,0.06)]"
+                                  style={{
+                                    borderRight: language === "ur" ? `4px solid ${COLORS.accent}` : "none",
+                                    borderLeft: language === "en" ? `4px solid ${COLORS.accent}` : "none"
+                                  }}
+                                >
+                                  {language === "ur" ? 'تمام موضوعات' : 'All Topics'}
+                                </Link>
+                              </li>
+                              {item.categories.map((cat) => {
+                                const isSubActive = location.search.includes(cat.value);
+                                return (
+                                  <li key={cat.value}>
+                                    <Link
+                                      to={`${item.href}?category=${encodeURIComponent(cat.value)}`}
+                                      style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
+                                      className="flex items-center px-6 h-[64px] text-[15px] font-medium transition-all duration-300 hover:bg-[rgba(255,255,255,0.06)]"
+                                    >
+                                      {language === "ur" ? cat.labelUr : cat.labelEn}
+                                    </Link>
+                                  </li>
+                                );
+                              })}
+                            </>
+                          ) : (
+                            item.dropdownItems.map((sub) => {
+                              const isSubActive = location.pathname === sub.href;
+                              return (
+                                <li key={sub.label}>
+                                  <Link
+                                    to={sub.href}
+                                    style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
+                                    className="flex items-center px-6 h-[64px] text-[15px] font-medium transition-all duration-300 hover:bg-[rgba(255,255,255,0.06)]"
+                                  >
+                                    {sub.label}
+                                  </Link>
+                                </li>
+                              );
+                            })
+                          )}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {index < allItems.length - 1 && (
+                  <div
+                    className="self-center w-[1px] h-5"
+                    style={{ backgroundColor: COLORS.border }}
+                  />
+                )}
+              </React.Fragment>
             );
           })}
         </nav>
 
-        {/* Right side CTA & Admin indicators */}
         <div className="hidden lg:flex items-center gap-3">
-          {/* <button
-            onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
-            className="px-3 py-2 text-xs font-bold text-text-primary bg-cream-light hover:bg-[#E5D8CA] rounded transition-all font-serif"
-          >
-            {language === 'en' ? 'اردو' : 'English'}
-          </button> */}
-
           {isAuthenticated ? (
             <div className="flex items-center gap-2.5">
-              <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              <Link
+                to="/admin/dashboard"
+                style={{ backgroundColor: COLORS.primary }}
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white rounded-md shadow-sm hover:shadow-md transition-all hover:opacity-90"
               >
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all"
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5 text-brown-mid" />
-                  ڈیش بورڈ
-                </Link>
-              </motion.div>
-
-              <motion.button
+                <LayoutDashboard className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
+                ڈیش بورڈ
+              </Link>
+              <button
                 onClick={handleLogout}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="flex items-center gap-1 px-3 py-2 text-xs font-semibold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md border border-red-200 dark:border-red-900/30 shadow-sm hover:shadow-md transition-colors"
-                title="لاگ آؤٹ"
+                className="flex items-center gap-1 px-3 py-2 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-md border border-red-200 shadow-sm hover:shadow-md transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
-              </motion.button>
+              </button>
             </div>
           ) : (
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            <Link
+              to="/ask"
+              style={{ backgroundColor: COLORS.primary }}
+              className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white rounded-md shadow-sm hover:shadow-md transition-all hover:opacity-90"
             >
-              <Link
-                to="/ask"
-                className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-md shadow-sm hover:shadow-md transition-all font-serif"
-              >
-                <HelpCircle className="w-4 h-4" />
-                سوال پوچھیں
-              </Link>
-            </motion.div>
+              <HelpCircle className="w-4 h-4" />
+              سوال
+            </Link>
           )}
         </div>
 
-        {/* Mobile Menu Trigger */}
         <div className="flex items-center lg:hidden gap-2">
-          {/* <button
-            onClick={() => dispatch(requestLanguageChange(language === 'en' ? 'ur' : 'en'))}
-            className="px-2.5 py-1 text-xs font-bold text-text-primary bg-cream-light rounded transition-all font-serif"
-          >
-            {language === 'en' ? 'اردو' : 'English'}
-          </button> */}
-
           {!isAuthenticated && (
             <Link
               to="/ask"
-              className="px-3 py-1.5 text-xs font-bold text-white bg-brown-dark hover:bg-[#162C49] rounded-full shadow-sm transition-all"
+              style={{ backgroundColor: COLORS.primary }}
+              className="px-3 py-1.5 text-xs font-bold text-white rounded-full shadow-sm transition-all hover:opacity-90"
             >
               {language === "en" ? "Ask Q" : "سوال پوچھیں"}
             </Link>
           )}
           <button
-            onClick={toggleMenu}
-            className="p-1.5 rounded text-text-secondary hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-1.5 rounded text-textSecondary hover:bg-slate-100 focus:outline-none"
             aria-label="Toggle Menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -190,70 +248,93 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Drawer Overlay */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300"
+          className="lg:hidden fixed inset-0 z-50 bg-slate-900/45 transition-opacity duration-300"
           onClick={closeMenu}
         >
           <div
-            className={`fixed top-0 ${language === "ur" ? "left-0 border-r" : "right-0 border-l"} h-full w-[280px] bg-card-bg shadow-2xl p-6 flex flex-col justify-between transition-transform duration-300 transform border-site-border`}
+            style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
+            className={`fixed top-0 ${language === "ur" ? "left-0 border-r" : "right-0 border-l"} h-full w-[280px] shadow-2xl p-6 flex flex-col justify-between`}
             onClick={(e) => e.stopPropagation()}
             dir={language === "ur" ? "rtl" : "ltr"}
           >
             <div>
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-6 border-b border-site-border">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-text-primary" />
-                  <span className="font-bold text-text-primary text-md">
-                    {language === "en" ? "Navigation" : "نیویگیشن"}
-                  </span>
-                </div>
-                <button
-                  onClick={closeMenu}
-                  className="p-1 rounded text-text-secondary hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
+              <div className="flex items-center justify-between pb-6 border-b" style={{ borderColor: COLORS.border }}>
+                <span className="font-bold text-md" style={{ color: COLORS.textPrimary }}>
+                  {language === "en" ? "Navigation" : "نیویگیشن"}
+                </span>
+                <button onClick={closeMenu} className="p-1 rounded text-textSecondary hover:bg-slate-100">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Drawer Navigation Links */}
-              <nav className="mt-6 flex flex-col gap-2">
-                {navLinks.map((link) => {
+              <nav className="mt-6 flex flex-col gap-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+                {allItems.map((item, index) => {
                   const isActive =
-                    location.pathname === link.href ||
-                    (link.href !== "/" &&
-                      location.pathname.startsWith(link.href));
+                    location.pathname === item.href ||
+                    (item.href !== "/" && location.pathname.startsWith(item.href));
 
+                  if (!item.hasDropdown) {
+                    return (
+                      <Link
+                        key={item.label}
+                        to={item.href}
+                        onClick={closeMenu}
+                        style={isActive ? { backgroundColor: COLORS.secondary, color: COLORS.primary } : { color: COLORS.textSecondary }}
+                        className={`px-3 py-2.5 rounded text-base font-medium transition-all ${isActive ? "font-bold" : "hover:bg-slate-50"}`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  }
+
+                  const isDropdownOpen = mobileOpenDropdown === index;
                   return (
-                    <Link
-                      key={link.label}
-                      to={link.href}
-                      onClick={closeMenu}
-                      className={`px-3 py-2.5 rounded text-base font-medium transition-all ${
-                        isActive
-                          ? "bg-[#E5D8CA] text-[#1F3A5F] font-bold"
-                          : "text-text-secondary hover:bg-slate-50 hover:text-[#B08D57]"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
+                    <div key={item.label} className="flex flex-col">
+                      <button
+                        onClick={() => setMobileOpenDropdown(isDropdownOpen ? null : index)}
+                        style={{ color: COLORS.textSecondary }}
+                        className="flex items-center justify-between px-3 py-2.5 rounded text-base font-medium transition-all hover:bg-slate-50"
+                      >
+                        <span>{item.label}</span>
+
+                      </button>
+                      <AnimatePresence>
+                        {isDropdownOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <ul style={{ borderColor: COLORS.border }} className={`mt-1 space-y-1 ${language === "ur" ? "pr-4 border-r-2" : "pl-4 border-l-2"}`}>
+                              {item.hasCategories ? (
+                                <>
+                                  <li><Link to={item.href} onClick={closeMenu} className="block py-2 px-2 text-sm font-semibold hover:text-primary">All Topics</Link></li>
+                                  {item.categories.map((cat) => (
+                                    <li key={cat.value}><Link to={`${item.href}?category=${encodeURIComponent(cat.value)}`} onClick={closeMenu} className="block py-2 px-2 text-sm hover:text-primary">{language === "ur" ? cat.labelUr : cat.labelEn}</Link></li>
+                                  ))}
+                                </>
+                              ) : (
+                                item.dropdownItems.map((sub) => (
+                                  <li key={sub.label}><Link to={sub.href} onClick={closeMenu} className="block py-2 px-2 text-sm hover:text-primary">{sub.label}</Link></li>
+                                ))
+                              )}
+                            </ul>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   );
                 })}
               </nav>
             </div>
-
-            {/* Drawer Footer Actions */}
-            <div className="pt-6 border-t border-site-border flex flex-col gap-3">
+            <div className="pt-6 border-t flex flex-col gap-3" style={{ borderColor: COLORS.border }}>
               {isAuthenticated ? (
                 <>
-                  <Link
-                    to="/admin/dashboard"
-                    onClick={closeMenu}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-white bg-brown-dark hover:bg-[#162C49] rounded"
-                  >
-                    <LayoutDashboard className="w-4 h-4 text-[#B08D57]" />
+                  <Link to="/admin/dashboard" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-white rounded hover:opacity-90" style={{ backgroundColor: COLORS.primary }}>
+                    <LayoutDashboard className="w-4 h-4" />
                     {language === "en" ? "Admin Dashboard" : "انتظامی ڈیش بورڈ"}
                   </Link>
                   <button
@@ -268,7 +349,8 @@ export default function Navbar() {
                 <Link
                   to="/admin/login"
                   onClick={closeMenu}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-text-secondary bg-slate-100 hover:bg-slate-200 hover:text-[#1F3A5F] rounded border border-site-border"
+                  style={{ backgroundColor: COLORS.background, color: COLORS.textSecondary, borderColor: COLORS.border }}
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold rounded border hover:bg-slate-200 hover:text-[var(--color-primary)] transition-colors"
                 >
                   <User className="w-4 h-4" />
                   {language === "en" ? "Admin Login" : "ایڈمن لاگ ان"}

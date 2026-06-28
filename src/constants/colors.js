@@ -1,31 +1,32 @@
+import { COLORS } from '@/utils/themeColors';
 export const COLORS = {
   // Brand / Theme Colors
-  brownDark: '#1F3A5F',
-  brownMid: '#B08D57',
-  brownLight: '#E5D8CA',
-  cream: '#E5D8CA',
-  creamLight: '#FAF7F2',
-  gold: '#B08D57',
-  footerBg: '#FAF7F2',
-  sectionHdr: '#1F3A5F',
+  brownDark: COLORS.primary,
+  brownMid: 'COLORS.accent',
+  brownLight: COLORS.secondary,
+  cream: COLORS.secondary,
+  creamLight: COLORS.background,
+  gold: 'COLORS.accent',
+  footerBg: COLORS.background,
+  sectionHdr: COLORS.primary,
 
   // Light Mode Colors
   light: {
-    bg: '#FAF7F2',
+    bg: COLORS.background,
     cardBg: '#FFFFFF',
-    border: '#E5D8CA',
-    textPrimary: '#2C2C2C',
-    textSecondary: '#7B654D',
+    border: COLORS.secondary,
+    textPrimary: COLORS.textPrimary,
+    textSecondary: COLORS.textSecondary,
     textMuted: '#8A8A8A',
   },
 
   // Dark Mode Colors
   dark: {
-    bg: '#FAF7F2',
+    bg: COLORS.background,
     cardBg: '#FFFFFF',
-    border: '#E5D8CA',
-    textPrimary: '#2C2C2C',
-    textSecondary: '#7B654D',
+    border: COLORS.secondary,
+    textPrimary: COLORS.textPrimary,
+    textSecondary: COLORS.textSecondary,
     textMuted: '#8A8A8A',
   }
 };

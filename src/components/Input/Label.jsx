@@ -36,7 +36,7 @@ function Label({
             onMouseEnter={() => setShowHelp(true)}
             onMouseLeave={() => setShowHelp(false)}
           >
-            <div className="w-4 h-4 flex items-center justify-center text-xs font-bold text-white bg-[#3e8b82] rounded-full cursor-pointer">
+            <div className="w-4 h-4 flex items-center justify-center text-xs font-bold text-white bg-primary rounded-full cursor-pointer">
               i
             </div>
 

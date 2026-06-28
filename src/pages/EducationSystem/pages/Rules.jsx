@@ -16,7 +16,7 @@ export default function Rules() {
       subtitle="جامعہ العلوم الاسلامیہ بنوری ٹاؤن کے قواعد و ضوابط اور ضابطہ اخلاق"
     >
       <div className="space-y-6">
-        <div className="bg-[#FFF5F5] border-r-4 border-red-500 p-5 my-4">
+        <div className="bg-red-50/50 border-r-4 border-red-500 p-5 my-4">
           <p className="font-bold text-red-700 text-[18px] mb-1">اہم نوٹ برائے داخلہ و رہائش</p>
           <p className="text-[15px] text-red-800 leading-relaxed">
             قواعد و ضوابط کی خلاف ورزی کرنے والے کسی بھی طالب علم کو جامعہ میں برقرار نہیں رکھا جائے گا۔ سرپرستِ اعلیٰ کا فیصلہ حتمی اور ناقابلِ چیلنج تصور کیا جائے گا۔
@@ -25,11 +25,11 @@ export default function Rules() {
 
         <div className="space-y-5 mt-6">
           {rules.map((rule, index) => (
-            <div key={index} className="bg-[#fdfcf9] border border-[#E5D8CA] p-5 rounded-sm">
-              <h4 className="text-[19px] font-bold text-[#B08D57] border-b border-dashed pb-2 mb-2">
+            <div key={index} className="bg-background border border-border p-5 rounded-sm">
+              <h4 className="text-[19px] font-bold text-accent border-b border-dashed pb-2 mb-2">
                 {index + 1}. {rule.title}
               </h4>
-              <p className="text-[16px] text-[#3A2C23] leading-relaxed">{rule.desc}</p>
+              <p className="text-[16px] text-primary leading-relaxed">{rule.desc}</p>
             </div>
           ))}
         </div>

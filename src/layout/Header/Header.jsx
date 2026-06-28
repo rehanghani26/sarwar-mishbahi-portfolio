@@ -4,6 +4,7 @@ import { NAV_ITEMS } from '@/constants/navigation'
 import { SITE } from '@/data/siteData'
 import { LogoSeal } from '@/layout';
 import { Input } from '@/components';
+import { COLORS } from '@/utils/themeColors'
 
 export default function Header() {
   const location = useLocation()
@@ -26,29 +27,40 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-[#D9D9D9] px-4 md:px-7 sticky top-0 z-40 shadow-sm font-serif">
+    <header 
+      style={{ backgroundColor: COLORS.white, borderBottomColor: COLORS.border }}
+      className="border-b px-4 md:px-7 sticky top-0 z-40 shadow-sm font-serif"
+    >
       <div className="max-w-[1440px] mx-auto h-[80px] md:h-[100px] flex items-center justify-between gap-2 md:gap-4">
 
         {/* Hamburger Menu Button (Leftmost in RTL / Visually Left) */}
         <button
           onClick={toggleMobileMenu}
-          className="flex lg:hidden flex-col justify-center items-center w-10 h-10 border border-[#D9D9D9] rounded bg-[#EFEFEF] hover:bg-[#E5D8CA] transition-colors focus:outline-none"
+          style={{ borderColor: COLORS.border, backgroundColor: COLORS.background }}
+          className="flex lg:hidden flex-col justify-center items-center w-10 h-10 border rounded transition-colors focus:outline-none theme-hover-bg-secondary"
           aria-label="مینو"
         >
-          <span className={`block w-6 h-0.5 bg-[#3A2C23] transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
-          <span className={`block w-6 h-0.5 bg-[#3A2C23] my-1 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
-          <span className={`block w-6 h-0.5 bg-[#3A2C23] transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+          <span style={{ backgroundColor: COLORS.primary }} className={`block w-6 h-0.5 transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+          <span style={{ backgroundColor: COLORS.primary }} className={`block w-6 h-0.5 my-1 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span style={{ backgroundColor: COLORS.primary }} className={`block w-6 h-0.5 transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
         </button>
 
         {/* Search — leftmost in Desktop, responsive width on smaller devices */}
-        <div className="flex items-center border border-[#ccc] h-[36px] md:h-[38px] bg-white shrink-0 overflow-hidden">
-          <button className="bg-white border-none border-l md:border-r border-[#ccc] w-[36px] md:w-[38px] h-[36px] md:h-[38px] flex items-center justify-center text-[15px] text-[#777] hover:bg-gray-50">
+        <div 
+          style={{ borderColor: COLORS.border, backgroundColor: COLORS.white }}
+          className="flex items-center border h-[36px] md:h-[38px] shrink-0 overflow-hidden"
+        >
+          <button 
+            style={{ backgroundColor: COLORS.white, borderRight: `1px solid ${COLORS.border}`, color: COLORS.textSecondary }}
+            className="border-none w-[36px] md:w-[38px] h-[36px] md:h-[38px] flex items-center justify-center text-[15px] hover:bg-gray-50 transition-colors"
+          >
             🔍
           </button>
           <Input
             type="text"
             placeholder="تلاش..."
-            inputClassName="border-none outline-none px-2 md:px-3.5 text-[13px] md:text-[14px] text-[#3A2C23] w-[80px] sm:w-[120px] md:w-[170px] direction-rtl bg-transparent font-[inherit] placeholder:text-[#aaa]"
+            style={{ color: COLORS.textPrimary }}
+            inputClassName="border-none outline-none px-2 md:px-3.5 text-[13px] md:text-[14px] w-[80px] sm:w-[120px] md:w-[170px] direction-rtl bg-transparent font-[inherit] placeholder:text-textSecondary/50"
             aria-label="تلاش"
             border=""
           />
@@ -65,11 +77,12 @@ export default function Header() {
                 <li key={item.label} className="relative group flex items-stretch">
                   <Link
                     to={item.hasDropdown && item.dropdownItems ? item.dropdownItems[0].href : item.href}
-                    className={`nav-link flex items-center gap-1.5 px-[14px] xl:px-[18px] text-[18px] xl:text-[19px] text-[#3A2C23] whitespace-nowrap h-[100px] ${isActive ? 'active' : ''}`}
+                    style={isActive ? { color: COLORS.primary } : { color: COLORS.textPrimary }}
+                    className={`nav-link flex items-center gap-1.5 px-[14px] xl:px-[18px] text-[18px] xl:text-[19px] whitespace-nowrap h-[100px] ${isActive ? 'active' : ''}`}
                   >
                     {item.label}
                     {item.hasDropdown && (
-                      <span className="text-[11px] text-[#B08D57] select-none transition-transform group-hover:rotate-180">
+                      <span style={{ color: COLORS.accent }} className="text-[11px] select-none transition-transform group-hover:rotate-180">
                         ‹
                       </span>
                     )}
@@ -77,20 +90,20 @@ export default function Header() {
 
                   {/* Dropdown menu */}
                   {item.hasDropdown && item.dropdownItems && (
-                    <div className="absolute right-0 top-[100px] hidden group-hover:block bg-[#3D2E1E] border-t-2 border-[#B08D57] shadow-xl min-w-[320px] z-[100] text-right">
+                    <div 
+                      style={{ backgroundColor: COLORS.primary, borderTopColor: COLORS.accent }}
+                      className="absolute right-0 top-[100px] hidden group-hover:block border-t-2 shadow-xl min-w-[320px] z-[100] text-right"
+                    >
                       <ul className="py-1">
                         {item.dropdownItems.map((subItem, idx) => {
                           const isSubActive = location.pathname === subItem.href
 
                           return (
-                            <li key={idx} className="border-b border-[#4d3c2a] last:border-none">
+                            <li key={idx} style={{ borderBottomColor: COLORS.border }} className="border-b last:border-none">
                               <Link
                                 to={subItem.href}
-                                className={`block px-6 py-3.5 text-[16px] transition-colors leading-relaxed whitespace-normal ${
-                                  isSubActive 
-                                    ? 'bg-[#1F3A5F] text-[#E5D8CA] font-bold' 
-                                    : 'text-white hover:bg-[#1F3A5F] hover:text-[#E5D8CA]'
-                                }`}
+                                style={isSubActive ? { backgroundColor: COLORS.accent, color: COLORS.white } : { color: COLORS.white }}
+                                className="block px-6 py-3.5 text-[16px] transition-colors leading-relaxed whitespace-normal theme-hover-bg-accent"
                               >
                                 {subItem.label}
                               </Link>
@@ -109,10 +122,10 @@ export default function Header() {
         {/* Logo — rightmost in RTL */}
         <Link to="/" className="flex items-center gap-2 md:gap-3.5 shrink-0 hover:opacity-95 transition-opacity max-w-[60%] sm:max-w-none">
           <div className="leading-[1.2] sm:leading-[1.35] text-right">
-            <span className="block text-[18px] sm:text-[24px] md:text-[30px] font-bold text-[#1F3A5F] leading-[1.2] whitespace-nowrap overflow-hidden text-ellipsis">
+            <span style={{ color: COLORS.primary }} className="block text-[18px] sm:text-[24px] md:text-[30px] font-bold leading-[1.2] whitespace-nowrap overflow-hidden text-ellipsis">
               {SITE.nameArabic}
             </span>
-            <span className="block text-[9px] sm:text-[11px] md:text-[13px] text-[#B08D57] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
+            <span style={{ color: COLORS.accent }} className="block text-[9px] sm:text-[11px] md:text-[13px] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
               {SITE.nameUrdu}
             </span>
           </div>
@@ -136,17 +149,21 @@ export default function Header() {
         onClick={closeMobileMenu}
       >
         <div
-          className={`fixed top-0 right-0 h-full w-[80%] max-w-[350px] bg-[#3D2E1E] text-white z-[1001] shadow-2xl transition-transform duration-300 transform ${
+          style={{ backgroundColor: COLORS.primary }}
+          className={`fixed top-0 right-0 h-full w-[80%] max-w-[350px] text-white z-[1001] shadow-2xl transition-transform duration-300 transform ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Drawer Header */}
-          <div className="flex items-center justify-between p-5 border-b border-[#4d3c2a] bg-[#1F3A5F]">
-            <span className="font-bold text-[18px] text-[#E5D8CA]">مینو</span>
+          <div 
+            style={{ borderBottomColor: COLORS.border, backgroundColor: COLORS.accent }}
+            className="flex items-center justify-between p-5 border-b"
+          >
+            <span style={{ color: COLORS.secondary }} className="font-bold text-[18px]">مینو</span>
             <button
               onClick={closeMobileMenu}
-              className="text-white hover:text-[#B08D57] text-[24px] leading-none focus:outline-none"
+              className="text-white hover:text-red-500 text-[24px] leading-none focus:outline-none transition-colors"
             >
               &times;
             </button>
@@ -161,24 +178,23 @@ export default function Header() {
                 const isDropdownOpen = activeDropdownIndex === index
 
                 return (
-                  <li key={item.label} className="border-b border-[#4d3c2a] last:border-none pb-2">
+                  <li key={item.label} style={{ borderBottomColor: COLORS.border }} className="border-b last:border-none pb-2">
                     {item.hasDropdown ? (
                       <div>
                         {/* Parent trigger link */}
                         <div className="flex items-center justify-between py-3 px-2">
                           <button
                             onClick={(e) => toggleDropdown(index, e)}
-                            className="text-[14px] text-[#B08D57] bg-[#1F3A5F] w-8 h-8 flex items-center justify-center rounded focus:outline-none transition-transform"
-                            style={{ transform: isDropdownOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                            style={{ color: COLORS.accent, backgroundColor: COLORS.primary, transform: isDropdownOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                            className="text-[14px] w-8 h-8 flex items-center justify-center rounded focus:outline-none transition-transform"
                           >
                             ‹
                           </button>
                           <Link
                             to={item.dropdownItems ? item.dropdownItems[0].href : item.href}
                             onClick={closeMobileMenu}
-                            className={`text-[19px] font-semibold text-right flex-1 ${
-                              isActive ? 'text-[#B08D57]' : 'text-white'
-                            }`}
+                            style={{ color: isActive ? COLORS.accent : COLORS.white }}
+                            className="text-[19px] font-semibold text-right flex-1"
                           >
                             {item.label}
                           </Link>
@@ -186,7 +202,10 @@ export default function Header() {
 
                         {/* Dropdown Items list */}
                         {isDropdownOpen && item.dropdownItems && (
-                          <ul className="mt-2 bg-[#1F3A5F] p-2 space-y-1 rounded border-r-2 border-[#B08D57]">
+                          <ul 
+                            style={{ backgroundColor: COLORS.primary, borderRightColor: COLORS.accent }}
+                            className="mt-2 p-2 space-y-1 rounded border-r-2"
+                          >
                             {item.dropdownItems.map((subItem, sIdx) => {
                               const isSubActive = location.pathname === subItem.href
                               return (
@@ -194,9 +213,8 @@ export default function Header() {
                                   <Link
                                     to={subItem.href}
                                     onClick={closeMobileMenu}
-                                    className={`block p-2 text-[16px] text-right ${
-                                      isSubActive ? 'text-[#E5D8CA] font-bold' : 'text-[#d0d0d0] hover:text-white'
-                                    }`}
+                                    style={{ color: isSubActive ? COLORS.secondary : COLORS.white }}
+                                    className="block p-2 text-[16px] text-right hover:opacity-80 transition-opacity"
                                   >
                                     {subItem.label}
                                   </Link>
@@ -210,9 +228,8 @@ export default function Header() {
                       <Link
                         to={item.href}
                         onClick={closeMobileMenu}
-                        className={`block py-3 px-2 text-[19px] font-semibold ${
-                          isActive ? 'text-[#B08D57]' : 'text-white'
-                        }`}
+                        style={{ color: isActive ? COLORS.accent : COLORS.white }}
+                        className="block py-3 px-2 text-[19px] font-semibold"
                       >
                         {item.label}
                       </Link>
@@ -227,4 +244,3 @@ export default function Header() {
     </header>
   )
 }
-

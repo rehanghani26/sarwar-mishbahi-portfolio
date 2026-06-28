@@ -44,7 +44,7 @@ export default function EventCard({ event }) {
         />
 
         {/* Status Badge */}
-        <div className={`absolute top-3 right-3 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm ${isUpcoming ? 'bg-[#E5D8CA] text-[#7B654D]' : 'bg-slate-500 text-white'
+        <div className={`absolute top-3 right-3 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm ${isUpcoming ? 'bg-secondary text-textSecondary' : 'bg-slate-500 text-white'
           }`}>
           {isUpcoming
             ? (language === 'en' ? 'Upcoming' : 'آنے والا')
@@ -58,8 +58,8 @@ export default function EventCard({ event }) {
 
         {/* Date Stamp Block (Right Side on Desktop in RTL) */}
         <div className={`flex flex-row md:flex-col items-center justify-center border-b md:border-b-0 ${language === 'ur' ? 'md:border-l md:pl-4' : 'md:border-r md:pr-4'
-          } border-[#E5D8CA] pb-4 md:pb-0 shrink-0 text-center gap-4`}>
-          <div className="w-12 md:w-16 h-12 md:h-16 rounded bg-[#E5D8CA] flex flex-col items-center justify-center text-[#1F3A5F]">
+          } border-border pb-4 md:pb-0 shrink-0 text-center gap-4`}>
+          <div className="w-12 md:w-16 h-12 md:h-16 rounded bg-secondary flex flex-col items-center justify-center text-primary">
             <span className="text-lg font-bold leading-none">{dayNum}</span>
             <span className="text-xs font-bold uppercase tracking-wider mt-0.5">{monthName}</span>
           </div>
@@ -70,12 +70,12 @@ export default function EventCard({ event }) {
         <div className={`flex flex-col flex-grow justify-between ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div>
             {/* Title */}
-            <h3 className={`text-base font-bold text-slate-900 group-hover:text-[#1F3A5F] transition-colors leading-snug mb-4 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <h3 className={`text-base font-bold text-slate-900 group-hover:text-primary transition-colors leading-snug mb-4 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               {title}
             </h3>
 
             {/* Description */}
-            <p className={`text-[#2C2C2C] text-sm font-light leading-relaxed line-clamp-3 mb-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <p className={`text-textPrimary text-sm font-light leading-relaxed line-clamp-3 mb-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               {description}
             </p>
           </div>
@@ -83,11 +83,11 @@ export default function EventCard({ event }) {
           {/* Time and Location markers */}
           <div className={`flex flex-col gap-4 pt-4 border-t border-slate-100 text-sm text-slate-500 justify-start ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <span className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-[#B08D57] shrink-0" />
+              <Clock className="w-5 h-5 text-accent shrink-0" />
               {formattedTime}
             </span>
             <span className="flex items-start gap-2">
-              <MapPin className="w-5 h-5 text-[#B08D57] shrink-0 mt-0.5" />
+              <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
               <span className="line-clamp-1">{location}</span>
             </span>
           </div>

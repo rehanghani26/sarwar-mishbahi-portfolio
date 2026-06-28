@@ -25,7 +25,7 @@ function CheckBox({
           id={id}
           name={name}
           title={title}
-          className={`size-5 accent-[#051c2c] cursor-pointer ${checkBoxClassName}`}
+          className={`size-5 accent-primary cursor-pointer ${checkBoxClassName}`}
           checked={checked}
           onChange={onChange}
           disabled={disabled}

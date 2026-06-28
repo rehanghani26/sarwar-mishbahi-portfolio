@@ -4,18 +4,7 @@ import { submitQuestion } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
 
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
+import { QA_CATEGORIES, QA_TRANSLATIONS } from '@/utils/categories';
 
 export default function AskQuestion() {
   const { settings } = useSettings();
@@ -35,18 +24,7 @@ export default function AskQuestion() {
   const [success, setSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const categories = [
-    'Salah',
-    'Fasting',
-    'Zakat',
-    'Hajj & Umrah',
-    'Marriage',
-    'Divorce',
-    'Business',
-    'Family Issues',
-    'Education',
-    'General Questions',
-  ];
+  const categories = QA_CATEGORIES;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,20 +60,20 @@ export default function AskQuestion() {
   };
 
   return (
-    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-xl mx-auto px-4 sm:px-6">
 
         {/* Success Banner */}
         {success ? (
           <div className="premium-card p-8 shadow-sm text-center">
             <CheckCircle className="w-16 h-16 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-[#1F3A5F] dark:text-emerald-400 font-serif mb-3">
+            <h2 className="text-2xl font-bold text-primary dark:text-emerald-400 font-serif mb-3">
               {language === 'en' ? 'Question Received' : 'سوال موصول ہو گیا'}
             </h2>
             <p className="text-slate-700 dark:text-slate-350 text-sm leading-relaxed mb-6 font-light">{successMsg}</p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-5 py-2.5 bg-[#1F3A5F] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-[#162C49] transition-colors"
+              className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-primary/90 transition-colors"
             >
               {language === 'en' ? 'Ask Another Question' : 'ایک اور سوال پوچھیں'}
             </button>
@@ -104,13 +82,13 @@ export default function AskQuestion() {
           <div className="premium-card shadow-sm overflow-hidden text-start">
 
             {/* Header Title */}
-            <div className={`bg-[#1F3A5F] islamic-pattern text-white p-6 relative border-b border-[#B08D57]/35 flex items-center gap-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-              <HelpCircle className="w-8 h-8 text-[#B08D57] shrink-0" />
+            <div className={`bg-primary islamic-pattern text-white p-6 relative border-b border-accent/35 flex items-center gap-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+              <HelpCircle className="w-8 h-8 text-accent shrink-0" />
               <div>
                 <h1 className="text-xl font-bold text-white font-serif">
                   {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
                 </h1>
-                <p className="text-[10px] text-[#E5D8CA] mt-0.5">
+                <p className="text-[10px] text-secondary mt-0.5">
                   {language === 'en' ? 'Send your question directly to the scholar/mufti' : 'اپنا سوال براہِ راست عالم/مفتی صاحب کو ارسال کریں'}
                 </p>
               </div>
@@ -139,7 +117,7 @@ export default function AskQuestion() {
                   onChange={handleInputChange}
                   required
                   placeholder={language === 'en' ? 'Enter your name' : 'اپنا نام لکھیں'}
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   border=""
                 />
               </div>
@@ -157,7 +135,7 @@ export default function AskQuestion() {
                     onChange={handleInputChange}
                     required
                     placeholder="name@example.com"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -171,7 +149,7 @@ export default function AskQuestion() {
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                     placeholder="+92 300 1234567"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -187,11 +165,11 @@ export default function AskQuestion() {
                   value={formData.category}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-[#B08D57] dark:focus:border-emerald-500 rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-emerald-500 rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
-                      {language === 'ur' ? (categoryTranslations[cat] || cat) : cat}
+                      {language === 'ur' ? (QA_TRANSLATIONS[cat] || cat) : cat}
                     </option>
                   ))}
                 </select>
@@ -209,7 +187,7 @@ export default function AskQuestion() {
                   onChange={handleInputChange}
                   required
                   placeholder={language === 'en' ? 'e.g. Zakat calculation on retirement funds' : 'مثال: ریٹائرمنٹ فنڈز پر زکوٰۃ کا حساب'}
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   border=""
                 />
               </div>
@@ -226,7 +204,7 @@ export default function AskQuestion() {
                   required
                   placeholder={language === 'en' ? 'Provide all relevant details to explain your query to the scholar...' : 'عالم صاحب کو اپنا مسئلہ سمجھانے کے لیے تمام متعلقہ تفصیلات فراہم کریں...'}
                   rows={6}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -235,7 +213,7 @@ export default function AskQuestion() {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-[#1F3A5F] hover:bg-[#725B43] text-white font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   {actionLoading 

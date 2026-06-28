@@ -27,7 +27,7 @@ const ImageInput = ({
     <div className={`inline-block ${className}`}>
       <div
         className={`relative size-36 rounded-full flex items-center justify-center group ${
-          image?.includes("svg") ? "border border-dashed border-[#20504E]" : ""
+          image?.includes("svg") ? "border border-dashed border-primary" : ""
         }`}
       >
         <img
@@ -42,7 +42,7 @@ const ImageInput = ({
         {image?.includes("svg") && !readOnly ? (
           <label
             htmlFor={id}
-            className="absolute bottom-[30px] right-3 w-8 h-8 bg-[#20504E] text-white rounded-full flex items-center justify-center cursor-pointer border border-white z-10 translate-x-1/2 translate-y-1/2"
+            className="absolute bottom-[30px] right-3 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer border border-white z-10 translate-x-1/2 translate-y-1/2"
             onClick={() => setIsSubmitClicked(false)}
           >
             +
@@ -76,7 +76,7 @@ const ImageInput = ({
                     src={uploadCloud01White}
                     // htmlFor={id}
                     title="Upload image"
-                    className="p-1 absolute bottom-8 right-3 size-8 rounded-full flex items-center justify-center cursor-pointer bg-[#20504E] border z-10 translate-x-1/2 translate-y-1/2 transition-all duration-300"
+                    className="p-1 absolute bottom-8 right-3 size-8 rounded-full flex items-center justify-center cursor-pointer bg-primary border z-10 translate-x-1/2 translate-y-1/2 transition-all duration-300"
                     onClick={() => {
                       onImageUploadClick();
                       setIsSubmitClicked(true);
@@ -248,7 +248,7 @@ export default memo(ImageInput);
 //               src={image}
 //               alt="Uploaded image"
 //             />
-//             <div className="absolute inset-0 flex items-center justify-center text-[#20504E] text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+//             <div className="absolute inset-0 flex items-center justify-center text-primary text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
 //               Edit
 //             </div>
 //           </>
@@ -259,7 +259,7 @@ export default memo(ImageInput);
 //         {!image && !isPopupOpen && (
 //           <label
 //             htmlFor={id}
-//             className="absolute bottom-[30px] right-[5px] w-8 h-8 bg-[#20504E] text-white rounded-full flex items-center justify-center cursor-pointer border border-white z-10 translate-x-1/2 translate-y-1/2"
+//             className="absolute bottom-[30px] right-[5px] w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer border border-white z-10 translate-x-1/2 translate-y-1/2"
 //           >
 //             +
 //           </label>
@@ -320,7 +320,7 @@ export default memo(ImageInput);
 //                 />
 //               )}
 //               <button
-//                 className="flex items-center justify-center text-sm text-[#20504E] rounded-lg p-2 border border-[#20504E] hover:bg-gray-50"
+//                 className="flex items-center justify-center text-sm text-primary rounded-lg p-2 border border-primary hover:bg-gray-50"
 //                 onClick={isNewUpload ? handleClosePopup : handleDeleteImage} // Conditional behavior
 //               >
 //                 {isNewUpload ? "Close" : "Delete image"}
@@ -339,7 +339,7 @@ export default memo(ImageInput);
 //             <div className="flex justify-around">
 //               <Button name="Keep" onClick={cancelDiscard} />
 //               <button
-//                 className="flex items-center justify-center text-sm text-[#20504E] rounded-lg p-2 border border-[#20504E] hover:bg-gray-50"
+//                 className="flex items-center justify-center text-sm text-primary rounded-lg p-2 border border-primary hover:bg-gray-50"
 //                 onClick={confirmDiscard}
 //               >
 //                 Delete

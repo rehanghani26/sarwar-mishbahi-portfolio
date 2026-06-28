@@ -1,3 +1,4 @@
+import { COLORS } from '@/utils/themeColors';
 import { useState, useRef, useEffect, forwardRef } from "react";
 import PropTypes from "prop-types";
 
@@ -309,14 +310,14 @@ export default MultiSelect;
 //   control: (base, state) => ({
 //     ...base,
 //     borderColor: "none",
-//     "&:hover": { borderColor: "#20504e" },
+//     "&:hover": { borderColor: COLORS.primary },
 //     "&:active": { outline: "none" },
 //     boxShadow: state.isFocused ? "none" : "none",
 //   }),
 //   option: (base, { isFocused, isSelected }) => ({
 //     ...base,
 //     backgroundColor: isSelected ? "#3E8B821A" : isFocused ? "white" : "white",
-//     color: isSelected ? "#20504e" : isFocused ? "#20504e" : "black",
+//     color: isSelected ? COLORS.primary : isFocused ? COLORS.primary : "black",
 //     fontWeight: isFocused ? 900 : "normal",
 //     transition: "transform 0.2s ease-in-out, font-weight 0.2s ease-in-out",
 //     "&:active": { backgroundColor: "#3E8B821A" },
@@ -383,7 +384,7 @@ export default MultiSelect;
 //         classNamePrefix="react-select"
 //       />
 //       {errorMessage && (
-//         <span className="text-sm text-[#DE350B] mt-1 block">
+//         <span className="text-sm text-error mt-1 block">
 //           {errorMessage}
 //         </span>
 //       )}

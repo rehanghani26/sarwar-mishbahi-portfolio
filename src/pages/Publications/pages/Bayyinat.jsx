@@ -20,22 +20,22 @@ export default function Bayyinat() {
           }
         </p>
 
-        <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">
+        <h3 className="text-[22px] font-bold text-primary border-b pb-2">
           {language === 'en' ? 'Selected Articles from the Latest Issue' : 'تازہ ترین شمارے کے منتخب مضامین'}
         </h3>
 
         <div className="space-y-3 my-6">
           {ARTICLES.map((art) => (
-            <div key={art.id} className="bg-[#fcfbf9] border border-[#E5D8CA] p-4 rounded-sm hover:border-[#B08D57] transition-colors cursor-pointer flex justify-between items-center">
-              <span className="font-bold text-[#3A2C23] text-[17px]">{art.title}</span>
-              <span className="text-[#B08D57] text-[14px]">
+            <div key={art.id} className="bg-background border border-border p-4 rounded-sm hover:border-accent transition-colors cursor-pointer flex justify-between items-center">
+              <span className="font-bold text-primary text-[17px]">{art.title}</span>
+              <span className="text-accent text-[14px]">
                 {language === 'en' ? 'Read Article 🗎' : 'مضمون پڑھیں 🗎'}
               </span>
             </div>
           ))}
         </div>
 
-        <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">
+        <h3 className="text-[22px] font-bold text-primary border-b pb-2">
           {language === 'en' ? 'Permanent Columns and Departments of Bayyinat' : 'بینات کے مستقل کالم اور شعبہ جات'}
         </h3>
         <ul className={`list-disc list-inside space-y-2 text-[17px] ${language === 'ur' ? 'pr-4' : 'pl-4'}`}>
@@ -60,7 +60,7 @@ export default function Bayyinat() {
         <div className="text-center pt-6">
           <button
             onClick={() => alert(language === 'en' ? 'The annual subscription form is disabled in this demo version.' : 'سالانہ خریدار بننے کا فارم ڈیمو ورژن میں غیر فعال ہے۔')}
-            className="bg-[#1F3A5F] text-white py-3 px-6 text-[16px] font-bold hover:bg-[#1F3A5F] transition-colors"
+            className="bg-primary text-white py-3 px-6 text-[16px] font-bold hover:bg-primary transition-colors"
           >
             {language === 'en' ? '✍️ Become an Annual Subscriber (Get printed copies home-delivered)' : '✍️ سالانہ خریدار بنیں (پرنٹڈ کاپی گھر منگوائیں)'}
           </button>

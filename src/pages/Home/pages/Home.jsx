@@ -20,9 +20,10 @@ import {
 } from 'lucide-react';
 import { getArticles, getFatwas, getPublicQuestions, getPublications, getLectures, getEvents } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
+import { COLORS } from '@/utils/themeColors';
 
 import { ArticleCard, FatwaCard, LectureCard, PublicationCard, EventCard } from '@/components';
-import AnimatedFeatureCard from './Animatedfeaturecard ';
+import AnimatedFeatureCard from '../components/AnimatedFeatureCard';
 import muftiSahebImg from '../../../assets/images/muftiSaheb.png';
 
 // Small helper so every section heading animates in the same way on scroll,
@@ -37,18 +38,18 @@ function SectionHeading({ eyebrow, title, linkTo, linkLabel }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="flex items-end justify-between mb-10 border-b-2 border-[#E5D8CA] pb-4"
+      className="flex items-end justify-between mb-10 border-b-2 border-border pb-4"
     >
-      <div className={`border-[#B08D57] ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'}`}>
-        <span className="text-xs font-bold text-[#B08D57] uppercase tracking-widest block mb-1">
+      <div className={`border-accent ${language === 'ur' ? 'border-r-4 pr-4 text-right' : 'border-l-4 pl-4 text-left'}`}>
+        <span className="text-xs font-bold text-accent uppercase tracking-widest block mb-1">
           {eyebrow}
         </span>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F3A5F] leading-none">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-primary leading-none">
           {title}
         </h2>
       </div>
       {linkTo && (
-        <Link to={linkTo} className="text-sm font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 transition-colors">
+        <Link to={linkTo} className="text-sm font-bold text-primary hover:text-accent flex items-center gap-1 transition-colors">
           {linkLabel} {language === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
         </Link>
       )}
@@ -72,9 +73,7 @@ function ScholarPhotoPlaceholder() {
       transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-full max-w-sm"
     >
-      {/* Decorative glowing ring */}
-      <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#B08D57]/40 via-[#1F3A5F]/20 to-[#B08D57]/40 blur-sm" />
-      <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-2 border-[#B08D57]/40 shadow-2xl group">
+      <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-2 border-accent/40 shadow-2xl group">
         <img
           src={muftiSahebImg}
           alt={name || 'Mufti Saheb'}
@@ -88,11 +87,6 @@ function ScholarPhotoPlaceholder() {
             }
           }}
         />
-        {/* Bottom gradient name overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1F3A5F]/90 via-[#1F3A5F]/50 to-transparent p-5">
-          {name && <p className="text-white font-extrabold text-lg leading-snug tracking-wide">{name}</p>}
-          {title && <p className="text-[#E5D8CA] text-xs font-semibold mt-0.5">{title}</p>}
-        </div>
       </div>
     </motion.div>
   );
@@ -106,7 +100,7 @@ function AnimatedParticles() {
       {particles.map((i) => (
         <motion.div
           key={i}
-          className="absolute w-1.5 h-1.5 rounded-full bg-[#B08D57]/20"
+          className="absolute w-1.5 h-1.5 rounded-full bg-accent/20"
           style={{
             left: `${(i * 8.33) % 100}%`,
             top: `${(i * 13.7) % 100}%`,
@@ -135,7 +129,7 @@ function AnimatedCounter({ value, label }) {
     let start = 0;
     const end = parseInt(value, 10);
     if (isNaN(end)) return;
-    const duration = 1500;
+    const duration = 500;
     const step = Math.ceil(end / (duration / 16));
     const timer = setInterval(() => {
       start += step;
@@ -152,8 +146,8 @@ function AnimatedCounter({ value, label }) {
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <p className="text-3xl font-extrabold text-[#1F3A5F]">{count}+</p>
-      <p className="text-xs text-[#7B654D] font-semibold uppercase tracking-widest mt-1">{label}</p>
+      <p className="text-3xl font-extrabold text-primary">{count}+</p>
+      <p className="text-xs text-textSecondary font-semibold uppercase tracking-widest mt-1">{label}</p>
     </motion.div>
   );
 }
@@ -166,6 +160,7 @@ export default function Home() {
   const [publications, setPublications] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [events, setEvents] = useState([]);
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
@@ -247,11 +242,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-site-bg min-h-screen relative overflow-x-hidden">
+    <div className="bg-background min-h-screen relative overflow-x-hidden">
 
       {/* Progress bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-[#B08D57] z-50"
+        className="fixed top-0 left-0 right-0 h-1 bg-accent z-50"
         style={{ scaleX: smoothProgress, transformOrigin: '0%' }}
       />
 
@@ -261,7 +256,7 @@ export default function Home() {
           opacity: heroOpacity,
           scale: heroScale,
         }}
-        className="scholar-gradient-bg relative overflow-hidden py-20 border-b-2 border-[#E5D8CA]"
+        className="scholar-gradient-bg relative overflow-hidden py-20 border-b-2 border-border"
       >
         <AnimatedParticles />
 
@@ -275,7 +270,7 @@ export default function Home() {
             rotate: { duration: 20, repeat: Infinity, ease: "linear" },
             scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
           }}
-          className="absolute top-10 right-10 w-32 h-32 border border-[#B08D57]/10 rounded-full pointer-events-none"
+          className="absolute top-10 right-10 w-32 h-32 border border-accent/10 rounded-full pointer-events-none"
         />
         <motion.div
           animate={{
@@ -286,7 +281,7 @@ export default function Home() {
             rotate: { duration: 25, repeat: Infinity, ease: "linear" },
             scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
           }}
-          className="absolute bottom-10 left-10 w-24 h-24 border border-[#B08D57]/10 rounded-full pointer-events-none"
+          className="absolute bottom-10 left-10 w-24 h-24 border border-accent/10 rounded-full pointer-events-none"
         />
 
         <div className="mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -313,12 +308,12 @@ export default function Home() {
                 type: "spring",
                 damping: 15
               }}
-              className="inline-flex items-center gap-1.5 bg-[#F5EEE5] border border-[#E5D8CA] text-[#7B654D] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full leading-none whitespace-nowrap max-w-full break-words"
+              className="inline-flex items-center gap-1.5 bg-secondary border border-border text-textSecondary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full leading-none whitespace-nowrap max-w-full break-words"
             >
               <motion.span
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="text-[#B08D57] text-sm"
+                className="text-accent text-sm"
               >
                 ✦
               </motion.span>
@@ -336,7 +331,7 @@ export default function Home() {
                 damping: 10,
                 stiffness: 120
               }}
-              className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#1F3A5F] leading-snug sm:leading-normal tracking-wide break-words [text-wrap:balance] max-w-2xl"
+              className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-primary leading-snug sm:leading-normal tracking-wide break-words [text-wrap:balance] max-w-2xl"
             >
               {heroName}
             </motion.h1>
@@ -352,7 +347,7 @@ export default function Home() {
                 damping: 12,
                 stiffness: 100,
               }}
-              className="text-[#2C2C2C] text-md sm:text-lg font-light leading-[calc(1em+2rem)] max-w-3xl px-2 sm:px-3 py-1 break-words [overflow-wrap:anywhere] hyphens-auto"
+              className="text-textPrimary text-md sm:text-lg font-light leading-[calc(1em+2rem)] max-w-3xl px-2 sm:px-3 py-1 break-words [overflow-wrap:anywhere] hyphens-auto"
             >
               {heroIntro}
             </motion.p>
@@ -368,10 +363,10 @@ export default function Home() {
                 damping: 12,
                 stiffness: 100,
               }}
-              className={`border-[#B08D57] ${language === "ur"
+              className={`border-accent ${language === "ur"
                 ? "border-r-4 pr-4 sm:pr-5 text-right"
                 : "border-l-4 pl-4 sm:pl-5 text-left"
-                } italic text-sm sm:text-base text-[#7B654D] font-light leading-loose max-w-lg relative p-4 sm:p-5 break-words [overflow-wrap:anywhere]`}
+                } italic text-sm sm:text-base text-textSecondary font-light leading-loose max-w-lg relative p-4 sm:p-5 break-words [overflow-wrap:anywhere]`}
             >
               <motion.div
                 animate={{
@@ -384,7 +379,7 @@ export default function Home() {
                   ease: "easeInOut",
                 }}
                 className={`absolute ${language === "ur" ? "right-0" : "left-0"
-                  } top-0 w-1 h-full bg-[#B08D57]`}
+                  } top-0 w-1 h-full bg-accent`}
               />
               {heroMission}
             </motion.div>
@@ -403,9 +398,8 @@ export default function Home() {
               className="flex flex-wrap items-center gap-4 pt-4 justify-start"
             >
               {[
-                { to: "/ask", label: language === 'en' ? 'Ask Question' : 'سوال پوچھیں', icon: HelpCircle, primary: true },
-                { to: "/articles", label: language === 'en' ? 'Read Articles' : 'مقالات پڑھیں', icon: FileText, primary: false },
-                { to: "/fatwas", label: language === 'en' ? 'View Fatwas' : 'فتاویٰ دیکھیں', icon: null, primary: false },
+                { to: "/articles", label: language === 'en' ? 'Read Articles' : 'مقالات پڑھیں', icon: FileText, primary: true },
+                { to: "/fatwas", label: language === 'en' ? 'View Fatwas' : 'فتاویٰ دیکھیں', icon: BookOpen, primary: false },
               ].map((btn, index) => (
                 <motion.div
                   key={index}
@@ -418,10 +412,8 @@ export default function Home() {
                   <Link
                     to={btn.to}
                     className={`px-6 py-3 ${btn.primary
-                      ? 'bg-[#1F3A5F] hover:bg-[#162C49] text-white shadow-md hover:shadow-lg'
-                      : btn.label.includes('Fatwas')
-                        ? 'bg-transparent hover:underline text-[#7B654D] hover:text-[#1F3A5F]'
-                        : 'bg-transparent border-2 border-[#E5D8CA] text-[#7B654D] hover:bg-[#FAF7F2]'
+                      ? 'bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg'
+                      : 'bg-transparent border-2 border-border text-textSecondary hover:bg-background'
                       } font-bold rounded transition-all flex items-center gap-2 text-sm font-serif leading-none whitespace-nowrap`}
                   >
                     {btn.icon && <btn.icon className="w-4.5 h-4.5" />}
@@ -469,14 +461,14 @@ export default function Home() {
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          className="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-[#7B654D]"
+          className="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-textSecondary"
         >
           <ChevronDown className="w-6 h-6" />
         </motion.div>
       </motion.section>
       {/* Stats Section */}
       <motion.section
-        className="py-8 border-b border-[#E5D8CA] bg-white/50 backdrop-blur-sm"
+        className="py-8 border-b border-border bg-white"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -499,10 +491,20 @@ export default function Home() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div 
+          onScroll={(e) => {
+            const container = e.currentTarget;
+            const scrollLeft = Math.abs(container.scrollLeft);
+            const itemWidth = 260; // approximate width of card + gap
+            const index = Math.round(scrollLeft / itemWidth);
+            setActiveFeatureIndex(Math.max(0, Math.min(FEATURES.length - 1, index)));
+          }}
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 scrollbar-none"
+        >
           {FEATURES.map((feature, i) => (
             <motion.div
               key={feature.title}
+              className="w-[240px] xs:w-[280px] sm:w-auto snap-start flex-shrink-0"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -513,11 +515,6 @@ export default function Home() {
                 damping: 12,
                 stiffness: 100
               }}
-              whileHover={{
-                y: -8,
-                scale: 1.02,
-                transition: { duration: 0.3 }
-              }}
             >
               <AnimatedFeatureCard
                 icon={feature.icon}
@@ -527,6 +524,20 @@ export default function Home() {
                 index={i}
               />
             </motion.div>
+          ))}
+        </div>
+
+        {/* Pagination Dots (Only visible on Mobile) */}
+        <div className="flex sm:hidden justify-center items-center gap-2 mt-4">
+          {FEATURES.map((_, dotIndex) => (
+            <div
+              key={dotIndex}
+              className="w-2 h-2 rounded-full transition-all duration-300"
+              style={{
+                backgroundColor: activeFeatureIndex === dotIndex ? COLORS.primary : COLORS.border,
+                transform: activeFeatureIndex === dotIndex ? 'scale(1.25)' : 'scale(1)'
+              }}
+            />
           ))}
         </div>
       </motion.section>
@@ -548,10 +559,11 @@ export default function Home() {
 
         <AnimatePresence>
           {articles && articles.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-none">
               {articles.slice(0, 3).map((article, index) => (
                 <motion.div
                   key={article._id}
+                  className="w-[280px] xs:w-[320px] sm:w-auto snap-start flex-shrink-0"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -561,11 +573,6 @@ export default function Home() {
                     type: "spring",
                     damping: 12,
                     stiffness: 100
-                  }}
-                  whileHover={{
-                    y: -8,
-                    scale: 1.02,
-                    transition: { duration: 0.3 }
                   }}
                 >
                   <ArticleCard article={article} />
@@ -586,7 +593,7 @@ export default function Home() {
 
       {/* 3. FEATURED FATWAS */}
       <motion.section
-        className="bg-[#FAF7F2] border-y border-[#E5D8CA] py-16"
+        className="bg-background border-y border-border py-16"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -603,10 +610,11 @@ export default function Home() {
 
           <AnimatePresence>
             {fatwas && fatwas.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-none">
                 {fatwas.slice(0, 3).map((fatwa, index) => (
                   <motion.div
                     key={fatwa._id}
+                    className="w-[280px] xs:w-[320px] sm:w-auto snap-start flex-shrink-0"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -616,11 +624,6 @@ export default function Home() {
                       type: "spring",
                       damping: 12,
                       stiffness: 100
-                    }}
-                    whileHover={{
-                      y: -8,
-                      scale: 1.02,
-                      transition: { duration: 0.3 }
                     }}
                   >
                     <FatwaCard fatwa={fatwa} />
@@ -680,7 +683,7 @@ export default function Home() {
                   className={`premium-card p-6 flex flex-col justify-between h-full bg-white ${language === 'ur' ? 'text-right' : 'text-left'} relative overflow-hidden group`}
                 >
                   <motion.div
-                    className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#B08D57] via-[#1F3A5F] to-[#B08D57]"
+                    className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent via-primary to-accent"
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
@@ -690,7 +693,7 @@ export default function Home() {
                   <div>
                     <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
                       <motion.span
-                        className="bg-[#E5D8CA] text-[#7B654D] font-bold px-2.5 py-1 rounded-full text-[10px]"
+                        className="bg-secondary text-textSecondary font-bold px-2.5 py-1 rounded-full text-[10px]"
                         whileHover={{ scale: 1.05 }}
                       >
                         {q.category}
@@ -704,7 +707,7 @@ export default function Home() {
                       "{q.detailedQuestion}"
                     </p>
                   </div>
-                  <Link to={`/qa`} className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <Link to={`/qa`} className="text-xs font-bold text-primary hover:text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                     {language === 'en' ? 'View Answer' : 'مفتی صاحب کا جواب دیکھیں'}
                     <motion.span
                       animate={{ x: [0, 5, 0] }}
@@ -728,58 +731,32 @@ export default function Home() {
         </AnimatePresence>
       </motion.section>
 
-      {/* 5. LATEST PUBLICATIONS & LECTURES (SPLIT SECTION) */}
+      {/* 5. LATEST PUBLICATIONS */}
       <motion.section
-        className="bg-[#FAF7F2] border-t border-[#E5D8CA] py-16"
+        className="py-16 bg-white border-t border-border"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12" dir={language === 'ur' ? 'rtl' : 'ltr'}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow={language === 'en' ? 'LIBRARY & ARCHIVE' : 'مطبوعات و رسائل'}
+            title={language === 'en' ? 'Latest Publications' : 'تازہ ترین مطبوعات'}
+            linkTo="/publications"
+            linkLabel={language === 'en' ? 'View All' : 'سب دیکھیں'}
+          />
 
-          {/* Left: Publications */}
-          <motion.div
-            className={language === 'ur' ? 'text-right' : 'text-left'}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.6,
-              type: "spring",
-              damping: 12,
-              stiffness: 100
-            }}
-          >
-            <motion.div
-              className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <motion.h2
-                className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Book className="w-5.5 h-5.5 text-[#B08D57]" />
-                {language === 'en' ? 'Latest Publications' : 'تازہ ترین مطبوعات'}
-              </motion.h2>
-              <Link to="/publications" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors">
-                {language === 'en' ? 'View All' : 'سب دیکھیں'}
-              </Link>
-            </motion.div>
-
+          <AnimatePresence>
             {publications && publications.length > 0 ? (
-              <div className="space-y-4">
-                {publications.slice(0, 2).map((pub, index) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {publications.slice(0, 4).map((pub, index) => (
                   <motion.div
                     key={pub._id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    whileHover={{ x: language === 'ur' ? -8 : 8 }}
                   >
                     <PublicationCard publication={pub} />
                   </motion.div>
@@ -794,50 +771,36 @@ export default function Home() {
                 {language === 'en' ? 'No publications available.' : 'کوئی مطبوعہ دستیاب نہیں ہے۔'}
               </motion.p>
             )}
-          </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.section>
 
-          {/* Right: Lectures */}
-          <motion.div
-            className={language === 'ur' ? 'text-right' : 'text-left'}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.6,
-              type: "spring",
-              damping: 12,
-              stiffness: 100
-            }}
-          >
-            <motion.div
-              className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <motion.h2
-                className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Play className="w-5.5 h-5.5 text-[#B08D57] fill-current" />
-                {language === 'en' ? 'Latest Lectures' : 'تازہ ترین بیانات'}
-              </motion.h2>
-              <Link to="/lectures" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors">
-                {language === 'en' ? 'View All' : 'سب دیکھیں'}
-              </Link>
-            </motion.div>
+      {/* 6. LATEST LECTURES */}
+      <motion.section
+        className="py-16 bg-background border-t border-border"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow={language === 'en' ? 'LECTURES & BAYANS' : 'خطبات و بیانات'}
+            title={language === 'en' ? 'Latest Lectures' : 'تازہ ترین بیانات'}
+            linkTo="/lectures"
+            linkLabel={language === 'en' ? 'View All' : 'سب دیکھیں'}
+          />
 
+          <AnimatePresence>
             {lectures && lectures.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {lectures.slice(0, 2).map((lecture, index) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {lectures.slice(0, 3).map((lecture, index) => (
                   <motion.div
                     key={lecture._id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.2 }}
-                    whileHover={{ scale: 1.02 }}
+                    transition={{ delay: index * 0.1 }}
                   >
                     <LectureCard lecture={lecture} onPlay={() => window.open(lecture.videoUrl, '_blank')} />
                   </motion.div>
@@ -852,8 +815,7 @@ export default function Home() {
                 {language === 'en' ? 'No bayans available.' : 'کوئی بیان دستیاب نہیں ہے۔'}
               </motion.p>
             )}
-          </motion.div>
-
+          </AnimatePresence>
         </div>
       </motion.section>
 
@@ -875,12 +837,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
         >
-          <div className={`flex items-end justify-between mb-8 border-b border-[#E5D8CA] pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-            <h2 className="text-xl font-bold text-[#1F3A5F] flex items-center gap-2">
-              <Calendar className="w-5.5 h-5.5 text-[#B08D57]" />
+          <div className={`flex items-end justify-between mb-8 border-b border-border pb-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+              <Calendar className="w-5.5 h-5.5 text-accent" />
               {language === 'en' ? 'Upcoming Programs & Gatherings' : 'آنے والے پروگرام اور اجتماعات'}
             </h2>
-            <Link to="/events" className="text-xs font-bold text-[#1F3A5F] hover:text-[#B08D57] transition-colors">
+            <Link to="/events" className="text-xs font-bold text-primary hover:text-accent transition-colors">
               {language === 'en' ? 'View All' : 'سب دیکھیں'}
             </Link>
           </div>
@@ -920,7 +882,7 @@ export default function Home() {
           transition={{ delay: 0.3 }}
         >
           <motion.h2
-            className="text-xl font-bold text-[#1F3A5F] mb-8 border-b border-[#E5D8CA] pb-3"
+            className="text-xl font-bold text-primary mb-8 border-b border-border pb-3"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -937,7 +899,7 @@ export default function Home() {
             }}
           >
             <motion.div
-              className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#B08D57] via-[#1F3A5F] to-[#B08D57]"
+              className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent via-primary to-accent"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
@@ -972,7 +934,7 @@ export default function Home() {
                   transition={{ delay: 0.6 + index * 0.1 }}
                   whileHover={{ x: 5 }}
                 >
-                  <item.icon className="w-5 h-5 text-[#B08D57] shrink-0 mt-0.5" />
+                  <item.icon className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                   <span className="text-slate-700 leading-tight font-light">{item.text}</span>
                 </motion.li>
               ))}
@@ -988,7 +950,7 @@ export default function Home() {
             >
               <Link
                 to="/contact"
-                className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white text-xs font-bold rounded transition-colors relative overflow-hidden group"
+                className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded transition-colors relative overflow-hidden group"
               >
                 <motion.span
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"

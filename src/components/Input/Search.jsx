@@ -29,7 +29,7 @@ const Search = ({
   return (
     <>
       <div
-        // className={`p-2 flex gap-2 items-center border border-[#3e8b8250] hover:bg-[#f2f9f9] focus:border-[#3e8b82] focus:shadow-[#20504e] ${className}`}
+        // className={`p-2 flex gap-2 items-center border border-border hover:bg-background focus:border-primary focus:shadow-primary/30 ${className}`}
         className={`p-2 h-10 flex gap-0.5 items-center ${border} ${className}`}
       >
         <label htmlFor={id}>
@@ -43,7 +43,7 @@ const Search = ({
           onChange={onChange}
           onClick={onClick}
           onKeyDown={handleKeyDown}
-          // className="w-full outline-0 placeholder-[#3e8b82d0] hover:bg-[#f2f9f9]"
+          // className="w-full outline-0 placeholder-textSecondary hover:bg-background"
           className={`w-full outline-0 placeholder-gray-500 ${placeholderClassName}`}
           placeholder={placeholder}
         />

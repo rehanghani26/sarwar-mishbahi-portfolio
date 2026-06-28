@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useSettings } from '@/hooks/useSettings';
 import { Navbar, Footer } from '@/layout';
+import { COLORS } from '@/utils/themeColors';
 
 export const fontFamilies = {
   'Inter': "'Inter', sans-serif",
@@ -116,9 +117,13 @@ export default function MainLayout() {
   // If initial API call is in progress, show spinner/loader
   if ((loading && !settings) || (!settings && !error)) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF7F2] text-[#1F3A5F]" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B08D57]"></div>
-        <p className="mt-4 text-sm font-bold tracking-wider text-[#7B654D] animate-pulse">
+      <div 
+        style={{ backgroundColor: COLORS.background, color: COLORS.primary }}
+        className="flex flex-col items-center justify-center min-h-screen" 
+        dir={language === 'ur' ? 'rtl' : 'ltr'}
+      >
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: COLORS.accent }}></div>
+        <p className="mt-4 text-sm font-bold tracking-wider animate-pulse" style={{ color: COLORS.textSecondary }}>
           {language === 'ur' ? 'پورٹل لوڈ ہو رہا ہے...' : 'Portal is loading...'}
         </p>
       </div>
@@ -128,23 +133,31 @@ export default function MainLayout() {
   // If API call fails or there's no response, show "Server is under maintenance"
   if (error && !settings) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF7F2] text-center p-6" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-        <div className="max-w-md w-full p-8 bg-white rounded-2xl shadow-xl border border-[#E5D8CA] relative overflow-hidden">
+      <div 
+        style={{ backgroundColor: COLORS.background }}
+        className="flex flex-col items-center justify-center min-h-screen text-center p-6" 
+        dir={language === 'ur' ? 'rtl' : 'ltr'}
+      >
+        <div 
+          style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
+          className="max-w-md w-full p-8 rounded-2xl shadow-xl border relative overflow-hidden"
+        >
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-red-500"></div>
           <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#1F3A5F] mb-3">
+          <h1 className="text-2xl font-bold mb-3" style={{ color: COLORS.primary }}>
             {language === 'ur' ? 'سسٹم کی دیکھ بھال جاری ہے' : 'System is under maintenance'}
           </h1>
-          <p className="text-[#7B654D]/80 text-sm leading-relaxed mb-6 font-light">
+          <p className="text-sm leading-relaxed mb-6 font-light" style={{ color: `rgba(107, 91, 75, 0.8)` }}>
             {language === 'ur' ? 'ہم اس وقت سسٹم کی دیکھ بھال کر رہے ہیں یا اپنی ترتیبات کو اپ ڈیٹ کر رہے ہیں۔ براہ کرم چند لمحوں بعد دوبارہ کوشش کریں۔' : 'We are currently maintaining the system or updating our settings. Please try again in a few moments.'}
           </p>
           <button
             onClick={() => refreshSettings()}
-            className="px-6 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white font-bold rounded shadow-md hover:shadow-lg transition-all text-xs"
+            style={{ backgroundColor: COLORS.primary }}
+            className="px-6 py-2.5 text-white font-bold rounded shadow-md hover:opacity-90 transition-all text-xs"
           >
             {language === 'ur' ? 'دوبارہ کوشش کریں' : 'Try Again'}
           </button>
@@ -170,7 +183,7 @@ export default function MainLayout() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-site-bg relative">
+    <div className="flex flex-col min-h-screen bg-background relative">
       {/* Premium header navigation */}
       <Navbar />
 
@@ -187,14 +200,15 @@ export default function MainLayout() {
         <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-slate-900/45 backdrop-blur-xs animate-modal-fade-in cursor-pointer"
+            className="absolute inset-0 bg-slate-900/50 animate-modal-fade-in cursor-pointer"
             onClick={handleCancel}
           />
           
           {/* Modal Box */}
           <div 
             ref={modalRef}
-            className={`relative bg-white dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transform animate-modal-scale-up ${language === 'ur' ? 'text-right' : 'text-left'}`} 
+            style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
+            className={`relative border rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transform animate-modal-scale-up ${language === 'ur' ? 'text-right' : 'text-left'}`} 
             dir={language === 'ur' ? 'rtl' : 'ltr'}
             role="dialog"
             aria-modal="true"
@@ -203,7 +217,7 @@ export default function MainLayout() {
           >
             <div className="space-y-6">
               <div className="space-y-2">
-                <h3 id="lang-modal-title" className="text-lg font-bold text-[#1F3A5F] dark:text-slate-100 font-serif">
+                <h3 id="lang-modal-title" className="text-lg font-bold font-serif" style={{ color: COLORS.primary }}>
                   {language === 'en' ? 'Change Language' : 'زبان تبدیل کریں'}
                 </h3>
                 <p id="lang-modal-desc" className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-light">
@@ -224,7 +238,8 @@ export default function MainLayout() {
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="confirm-btn px-5 py-2 text-xs font-bold text-white bg-[#1F3A5F] hover:bg-[#162C49] rounded shadow transition-colors uppercase tracking-wider font-serif"
+                  style={{ backgroundColor: COLORS.primary }}
+                  className="confirm-btn px-5 py-2 text-xs font-bold text-white rounded shadow transition-all hover:opacity-95 uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Confirm' : 'تصدیق کریں'}
                 </button>
@@ -241,10 +256,10 @@ export default function MainLayout() {
             {/* Elegant Spinner */}
             <div className="relative w-16 h-16">
               <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
-              <div className="absolute inset-0 rounded-full border-4 border-t-[#B08D57] animate-spin" />
+              <div className="absolute inset-0 rounded-full border-4 animate-spin" style={{ borderTopColor: COLORS.accent }} />
             </div>
             {/* Pulsing loading state text */}
-            <span className="text-[#1F3A5F] font-serif text-sm font-bold tracking-wider animate-pulse-slow">
+            <span className="font-serif text-sm font-bold tracking-wider animate-pulse-slow" style={{ color: COLORS.primary }}>
               {pendingLanguageChange === 'ur' ? 'زبان تبدیل کی جا رہی ہے...' : 'Switching Language...'}
             </span>
           </div>

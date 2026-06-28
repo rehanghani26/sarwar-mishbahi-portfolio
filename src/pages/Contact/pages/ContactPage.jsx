@@ -59,16 +59,16 @@ export default function ContactPage() {
   const socialLinks = settings?.socialLinks || {};
 
   return (
-    <div className={`bg-[#FAF7F2] dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
 
         {/* Left Side: Contact Information Cards (5 columns) */}
         <div className={`lg:col-span-5 space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div>
-            <span className={`text-xs font-bold text-[#B08D57] dark:text-amber-500 uppercase tracking-widest block mb-1 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <span className={`text-xs font-bold text-accent dark:text-amber-500 uppercase tracking-widest block mb-1 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               {language === 'en' ? 'Contact Us' : 'رابطہ کریں'}
             </span>
-            <h1 className={`text-3xl font-extrabold text-[#1F3A5F] dark:text-[#B08D57] font-serif tracking-wide ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+            <h1 className={`text-3xl font-extrabold text-primary dark:text-accent font-serif tracking-wide ${language === 'ur' ? 'text-right' : 'text-left'}`}>
               {language === 'en' ? 'Contact Details' : 'رابطے کی تفصیلات'}
             </h1>
             <p className={`text-slate-550 dark:text-slate-400 text-sm font-light mt-2 leading-relaxed ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -83,7 +83,7 @@ export default function ContactPage() {
 
             {/* Address */}
             <div className={`flex gap-4 items-start ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
-              <div className="p-2.5 rounded bg-[#1F3A5F]/5 dark:bg-amber-950/20 text-[#1F3A5F] dark:text-[#B08D57] border border-[#1F3A5F]/10 dark:border-[#B08D57]/20 shrink-0">
+              <div className="p-2.5 rounded bg-primary/5 dark:bg-amber-950/20 text-primary dark:text-accent border border-primary/10 dark:border-accent/20 shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div className={`flex-grow ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -96,7 +96,7 @@ export default function ContactPage() {
 
             {/* Phone */}
             <div className={`flex gap-4 items-start ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
-              <div className="p-2.5 rounded bg-[#1F3A5F]/5 dark:bg-amber-950/20 text-[#1F3A5F] dark:text-[#B08D57] border border-[#1F3A5F]/10 dark:border-[#B08D57]/20 shrink-0">
+              <div className="p-2.5 rounded bg-primary/5 dark:bg-amber-950/20 text-primary dark:text-accent border border-primary/10 dark:border-accent/20 shrink-0">
                 <Phone className="w-5 h-5" />
               </div>
               <div className={`flex-grow ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -107,7 +107,7 @@ export default function ContactPage() {
                   {language === 'en' ? 'Office:' : 'دفتر:'} {phone}
                 </p>
                 {whatsapp && (
-                  <p className="text-[#B08D57] dark:text-amber-400 text-xs font-semibold mt-1">
+                  <p className="text-accent dark:text-amber-400 text-xs font-semibold mt-1">
                     {language === 'en' ? 'WhatsApp Link:' : 'واٹس ایپ لنک:'} {whatsapp}
                   </p>
                 )}
@@ -116,7 +116,7 @@ export default function ContactPage() {
 
             {/* Email */}
             <div className={`flex gap-4 items-start ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
-              <div className="p-2.5 rounded bg-[#1F3A5F]/5 dark:bg-amber-950/20 text-[#1F3A5F] dark:text-[#B08D57] border border-[#1F3A5F]/10 dark:border-[#B08D57]/20 shrink-0">
+              <div className="p-2.5 rounded bg-primary/5 dark:bg-amber-950/20 text-primary dark:text-accent border border-primary/10 dark:border-accent/20 shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div className={`flex-grow ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -130,7 +130,7 @@ export default function ContactPage() {
           </div>
 
           {/* Social icons */}
-          <div className="bg-[#1F3A5F] islamic-pattern text-white p-6 rounded-lg border border-[#B08D57]/35 relative overflow-hidden shadow-sm">
+          <div className="bg-primary islamic-pattern text-white p-6 rounded-lg border border-accent/35 relative overflow-hidden shadow-sm">
             <h3 className="font-bold text-md mb-3 font-serif">
               {language === 'en' ? 'Connect on Social Media' : 'سوشل میڈیا پر جڑیں'}
             </h3>
@@ -139,22 +139,22 @@ export default function ContactPage() {
             </p>
             <div className="flex items-center gap-2.5 relative z-10 justify-start">
               {socialLinks.facebook && (
-                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#162C49] text-[#B08D57] hover:bg-[#1F3A5F] border border-[#B08D57]/30 transition-colors">
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-primary text-accent hover:bg-primary border border-accent/30 transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.youtube && (
-                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#162C49] text-[#B08D57] hover:bg-[#1F3A5F] border border-[#B08D57]/30 transition-colors">
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-primary text-accent hover:bg-primary border border-accent/30 transition-colors">
                   <Youtube className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.twitter && (
-                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#162C49] text-[#B08D57] hover:bg-[#1F3A5F] border border-[#B08D57]/30 transition-colors">
+                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-primary text-accent hover:bg-primary border border-accent/30 transition-colors">
                   <Twitter className="w-4 h-4" />
                 </a>
               )}
               {socialLinks.instagram && (
-                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-[#162C49] text-[#B08D57] hover:bg-[#1F3A5F] border border-[#B08D57]/30 transition-colors">
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded bg-primary text-accent hover:bg-primary border border-accent/30 transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
               )}
@@ -167,8 +167,8 @@ export default function ContactPage() {
         <div className="lg:col-span-7">
           {success ? (
             <div className="premium-card p-10 shadow-sm text-center flex flex-col items-center justify-center min-h-[400px]">
-              <CheckCircle2 className="w-16 h-16 text-[#B08D57] dark:text-[#B08D57] mb-4" />
-              <h2 className="text-2xl font-bold text-[#1F3A5F] dark:text-[#B08D57] font-serif mb-3">
+              <CheckCircle2 className="w-16 h-16 text-accent dark:text-accent mb-4" />
+              <h2 className="text-2xl font-bold text-primary dark:text-accent font-serif mb-3">
                 {language === 'en' ? 'Message Received' : 'پیغام موصول ہو گیا'}
               </h2>
               <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed max-w-sm font-light mb-6">
@@ -180,7 +180,7 @@ export default function ContactPage() {
               </p>
               <button
                 onClick={() => setSuccess(false)}
-                className="px-5 py-2.5 bg-[#1F3A5F] text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-[#162C49] transition-colors"
+                className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-primary/90 transition-colors"
               >
                 {language === 'en' ? 'Send Another Message' : 'ایک اور پیغام بھیجیں'}
               </button>
@@ -188,7 +188,7 @@ export default function ContactPage() {
           ) : (
             <div className="premium-card shadow-sm p-6 sm:p-8">
               <h2 className={`text-xl font-bold text-slate-900 dark:text-white font-serif mb-6 border-b border-slate-100 dark:border-slate-750 pb-3 flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
-                <MessageSquareCode className="w-5 h-5 text-[#B08D57] dark:text-amber-500" />
+                <MessageSquareCode className="w-5 h-5 text-accent dark:text-amber-500" />
                 {language === 'en' ? 'Send Message' : 'پیغام بھیجیں'}
               </h2>
 
@@ -215,7 +215,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       placeholder={language === 'en' ? 'e.g. Abdullah' : 'مثال: عبداللہ'}
-                      inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                       border=""
                     />
                   </div>
@@ -230,7 +230,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="abdullah@example.com"
-                      inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                       border=""
                     />
                   </div>
@@ -248,7 +248,7 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Seminar Invitation' : 'مثال: سیمینار کی دعوت / فقہی سوال'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -265,7 +265,7 @@ export default function ContactPage() {
                     required
                     placeholder={language === 'en' ? 'Write your message here...' : 'اپنا پیغام یہاں لکھیں...'}
                     rows={6}
-                    className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-[#B08D57] dark:focus:border-[#B08D57] focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   ></textarea>
                 </div>
 
@@ -274,9 +274,9 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#1F3A5F] hover:bg-[#162C49] dark:bg-[#1F3A5F] dark:hover:bg-[#162C49] text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                   >
-                    <Send className="w-4 h-4 text-[#B08D57]" />
+                    <Send className="w-4 h-4 text-accent" />
                     {actionLoading 
                       ? (language === 'en' ? 'Sending message...' : 'پیغام بھیجا جا رہا ہے...') 
                       : (language === 'en' ? 'Send Message' : 'پیغام بھیجیں')

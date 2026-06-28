@@ -28,7 +28,7 @@ const InputEffect = ({
         htmlFor="defaultInput`}
       >
         {BtnName}
-        <span>{required && <span className="text-[#DE350B]">*</span>}</span>
+        <span>{required && <span className="text-error">*</span>}</span>
       </label>
     </div>
   );

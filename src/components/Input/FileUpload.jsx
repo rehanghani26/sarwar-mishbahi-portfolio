@@ -135,7 +135,7 @@ const FileUpload = forwardRef(
           <button
             onClick={onPreviewClick}
             title={fileName || "View"}
-            className={`p-2 rounded-full bg-white hover:bg-[#B0C4DE]/20 border border-gray-300 hover:border-[#0177D9] shadow-sm transition-all duration-200 ${iconClassName}`}
+            className={`p-2 rounded-full bg-white theme-hover-bg-secondary border border-gray-300 theme-hover-border-accent shadow-sm transition-all duration-200 ${iconClassName}`}
           >
             <img src={fileAttachment02} alt="" className="w-5 h-5 min-w-5" />
           </button>
@@ -167,7 +167,7 @@ const FileUpload = forwardRef(
                 <span
                   className={`flex items-center gap-2 truncate ${
                     !isViewButtonShown
-                      ? "cursor-pointer hover:text-[#0177D9]"
+                      ? "cursor-pointer theme-hover-text-accent"
                       : ""
                   } ${textClassName}`}
                   title={fileName ? fileName : ""}
@@ -211,7 +211,7 @@ const FileUpload = forwardRef(
                       <FaUpload
                         onClick={onUploadClick}
                         className={`p-0.5 size-4 cursor-pointer hover:hover:scale-110 ${
-                          isFileUploading ? "text-gray-400" : "text-[#0177D9]"
+                          isFileUploading ? "text-gray-400" : "text-info"
                         }`}
                         title="Upload"
                       />
@@ -219,7 +219,7 @@ const FileUpload = forwardRef(
 
                     {fileName && isViewButtonShown && (
                       <FaEye
-                        className="p-0.5 size-5 cursor-pointer text-[#033F7D] hover:scale-110"
+                        className="p-0.5 size-5 cursor-pointer text-infoDark hover:scale-110"
                         onClick={onPreviewClick}
                         title="View"
                       />

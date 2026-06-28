@@ -19,18 +19,18 @@ export default function Branches() {
           جامعہ العلوم الاسلامیہ بنوری ٹاؤن کے زیرِ نگرانی کراچی کے مختلف علاقوں میں کئی شاخیں مصروفِ عمل ہیں، جہاں ہزاروں طلبہ و طالبات علمِ دین حاصل کر رہے ہیں۔ ان کا مقصد مرکزی کیمپس کے تعلیمی بوجھ کو بانٹنا اور دیگر علاقوں کے لوگوں کو ان کے گھر کے قریب دینی تعلیم فراہم کرنا ہے۔
         </p>
 
-        <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">نمایاں شاخیں</h3>
+        <h3 className="text-[22px] font-bold text-primary border-b pb-2">نمایاں شاخیں</h3>
 
         <div className="space-y-4 my-6">
           {branchesList.map((branch, i) => (
-            <div key={i} className="bg-[#fcfbf9] border border-[#E5D8CA] p-5 rounded-sm hover:border-[#B08D57] transition-all">
-              <h4 className="text-[19px] font-bold text-[#B08D57] mb-1">{branch.name}</h4>
-              <p className="text-[16px] text-[#555]">{branch.desc}</p>
+            <div key={i} className="bg-background border border-border p-5 rounded-sm hover:border-accent transition-all">
+              <h4 className="text-[19px] font-bold text-accent mb-1">{branch.name}</h4>
+              <p className="text-[16px] text-textSecondary">{branch.desc}</p>
             </div>
           ))}
         </div>
 
-        <h3 className="text-[22px] font-bold text-[#3A2C23] border-b pb-2">شعبہ جاتِ خدمات</h3>
+        <h3 className="text-[22px] font-bold text-primary border-b pb-2">شعبہ جاتِ خدمات</h3>
         <p>
           تعلیم کے علاوہ، مرکزی جامعہ میں دیگر سماجی اور علمی شعبے بھی قائم ہیں:
         </p>

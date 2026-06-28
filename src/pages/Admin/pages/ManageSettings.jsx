@@ -162,8 +162,8 @@ export default function ManageSettings() {
 
   if (loading && !settings) {
     return (
-      <div className="flex items-center justify-center min-h-[70vh] bg-[#FAF7F2]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1F3A5F]"></div>
+      <div className="flex items-center justify-center min-h-[70vh] bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -177,17 +177,17 @@ export default function ManageSettings() {
   ];
 
   return (
-    <div className={`bg-[#FAF7F2] py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5D8CA]/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-[#E5D8CA] bg-white rounded text-slate-500 hover:text-[#B08D57] shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#1F3A5F] font-serif">
+              <h1 className="text-2xl font-bold text-primary font-serif">
                 {language === 'en' ? 'Website Settings' : 'ویب سائٹ کی ترتیبات'}
               </h1>
               <p className="text-xs text-slate-400 font-light font-sans">
@@ -214,7 +214,7 @@ export default function ManageSettings() {
         )}
 
         {/* Settings Tab Selector Bar */}
-        <div className="flex flex-wrap border-b border-[#E5D8CA]/60 gap-1 shrink-0">
+        <div className="flex flex-wrap border-b border-border/60 gap-1 shrink-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -223,8 +223,8 @@ export default function ManageSettings() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-all uppercase tracking-wider font-serif ${activeTab === tab.id
-                ? 'border-[#B08D57] text-[#1F3A5F]'
-                : 'border-transparent text-slate-500 hover:text-[#B08D57]'
+                ? 'border-accent text-primary'
+                : 'border-transparent text-slate-500 hover:text-accent'
                 }`}
             >
               {tab.icon}
@@ -234,7 +234,7 @@ export default function ManageSettings() {
         </div>
 
         {/* Global Save Form */}
-        <form onSubmit={handleFormSubmit} className={`bg-white border border-[#E5D8CA] p-6 rounded-lg shadow-sm space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <form onSubmit={handleFormSubmit} className={`bg-white border border-border p-6 rounded-lg shadow-sm space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
 
           {/* TAB 1: Biography Details */}
           {activeTab === 'bio' && (
@@ -249,7 +249,7 @@ export default function ManageSettings() {
                     value={scholarInfo.fullName}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, fullName: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -261,7 +261,7 @@ export default function ManageSettings() {
                     value={scholarInfo.title}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, title: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function ManageSettings() {
                   value={scholarInfo.bio}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, bio: e.target.value })}
                   rows={5}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -288,7 +288,7 @@ export default function ManageSettings() {
                     value={scholarInfo.madrasah}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, madrasah: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -300,7 +300,7 @@ export default function ManageSettings() {
                     value={scholarInfo.university}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, university: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -315,7 +315,7 @@ export default function ManageSettings() {
                   onChange={(e) => setScholarInfo({ ...scholarInfo, qualifications: e.target.value })}
                   placeholder={language === 'en' ? 'PhD Shariah, Masters Islamic Law' : 'پی ایچ ڈی شریعہ، ماسٹرز اسلامی قانون'}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
 
@@ -329,7 +329,7 @@ export default function ManageSettings() {
                   onChange={(e) => setScholarInfo({ ...scholarInfo, areasOfExpertise: e.target.value })}
                   placeholder={language === 'en' ? 'Fiqh, Hadith, Islamic Banking' : 'فقہ، حدیث، اسلامی بینکاری'}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
 
@@ -342,7 +342,7 @@ export default function ManageSettings() {
                   value={scholarInfo.teachingExperience}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, teachingExperience: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
 
@@ -356,7 +356,7 @@ export default function ManageSettings() {
                     value={scholarInfo.researchInterests}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, researchInterests: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -368,7 +368,7 @@ export default function ManageSettings() {
                     value={scholarInfo.institutionsAssociatedWith}
                     onChange={(e) => setScholarInfo({ ...scholarInfo, institutionsAssociatedWith: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function ManageSettings() {
                   value={scholarInfo.achievements}
                   onChange={(e) => setScholarInfo({ ...scholarInfo, achievements: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
             </div>
@@ -400,7 +400,7 @@ export default function ManageSettings() {
                   value={contactInfo.address}
                   onChange={(e) => setContactInfo({ ...contactInfo, address: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
 
@@ -414,7 +414,7 @@ export default function ManageSettings() {
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -426,7 +426,7 @@ export default function ManageSettings() {
                     value={contactInfo.whatsapp}
                     onChange={(e) => setContactInfo({ ...contactInfo, whatsapp: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -440,7 +440,7 @@ export default function ManageSettings() {
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
             </div>
@@ -460,7 +460,7 @@ export default function ManageSettings() {
                     onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
                     placeholder="https://facebook.com/username"
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -473,7 +473,7 @@ export default function ManageSettings() {
                     onChange={(e) => setSocialLinks({ ...socialLinks, youtube: e.target.value })}
                     placeholder="https://youtube.com/channel/..."
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -489,7 +489,7 @@ export default function ManageSettings() {
                     onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
                     placeholder="https://twitter.com/username"
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -502,7 +502,7 @@ export default function ManageSettings() {
                     onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
                     placeholder="https://instagram.com/username"
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -522,7 +522,7 @@ export default function ManageSettings() {
                     value={homepageSettings.heroName}
                     onChange={(e) => setHomepageSettings({ ...homepageSettings, heroName: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
                 <div>
@@ -534,7 +534,7 @@ export default function ManageSettings() {
                     value={homepageSettings.heroTitle}
                     onChange={(e) => setHomepageSettings({ ...homepageSettings, heroTitle: e.target.value })}
                     border=""
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
                 </div>
               </div>
@@ -547,7 +547,7 @@ export default function ManageSettings() {
                   value={homepageSettings.heroIntroduction}
                   onChange={(e) => setHomepageSettings({ ...homepageSettings, heroIntroduction: e.target.value })}
                   rows={3}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
@@ -560,7 +560,7 @@ export default function ManageSettings() {
                   value={homepageSettings.heroMission}
                   onChange={(e) => setHomepageSettings({ ...homepageSettings, heroMission: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
             </div>
@@ -578,7 +578,7 @@ export default function ManageSettings() {
                   value={seoSettings.metaTitle}
                   onChange={(e) => setSeoSettings({ ...seoSettings, metaTitle: e.target.value })}
                   border=""
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 />
               </div>
 
@@ -590,7 +590,7 @@ export default function ManageSettings() {
                   value={seoSettings.metaDescription}
                   onChange={(e) => setSeoSettings({ ...seoSettings, metaDescription: e.target.value })}
                   rows={4}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-[#E5D8CA] rounded outline-none focus:border-[#B08D57] resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
             </div>
@@ -601,9 +601,9 @@ export default function ManageSettings() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-1.5 px-6 py-2.5 bg-[#1F3A5F] hover:bg-[#162C49] text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+              className="flex items-center gap-1.5 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
             >
-              <Save className="w-4 h-4 text-[#B08D57]" />
+              <Save className="w-4 h-4 text-accent" />
               {loading
                 ? (language === 'en' ? 'Saving settings...' : 'ترتیبات محفوظ ہو رہی ہیں...')
                 : (language === 'en' ? 'Save Settings' : 'ترتیبات محفوظ کریں')
@@ -626,7 +626,7 @@ export default function ManageSettings() {
           
           {/* Modal Box */}
           <div 
-            className={`relative bg-white dark:bg-slate-900 border border-[#E5D8CA] dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transition-all duration-300 transform animate-modal-entrance ${language === 'ur' ? 'text-right' : 'text-left'}`} 
+            className={`relative bg-white dark:bg-slate-900 border border-border dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transition-all duration-300 transform animate-modal-entrance ${language === 'ur' ? 'text-right' : 'text-left'}`} 
             dir={language === 'ur' ? 'rtl' : 'ltr'}
           >
             {modalStep === 'confirm' ? (
@@ -658,9 +658,9 @@ export default function ManageSettings() {
                   <button
                     type="button"
                     onClick={confirmAndSave}
-                    className="px-5 py-2 text-xs font-bold text-white bg-[#1F3A5F] hover:bg-[#162C49] rounded shadow transition-colors flex items-center gap-2 uppercase tracking-wider font-serif"
+                    className="px-5 py-2 text-xs font-bold text-white bg-primary hover:bg-primary/90 rounded shadow transition-colors flex items-center gap-2 uppercase tracking-wider font-serif"
                   >
-                    <Save className="w-4 h-4 text-[#B08D57]" />
+                    <Save className="w-4 h-4 text-accent" />
                     {language === 'en' ? 'Save Settings' : 'ترتیبات محفوظ کریں'}
                   </button>
                 </div>
