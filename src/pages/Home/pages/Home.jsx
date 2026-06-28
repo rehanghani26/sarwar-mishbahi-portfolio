@@ -92,6 +92,7 @@ export default function Home() {
   const [publications, setPublications] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [events, setEvents] = useState([]);
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
@@ -245,7 +246,8 @@ export default function Home() {
 
       {/* FEATURE CARDS SECTION */}
       <section className="py-12 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Desktop View: Grid */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {FEATURES.map((feature) => (
             <div key={feature.title}>
               <AnimatedFeatureCard
@@ -256,6 +258,55 @@ export default function Home() {
               />
             </div>
           ))}
+        </div>
+
+        {/* Mobile View: Slide One-by-One */}
+        <div className="sm:hidden flex flex-col items-center gap-4">
+          <div className="w-full">
+            <AnimatedFeatureCard
+              icon={FEATURES[activeFeatureIndex].icon}
+              title={FEATURES[activeFeatureIndex].title}
+              description={FEATURES[activeFeatureIndex].description}
+              to={FEATURES[activeFeatureIndex].to}
+            />
+          </div>
+          
+          {/* Controls */}
+          <div className="flex items-center gap-6 mt-2">
+            <button
+              type="button"
+              disabled={activeFeatureIndex === 0}
+              onClick={() => setActiveFeatureIndex(prev => prev - 1)}
+              className={`p-2 rounded-full border transition-all ${activeFeatureIndex === 0 ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'text-primary border-primary hover:bg-slate-50'}`}
+            >
+              {language === 'ur' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+            </button>
+            
+            {/* Dots indicator */}
+            <div className="flex items-center gap-2">
+              {FEATURES.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setActiveFeatureIndex(index)}
+                  className="w-2 h-2 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor: activeFeatureIndex === index ? COLORS.primary : COLORS.border,
+                    transform: activeFeatureIndex === index ? 'scale(1.2)' : 'scale(1)'
+                  }}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              disabled={activeFeatureIndex === FEATURES.length - 1}
+              onClick={() => setActiveFeatureIndex(prev => prev + 1)}
+              className={`p-2 rounded-full border transition-all ${activeFeatureIndex === FEATURES.length - 1 ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'text-primary border-primary hover:bg-slate-50'}`}
+            >
+              {language === 'ur' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
       </section>
 
