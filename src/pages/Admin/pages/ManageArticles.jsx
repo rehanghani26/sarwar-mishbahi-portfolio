@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle, Eye, Upload } from 'lucide-react';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
-import { Input } from '../../../components/Input';
+import { Input, PdfViewer } from '@/components';
 
 import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS } from '@/utils/categories';
 
@@ -26,12 +25,18 @@ export default function ManageArticles() {
   const [formFields, setFormFields] = useState({
     title: '',
     summary: '',
-    category: 'Fiqh',
+    category: 'تفسیرِ قرآن',
     tags: '',
-    featuredImage: '',
-    fullContent: '',
     references: '',
   });
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+  const [existingPdfUrl, setExistingPdfUrl] = useState(null);
+  const [existingThumbnailUrl, setExistingThumbnailUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewType, setPreviewType] = useState('auto');
+  const [previewTitle, setPreviewTitle] = useState('Preview');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const categories = ARTICLE_CATEGORIES;
 
@@ -56,22 +61,22 @@ export default function ManageArticles() {
     setFormFields((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEditorChange = (htmlContent) => {
-    setFormFields((prev) => ({ ...prev, fullContent: htmlContent }));
-  };
-
   const openCreateForm = () => {
     setActionError(null);
     setEditingId(null);
     setFormFields({
       title: '',
       summary: '',
-      category: 'Fiqh',
+      category: 'QURAN_TAFSEER',
       tags: '',
-      featuredImage: '',
-      fullContent: '',
       references: '',
     });
+    setThumbnailFile(null);
+    setPdfFile(null);
+    setExistingPdfUrl(null);
+    setExistingThumbnailUrl(null);
+    setPreviewUrl(null);
+    setIsPreviewOpen(false);
     setIsFormOpen(true);
     setSuccess(false);
   };
@@ -79,15 +84,36 @@ export default function ManageArticles() {
   const openEditForm = (article) => {
     setActionError(null);
     setEditingId(article._id);
+
+    const categoryMap = {
+      'تفسیرِ قرآن': 'QURAN_TAFSEER',
+      'علومِ حدیث': 'HADITH_SCIENCES',
+      'فقہ و فتاویٰ': 'FIQH_FATAWA',
+      'عقائد': 'AQEEDAH',
+      'سیرتِ نبوی ﷺ': 'SEERAH',
+      'اسلامی تاریخ': 'ISLAMIC_HISTORY',
+      'خاندانی و معاشرتی مسائل': 'FAMILY_SOCIAL_ISSUES',
+      'تعلیم و تربیت': 'EDUCATION_UPBRINGING',
+      'دعوت و اصلاح': 'DAWAH_REFORM',
+      'متفرق اسلامی مضامین': 'MISC_ISLAMIC_TOPICS',
+    };
+
+    const pdfUrl = article.pdf?.url || (typeof article.pdf === 'string' ? article.pdf : null);
+    const thumbnailUrl = article.featuredImage?.url || (typeof article.featuredImage === 'string' ? article.featuredImage : null);
+
     setFormFields({
       title: article.title,
       summary: article.summary,
-      category: article.category,
+      category: categoryMap[article.category] || article.category,
       tags: article.tags ? article.tags.join(', ') : '',
-      featuredImage: article.featuredImage || '',
-      fullContent: article.fullContent,
-      references: article.references ? article.references.join('\n') : '',
+      references: article.references ? article.references.join(', ') : '',
     });
+    setThumbnailFile(null);
+    setPdfFile(null);
+    setExistingPdfUrl(pdfUrl);
+    setExistingThumbnailUrl(thumbnailUrl);
+    setPreviewUrl(null);
+    setIsPreviewOpen(false);
     setIsFormOpen(true);
     setSuccess(false);
   };
@@ -97,18 +123,38 @@ export default function ManageArticles() {
     setActionError(null);
     setActionLoading(true);
 
-    const payload = {
-      ...formFields,
-      tags: formFields.tags.split(',').map((t) => t.trim()).filter((t) => t),
-      references: formFields.references.split('\n').map((r) => r.trim()).filter((r) => r),
-    };
+    // Validation: files are required for creation!
+    if (!editingId && !thumbnailFile) {
+      setActionError(language === 'en' ? 'Featured Image file is required' : 'نمایاں تصویر کی فائل درکار ہے');
+      setActionLoading(false);
+      return;
+    }
+    if (!editingId && !pdfFile) {
+      setActionError(language === 'en' ? 'PDF file is required' : 'پی ڈی ایف فائل درکار ہے');
+      setActionLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', formFields.title);
+    formData.append('summary', formFields.summary);
+    formData.append('category', formFields.category);
+    formData.append('tags', formFields.tags);
+    formData.append('references', formFields.references);
+
+    if (thumbnailFile) {
+      formData.append('thumbnail', thumbnailFile);
+    }
+    if (pdfFile) {
+      formData.append('pdf', pdfFile);
+    }
 
     try {
       if (editingId) {
-        await updateArticle(editingId, payload);
+        await updateArticle(editingId, formData);
         showSuccess(language === 'en' ? 'Article updated successfully.' : 'مضمون کامیابی کے ساتھ اپ ڈیٹ ہو گیا۔');
       } else {
-        await createArticle(payload);
+        await createArticle(formData);
         showSuccess(language === 'en' ? 'Article published successfully.' : 'مضمون کامیابی کے ساتھ شائع ہو گیا۔');
       }
     } catch (err) {
@@ -228,8 +274,8 @@ export default function ManageArticles() {
                     className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {language === 'en' ? cat : (ARTICLE_TRANSLATIONS[cat] || cat)}
+                      <option key={cat.value} value={cat.value}>
+                        {language === 'en' ? cat.labelEn : cat.labelUr}
                       </option>
                     ))}
                   </select>
@@ -251,8 +297,8 @@ export default function ManageArticles() {
                 />
               </div>
 
-              {/* Tags & Featured Image */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Tags, Featured Image, and PDF file */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Tags (separated by comma)' : 'ٹیگز (کوما سے الگ کریں)'}</label>
                   <Input
@@ -266,37 +312,147 @@ export default function ManageArticles() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Featured Image URL' : 'نمایاں تصویر کا یو آر ایل'}</label>
-                  <Input
-                    type="text"
-                    name="featuredImage"
-                    value={formFields.featuredImage}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/cover.jpg"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                    border=""
-                  />
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'Featured Image (JPEG/PNG)' : 'نمایاں تصویر'} {!editingId && ' *'}
+                  </label>
+                  {thumbnailFile ? (
+                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={thumbnailFile.name}>{thumbnailFile.name}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">({(thumbnailFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = URL.createObjectURL(thumbnailFile);
+                            setPreviewUrl(url);
+                            setPreviewType('image');
+                            setPreviewTitle(formFields.title || 'Featured Image Preview');
+                            setIsPreviewOpen(true);
+                          }}
+                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-accent" />
+                          {language === 'en' ? 'Preview' : 'پیش نظارہ'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setThumbnailFile(null)}
+                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                        >
+                          {language === 'en' ? 'Remove' : 'حذف کریں'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : existingThumbnailUrl ? (
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setThumbnailFile(e.target.files[0])}
+                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewUrl(existingThumbnailUrl);
+                          setPreviewType('image');
+                          setPreviewTitle(formFields.title || 'Current Featured Image');
+                          setIsPreviewOpen(true);
+                        }}
+                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-accent" />
+                        {language === 'en' ? 'View Current Image' : 'موجودہ تصویر دیکھیں'}
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setThumbnailFile(e.target.files[0])}
+                      required={!editingId}
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    />
+                  )}
                 </div>
-              </div>
-
-              {/* Rich Text Editor */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Full Article Content (Rich Editor) *' : 'مکمل مضمون کا مواد (رچ ایڈیٹر) *'}</label>
-                <RichTextEditor
-                  value={formFields.fullContent}
-                  onChange={handleEditorChange}
-                  placeholder={language === 'en' ? 'Write your Islamic article content here...' : 'اپنا علمی اسلامی مواد یہاں تحریر کریں...'}
-                />
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'PDF Document' : 'پی ڈی ایف علمی مضمون'} {!editingId && ' *'}
+                  </label>
+                  {pdfFile ? (
+                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={pdfFile.name}>{pdfFile.name}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = URL.createObjectURL(pdfFile);
+                            setPreviewUrl(url);
+                            setPreviewType('pdf');
+                            setPreviewTitle(formFields.title || 'PDF Preview');
+                            setIsPreviewOpen(true);
+                          }}
+                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-accent" />
+                          {language === 'en' ? 'Preview' : 'پیش نظارہ'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPdfFile(null)}
+                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                        >
+                          {language === 'en' ? 'Remove' : 'حذف کریں'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : existingPdfUrl ? (
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => setPdfFile(e.target.files[0])}
+                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewUrl(existingPdfUrl);
+                          setPreviewType('pdf');
+                          setPreviewTitle(formFields.title || 'Current PDF');
+                          setIsPreviewOpen(true);
+                        }}
+                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-accent" />
+                        {language === 'en' ? 'View Current PDF' : 'موجودہ پی ڈی ایف دیکھیں'}
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) => setPdfFile(e.target.files[0])}
+                      required={!editingId}
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    />
+                  )}
+                </div>
               </div>
 
               {/* References */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'References / Sources (one per line)' : 'حوالہ جات / مراجع (ہر لائن میں ایک)'}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'References / Sources (separated by comma)' : 'حوالہ جات / مراجع (کوما سے الگ کریں)'}</label>
                 <textarea
                   name="references"
                   value={formFields.references}
                   onChange={handleInputChange}
-                  placeholder={language === 'en' ? 'e.g. Sahih Bukhari, Hadith No. 456\nAl-Mughni by Ibn Qudamah' : 'مثال: صحیح بخاری، حدیث نمبر 456\nالمغنی از ابن قدامہ'}
+                  placeholder={language === 'en' ? 'e.g. Sahih Bukhari, Hadith No. 456, Al-Mughni by Ibn Qudamah' : 'مثال: صحیح بخاری، حدیث نمبر 456، المغنی از ابن قدامہ'}
                   rows={3}
                   className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
@@ -393,6 +549,21 @@ export default function ManageArticles() {
           </div>
         )}
       </div>
+
+      {isPreviewOpen && previewUrl && (
+        <PdfViewer
+          url={previewUrl}
+          type={previewType}
+          title={previewTitle}
+          isModal={true}
+          onClose={() => {
+            setIsPreviewOpen(false);
+            if (previewUrl.startsWith('blob:')) {
+              URL.revokeObjectURL(previewUrl);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle, Eye } from 'lucide-react';
 import { getPublications, createPublication, updatePublication, deletePublication } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input } from '../../../components/Input';
+import { Input, PdfViewer } from '@/components';
 
-import { CATEGORY_MAP, PUBLICATION_TRANSLATIONS } from '@/utils/categories';
+import { CATEGORY_MAP, PUBLICATION_TRANSLATIONS, BOOK_LANGUAGE_TRANSLATIONS } from '@/utils/categories';
 
-const languageTranslations = {
-  'English': 'انگریزی',
-  'Urdu': 'اردو',
-  'Arabic': 'عربی',
-  'Persian': 'فارسی',
-};
+const BOOK_LANGUAGES = [
+  { value: 'ur', labelUr: 'اردو', labelEn: 'Urdu' },
+  { value: 'ar', labelUr: 'عربی', labelEn: 'Arabic' },
+  { value: 'en', labelUr: 'انگریزی', labelEn: 'English' },
+];
 
 export default function ManagePublications() {
   const { settings } = useSettings();
@@ -31,13 +30,22 @@ export default function ManagePublications() {
   // Form Fields State
   const [formFields, setFormFields] = useState({
     title: '',
-    description: '',
-    category: 'Fiqh',
-    language: 'English',
-    author: 'Dr. Islamic Scholar',
-    googleDriveLink: '',
-    coverImage: '',
+    summary: '',
+    category: 'تفسیرِ قرآن',
+    blanguage: 'ur',
+    author: 'مفتی فیضان سرور مصباحی',
+    pageCount: '',
+    tags: '',
+    references: '',
   });
+  const [coverImageFile, setCoverImageFile] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+  const [existingPdfUrl, setExistingPdfUrl] = useState(null);
+  const [existingCoverUrl, setExistingCoverUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewType, setPreviewType] = useState('auto');
+  const [previewTitle, setPreviewTitle] = useState('Preview');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const categories = CATEGORY_MAP.publications;
 
@@ -45,7 +53,7 @@ export default function ManagePublications() {
     try {
       setLoading(true);
       const data = await getPublications();
-      setPublications(Array.isArray(data) ? data : (data.publications || []));
+      setPublications(Array.isArray(data) ? data : (data.books || []));
     } catch (err) {
       console.error('Failed to load publications:', err);
     } finally {
@@ -67,13 +75,20 @@ export default function ManagePublications() {
     setEditingId(null);
     setFormFields({
       title: '',
-      description: '',
-      category: 'Fiqh',
-      language: 'English',
-      author: 'Dr. Islamic Scholar',
-      googleDriveLink: '',
-      coverImage: '',
+      summary: '',
+      category: 'QURAN_TAFSEER',
+      blanguage: 'ur',
+      author: 'مفتی فیضان سرور مصباحی',
+      pageCount: '',
+      tags: '',
+      references: '',
     });
+    setCoverImageFile(null);
+    setPdfFile(null);
+    setExistingPdfUrl(null);
+    setExistingCoverUrl(null);
+    setPreviewUrl(null);
+    setIsPreviewOpen(false);
     setIsFormOpen(true);
     setSuccess(false);
   };
@@ -81,15 +96,39 @@ export default function ManagePublications() {
   const openEditForm = (pub) => {
     setActionError(null);
     setEditingId(pub._id);
+    
+    const categoryMap = {
+      'تفسیرِ قرآن': 'QURAN_TAFSEER',
+      'علومِ حدیث': 'HADITH_SCIENCES',
+      'فقہ و فتاویٰ': 'FIQH_FATAWA',
+      'عقائد': 'AQEEDAH',
+      'سیرتِ نبوی ﷺ': 'SEERAH',
+      'اسلامی تاریخ': 'ISLAMIC_HISTORY',
+      'خاندانی و معاشرتی مسائل': 'FAMILY_SOCIAL_ISSUES',
+      'تعلیم و تربیت': 'EDUCATION_UPBRINGING',
+      'دعوت و اصلاح': 'DAWAH_REFORM',
+      'متفرق اسلامی مضامین': 'MISC_ISLAMIC_TOPICS',
+    };
+
+    const pdfUrl = pub.pdf?.url || (typeof pub.pdf === 'string' ? pub.pdf : null);
+    const coverUrl = pub.coverImage?.url || (typeof pub.coverImage === 'string' ? pub.coverImage : null);
+
     setFormFields({
       title: pub.title,
-      description: pub.description,
-      category: pub.category,
-      language: pub.language,
+      summary: pub.summary,
+      category: categoryMap[pub.category] || pub.category,
+      blanguage: pub.blanguage || 'ur',
       author: pub.author,
-      googleDriveLink: pub.googleDriveLink,
-      coverImage: pub.coverImage || '',
+      pageCount: pub.pageCount || '',
+      tags: pub.tags ? pub.tags.join(', ') : '',
+      references: pub.references ? pub.references.join(', ') : '',
     });
+    setCoverImageFile(null);
+    setPdfFile(null);
+    setExistingPdfUrl(pdfUrl);
+    setExistingCoverUrl(coverUrl);
+    setPreviewUrl(null);
+    setIsPreviewOpen(false);
     setIsFormOpen(true);
     setSuccess(false);
   };
@@ -99,12 +138,42 @@ export default function ManagePublications() {
     setActionError(null);
     setActionLoading(true);
 
+    if (!editingId && !coverImageFile) {
+      setActionError(language === 'en' ? 'Cover Image file is required' : 'سرورق تصویر کی فائل درکار ہے');
+      setActionLoading(false);
+      return;
+    }
+    if (!editingId && !pdfFile) {
+      setActionError(language === 'en' ? 'PDF file is required' : 'پی ڈی ایف فائل درکار ہے');
+      setActionLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', formFields.title);
+    formData.append('summary', formFields.summary);
+    formData.append('category', formFields.category);
+    formData.append('blanguage', formFields.blanguage);
+    formData.append('author', formFields.author);
+    if (formFields.pageCount) {
+      formData.append('pageCount', formFields.pageCount);
+    }
+    formData.append('tags', formFields.tags);
+    formData.append('references', formFields.references);
+
+    if (coverImageFile) {
+      formData.append('coverImage', coverImageFile);
+    }
+    if (pdfFile) {
+      formData.append('pdf', pdfFile);
+    }
+
     try {
       if (editingId) {
-        await updatePublication(editingId, formFields);
+        await updatePublication(editingId, formData);
         showSuccess(language === 'en' ? 'Publication updated successfully.' : 'مطبوعہ کامیابی سے اپ ڈیٹ ہو گئی۔');
       } else {
-        await createPublication(formFields);
+        await createPublication(formData);
         showSuccess(language === 'en' ? 'Publication added successfully.' : 'مطبوعہ کامیابی سے شامل ہو گئی۔');
       }
     } catch (err) {
@@ -249,58 +318,210 @@ export default function ManagePublications() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Language *' : 'زبان *'}</label>
-                  <Input
-                    type="text"
-                    name="language"
-                    value={formFields.language}
+                  <select
+                    name="blanguage"
+                    value={formFields.blanguage}
                     onChange={handleInputChange}
                     required
-                    placeholder={language === 'en' ? 'e.g. Urdu / Arabic / English' : 'مثال: Urdu / Arabic / English'}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  >
+                    {BOOK_LANGUAGES.map((lang) => (
+                      <option key={lang.value} value={lang.value}>
+                        {language === 'en' ? lang.labelEn : lang.labelUr}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Cover Image File & PDF File */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'Cover Image (JPEG/PNG)' : 'کتاب کا سرورق'} {!editingId && ' *'}
+                  </label>
+                  {coverImageFile ? (
+                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={coverImageFile.name}>{coverImageFile.name}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">({(coverImageFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = URL.createObjectURL(coverImageFile);
+                            setPreviewUrl(url);
+                            setPreviewType('image');
+                            setPreviewTitle(formFields.title || 'Cover Image Preview');
+                            setIsPreviewOpen(true);
+                          }}
+                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-accent" />
+                          {language === 'en' ? 'Preview' : 'پیش نظارہ'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCoverImageFile(null)}
+                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                        >
+                          {language === 'en' ? 'Remove' : 'حذف کریں'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : existingCoverUrl ? (
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setCoverImageFile(e.target.files[0])}
+                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewUrl(existingCoverUrl);
+                          setPreviewType('image');
+                          setPreviewTitle(formFields.title || 'Current Cover');
+                          setIsPreviewOpen(true);
+                        }}
+                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-accent" />
+                        {language === 'en' ? 'View Current Cover' : 'موجودہ سرورق دیکھیں'}
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setCoverImageFile(e.target.files[0])}
+                      required={!editingId}
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    />
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'PDF Document' : 'پی ڈی ایف کتاب'} {!editingId && ' *'}
+                  </label>
+                  {pdfFile ? (
+                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={pdfFile.name}>{pdfFile.name}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = URL.createObjectURL(pdfFile);
+                            setPreviewUrl(url);
+                            setPreviewType('pdf');
+                            setPreviewTitle(formFields.title || 'PDF Preview');
+                            setIsPreviewOpen(true);
+                          }}
+                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-accent" />
+                          {language === 'en' ? 'Preview' : 'پیش نظارہ'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPdfFile(null)}
+                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                        >
+                          {language === 'en' ? 'Remove' : 'حذف کریں'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : existingPdfUrl ? (
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => setPdfFile(e.target.files[0])}
+                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewUrl(existingPdfUrl);
+                          setPreviewType('pdf');
+                          setPreviewTitle(formFields.title || 'Current PDF');
+                          setIsPreviewOpen(true);
+                        }}
+                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-accent" />
+                        {language === 'en' ? 'View Current PDF' : 'موجودہ پی ڈی ایف دیکھیں'}
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) => setPdfFile(e.target.files[0])}
+                      required={!editingId}
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Page Count & Tags */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Page Count' : 'صفحات کی تعداد'}</label>
+                  <Input
+                    type="number"
+                    name="pageCount"
+                    value={formFields.pageCount}
+                    onChange={handleInputChange}
+                    min="1"
+                    placeholder={language === 'en' ? 'e.g. 150' : 'مثال: 150'}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    border=""
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Tags (separated by comma)' : 'ٹیگز (کوما سے الگ کریں)'}</label>
+                  <Input
+                    type="text"
+                    name="tags"
+                    value={formFields.tags}
+                    onChange={handleInputChange}
+                    placeholder={language === 'en' ? 'e.g. Aqeedah, Tauheed' : 'مثال: عقائد، توحید'}
                     inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
               </div>
 
-              {/* Drive Link */}
+              {/* Summary */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Google Drive Share Link *' : 'گوگل ڈرائیو شیئر لنک *'}</label>
-                <Input
-                  type="url"
-                  name="googleDriveLink"
-                  value={formFields.googleDriveLink}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="https://drive.google.com/file/d/..."
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                  border=""
-                />
-              </div>
-
-              {/* Cover Image URL */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Cover Image URL (Optional)' : 'سرورق کا یو آر ایل (اختیاری)'}</label>
-                <Input
-                  type="text"
-                  name="coverImage"
-                  value={formFields.coverImage}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/cover.jpg"
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                  border=""
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Short Description *' : 'مختصر تفصیل *'}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Short Summary *' : 'مختصر خلاصہ *'}</label>
                 <textarea
-                  name="description"
-                  value={formFields.description}
+                  name="summary"
+                  value={formFields.summary}
                   onChange={handleInputChange}
                   required
-                  placeholder={language === 'en' ? 'Provide a brief overview of this publication file...' : 'اس مطبوعہ فائل کا مختصر جائزہ فراہم کریں...'}
-                  rows={4}
+                  placeholder={language === 'en' ? 'Provide a brief overview of this book...' : 'اس کتاب کا مختصر جائزہ فراہم کریں...'}
+                  rows={3}
+                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                ></textarea>
+              </div>
+
+              {/* References */}
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'References / Sources (separated by comma)' : 'حوالہ جات / مراجع (کوما سے الگ کریں)'}</label>
+                <textarea
+                  name="references"
+                  value={formFields.references}
+                  onChange={handleInputChange}
+                  placeholder={language === 'en' ? 'e.g. Fath al-Bari, Hadith No. 123' : 'مثال: فتح الباری، حدیث نمبر 123'}
+                  rows={2}
                   className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
@@ -320,7 +541,7 @@ export default function ManagePublications() {
                   className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                 >
                   <Save className="w-4 h-4 text-accent" />
-                  {actionLoading ? 'محفوظ ہو رہا ہے...' : 'مطبوعہ محفوظ کریں'}
+                  {actionLoading ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') : (language === 'en' ? 'Save Book' : 'کتاب محفوظ کریں')}
                 </button>
               </div>
 
@@ -356,7 +577,7 @@ export default function ManagePublications() {
                           </span>
                         </td>
                         <td className={`px-6 py-4 text-xs font-semibold text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          {language === 'en' ? pub.language : (languageTranslations[pub.language] || pub.language)}
+                          {language === 'en' ? pub.blanguage : (BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage)}
                         </td>
                         <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
                           <div className="inline-flex items-center gap-2">
@@ -392,7 +613,21 @@ export default function ManagePublications() {
         )}
 
       </div>
+
+      {isPreviewOpen && previewUrl && (
+        <PdfViewer
+          url={previewUrl}
+          type={previewType}
+          title={previewTitle}
+          isModal={true}
+          onClose={() => {
+            setIsPreviewOpen(false);
+            if (previewUrl.startsWith('blob:')) {
+              URL.revokeObjectURL(previewUrl);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
-

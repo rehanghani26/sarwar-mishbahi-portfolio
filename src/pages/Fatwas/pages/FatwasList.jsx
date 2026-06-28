@@ -112,8 +112,8 @@ export default function FatwasList() {
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {language === 'ur' ? (FATWA_TRANSLATIONS[cat] || cat) : cat}
+                <option key={cat.value} value={cat.value}>
+                  {language === 'ur' ? cat.labelUr : cat.labelEn}
                 </option>
               ))}
             </select>
@@ -133,14 +133,14 @@ export default function FatwasList() {
           </button>
           {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
+              key={cat.value}
+              onClick={() => handleCategoryChange(cat.value)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
                   ? 'bg-primary border-primary text-white shadow-sm'
                   : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
-              {language === 'ur' ? (FATWA_TRANSLATIONS[cat] || cat) : cat}
+              {language === 'ur' ? cat.labelUr : cat.labelEn}
             </button>
           ))}
         </div>

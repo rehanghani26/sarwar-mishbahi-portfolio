@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, Hash, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
+import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, Hash, Share2, Facebook, Twitter, MessageCircle, ExternalLink, Download } from 'lucide-react';
 import { getArticleBySlug } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { ArticleCard } from '@/components';
+import { ArticleCard, PdfViewer } from '@/components';
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -13,6 +13,7 @@ export default function ArticleDetail() {
   const [current, setCurrent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPdf, setShowPdf] = useState(false);
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -54,7 +55,13 @@ export default function ArticleDetail() {
   }
 
   const { article, related } = current;
-  const { title, summary, category, tags, featuredImage, fullContent, references, publishDate, viewCount } = article;
+  const { title, summary, category, tags, featuredImage, pdf, references, publishDate, viewCount } = article;
+
+  // Backend returns featuredImage as { url, public_id }
+  const featuredImageUrl = featuredImage?.url || featuredImage || null;
+
+  // Backend returns pdf as { url, public_id }
+  const pdfUrl = pdf?.url || (typeof pdf === 'string' ? pdf : null);
 
   const formattedDate = new Date(publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
@@ -100,7 +107,7 @@ export default function ArticleDetail() {
           {/* Main Cover Image */}
           <div className="h-64 sm:h-[400px] w-full bg-slate-100 dark:bg-slate-950 relative">
             <img
-              src={featuredImage || placeholderImage}
+              src={featuredImageUrl || placeholderImage}
               alt={title}
               className="w-full h-full object-cover"
             />
@@ -132,11 +139,47 @@ export default function ArticleDetail() {
               {summary}
             </p>
 
-            {/* Rich Content rendering */}
-            <div
-              className={`prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-              dangerouslySetInnerHTML={{ __html: fullContent }}
-            ></div>
+            {/* PDF View / Download section */}
+            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-col gap-6">
+              <div className="flex items-center justify-start gap-4">
+                {pdfUrl ? (
+                  <>
+                    <button
+                      onClick={() => setShowPdf(!showPdf)}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary/95 text-white rounded text-xs font-bold transition-colors shadow-sm cursor-pointer"
+                    >
+                      <ExternalLink className="w-4 h-4 text-accent" />
+                      {showPdf 
+                        ? (language === 'en' ? 'Hide Reader' : 'ریڈر چھپائیں')
+                        : (language === 'en' ? 'View PDF Article' : 'مضمون پی ڈی ایف دیکھیں')
+                      }
+                    </button>
+                    <a
+                      href={pdfUrl}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded text-xs font-bold transition-colors shadow-xs decoration-none"
+                      title={language === 'en' ? 'Download PDF' : 'پی ڈی ایف ڈاؤن لوڈ کریں'}
+                    >
+                      <Download className="w-4 h-4 text-accent" />
+                      {language === 'en' ? 'Download' : 'ڈاؤن لوڈ کریں'}
+                    </a>
+                  </>
+                ) : (
+                  <span className="text-xs text-slate-400 italic">
+                    {language === 'en' ? 'No PDF file available' : 'پی ڈی ایف فائل دستیاب نہیں ہے'}
+                  </span>
+                )}
+              </div>
+
+              {/* Inline PDF Viewer */}
+              {showPdf && pdfUrl && (
+                <div className="w-full mt-2">
+                  <PdfViewer url={pdfUrl} title={title} />
+                </div>
+              )}
+            </div>
 
             {/* Reference section */}
             {references && references.length > 0 && (

@@ -2,19 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, FileText, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
-
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
+import { FATWA_CATEGORY_TRANSLATIONS } from '@/utils/categories';
 
 export default function FatwaCard({ fatwa }) {
   const { settings } = useSettings();
@@ -39,7 +27,7 @@ export default function FatwaCard({ fatwa }) {
       {/* Category and stats metadata */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 shrink-0">
         <span className="bg-secondary text-textSecondary text-xs font-bold px-2.5 py-1 rounded-full text-[10px]">
-          {language === 'ur' ? (categoryTranslations[category] || category) : category}
+          {language === 'ur' ? (FATWA_CATEGORY_TRANSLATIONS[category] || category) : category}
         </span>
         <div className="flex items-center gap-3.5 text-xs text-slate-500">
           <span className="flex items-center gap-1">

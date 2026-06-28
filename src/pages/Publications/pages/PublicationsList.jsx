@@ -5,7 +5,7 @@ import { getPublications } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { PublicationCard, Input } from '@/components';
 
-import { PUBLICATION_CATEGORIES, PUBLICATION_TRANSLATIONS } from '@/utils/categories';
+import { PUBLICATION_CATEGORIES, PUBLICATION_TRANSLATIONS, PUBLICATION_EN_LABELS } from '@/utils/categories';
 
 export default function PublicationsList() {
   const { settings } = useSettings();
@@ -16,6 +16,9 @@ export default function PublicationsList() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -30,12 +33,16 @@ export default function PublicationsList() {
 
   const categories = PUBLICATION_CATEGORIES;
 
-  const loadPublications = async (category = selectedCategory, search = searchTerm) => {
+  const loadPublications = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getPublications({ category, search });
-      setPublications(data || []);
+      const data = await getPublications({ category, search, page: pageNum, limit: 6 });
+      // Backend returns { books, page, pages, total }
+      setPublications(data.books || []);
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to load publications');
     } finally {
@@ -44,17 +51,22 @@ export default function PublicationsList() {
   };
 
   useEffect(() => {
-    loadPublications(selectedCategory, searchTerm);
-  }, [selectedCategory]);
+    loadPublications(page, selectedCategory, searchTerm);
+  }, [selectedCategory, page]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    loadPublications(selectedCategory, searchTerm);
+    loadPublications(1, selectedCategory, searchTerm);
   };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    loadPublications(category, searchTerm);
+    loadPublications(1, category, searchTerm);
+  };
+
+  const handlePageChange = (pageNum) => {
+    loadPublications(pageNum, selectedCategory, searchTerm);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -102,8 +114,8 @@ export default function PublicationsList() {
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {language === 'ur' ? (PUBLICATION_TRANSLATIONS[cat] || cat) : cat}
+                <option key={cat.value} value={cat.value}>
+                  {language === 'ur' ? cat.labelUr : cat.labelEn}
                 </option>
               ))}
             </select>
@@ -124,14 +136,14 @@ export default function PublicationsList() {
           </button>
           {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
+              key={cat.value}
+              onClick={() => handleCategoryChange(cat.value)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
                   ? 'bg-primary border-primary text-white shadow-sm'
                   : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
-              {language === 'ur' ? (PUBLICATION_TRANSLATIONS[cat] || cat) : cat}
+              {language === 'ur' ? cat.labelUr : cat.labelEn}
             </button>
           ))}
         </div>
@@ -142,11 +154,45 @@ export default function PublicationsList() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
         ) : publications && publications.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {publications.map((pub) => (
-              <PublicationCard key={pub._id} publication={pub} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {publications.map((pub) => (
+                <PublicationCard key={pub._id} publication={pub} />
+              ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {pages > 1 && (
+              <div className="flex justify-center items-center gap-1.5 pt-4 text-slate-800 dark:text-white">
+                <button
+                  onClick={() => handlePageChange(Math.max(1, page - 1))}
+                  disabled={page === 1}
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                >
+                  {language === 'en' ? 'Previous' : 'پچھلا'}
+                </button>
+                {[...Array(pages).keys()].map((pNum) => (
+                  <button
+                    key={pNum + 1}
+                    onClick={() => handlePageChange(pNum + 1)}
+                    className={`w-8 h-8 rounded text-xs font-bold border transition-colors ${page === pNum + 1
+                        ? 'bg-primary border-primary text-white'
+                        : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      }`}
+                  >
+                    {pNum + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(Math.min(pages, page + 1))}
+                  disabled={page === pages}
+                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                >
+                  {language === 'en' ? 'Next' : 'اگلا'}
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16 premium-card">
             <BookOpen className="w-12 h-12 text-accent mx-auto mb-4" />
@@ -158,6 +204,7 @@ export default function PublicationsList() {
             </p>
           </div>
         )}
+
 
       </div>
     </div>

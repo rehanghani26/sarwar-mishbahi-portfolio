@@ -1,4 +1,15 @@
-export const BASE_URL = "https://jamia-madarsha-server.onrender.com/api";
+// URLs
+export const LOCAL_URL = "http://localhost:5000";
+export const PROD_URL = "https://jamia-madarsha-server.onrender.com";
+
+// Auto detect environment
+export const BACKEND_URL =
+  window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+    ? LOCAL_URL
+    : PROD_URL;
+
+export const BASE_URL = `${BACKEND_URL}/api`;
 
 // Auth
 export const AUTH_LOGIN = "/auth/login";
@@ -23,5 +34,5 @@ export const EVENTS = "/events";
 export const QUESTIONS = "/questions";
 
 // Publications & Lectures
-export const PUBLICATIONS = "/publications";
+export const PUBLICATIONS = "/books";
 export const LECTURES = "/lectures";

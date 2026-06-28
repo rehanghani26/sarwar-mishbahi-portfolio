@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
 import { getArticles } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { ArticleCard, Input } from '@/components';
-import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS } from '@/utils/categories';
+import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS, ARTICLE_EN_LABELS } from '@/utils/categories';
 
 export default function ArticlesList() {
   const { settings } = useSettings();
@@ -111,8 +111,8 @@ export default function ArticlesList() {
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {language === 'ur' ? (ARTICLE_TRANSLATIONS[cat] || cat) : cat}
+                <option key={cat.value} value={cat.value}>
+                  {language === 'ur' ? cat.labelUr : cat.labelEn}
                 </option>
               ))}
             </select>
@@ -132,14 +132,14 @@ export default function ArticlesList() {
           </button>
           {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat
+              key={cat.value}
+              onClick={() => handleCategoryChange(cat.value)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
                   ? 'bg-primary border-primary text-white shadow-sm'
                   : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
-              {language === 'ur' ? (ARTICLE_TRANSLATIONS[cat] || cat) : cat}
+              {language === 'ur' ? cat.labelUr : cat.labelEn}
             </button>
           ))}
         </div>

@@ -2,15 +2,7 @@ import React from 'react';
 import { Play, Video, Music, Calendar } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
 import { COLORS } from '@/utils/themeColors';
-
-const categoryTranslations = {
-  'Audio Lectures': 'آڈیو خطابات',
-  'Bayan Recordings': 'آڈیو بیانات',
-  'Video Lectures': 'ویڈیو خطابات',
-  'Friday Sermons': 'خطبات جمعہ',
-  'Short Clips': 'مختصر کلپس',
-  'Sermons': 'بیانات',
-};
+import { LECTURE_CATEGORY_TRANSLATIONS } from '@/utils/categories';
 
 export default function LectureCard({ lecture, onPlay }) {
   const { settings } = useSettings();
@@ -57,11 +49,11 @@ export default function LectureCard({ lecture, onPlay }) {
   };
 
   return (
-    <div 
+    <div
       onClick={() => onPlay(lecture)}
       className={`premium-card shadow-sm overflow-hidden flex flex-col h-full group cursor-pointer ${language === 'ur' ? 'text-right' : 'text-left'}`}
     >
-      
+
       {/* Thumbnail with Play Overlay */}
       <div className="relative h-44 w-full bg-slate-800 shrink-0 overflow-hidden">
         <img
@@ -71,7 +63,7 @@ export default function LectureCard({ lecture, onPlay }) {
           loading="lazy"
           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackThumb; }}
         />
-        
+
         {/* Play Button Overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-all">
           <button
@@ -85,18 +77,18 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Media Type Badge */}
-        <div 
+        <div
           style={{ backgroundColor: COLORS.secondary, color: COLORS.textSecondary }}
           className={`absolute bottom-3 ${language === 'ur' ? 'right-3' : 'left-3'} text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow`}
         >
           {getMediaIcon({ color: COLORS.textSecondary })}
-          {language === 'ur' ? (categoryTranslations[category] || category) : category}
+          {language === 'ur' ? (LECTURE_CATEGORY_TRANSLATIONS[category] || category) : category}
         </div>
       </div>
 
       {/* Card Content */}
       <div className="p-4 flex flex-col flex-grow">
-        
+
         {/* Date */}
         <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2 justify-start">
           <Calendar className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
@@ -104,7 +96,7 @@ export default function LectureCard({ lecture, onPlay }) {
         </div>
 
         {/* Title */}
-        <h3 
+        <h3
           style={{ color: COLORS.textPrimary }}
           className={`text-md font-bold transition-colors leading-snug mb-2 font-serif line-clamp-2 ${language === 'ur' ? 'text-right' : 'text-left'} group-hover:text-[var(--color-primary)]`}
         >
@@ -125,7 +117,7 @@ export default function LectureCard({ lecture, onPlay }) {
           >
             {language === 'en' ? 'Listen/Watch Now' : 'ابھی سنیں/دیکھیں'}
           </button>
-          
+
           <a
             href={videoUrl}
             target="_blank"

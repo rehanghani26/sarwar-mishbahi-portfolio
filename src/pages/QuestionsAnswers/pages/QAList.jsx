@@ -115,8 +115,8 @@ export default function QAList() {
             >
               <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {language === 'ur' ? (QA_TRANSLATIONS[cat] || cat) : cat}
+                <option key={cat.value} value={cat.value}>
+                  {language === 'ur' ? cat.labelUr : cat.labelEn}
                 </option>
               ))}
             </select>

@@ -3,19 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
-
-const categoryTranslations = {
-  'Quran': 'قرآن',
-  'Hadith': 'حدیث',
-  'Fiqh': 'فقہ',
-  'Aqeedah': 'عقیدہ',
-  'Seerah': 'سیرت',
-  'Islamic History': 'اسلامی تاریخ',
-  'Family Matters': 'خاندانی معاملات',
-  'Education': 'تعلیم',
-  'Dawah': 'دعوت',
-  'General Islam': 'عام معلوماتِ اسلام',
-};
+import { BACKEND_URL } from '@/constants/urls';
+import { ARTICLE_CATEGORY_TRANSLATIONS } from '@/utils/categories';
 
 export default function ArticleCard({ article }) {
   const { settings } = useSettings();
@@ -29,12 +18,14 @@ export default function ArticleCard({ article }) {
     day: 'numeric',
   });
 
-  const BACKEND_URL = 'https://jamia-madarsha-server.onrender.com';
   const placeholderImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800';
 
-  const getImageSrc = (url) => {
+  // Backend returns featuredImage as { url, public_id } object
+  const getImageSrc = (imgField) => {
+    if (!imgField) return placeholderImage;
+    // Object form from backend: { url, public_id }
+    const url = typeof imgField === 'object' ? imgField.url : imgField;
     if (!url) return placeholderImage;
-    // If relative path, prepend backend URL
     if (url.startsWith('/')) return `${BACKEND_URL}${url}`;
     return url;
   };
@@ -52,7 +43,7 @@ export default function ArticleCard({ article }) {
           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage; }}
         />
         <div className="absolute top-3 left-3 bg-secondary text-textSecondary text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
-          {language === 'ur' ? (categoryTranslations[category] || category) : category}
+          {language === 'ur' ? (ARTICLE_CATEGORY_TRANSLATIONS[category] || category) : category}
         </div>
       </div>
 
@@ -107,7 +98,11 @@ ArticleCard.propTypes = {
     slug: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
-    featuredImage: PropTypes.string,
+    // Backend returns featuredImage as { url, public_id } object
+    featuredImage: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({ url: PropTypes.string, public_id: PropTypes.string }),
+    ]),
     publishDate: PropTypes.string.isRequired,
     viewCount: PropTypes.number.isRequired,
   }).isRequired,

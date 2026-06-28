@@ -221,8 +221,8 @@ export default function ManageFatwas() {
                     className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {language === 'en' ? cat : (FATWA_TRANSLATIONS[cat] || cat)}
+                      <option key={cat.value} value={cat.value}>
+                        {language === 'en' ? cat.labelEn : cat.labelUr}
                       </option>
                     ))}
                   </select>

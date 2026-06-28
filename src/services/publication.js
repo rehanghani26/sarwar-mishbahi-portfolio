@@ -21,7 +21,11 @@ export const getPublications = async (params) => {
 
 export const createPublication = async (data) => {
   try {
-    const response = await API.post(PUBLICATIONS, data);
+    const response = await API.post(PUBLICATIONS, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Create Publication Error:", error);
@@ -31,7 +35,11 @@ export const createPublication = async (data) => {
 
 export const updatePublication = async (id, data) => {
   try {
-    const response = await API.put(`${PUBLICATIONS}/${id}`, data);
+    const response = await API.put(`${PUBLICATIONS}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Update Publication Error:", error);

@@ -30,7 +30,11 @@ export const getArticleBySlug = async (slug) => {
 
 export const createArticle = async (data) => {
   try {
-    const response = await API.post(ARTICLES, data);
+    const response = await API.post(ARTICLES, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Create Article Error:", error);
@@ -40,7 +44,11 @@ export const createArticle = async (data) => {
 
 export const updateArticle = async (id, data) => {
   try {
-    const response = await API.put(`${ARTICLES}/${id}`, data);
+    const response = await API.put(`${ARTICLES}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Update Article Error:", error);

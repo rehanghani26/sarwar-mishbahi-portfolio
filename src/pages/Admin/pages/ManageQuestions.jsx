@@ -1,45 +1,30 @@
-import { COLORS } from '@/utils/themeColors';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Save, Trash2, ShieldQuestion, HelpCircle, CheckCircle, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { getAdminQuestions, answerQuestion, deleteQuestion } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
+import { FATWA_CATEGORY_TRANSLATIONS as categoryTranslations } from '@/utils/categories';
+import { COLORS } from '@/utils/themeColors';
 
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
-
-export default function ManageQuestions() {
-  const { settings } = useSettings();
-  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
-
+const ManageQuestions = () => {
+  const { language } = useSettings();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [answerContent, setAnswerContent] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState(null);
-
-  const [activeQuestion, setActiveQuestion] = useState(null); // Currently selected question for answering
-  const [answerContent, setAnswerContent] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const loadQuestions = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const data = await getAdminQuestions();
-      setQuestions(Array.isArray(data) ? data : (data.questions || []));
+      setQuestions(data);
     } catch (err) {
-      console.error('Failed to load questions:', err);
+      console.error('Failed to load questions', err);
     } finally {
       setLoading(false);
     }
@@ -50,11 +35,10 @@ export default function ManageQuestions() {
   }, []);
 
   const selectQuestion = (q) => {
-    setActionError(null);
     setActiveQuestion(q);
     setAnswerContent(q.answerContent || '');
-    setIsPublic(q.isPublic || false);
-    setSuccess(false);
+    setIsPublic(q.isPublic !== undefined ? q.isPublic : true);
+    setActionError(null);
   };
 
   const handleAnswerSubmit = async (e) => {
@@ -96,7 +80,7 @@ export default function ManageQuestions() {
   return (
     <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
+
         {/* Left Side: Inbox List (5 columns) */}
         <div className={`lg:col-span-5 space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className={`flex items-center gap-3 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -108,7 +92,7 @@ export default function ManageQuestions() {
               <p className="text-xs text-slate-400 font-light">{language === 'en' ? `${pendingCount} pending in inbox` : `${pendingCount} ان باکس میں زیرِ التوا`}</p>
             </div>
           </div>
-  
+
           {/* Success Banner */}
           {success && (
             <div className={`bg-emerald-50 border-r-4 border-emerald-500 p-3.5 flex items-start gap-2 text-emerald-800 text-xs shadow-xs shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -123,7 +107,7 @@ export default function ManageQuestions() {
               <span>{language === 'en' ? 'Question Title' : 'سوال کا عنوان'}</span>
               <span>{language === 'en' ? 'Status' : 'حیثیت'}</span>
             </div>
-            
+
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
@@ -137,9 +121,8 @@ export default function ManageQuestions() {
                     <div
                       key={q._id}
                       onClick={() => selectQuestion(q)}
-                      className={`p-4 cursor-pointer hover:bg-slate-50/70 transition-colors ${
-                        isSelected ? 'bg-slate-100/80 border-r-4 border-accent' : ''
-                      }`}
+                      className={`p-4 cursor-pointer hover:bg-slate-50/70 transition-colors ${isSelected ? 'bg-slate-100/80 border-r-4 border-accent' : ''
+                        }`}
                     >
                       <div className={`flex items-center justify-between gap-3 mb-1.5 text-[10px] text-slate-400 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
                         <span className="font-semibold text-slate-500">{language === 'en' ? q.category : (categoryTranslations[q.category] || q.category)}</span>
@@ -147,22 +130,21 @@ export default function ManageQuestions() {
                       </div>
                       <h4 className={`text-sm font-bold text-slate-800 line-clamp-1 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>{q.questionTitle}</h4>
                       <p className={`text-xs text-slate-400 line-clamp-1 mt-1 font-light ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'From: ' : 'منجانب: '}{q.fullName}</p>
-                      
+
                       <div className={`flex items-center justify-between mt-3.5 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
-                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                          isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
-                        }`}>
-                          {isPending 
-                            ? (language === 'en' ? 'Pending' : 'زیرِ التوا') 
+                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
+                          }`}>
+                          {isPending
+                            ? (language === 'en' ? 'Pending' : 'زیرِ التوا')
                             : (language === 'en' ? 'Answered' : 'جواب شدہ')
                           }
                         </span>
-                        
+
                         {!isPending && (
                           <span className="text-slate-400 flex items-center gap-0.5 text-[9px] font-semibold">
                             {q.isPublic ? <Eye className="w-3.5 h-3.5 text-emerald-600" /> : <EyeOff className="w-3.5 h-3.5 text-slate-400" />}
-                            {q.isPublic 
-                              ? (language === 'en' ? 'Public' : 'پبلک') 
+                            {q.isPublic
+                              ? (language === 'en' ? 'Public' : 'پبلک')
                               : (language === 'en' ? 'Private' : 'پرائیویٹ')
                             }
                           </span>
@@ -186,7 +168,7 @@ export default function ManageQuestions() {
         <div className={`lg:col-span-7 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           {activeQuestion ? (
             <div className="bg-white border border-border rounded-lg shadow-sm p-6 space-y-5">
-              
+
               {/* Heading */}
               <div className={`border-b border-slate-100 pb-3 flex items-center justify-between ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
                 <h2 className="text-md font-bold text-primary font-serif uppercase tracking-wide">
@@ -279,8 +261,8 @@ export default function ManageQuestions() {
                     className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
                   >
                     <Save className="w-4 h-4 text-accent" />
-                    {actionLoading 
-                      ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') 
+                    {actionLoading
+                      ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...')
                       : (language === 'en' ? 'Save Answer' : 'جواب محفوظ کریں')
                     }
                   </button>
@@ -294,7 +276,7 @@ export default function ManageQuestions() {
               <HelpCircle className="w-12 h-12 text-accent mb-4" />
               <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No Question Selected' : 'کوئی سوال منتخب نہیں کیا گیا'}</h3>
               <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
-                {language === 'en' 
+                {language === 'en'
                   ? 'Select a question from the inbox list on the left to review, answer, or delete it.'
                   : 'جائزہ لینے، جواب دینے یا حذف کرنے کے لیے بائیں جانب ان باکس کی فہرست سے کوئی جمع کرایا گیا سوال منتخب کریں۔'
                 }
@@ -306,4 +288,6 @@ export default function ManageQuestions() {
       </div>
     </div>
   );
-}
+};
+
+export default ManageQuestions;

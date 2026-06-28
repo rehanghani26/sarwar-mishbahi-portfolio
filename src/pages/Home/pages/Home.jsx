@@ -117,7 +117,7 @@ export default function Home() {
         setArticles(articlesData.articles || []);
         setFatwas(fatwasData.fatwas || []);
         setQuestions(questionsData.questions || []);
-        setPublications(publicationsData || []);
+        setPublications(publicationsData.books || []);
         setLectures(lecturesData || []);
         setEvents(eventsData || []);
       } catch (err) {

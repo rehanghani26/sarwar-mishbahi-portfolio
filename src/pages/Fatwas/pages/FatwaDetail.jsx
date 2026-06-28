@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, HelpCircle, FileText } from 'lucide-react';
+import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, HelpCircle, FileText, Download, ExternalLink } from 'lucide-react';
 import { getFatwaById } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { FatwaCard } from '@/components';
-
-const categoryTranslations = {
-  'Salah': 'نماز',
-  'Fasting': 'روزه',
-  'Zakat': 'زکوٰۃ',
-  'Hajj & Umrah': 'حج اور عمرہ',
-  'Marriage': 'نکاح / شادی',
-  'Divorce': 'طلاق',
-  'Business': 'تجارت / کاروبار',
-  'Family Issues': 'خاندانی مسائل',
-  'Education': 'تعلیم',
-  'General Questions': 'عام مسائل',
-};
+import { FatwaCard, PdfViewer } from '@/components';
+import { FATWA_CATEGORY_TRANSLATIONS } from '@/utils/categories';
 
 export default function FatwaDetail() {
   const { id } = useParams();
@@ -27,6 +15,7 @@ export default function FatwaDetail() {
   const [current, setCurrent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPdf, setShowPdf] = useState(false);
 
   useEffect(() => {
     const loadFatwa = async () => {
@@ -68,7 +57,8 @@ export default function FatwaDetail() {
   }
 
   const { fatwa, related } = current;
-  const { title, category, question, detailedAnswer, references, publishDate, viewCount } = fatwa;
+  const { title, category, question, detailedAnswer, references, publishDate, viewCount, pdf } = fatwa;
+  const pdfUrl = pdf?.url || (typeof pdf === 'string' ? pdf : null);
 
   const formattedDate = new Date(publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
@@ -92,7 +82,7 @@ export default function FatwaDetail() {
           {/* Header Banner */}
           <div className={`bg-primary islamic-pattern text-white px-6 py-8 sm:px-10 relative border-b border-accent/35 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <span className="bg-primary text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded shadow-sm inline-block mb-3 font-serif">
-              {language === 'ur' ? (categoryTranslations[category] || category) : category}
+              {language === 'ur' ? (FATWA_CATEGORY_TRANSLATIONS[category] || category) : category}
             </span>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight font-serif tracking-wide">
               {title}
@@ -135,6 +125,43 @@ export default function FatwaDetail() {
                 className={`prose max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-light text-base space-y-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 dangerouslySetInnerHTML={{ __html: detailedAnswer }}
               ></div>
+
+              {/* PDF View / Download section */}
+              {pdfUrl && (
+                <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-col gap-6">
+                  <div className="flex items-center justify-start gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowPdf(!showPdf)}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary/95 text-white rounded text-xs font-bold transition-colors shadow-sm cursor-pointer border-0"
+                    >
+                      <ExternalLink className="w-4 h-4 text-accent" />
+                      {showPdf 
+                        ? (language === 'en' ? 'Hide Reader' : 'ریڈر چھپائیں')
+                        : (language === 'en' ? 'View PDF Fatwa' : 'فتویٰ پی ڈی ایف دیکھیں')
+                      }
+                    </button>
+                    <a
+                      href={pdfUrl}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded text-xs font-bold transition-colors shadow-xs decoration-none"
+                      title={language === 'en' ? 'Download PDF' : 'پی ڈی ایف ڈاؤن لوڈ کریں'}
+                    >
+                      <Download className="w-4 h-4 text-accent" />
+                      {language === 'en' ? 'Download' : 'ڈاؤن لوڈ کریں'}
+                    </a>
+                  </div>
+
+                  {/* Inline PDF Viewer */}
+                  {showPdf && (
+                    <div className="w-full mt-2">
+                      <PdfViewer url={pdfUrl} title={title} />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* 3. Classical References list */}

@@ -167,9 +167,9 @@ export default function AskQuestion() {
                   required
                   className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-emerald-500 rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {language === 'ur' ? (QA_TRANSLATIONS[cat] || cat) : cat}
+                   {categories.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {language === 'ur' ? cat.labelUr : cat.labelEn}
                     </option>
                   ))}
                 </select>

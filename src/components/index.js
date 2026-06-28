@@ -21,3 +21,6 @@ export * from './ThreeColumns';
 
 // Editor
 export * from './RichTextEditor';
+
+// PDF Viewer
+export * from './PdfViewer';
