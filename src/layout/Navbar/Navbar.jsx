@@ -308,18 +308,56 @@ export default function Navbar() {
                             exit={{ height: 0, opacity: 0 }}
                             className="overflow-hidden"
                           >
-                            <ul style={{ borderColor: COLORS.border }} className={`mt-1 space-y-1 ${language === "ur" ? "pr-4 border-r-2" : "pl-4 border-l-2"}`}>
+                            <ul
+                              style={{
+                                backgroundColor: COLORS.primary,
+                                borderColor: COLORS.accent
+                              }}
+                              className="mt-2 rounded border overflow-hidden divide-y divide-[rgba(184,156,125,0.18)]"
+                            >
                               {item.hasCategories ? (
                                 <>
-                                  <li><Link to={item.href} onClick={closeMenu} className="block py-2 px-2 text-sm font-semibold hover:text-primary">All Topics</Link></li>
-                                  {item.categories.map((cat) => (
-                                    <li key={cat.value}><Link to={`${item.href}?category=${encodeURIComponent(cat.value)}`} onClick={closeMenu} className="block py-2 px-2 text-sm hover:text-primary">{language === "ur" ? cat.labelUr : cat.labelEn}</Link></li>
-                                  ))}
+                                  <li>
+                                    <Link
+                                      to={item.href}
+                                      onClick={closeMenu}
+                                      className={`block py-2.5 px-4 text-sm font-semibold text-white transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                                    >
+                                      {'تمام موضوعات'}
+                                    </Link>
+                                  </li>
+                                  {item.categories.map((cat) => {
+                                    const isSubActive = location.search.includes(cat.value);
+                                    return (
+                                      <li key={cat.value}>
+                                        <Link
+                                          to={`${item.href}?category=${encodeURIComponent(cat.value)}`}
+                                          onClick={closeMenu}
+                                          style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
+                                          className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                                        >
+                                          {language === "ur" ? cat.labelUr : cat.labelEn}
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
                                 </>
                               ) : (
-                                item.dropdownItems.map((sub) => (
-                                  <li key={sub.label}><Link to={sub.href} onClick={closeMenu} className="block py-2 px-2 text-sm hover:text-primary">{sub.label}</Link></li>
-                                ))
+                                item.dropdownItems.map((sub) => {
+                                  const isSubActive = location.pathname === sub.href;
+                                  return (
+                                    <li key={sub.label}>
+                                      <Link
+                                        to={sub.href}
+                                        onClick={closeMenu}
+                                        style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
+                                        className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                                      >
+                                        {sub.label}
+                                      </Link>
+                                    </li>
+                                  );
+                                })
                               )}
                             </ul>
                           </motion.div>
