@@ -118,7 +118,7 @@
   -webkit-font-smoothing: subpixel-antialiased;
 }
 .premium-card:hover {
-  box-shadow: 0 12px 24px -4px rgba(184, 156, 125, 0.18);
+  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
   border-color: var(--color-accent);
 }
 

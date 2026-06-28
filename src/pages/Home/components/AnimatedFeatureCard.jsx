@@ -1,58 +1,40 @@
 import { COLORS } from '@/utils/themeColors';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 
 /**
  * AnimatedFeatureCard
- * A small, compact card with a continuously rotating gradient "ring" border.
- *
- * Props:
- *  - icon: lucide-react icon component
- *  - title: string
- *  - description: string
- *  - to: route for the "Learn More" link
- *  - index: used to stagger the entrance animation across a grid
+ * Redesigned to be a static, premium academic feature card with no animations.
  */
-export default function AnimatedFeatureCard({ icon: Icon, title, description, to, index = 0 }) {
+export default function AnimatedFeatureCard({ icon: Icon, title, description, to }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-30px' }}
-            transition={{ duration: 0.45, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="relative rounded-xl p-[1.5px] overflow-hidden isolate group"
+        <div 
+            style={{ borderColor: COLORS.border }}
+            className="relative rounded-xl border bg-white p-5 h-full flex flex-col items-center text-center shadow-xs"
         >
-            {/* Rotating gradient ring (the animated border) */}
-            <motion.div
-                aria-hidden="true"
-                className="absolute -inset-[60%] opacity-60"
-                style={{
-                    background:
-                        `conic-gradient(from 0deg, transparent 0deg, ${COLORS.accent} 40deg, ${COLORS.accent} 80deg, transparent 130deg, transparent 360deg)`,
-                }}
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 5.5, ease: 'linear' }}
-            />
-
-            {/* Static faint base ring so the border reads even between gradient sweeps */}
-            <div className="absolute inset-0 rounded-xl ring-1 ring-secondary" aria-hidden="true" />
-
-            {/* Card body */}
-            <div className="relative z-10 bg-white rounded-[10px] p-4 h-full flex flex-col items-center text-center">
-                <div className="w-11 h-11 rounded-full bg-secondary text-primary flex items-center justify-center mb-3">
-                    <Icon className="w-5 h-5" />
-                </div>
-                <h3 className="text-sm font-bold text-primary mb-1.5 font-serif">{title}</h3>
-                <p className="text-textSecondary text-[11px] font-light leading-relaxed mb-3">{description}</p>
-                <Link
-                    to={to}
-                    className="mt-auto inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:text-accent transition-colors"
-                >
-                    مزید جانیں <ArrowLeft className="w-3 h-3" />
-                </Link>
+            {/* Icon Container */}
+            <div 
+                style={{ backgroundColor: COLORS.secondary, color: COLORS.primary }}
+                className="w-12 h-12 rounded-full flex items-center justify-center mb-4 shrink-0"
+            >
+                <Icon className="w-5 h-5" />
             </div>
-        </motion.div>
+
+            {/* Title */}
+            <h3 style={{ color: COLORS.primary }} className="text-sm font-bold mb-2 font-serif">{title}</h3>
+
+            {/* Description */}
+            <p className="text-textSecondary text-[11px] font-light leading-relaxed mb-4 flex-grow">{description}</p>
+
+            {/* Action Link */}
+            <Link
+                to={to}
+                style={{ color: COLORS.primary }}
+                className="mt-auto inline-flex items-center gap-1 text-[11px] font-bold hover:text-accent transition-colors"
+            >
+                مزید جانیں <ArrowLeft className="w-3 h-3 text-accent" />
+            </Link>
+        </div>
     );
 }
