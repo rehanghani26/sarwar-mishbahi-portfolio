@@ -92,9 +92,6 @@ export default function Home() {
   const [publications, setPublications] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [events, setEvents] = useState([]);
-  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
-  const [activeArticleIndex, setActiveArticleIndex] = useState(0);
-  const [activeFatwaIndex, setActiveFatwaIndex] = useState(0);
 
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
@@ -141,7 +138,7 @@ export default function Home() {
   const FEATURES = [
     {
       icon: BookOpen,
-      title: language === 'en' ? 'Authentic Knowledge' : 'مستند علم',
+      title: language === 'en' ? 'Authentic Knowledge ' : 'مستند علم',
       description: language === 'en' ? 'Islamic content based on Quran, Hadith, and Fiqh.' : 'قرآن، حدیث اور فقہ پر مبنی علمی مواد۔',
       to: '/articles',
     },
@@ -168,7 +165,8 @@ export default function Home() {
   return (
     <div className="bg-background min-h-screen relative overflow-x-hidden">
 
-      {/* 1. HERO SECTION */}
+      {/* 1. HERO SECTION  Testing comments 
+      */}
       <section className="scholar-gradient-bg relative overflow-hidden py-20 border-b-2 border-border">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
@@ -247,8 +245,7 @@ export default function Home() {
 
       {/* FEATURE CARDS SECTION */}
       <section className="py-12 mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Desktop View: Grid */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature) => (
             <div key={feature.title}>
               <AnimatedFeatureCard
@@ -259,55 +256,6 @@ export default function Home() {
               />
             </div>
           ))}
-        </div>
-
-        {/* Mobile View: Slide One-by-One */}
-        <div className="sm:hidden flex flex-col items-center gap-4">
-          <div className="w-full">
-            <AnimatedFeatureCard
-              icon={FEATURES[activeFeatureIndex].icon}
-              title={FEATURES[activeFeatureIndex].title}
-              description={FEATURES[activeFeatureIndex].description}
-              to={FEATURES[activeFeatureIndex].to}
-            />
-          </div>
-          
-          {/* Controls */}
-          <div className="flex items-center gap-6 mt-2">
-            <button
-              type="button"
-              disabled={activeFeatureIndex === 0}
-              onClick={() => setActiveFeatureIndex(prev => prev - 1)}
-              className={`p-2 rounded-full border transition-all ${activeFeatureIndex === 0 ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'text-primary border-primary hover:bg-slate-50'}`}
-            >
-              {language === 'ur' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            </button>
-            
-            {/* Dots indicator */}
-            <div className="flex items-center gap-2">
-              {FEATURES.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setActiveFeatureIndex(index)}
-                  className="w-2 h-2 rounded-full transition-all duration-300"
-                  style={{
-                    backgroundColor: activeFeatureIndex === index ? COLORS.primary : COLORS.border,
-                    transform: activeFeatureIndex === index ? 'scale(1.2)' : 'scale(1)'
-                  }}
-                />
-              ))}
-            </div>
-
-            <button
-              type="button"
-              disabled={activeFeatureIndex === FEATURES.length - 1}
-              onClick={() => setActiveFeatureIndex(prev => prev + 1)}
-              className={`p-2 rounded-full border transition-all ${activeFeatureIndex === FEATURES.length - 1 ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'text-primary border-primary hover:bg-slate-50'}`}
-            >
-              {language === 'ur' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-            </button>
-          </div>
         </div>
       </section>
 
@@ -321,59 +269,12 @@ export default function Home() {
         />
 
         {articles && articles.length > 0 ? (
-          <div>
-            {/* Desktop View */}
-            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {articles.slice(0, 3).map((article) => (
-                <div key={article._id}>
-                  <ArticleCard article={article} />
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile View: Slide One-by-One */}
-            <div className="md:hidden flex flex-col items-center gap-4">
-              <div className="w-full">
-                <ArticleCard article={articles[activeArticleIndex]} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.slice(0, 3).map((article) => (
+              <div key={article._id}>
+                <ArticleCard article={article} />
               </div>
-              
-              {/* Controls */}
-              <div className="flex items-center gap-6 mt-2">
-                <button
-                  type="button"
-                  disabled={activeArticleIndex === 0}
-                  onClick={() => setActiveArticleIndex(prev => prev - 1)}
-                  className={`p-2 rounded-full border transition-all ${activeArticleIndex === 0 ? 'text-slate-300 border-slate-250 cursor-not-allowed' : 'text-primary border-primary'}`}
-                >
-                  {language === 'ur' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-                </button>
-                
-                {/* Dots indicator */}
-                <div className="flex items-center gap-2">
-                  {articles.slice(0, 3).map((_, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => setActiveArticleIndex(index)}
-                      className="w-2 h-2 rounded-full transition-all duration-300"
-                      style={{
-                        backgroundColor: activeArticleIndex === index ? COLORS.primary : COLORS.border,
-                        transform: activeArticleIndex === index ? 'scale(1.2)' : 'scale(1)'
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  disabled={activeArticleIndex === Math.min(2, articles.length - 1)}
-                  onClick={() => setActiveArticleIndex(prev => prev + 1)}
-                  className={`p-2 rounded-full border transition-all ${activeArticleIndex === Math.min(2, articles.length - 1) ? 'text-slate-300 border-slate-250 cursor-not-allowed' : 'text-primary border-primary'}`}
-                >
-                  {language === 'ur' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         ) : (
           <p className="text-slate-400 italic text-center py-6">
@@ -393,59 +294,12 @@ export default function Home() {
           />
 
           {fatwas && fatwas.length > 0 ? (
-            <div>
-              {/* Desktop View */}
-              <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {fatwas.slice(0, 3).map((fatwa) => (
-                  <div key={fatwa._id}>
-                    <FatwaCard fatwa={fatwa} />
-                  </div>
-                ))}
-              </div>
-
-              {/* Mobile View: Slide One-by-One */}
-              <div className="md:hidden flex flex-col items-center gap-4">
-                <div className="w-full">
-                  <FatwaCard fatwa={fatwas[activeFatwaIndex]} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {fatwas.slice(0, 3).map((fatwa) => (
+                <div key={fatwa._id}>
+                  <FatwaCard fatwa={fatwa} />
                 </div>
-                
-                {/* Controls */}
-                <div className="flex items-center gap-6 mt-2">
-                  <button
-                    type="button"
-                    disabled={activeFatwaIndex === 0}
-                    onClick={() => setActiveFatwaIndex(prev => prev - 1)}
-                    className={`p-2 rounded-full border transition-all ${activeFatwaIndex === 0 ? 'text-slate-300 border-slate-250 cursor-not-allowed' : 'text-primary border-primary'}`}
-                  >
-                    {language === 'ur' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-                  </button>
-                  
-                  {/* Dots indicator */}
-                  <div className="flex items-center gap-2">
-                    {fatwas.slice(0, 3).map((_, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => setActiveFatwaIndex(index)}
-                        className="w-2 h-2 rounded-full transition-all duration-300"
-                        style={{
-                          backgroundColor: activeFatwaIndex === index ? COLORS.primary : COLORS.border,
-                          transform: activeFatwaIndex === index ? 'scale(1.2)' : 'scale(1)'
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    disabled={activeFatwaIndex === Math.min(2, fatwas.length - 1)}
-                    onClick={() => setActiveFatwaIndex(prev => prev + 1)}
-                    className={`p-2 rounded-full border transition-all ${activeFatwaIndex === Math.min(2, fatwas.length - 1) ? 'text-slate-300 border-slate-250 cursor-not-allowed' : 'text-primary border-primary'}`}
-                  >
-                    {language === 'ur' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
           ) : (
             <p className="text-slate-400 italic text-center py-6">

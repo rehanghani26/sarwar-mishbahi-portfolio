@@ -4,20 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 
-/**
- * AnimatedFeatureCard
- * A small, compact card with a continuously rotating gradient "ring" border.
- * The border is built by layering a rotating conic-gradient behind a white
- * inner panel that sits 1.5px inset from the wrapper — the gap is what
- * reveals the gradient as a thin animated border.
- *
- * Props:
- *  - icon: lucide-react icon component
- *  - title: string
- *  - description: string
- *  - to: route for the "Learn More" link
- *  - index: used to stagger the entrance animation across a grid
- */
+
 export default function AnimatedFeatureCard({ icon: Icon, title, description, to, index = 0 }) {
     return (
         <motion.div
