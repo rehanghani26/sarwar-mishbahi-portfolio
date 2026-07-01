@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle } from 'lucide-react';
 import { getLectures, createLecture, updateLecture, deleteLecture } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input } from '../../../components/Input';
+import { Input, Table } from '@/components';
 
 import { CATEGORY_MAP, LECTURE_TRANSLATIONS } from '@/utils/categories';
 
@@ -289,61 +289,54 @@ export default function ManageLectures() {
         ) : (
           /* Lectures List Table */
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              </div>
-            ) : lectures && lectures.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Video/Audio URL' : 'ویڈیو/آڈیو یو آر ایل'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>{language === 'en' ? 'Actions' : 'اقدامات'}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
-                    {lectures.map((lec) => (
-                      <tr key={lec._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.title}</td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
-                            {language === 'en' ? lec.category : (LECTURE_TRANSLATIONS[lec.category] || lec.category)}
-                          </span>
-                        </td>
-                        <td className={`px-6 py-4 text-xs font-light text-slate-400 max-w-xs truncate select-all ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.videoUrl}</td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
-                          <div className="inline-flex items-center gap-2">
-                             <button
-                               onClick={() => openEditForm(lec)}
-                               className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
-                               title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
-                             >
-                               <Edit2 className="w-4 h-4" />
-                             </button>
-                             <button
-                               onClick={() => handleDelete(lec._id)}
-                               className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                               title={language === 'en' ? 'Delete' : 'حذف کریں'}
-                             >
-                               <Trash2 className="w-4 h-4" />
-                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <Play className="w-12 h-12 text-accent mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}</h3>
-                <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Lecture" button to publish your first lecture.' : 'اپنا پہلا بیان شامل کرنے کے لیے "بیان شامل کریں" بٹن پر کلک کریں۔'}</p>
-              </div>
-            )}
+            <Table
+              loadingTableContent={loading}
+              data={lectures}
+              noRecordText={language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}
+              tableLayout={[
+                {
+                  headData: language === 'en' ? 'Title' : 'عنوان',
+                  bodyData: (lec) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.title}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Category' : 'زمرہ',
+                  bodyData: (lec) => (
+                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                      {language === 'en' ? lec.category : (LECTURE_TRANSLATIONS[lec.category] || lec.category)}
+                    </span>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Video/Audio URL' : 'ویڈیو/آڈیو یو آر ایل',
+                  bodyData: (lec) => <span className={`text-xs font-light text-slate-400 max-w-xs truncate select-all ${language === 'ur' ? 'text-right' : 'text-left'}`}>{lec.videoUrl}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Actions' : 'اقدامات',
+                  bodyData: (lec) => (
+                    <div className="inline-flex items-center gap-2">
+                       <button
+                         onClick={() => openEditForm(lec)}
+                         className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
+                         title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
+                       >
+                         <Edit2 className="w-4 h-4" />
+                       </button>
+                       <button
+                         onClick={() => handleDelete(lec._id)}
+                         className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                         title={language === 'en' ? 'Delete' : 'حذف کریں'}
+                       >
+                         <Trash2 className="w-4 h-4" />
+                       </button>
+                    </div>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-left' : 'text-right'
+                }
+              ]}
+            />
           </div>
         )}
 

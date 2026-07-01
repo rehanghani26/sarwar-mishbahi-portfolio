@@ -12,8 +12,9 @@ export const BACKEND_URL =
 export const BASE_URL = `${BACKEND_URL}/api`;
 
 // Auth
-export const AUTH_LOGIN = "/auth/login";
-export const AUTH_ME = "/auth/me";
+export const AUTH_LOGIN = "/users/login";
+export const AUTH_ME = "/users/me";
+export const AUTH_REGISTER = "/users/register";
 
 // Fatwas
 export const FATWAS = "/fatwas";

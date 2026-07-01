@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle, Eye } from 'lucide-react';
 import { getPublications, createPublication, updatePublication, deletePublication } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, PdfViewer } from '@/components';
+import { Input, PdfViewer, Table } from '@/components';
 
 import { CATEGORY_MAP, PUBLICATION_TRANSLATIONS, BOOK_LANGUAGE_TRANSLATIONS } from '@/utils/categories';
 
@@ -550,65 +550,63 @@ export default function ManagePublications() {
         ) : (
           /* Publications List Table */
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              </div>
-            ) : publications && publications.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Author' : 'مصنف'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Language' : 'زبان'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>{language === 'en' ? 'Actions' : 'اقدامات'}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
-                    {publications.map((pub) => (
-                      <tr key={pub._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.title}</td>
-                        <td className={`px-6 py-4 font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.author}</td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
-                            {language === 'en' ? pub.category : (PUBLICATION_TRANSLATIONS[pub.category] || pub.category)}
-                          </span>
-                        </td>
-                        <td className={`px-6 py-4 text-xs font-semibold text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          {language === 'en' ? pub.blanguage : (BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage)}
-                        </td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
-                          <div className="inline-flex items-center gap-2">
-                            <button
-                              onClick={() => openEditForm(pub)}
-                              className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
-                              title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(pub._id)}
-                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title={language === 'en' ? 'Delete' : 'حذف کریں'}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <Book className="w-12 h-12 text-accent mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No publications listed yet' : 'کوئی مطبوعہ درج نہیں ہے'}</h3>
-                <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Publication" button to upload your first publication.' : 'اپنی پہلی مطبوعہ تخلیق کرنے کے لیے "مطبوعہ شامل کریں" بٹن پر کلک کریں۔'}</p>
-              </div>
-            )}
+            <Table
+              loadingTableContent={loading}
+              data={publications}
+              noRecordText={language === 'en' ? 'No publications listed yet' : 'کوئی مطبوعہ درج نہیں ہے'}
+              tableLayout={[
+                {
+                  headData: language === 'en' ? 'Title' : 'عنوان',
+                  bodyData: (pub) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.title}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Author' : 'مصنف',
+                  bodyData: (pub) => <span className={`font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.author}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Category' : 'زمرہ',
+                  bodyData: (pub) => (
+                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                      {language === 'en' ? pub.category : (PUBLICATION_TRANSLATIONS[pub.category] || pub.category)}
+                    </span>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Language' : 'زبان',
+                  bodyData: (pub) => (
+                    <span className={`text-xs font-semibold text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+                      {language === 'en' ? pub.blanguage : (BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage)}
+                    </span>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Actions' : 'اقدامات',
+                  bodyData: (pub) => (
+                    <div className="inline-flex items-center gap-2">
+                      <button
+                        onClick={() => openEditForm(pub)}
+                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
+                        title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(pub._id)}
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                        title={language === 'en' ? 'Delete' : 'حذف کریں'}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-left' : 'text-right'
+                }
+              ]}
+            />
           </div>
         )}
 

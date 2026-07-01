@@ -6,3 +6,5 @@ export * from './question';
 export * from './publication';
 export * from './article';
 export * from './fatwa';
+export * from './user';
+

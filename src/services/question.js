@@ -1,5 +1,6 @@
 import API from './api';
 import { QUESTIONS } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 export const submitQuestion = async (data) => {
   try {
@@ -7,6 +8,7 @@ export const submitQuestion = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Submit Question Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -24,6 +26,7 @@ export const getPublicQuestions = async (params) => {
     return response.data;
   } catch (error) {
     console.error("Get Public Questions Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -34,6 +37,7 @@ export const getPublicQuestionById = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Get Public Question By ID Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -44,6 +48,7 @@ export const getAdminQuestions = async () => {
     return response.data;
   } catch (error) {
     console.error("Get Admin Questions Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -54,6 +59,7 @@ export const answerQuestion = async (id, data) => {
     return response.data;
   } catch (error) {
     console.error("Answer Question Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -64,6 +70,7 @@ export const deleteQuestion = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Delete Question Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };

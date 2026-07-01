@@ -43,6 +43,7 @@ import { BASE_URL } from "@/constants/urls";
 
 const API = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -58,6 +59,25 @@ API.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor to handle 401 Unauthorized globally
+API.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Handle 401 Unauthorized globally
+    if (error.response?.status === 401) {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminInfo");
+      if (window.location.pathname !== "/admin/login") {
+        window.location.href = "/admin/login";
+      }
+    }
+
     return Promise.reject(error);
   }
 );

@@ -24,3 +24,11 @@ export * from './RichTextEditor';
 
 // PDF Viewer
 export * from './PdfViewer';
+
+// Image Viewer
+export { default as ImageViewer } from './ImageViewer';
+
+// Table component
+export * from './Table';
+
+

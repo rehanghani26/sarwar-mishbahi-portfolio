@@ -1,5 +1,6 @@
 import API from './api';
 import { EVENTS } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 export const getEvents = async (params) => {
   try {
@@ -14,6 +15,7 @@ export const getEvents = async (params) => {
     return response.data;
   } catch (error) {
     console.error("Get Events Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -24,6 +26,7 @@ export const createEvent = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Create Event Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -34,6 +37,7 @@ export const updateEvent = async (id, data) => {
     return response.data;
   } catch (error) {
     console.error("Update Event Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -44,6 +48,7 @@ export const deleteEvent = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Delete Event Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };

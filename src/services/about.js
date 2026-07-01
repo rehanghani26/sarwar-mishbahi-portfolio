@@ -1,5 +1,6 @@
 import API from './api';
 import { SETTINGS } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 export const getSettings = async () => {
   try {
@@ -7,6 +8,7 @@ export const getSettings = async () => {
     return response.data;
   } catch (error) {
     console.error("Get Settings Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -17,6 +19,7 @@ export const putSettings = async (settingsData) => {
     return response.data;
   } catch (error) {
     console.error("Put Settings Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -27,6 +30,7 @@ export const getStats = async () => {
     return response.data;
   } catch (error) {
     console.error("Get Stats Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };

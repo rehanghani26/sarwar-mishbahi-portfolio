@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search } from 'lucide-react';
+import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search, User } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
+import { ImageViewer } from '@/components';
 
 export default function ManageSettings() {
   const { settings, loading, error, updateSuccess, updateSettings, clearErrors } = useSettings();
@@ -263,6 +264,43 @@ export default function ManageSettings() {
                     border=""
                     inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'Scholar Photo URL' : 'عالم کی تصویر کا یو آر ایل'}
+                  </label>
+                  <Input
+                    type="text"
+                    value={scholarInfo.photo || ""}
+                    onChange={(e) => setScholarInfo({ ...scholarInfo, photo: e.target.value })}
+                    border=""
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    placeholder="https://example.com/photo.jpg"
+                  />
+                </div>
+                <div className="flex flex-col items-center sm:items-start">
+                  <span className="block text-xs font-bold text-slate-500 uppercase mb-1.5 self-center sm:self-start">
+                    {language === 'en' ? 'Photo Preview' : 'تصویر کا پیش نظارہ'}
+                  </span>
+                  <div className="flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg p-1 min-h-[44px]">
+                    {scholarInfo.photo ? (
+                      <ImageViewer
+                        src={scholarInfo.photo}
+                        alt={scholarInfo.fullName || "Scholar Photo"}
+                        thumbnailSize={2}
+                        thumbnailBorderRadius="rounded"
+                        thumbnailObjectFit="cover"
+                        showZoomIcon={false}
+                      />
+                    ) : (
+                      <div className="w-10 h-10 flex items-center justify-center text-slate-400 bg-slate-100 rounded border border-dashed border-slate-300">
+                        <User className="w-5 h-5" />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 

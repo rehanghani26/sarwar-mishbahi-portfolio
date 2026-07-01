@@ -1,12 +1,35 @@
 import API from './api';
-import { AUTH_LOGIN, AUTH_ME } from '@/constants/urls';
+import { AUTH_LOGIN, AUTH_ME, AUTH_REGISTER } from '@/constants/urls';
+import toast from 'react-hot-toast';
+
+export const registerUser = async (formData) => {
+  try {
+    const payload = {
+      name: formData.name,
+      identifier: formData.identifier,
+      contactPhone: formData.contactPhone || "",
+      password: formData.password
+    };
+    const response = await API.post(AUTH_REGISTER, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Register Error:", error);
+    toast.error(error.response?.data?.message || error.message);
+    throw error;
+  }
+};
 
 export const loginUser = async (formData) => {
   try {
-    const response = await API.post(AUTH_LOGIN, formData);
+    const payload = {
+      identifier: formData.identifier || formData.username,
+      password: formData.password
+    };
+    const response = await API.post(AUTH_LOGIN, payload);
     return response.data;
   } catch (error) {
     console.error("Login Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -22,6 +45,7 @@ export const checkAuthStatus = async () => {
     return response.data;
   } catch (error) {
     console.error("Auth Status Error:", error);
+    // Silent for checkAuthStatus to prevent guest user toast alerts
     throw error;
   }
 };

@@ -1,5 +1,6 @@
 import API from './api';
 import { PUBLICATIONS, LECTURES } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 // --- Publications (Books) ---
 export const getPublications = async (params) => {
@@ -15,6 +16,7 @@ export const getPublications = async (params) => {
     return response.data;
   } catch (error) {
     console.error("Get Publications Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -29,6 +31,7 @@ export const createPublication = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Create Publication Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -43,6 +46,7 @@ export const updatePublication = async (id, data) => {
     return response.data;
   } catch (error) {
     console.error("Update Publication Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -53,6 +57,7 @@ export const deletePublication = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Delete Publication Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -71,6 +76,7 @@ export const getLectures = async (params) => {
     return response.data;
   } catch (error) {
     console.error("Get Lectures Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -81,6 +87,7 @@ export const createLecture = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Create Lecture Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -91,6 +98,7 @@ export const updateLecture = async (id, data) => {
     return response.data;
   } catch (error) {
     console.error("Update Lecture Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -101,6 +109,7 @@ export const deleteLecture = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Delete Lecture Error:", error);
+    toast.error(error.response?.data?.message || error.message);
     throw error;
   }
 };
