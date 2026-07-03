@@ -15,6 +15,7 @@ export const BASE_URL = `${BACKEND_URL}/api`;
 export const AUTH_LOGIN = "/users/login";
 export const AUTH_ME = "/users/me";
 export const AUTH_REGISTER = "/users/register";
+export const AUTH_LOGOUT = "/users/logout";
 
 // Fatwas
 export const FATWAS = "/fatwas";

@@ -49,32 +49,14 @@ const API = axios.create({
   },
 });
 
-// Request interceptor to automatically attach authorization tokens
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("adminToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptor to handle 401 Unauthorized globally
+// Response interceptor
 API.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // Handle 401 Unauthorized globally
     if (error.response?.status === 401) {
-      localStorage.removeItem("adminToken");
-      localStorage.removeItem("adminInfo");
-      if (window.location.pathname !== "/admin/login") {
-        window.location.href = "/admin/login";
+      // Redirect to login page
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
       }
     }
 
