@@ -114,12 +114,12 @@ export default function Home() {
           getLectures(),
           getEvents()
         ]);
-        setArticles(articlesData.articles || []);
-        setFatwas(fatwasData.fatwas || []);
-        setQuestions(questionsData.questions || []);
-        setPublications(publicationsData.books || []);
-        setLectures(lecturesData || []);
-        setEvents(eventsData || []);
+        setArticles(Array.isArray(articlesData?.articles) ? articlesData.articles : []);
+        setFatwas(Array.isArray(fatwasData?.fatwas) ? fatwasData.fatwas : []);
+        setQuestions(Array.isArray(questionsData?.questions) ? questionsData.questions : []);
+        setPublications(Array.isArray(publicationsData?.books) ? publicationsData.books : []);
+        setLectures(Array.isArray(lecturesData) ? lecturesData : []);
+        setEvents(Array.isArray(eventsData) ? eventsData : []);
       } catch (err) {
         console.error('Error loading homepage data:', err);
       }

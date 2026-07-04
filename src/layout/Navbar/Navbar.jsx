@@ -15,6 +15,7 @@ import {
 import { logout } from "@/store/slices/authSlice";
 import { useSettings } from '@/hooks/useSettings';
 import { COLORS } from "@/utils/themeColors";
+import { logoutUser } from "@/services";
 
 import { CATEGORY_MAP } from "@/utils/categories";
 
@@ -57,9 +58,15 @@ export default function Navbar() {
     setMobileOpenDropdown(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.warn("API logout failed, clearing local state anyway", err);
+    }
     dispatch(logout());
     closeMenu();
+    window.location.reload();
   };
 
   const allItems = [
@@ -210,6 +217,14 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-3">
           {(isAuthenticated || userRole === "admin") ? (
             <div className="flex items-center gap-2.5 relative" onClick={(e) => e.stopPropagation()}>
+              <Link
+                to="/ask"
+                style={{ backgroundColor: COLORS.primary }}
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white rounded-md shadow-sm hover:shadow-md transition-all hover:opacity-90"
+              >
+                <HelpCircle className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
+                {language === "en" ? "Ask" : "سوال"}
+              </Link>
               {userRole === "admin" && (
                 <Link
                   to="/admin/dashboard"
@@ -246,11 +261,20 @@ export default function Navbar() {
                       {loggedInUser?.role || "user"}
                     </span>
                   </div>
+                  {/* My Details — visible to all logged-in users */}
+                  <Link
+                    to="/my-details"
+                    onClick={() => setShowProfileDropdown(false)}
+                    className="mt-2.5 flex items-center gap-2 w-full px-3 py-2 text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 rounded border border-primary/15 transition-colors"
+                  >
+                    <User className="w-3.5 h-3.5 text-primary" />
+                    {language === "en" ? "My Details" : "میری تفصیلات"}
+                  </Link>
                   {userRole === "admin" && (
                     <Link
                       to="/admin/settings"
                       onClick={() => setShowProfileDropdown(false)}
-                      className="mt-2.5 flex items-center justify-center gap-2 w-full px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded border border-slate-200 transition-colors"
+                      className="mt-2 flex items-center justify-center gap-2 w-full px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded border border-slate-200 transition-colors"
                     >
                       <Settings className="w-3.5 h-3.5 text-slate-500" />
                       {language === "en" ? "Website Settings" : "ویب سائٹ کی ترتیبات"}
@@ -288,23 +312,21 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center lg:hidden gap-2">
+          <Link
+            to="/ask"
+            style={{ backgroundColor: COLORS.primary }}
+            className="px-3 py-1.5 text-xs font-bold text-white rounded-full shadow-sm transition-all hover:opacity-90"
+          >
+            {language === "en" ? "Ask Q" : "سوال پوچھیں"}
+          </Link>
           {!isAuthenticated && userRole !== "admin" && (
-            <>
-              <Link
-                to="/ask"
-                style={{ backgroundColor: COLORS.primary }}
-                className="px-3 py-1.5 text-xs font-bold text-white rounded-full shadow-sm transition-all hover:opacity-90"
-              >
-                {language === "en" ? "Ask Q" : "سوال پوچھیں"}
-              </Link>
-              <Link
-                to="/admin/login"
-                className="p-1.5 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary transition-all duration-200 shadow-xs flex items-center justify-center"
-                title={language === "en" ? "Login / Signup" : "لاگ ان / سائن اپ"}
-              >
-                <User className="w-4 h-4" />
-              </Link>
-            </>
+            <Link
+              to="/admin/login"
+              className="p-1.5 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary transition-all duration-200 shadow-xs flex items-center justify-center"
+              title={language === "en" ? "Login / Signup" : "لاگ ان / سائن اپ"}
+            >
+              <User className="w-4 h-4" />
+            </Link>
           )}
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -460,6 +482,16 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
+
+                  {/* My Details — all authenticated users */}
+                  <Link
+                    to="/my-details"
+                    onClick={closeMenu}
+                    className="flex items-center gap-2 w-full px-4 py-2 text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 rounded border border-primary/20 transition-colors"
+                  >
+                    <User className="w-4 h-4 text-primary" />
+                    {language === "en" ? "My Details" : "میری تفصیلات"}
+                  </Link>
 
                   <button
                     onClick={handleLogout}

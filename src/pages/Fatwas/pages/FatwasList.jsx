@@ -70,7 +70,7 @@ export default function FatwasList() {
 
   return (
     <div className="bg-background py-12 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Titles */}
         <div className="mb-10 text-center">
@@ -125,8 +125,8 @@ export default function FatwasList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-primary border-primary text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+              ? 'bg-primary border-primary text-white shadow-sm'
+              : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
               }`}
           >
             {language === 'en' ? 'All Topics' : 'تمام موضوعات'}
@@ -136,8 +136,8 @@ export default function FatwasList() {
               key={cat.value}
               onClick={() => handleCategoryChange(cat.value)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
-                  ? 'bg-primary border-primary text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+                ? 'bg-primary border-primary text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
               {language === 'ur' ? cat.labelUr : cat.labelEn}
@@ -173,8 +173,8 @@ export default function FatwasList() {
                     key={pNum + 1}
                     onClick={() => handlePageChange(pNum + 1)}
                     className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                        ? 'bg-primary border-primary text-white'
-                        : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      ? 'bg-primary border-primary text-white'
+                      : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                   >
                     {pNum + 1}

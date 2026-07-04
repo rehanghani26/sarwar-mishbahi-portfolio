@@ -526,6 +526,13 @@ export default function ManageArticles() {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
                   bodyData: (article) => (
                     <div className="inline-flex items-center gap-2">
+                      <Link
+                        to={`/articles/${article._id}`}
+                        className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors"
+                        title={language === 'en' ? 'View Article' : 'مضمون دیکھیں'}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Link>
                       <button
                         onClick={() => openEditForm(article)}
                         className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"

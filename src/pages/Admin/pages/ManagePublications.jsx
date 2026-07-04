@@ -587,6 +587,17 @@ export default function ManagePublications() {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
                   bodyData: (pub) => (
                     <div className="inline-flex items-center gap-2">
+                      {pub.pdf?.url && (
+                        <a
+                          href={pub.pdf.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors flex items-center justify-center"
+                          title={language === 'en' ? 'View PDF' : 'کتاب دیکھیں'}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </a>
+                      )}
                       <button
                         onClick={() => openEditForm(pub)}
                         className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"

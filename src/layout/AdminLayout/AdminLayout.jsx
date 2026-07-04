@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,45 +18,69 @@ import {
   ChevronRight,
   Globe,
   ChevronLeft,
+  Bell,
+  MessageSquare,
 } from 'lucide-react';
 import { logout } from '@/store/slices/authSlice';
 import { logoutUser } from '@/services';
 import toast from 'react-hot-toast';
 
+
 const NAV_LINKS = [
-  { to: '/admin/dashboard',    label: 'ڈیش بورڈ',       icon: LayoutDashboard },
-  { to: '/admin/articles',     label: 'مقالات',          icon: FileText },
-  { to: '/admin/fatwas',       label: 'فتاویٰ',          icon: Bookmark },
-  { to: '/admin/questions',    label: 'سوالات',          icon: HelpCircle },
-  { to: '/admin/publications', label: 'مطبوعات',         icon: BookOpen },
-  { to: '/admin/lectures',     label: 'بیانات',          icon: Mic },
-  { to: '/admin/events',       label: 'پروگرامات',       icon: CalendarDays },
-  { to: '/admin/users',        label: 'صارفین',          icon: Users },
-  { to: '/admin/settings',     label: 'ترتیبات',         icon: Settings },
+  { to: '/', label: 'عوامی ویب سائٹ', icon: Globe },
+  { to: '/admin/dashboard', label: 'ڈیش بورڈ', icon: LayoutDashboard },
+  { to: '/admin/articles', label: 'مقالات', icon: FileText },
+  { to: '/admin/fatwas', label: 'فتاویٰ', icon: Bookmark },
+  { to: '/admin/questions', label: 'سوالات', icon: HelpCircle },
+  { to: '/admin/publications', label: 'مطبوعات', icon: BookOpen },
+  { to: '/admin/lectures', label: 'بیانات', icon: Mic },
+  { to: '/admin/events', label: 'پروگرامات', icon: CalendarDays },
+  { to: '/admin/users', label: 'صارفین', icon: Users },
+  { to: '/admin/settings', label: 'ترتیبات', icon: Settings },
 ];
 
 // Premium gradient sidebar palette
 const SB = {
-  bg:          'linear-gradient(160deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)',
-  border:      'rgba(129,140,248,0.15)',
-  active:      'rgba(251,191,36,0.18)',
-  activeBorder:'#fbbf24',
-  activeText:  '#fde68a',
-  hoverBg:     'rgba(255,255,255,0.07)',
-  icon:        '#818cf8',
-  iconActive:  '#fbbf24',
-  text:        '#c7d2fe',
-  textMuted:   '#6d7fc7',
-  divider:     'rgba(129,140,248,0.12)',
+  bg: 'linear-gradient(160deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)',
+  border: 'rgba(129,140,248,0.15)',
+  active: 'rgba(251,191,36,0.18)',
+  activeBorder: '#fbbf24',
+  activeText: '#fde68a',
+  hoverBg: 'rgba(255,255,255,0.07)',
+  icon: '#818cf8',
+  iconActive: '#fbbf24',
+  text: '#c7d2fe',
+  textMuted: '#6d7fc7',
+  divider: 'rgba(129,140,248,0.12)',
 };
 
 export default function AdminLayout() {
-  const dispatch   = useDispatch();
-  const navigate   = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loggedInUser } = useSelector((state) => state.auth);
 
-  const [collapsed, setCollapsed]     = useState(false); // desktop collapse
-  const [mobileOpen, setMobileOpen]   = useState(false); // mobile slide-over
+  const [collapsed, setCollapsed] = useState(false); // desktop collapse
+  const [mobileOpen, setMobileOpen] = useState(false); // mobile slide-over
+
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+
+
+
+  const handleNotificationClick = (notif) => {
+    // Remove from notification list
+    setNotifications((prev) => prev.filter((n) => n._id !== notif._id));
+    setShowNotifDropdown(false);
+
+    // Route to corresponding management section
+    if (notif.contentType === 'article') {
+      navigate('/admin/articles');
+    } else if (notif.contentType === 'fatwa') {
+      navigate('/admin/fatwas');
+    } else if (notif.contentType === 'book') {
+      navigate('/admin/publications');
+    }
+  };
 
   const handleLogout = async () => {
     await logoutUser();
@@ -126,7 +150,7 @@ export default function AdminLayout() {
           >
             {collapsed
               ? <ChevronRight className="w-3.5 h-3.5" />
-              : <ChevronLeft  className="w-3.5 h-3.5" />
+              : <ChevronLeft className="w-3.5 h-3.5" />
             }
           </button>
 
@@ -153,9 +177,9 @@ export default function AdminLayout() {
                 <div
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer relative"
                   style={{
-                    background:   isActive ? SB.active : 'transparent',
-                    borderLeft:   isActive ? `3px solid ${SB.activeBorder}` : '3px solid transparent',
-                    color:        isActive ? SB.activeText : SB.text,
+                    background: isActive ? SB.active : 'transparent',
+                    borderLeft: isActive ? `3px solid ${SB.activeBorder}` : '3px solid transparent',
+                    color: isActive ? SB.activeText : SB.text,
                   }}
                   onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = SB.hoverBg; }}
                   onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
@@ -173,26 +197,7 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        {/* ── Divider ── */}
-        <div style={{ borderTop: `1px solid ${SB.divider}` }} />
 
-        {/* ── Visit site ── */}
-        <div className="px-2 py-2">
-          <a
-            href="/"
-            target="_blank"
-            rel="noreferrer"
-            title={collapsed ? 'ویب سائٹ دیکھیں' : ''}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl"
-            style={{ color: SB.textMuted }}
-            dir="rtl"
-            onMouseEnter={e => e.currentTarget.style.background = SB.hoverBg}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            <Globe className="w-4 h-4 flex-shrink-0" style={{ color: SB.icon }} />
-            {!collapsed && <span className="text-sm">عوامی ویب سائٹ</span>}
-          </a>
-        </div>
 
         {/* ── User + Logout ── */}
         <div style={{ borderTop: `1px solid ${SB.divider}` }} className="px-3 py-3 space-y-2">
@@ -257,9 +262,11 @@ export default function AdminLayout() {
             <span className="font-semibold text-slate-800">مینجمنٹ کنسول</span>
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4 relative">
+
+            {/* Profile badge */}
             <span
-              className="hidden sm:inline text-xs font-bold px-3 py-1 rounded-full"
+              className="hidden sm:inline text-xs font-bold px-3 py-1.5 rounded-full"
               style={{
                 background: 'linear-gradient(90deg,#4f46e5,#7c3aed)',
                 color: '#fff',
@@ -268,6 +275,62 @@ export default function AdminLayout() {
             >
               {loggedInUser?.role === 'admin' ? '⚙ سپر ایڈمن' : '👤 ' + (loggedInUser?.name || 'صارف')}
             </span>
+
+            {/* Notification Bell */}
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifDropdown(!showNotifDropdown)}
+                className="p-2 text-slate-500 hover:text-slate-800 rounded-full hover:bg-slate-100 transition-colors relative cursor-pointer flex items-center justify-center"
+              >
+                <Bell className="w-5 h-5" />
+                {notifications.length > 0 && (
+                  <span className="absolute top-1 left-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-bounce">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Dropdown Menu */}
+              {showNotifDropdown && (
+                <div
+                  style={{ zIndex: 99999 }}
+                  className="absolute left-0 top-full mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl py-3 px-4 transition-all"
+                  dir="rtl"
+                >
+                  <div className="flex items-center justify-between border-b pb-2 mb-3">
+                    <span className="text-xs font-bold text-slate-800">تبصرے کے نوٹیفیکیشنز</span>
+                    {notifications.length > 0 && (
+                      <button
+                        onClick={() => setNotifications([])}
+                        className="text-[10px] text-red-500 hover:underline bg-transparent border-0 cursor-pointer"
+                      >
+                        تمام صاف کریں
+                      </button>
+                    )}
+                  </div>
+
+                  {notifications.length === 0 ? (
+                    <p className="text-center py-6 text-xs text-slate-400 font-bold">کوئی نیا نوٹیفیکیشن نہیں ہے</p>
+                  ) : (
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                      {notifications.map((n, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => handleNotificationClick(n)}
+                          className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 flex flex-col gap-1 text-right cursor-pointer hover:bg-slate-100 transition-colors"
+                        >
+                          <div className="flex justify-between items-center text-[10px]">
+                            <span className="font-bold text-primary">{n.user?.name || 'صارف'}</span>
+                            <span className="text-slate-400 font-light">{n.contentType === 'article' ? 'مضمون' : n.contentType === 'fatwa' ? 'فتویٰ' : 'کتاب'}</span>
+                          </div>
+                          <p className="text-xs text-slate-700 font-medium leading-relaxed">"{n.text}"</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

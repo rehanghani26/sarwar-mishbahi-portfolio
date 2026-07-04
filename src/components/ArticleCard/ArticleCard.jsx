@@ -31,7 +31,7 @@ export default function ArticleCard({ article }) {
   };
 
   return (
-    <Link to={`/articles/${slug}`} className="premium-card flex flex-col h-full overflow-hidden group hover:no-underline text-inherit cursor-pointer">
+    <Link to={`/articles/${article._id || slug}`} className="premium-card flex flex-col h-full overflow-hidden group hover:no-underline text-inherit cursor-pointer">
 
       {/* Featured Image */}
       <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-900 shrink-0">

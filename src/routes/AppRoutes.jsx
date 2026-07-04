@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Layout Imports
-import { MainLayout } from '@/layout';
+import { MainLayout, AuthLayout } from '@/layout';
 import AdminLayout from '@/layout/AdminLayout';
 
 // Public Page Imports
@@ -19,6 +19,7 @@ import LecturesList from '../pages/Lectures/pages/LecturesList';
 import EventsList from '../pages/Events/pages/EventsList';
 import ContactPage from '../pages/Contact/pages/ContactPage';
 import PageNotFound from '../pages/PageNotFound/pages/PageNotFound';
+import MyDetails from '../pages/User/pages/MyDetails';
 
 // Admin Page Imports
 import Login from '../pages/Admin/pages/Login';
@@ -39,7 +40,14 @@ import { AdminRoute } from '@/components';
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* ── Public site (has Navbar + Footer) ── */}
+
+      {/* ── Authentication pages (English + LTR, no Navbar/Footer) ── */}
+      <Route element={<AuthLayout />}>
+        <Route path="/admin/login"  element={<Login />} />
+        <Route path="/admin/signup" element={<Signup />} />
+      </Route>
+
+      {/* ── Public site (Urdu + RTL, has Navbar + Footer) ── */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
@@ -56,10 +64,7 @@ export default function AppRoutes() {
         <Route path="lectures" element={<LecturesList />} />
         <Route path="events" element={<EventsList />} />
         <Route path="contact" element={<ContactPage />} />
-
-        {/* Admin login/signup stay inside public layout */}
-        <Route path="admin/login" element={<Login />} />
-        <Route path="admin/signup" element={<Signup />} />
+        <Route path="my-details" element={<MyDetails />} />
 
         {/* 404 */}
         <Route path="*" element={<PageNotFound />} />
@@ -79,7 +84,7 @@ export default function AppRoutes() {
           <Route path="/admin/users"        element={<ManageUsers />} />
         </Route>
       </Route>
+
     </Routes>
   );
 }
-

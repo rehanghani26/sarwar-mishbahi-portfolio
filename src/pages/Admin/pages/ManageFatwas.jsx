@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Bookmark, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Bookmark, CheckCircle, Eye } from 'lucide-react';
 import { getFatwas, createFatwa, updateFatwa, deleteFatwa } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
@@ -334,6 +334,13 @@ export default function ManageFatwas() {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
                   bodyData: (fatwa) => (
                     <div className="inline-flex items-center gap-2">
+                      <Link
+                        to={`/fatwas/${fatwa._id}`}
+                        className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors"
+                        title={language === 'en' ? 'View Fatwa' : 'فتویٰ دیکھیں'}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Link>
                       <button
                         onClick={() => openEditForm(fatwa)}
                         className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"

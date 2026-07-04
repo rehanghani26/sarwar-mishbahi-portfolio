@@ -6,4 +6,5 @@ export * from './Header';
 export * from './TopBar';
 export * from './LogoSeal';
 export { default as AdminLayout } from './AdminLayout';
+export { AuthLayout } from './AuthLayout';
 

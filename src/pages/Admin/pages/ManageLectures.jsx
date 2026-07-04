@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle, Eye } from 'lucide-react';
 import { getLectures, createLecture, updateLecture, deleteLecture } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input, Table } from '@/components';
@@ -317,6 +317,17 @@ export default function ManageLectures() {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
                   bodyData: (lec) => (
                     <div className="inline-flex items-center gap-2">
+                       {lec.videoUrl && (
+                         <a
+                           href={lec.videoUrl}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors flex items-center justify-center"
+                           title={language === 'en' ? 'View Media' : 'بیان دیکھیں'}
+                         >
+                           <Eye className="w-4 h-4" />
+                         </a>
+                       )}
                        <button
                          onClick={() => openEditForm(lec)}
                          className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"

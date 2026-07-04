@@ -31,4 +31,8 @@ export { default as ImageViewer } from './ImageViewer';
 // Table component
 export * from './Table';
 
+// Comments
+export { default as CommentsSection } from './CommentsSection';
+
+
 

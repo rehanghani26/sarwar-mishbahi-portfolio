@@ -60,7 +60,7 @@ export default function ContactPage() {
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
 
         {/* Left Side: Contact Information Cards (5 columns) */}
         <div className={`lg:col-span-5 space-y-6 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
@@ -72,7 +72,7 @@ export default function ContactPage() {
               {language === 'en' ? 'Contact Details' : 'رابطے کی تفصیلات'}
             </h1>
             <p className={`text-slate-550 dark:text-slate-400 text-sm font-light mt-2 leading-relaxed ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-              {language === 'en' 
+              {language === 'en'
                 ? 'If you have any questions about fatwas, books, invitations, or lectures, contact us through the official contact portal.'
                 : 'اگر آپ کے پاس فتاویٰ، کتب، دعوت ناموں یا خطابات کے بارے میں کوئی سوال ہے تو سرکاری رابطہ پورٹل کے ذریعے رابطہ کریں۔'
               }
@@ -173,7 +173,7 @@ export default function ContactPage() {
               </h2>
               <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed max-w-sm font-light mb-6">
                 {successMsg}
-                {language === 'en' 
+                {language === 'en'
                   ? ' Our administrative office will review it and reply as soon as possible.'
                   : ' ہمارا انتظامی دفتر اس کا جائزہ لے گا اور جلد از جلد جواب دے گا۔'
                 }
@@ -277,8 +277,8 @@ export default function ContactPage() {
                     className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-white font-bold rounded shadow-sm transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
                   >
                     <Send className="w-4 h-4 text-accent" />
-                    {actionLoading 
-                      ? (language === 'en' ? 'Sending message...' : 'پیغام بھیجا جا رہا ہے...') 
+                    {actionLoading
+                      ? (language === 'en' ? 'Sending message...' : 'پیغام بھیجا جا رہا ہے...')
                       : (language === 'en' ? 'Send Message' : 'پیغام بھیجیں')
                     }
                   </button>

@@ -10,7 +10,7 @@ export default function App() {
     <Provider store={store}>
       <BrowserRouter>
         <AppRoutes />
-        <Toaster position="top-right" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
       </BrowserRouter>
     </Provider>
   );
