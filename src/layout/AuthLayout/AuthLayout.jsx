@@ -18,7 +18,7 @@ export default function AuthLayout() {
     return () => {
       document.body.dir = 'rtl';
       document.body.style.fontFamily =
-        "'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif";
+        "'Pyami Nastaliq', 'Payami Nastaleeq', 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif";
     };
   }, []);
 

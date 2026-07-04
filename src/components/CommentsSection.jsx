@@ -151,9 +151,9 @@ export default function CommentsSection({ contentType, contentId, language }) {
 
   return (
     <div style={{ borderColor: COLORS.border }} className="my-8 border-2 bg-white">
-      
+
       {/* ── YouTube Style Header Accordion Bar ── */}
-      <div 
+      <div
         onClick={() => setIsExpanded(!isExpanded)}
         style={{ backgroundColor: COLORS.background }}
         className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-100/80 transition-colors select-none"

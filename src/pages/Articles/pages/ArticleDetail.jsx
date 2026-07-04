@@ -199,7 +199,7 @@ export default function ArticleDetail() {
       });
       toast.success('آپ کا تبصرہ جمع کرا دیا گیا ہے۔ انتظامیہ کی منظوری کے بعد یہ ظاہر ہو جائے گا۔');
       setCommentText('');
-      
+
       // Update local comments state immediately by appending the new comment
       if (result && result.data) {
         setComments((prev) => [result.data, ...prev]);
@@ -233,7 +233,7 @@ export default function ArticleDetail() {
       toast.success('آپ کا جواب جمع کرا دیا گیا ہے اور منظوری کے بعد ظاہر ہو گا۔');
       setReplyText('');
       setReplyToId(null);
-      
+
       // Update local replies array inside state immediately
       if (result && result.data) {
         setComments((prevComments) =>
@@ -282,14 +282,14 @@ export default function ArticleDetail() {
 
   return (
     <div className="min-h-screen text-[#2D2A26] font-serif py-8" style={{ backgroundColor: PALETTE.background }} dir="rtl">
-      
+
       {/* Scroll progress bar */}
       <div className="fixed top-0 left-0 right-0 h-1.5 z-50 bg-slate-200">
         <div className="h-full transition-all duration-100" style={{ width: `${scrollProgress}%`, backgroundColor: PALETTE.primary }} />
       </div>
 
       <div className="w-full px-4 sm:px-8 lg:px-12 space-y-6">
-        
+
         {/* Breadcrumb Back Button */}
         <Link to="/articles" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider mb-2 transition-all hover:opacity-80" style={{ color: PALETTE.primary }}>
           <ArrowRight className="w-4 h-4" />
@@ -298,7 +298,7 @@ export default function ArticleDetail() {
 
         {/* ── UNIFIED MAIN ARTICLE CARD (Single Card Layout) ── */}
         <article className="bg-white border rounded-2xl shadow-xs overflow-hidden" style={{ borderColor: PALETTE.border }}>
-          
+
           {/* Header image (Compact size) */}
           <div className="h-[200px] sm:h-[280px] w-full bg-slate-100 relative">
             <img
@@ -310,7 +310,7 @@ export default function ArticleDetail() {
             <div className="absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded" style={{ backgroundColor: PALETTE.primary }}>
               {category}
             </div>
-            
+
             {/* Save toggle icon overlay */}
             <button
               onClick={handleSaveToggle}
@@ -322,7 +322,7 @@ export default function ArticleDetail() {
           </div>
 
           <div className="p-6 sm:p-10 space-y-6">
-            
+
             {/* Article Top Stats bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500 pb-4 border-b" style={{ borderColor: PALETTE.border }}>
               <div className="flex flex-wrap items-center gap-5">
@@ -337,8 +337,8 @@ export default function ArticleDetail() {
               </div>
 
               {/* Scroll comment click action */}
-              <button 
-                onClick={scrollToCommentForm} 
+              <button
+                onClick={scrollToCommentForm}
                 className="flex items-center gap-1.5 font-bold hover:underline cursor-pointer border-0 bg-transparent text-slate-500 p-0"
               >
                 <MessageCircle className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
@@ -433,7 +433,7 @@ export default function ArticleDetail() {
 
             {/* Tags & Social sharing row inside card */}
             <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-5" style={{ borderColor: PALETTE.border }}>
-              
+
               {/* Tags block */}
               <div className="flex flex-wrap gap-1.5">
                 {tags && tags.map((tag, idx) => (
@@ -527,7 +527,7 @@ export default function ArticleDetail() {
             <form onSubmit={handleCommentSubmit} className="space-y-4">
               <div className="flex gap-3 items-start">
                 <Avatar user={loggedInUser} />
-                
+
                 <div className="flex-1 space-y-3">
                   <div className="relative">
                     <textarea
@@ -538,7 +538,7 @@ export default function ArticleDetail() {
                       className="w-full p-3 border rounded-lg outline-none text-sm font-medium focus:border-stone-500 transition-colors"
                       style={{ borderColor: PALETTE.border }}
                     />
-                    
+
                     <div className="absolute bottom-2.5 left-2.5 flex items-center gap-2 text-slate-400">
                       <button type="button" className="hover:text-slate-650 transition-colors p-1" title="ایموجی">
                         <Smile className="w-4 h-4" />
@@ -626,7 +626,7 @@ export default function ArticleDetail() {
                           <Heart className="w-3.5 h-3.5" />
                           <span>پسند کریں</span>
                         </button>
-                        
+
                         <button
                           onClick={() => setReplyToId(replyToId === comment._id ? null : comment._id)}
                           className="flex items-center gap-1 hover:text-blue-900 transition-colors bg-transparent border-0 cursor-pointer"

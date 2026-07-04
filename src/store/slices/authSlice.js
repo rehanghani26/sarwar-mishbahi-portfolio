@@ -24,11 +24,11 @@ export const register = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const data = await registerUser(formData);
-      
+
       // Save details to local storage
       localStorage.setItem('adminToken', data.token);
       localStorage.setItem('adminInfo', JSON.stringify(data));
-      
+
       return data;
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Registration failed';
@@ -42,11 +42,11 @@ export const login = createAsyncThunk(
   async ({ username, password }, thunkAPI) => {
     try {
       const data = await loginUser({ username, password });
-      
+
       // Save details to local storage
       localStorage.setItem('adminToken', data.token);
       localStorage.setItem('adminInfo', JSON.stringify(data));
-      
+
       return data;
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Login failed';

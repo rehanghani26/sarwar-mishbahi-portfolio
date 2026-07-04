@@ -43,7 +43,7 @@ export default function AppRoutes() {
 
       {/* ── Authentication pages (English + LTR, no Navbar/Footer) ── */}
       <Route element={<AuthLayout />}>
-        <Route path="/admin/login"  element={<Login />} />
+        <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/signup" element={<Signup />} />
       </Route>
 
@@ -73,15 +73,15 @@ export default function AppRoutes() {
       {/* ── Admin Console (full-screen, no public Navbar/Footer) ── */}
       <Route element={<AdminRoute />}>
         <Route element={<AdminLayout />}>
-          <Route path="/admin/dashboard"    element={<Dashboard />} />
-          <Route path="/admin/articles"     element={<ManageArticles />} />
-          <Route path="/admin/fatwas"       element={<ManageFatwas />} />
-          <Route path="/admin/questions"    element={<ManageQuestions />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/articles" element={<ManageArticles />} />
+          <Route path="/admin/fatwas" element={<ManageFatwas />} />
+          <Route path="/admin/questions" element={<ManageQuestions />} />
           <Route path="/admin/publications" element={<ManagePublications />} />
-          <Route path="/admin/lectures"     element={<ManageLectures />} />
-          <Route path="/admin/events"       element={<ManageEvents />} />
-          <Route path="/admin/settings"     element={<ManageSettings />} />
-          <Route path="/admin/users"        element={<ManageUsers />} />
+          <Route path="/admin/lectures" element={<ManageLectures />} />
+          <Route path="/admin/events" element={<ManageEvents />} />
+          <Route path="/admin/settings" element={<ManageSettings />} />
+          <Route path="/admin/users" element={<ManageUsers />} />
         </Route>
       </Route>
 

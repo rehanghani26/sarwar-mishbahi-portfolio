@@ -63,7 +63,7 @@
 /* Custom premium styles */
 .scholar-gradient-bg {
   background-color: var(--color-background);
-  background-image: 
+  background-image:
     url("/patterns/islamic-pattern.svg"),
     linear-gradient(135deg, var(--color-background) 0%, var(--color-secondary) 100%);
   background-repeat: repeat;
@@ -84,6 +84,7 @@
 .gold-accent-hover {
   transition: all 0.3s ease;
 }
+
 .gold-accent-hover:hover {
   color: var(--color-accent);
   border-color: var(--color-accent);
@@ -108,7 +109,7 @@
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   overflow: hidden;
   position: relative;
@@ -117,8 +118,9 @@
   transform: translate3d(0, 0, 0);
   -webkit-font-smoothing: subpixel-antialiased;
 }
+
 .premium-card:hover {
-  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
   border-color: var(--color-accent);
 }
 
@@ -149,15 +151,25 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none !important;
 }
+
 .scrollbar-none {
-  -ms-overflow-style: none !important;  /* IE and Edge */
-  scrollbar-width: none !important;  /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
 }
 
-/* Urdu/RTL typography overrides to inherit Noto Sans Arabic (modern/clean) first */
+/* Define Pyami Nastaliq local font with unicode-range for Urdu/Arabic characters */
+@font-face {
+  font-family: 'Pyami Nastaliq';
+  src: local('Pyami Nastaliq'), local('PyamiNastaliq'), local('Payami Nastaleeq'), local('PayamiNastaleeq');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* Urdu/RTL typography overrides to inherit Pyami Nastaliq (traditional/elegant) first */
 [dir="rtl"] body,
 [dir="rtl"] {
-  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Inter', sans-serif !important;
+  font-family: 'Pyami Nastaliq', 'Payami Nastaleeq', 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
 }
 
 [dir="rtl"] h1,
@@ -167,5 +179,5 @@
 [dir="rtl"] h5,
 [dir="rtl"] h6,
 [dir="rtl"] .title-serif {
-  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Inter', sans-serif !important;
+  font-family: 'Pyami Nastaliq', 'Payami Nastaleeq', 'Noto Nastaliq Urdu', 'Noto Sans Arabic', 'Inter', sans-serif !important;
 }
