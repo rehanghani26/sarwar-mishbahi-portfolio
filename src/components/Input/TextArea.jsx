@@ -13,7 +13,7 @@ const TextArea = forwardRef(
       value = "",
       autoComplete,
       className = "",
-      border = "border border-gray-200 focus:border-gray-400 rounded",
+      border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
       textareaClassName = "",
       labelClassName = "",
       placeholder,

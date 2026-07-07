@@ -18,7 +18,7 @@ const FileUpload = forwardRef(
     {
       type = "file",
       accept,
-      border = "p-2 border border-gray-200 hover:border-gray-400 rounded",
+      border = "p-2 border border-slate-300 hover:border-slate-400 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary rounded-md outline-none transition-colors",
       className = "",
       iconClassName = "",
       id = "",

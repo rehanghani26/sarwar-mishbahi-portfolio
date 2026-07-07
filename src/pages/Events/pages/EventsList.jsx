@@ -29,8 +29,8 @@ export default function EventsList() {
   }, []);
 
   const nowTime = Date.now();
-  const upcomingEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() > nowTime) : [];
-  const pastEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() <= nowTime) : [];
+  const upcomingEvents = events?.filter ? events.filter((e) => new Date(e?.eventDate).getTime() > nowTime) : [];
+  const pastEvents = events?.filter ? events.filter((e) => new Date(e?.eventDate).getTime() <= nowTime) : [];
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>

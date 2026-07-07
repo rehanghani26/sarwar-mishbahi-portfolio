@@ -66,7 +66,7 @@ const AsyncSearchSelect = ({
   return (
     <div className={`w-full relative ${className}`} ref={containerRef}>
       <div
-        className="p-2 h-10 flex gap-1 items-center border border-gray-300 rounded w-full"
+        className="py-3 px-4 h-[52px] flex gap-1 items-center border border-slate-300 hover:border-slate-400 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary rounded-md outline-none transition-colors w-full"
         onClick={() => setDropdownOpen(true)}
       >
         <FiSearch className="text-gray-500" />
@@ -75,7 +75,7 @@ const AsyncSearchSelect = ({
           type="text"
           value={searchText}
           placeholder={placeholder}
-          className="w-full outline-none placeholder-gray-400"
+          className="w-full bg-transparent outline-none text-slate-700 placeholder-slate-400 text-[16px] leading-relaxed"
           onChange={(e) => setSearchText(e.target.value)}
         />
 

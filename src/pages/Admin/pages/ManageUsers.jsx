@@ -256,7 +256,7 @@ export default function ManageUsers() {
   return (
     <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        
+
         {/* Header Block */}
         <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
@@ -265,7 +265,7 @@ export default function ManageUsers() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-primary font-serif">{t.title}</h1>
-              <p className="text-xs text-slate-400 font-light">{t.subTitle}</p>
+
             </div>
           </div>
         </div>
@@ -375,12 +375,11 @@ export default function ManageUsers() {
               {
                 headData: t.role,
                 bodyData: (user) => (
-                  <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide ${
-                    user.role === 'admin' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
-                    user.role === 'mufti' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                    user.role === 'editor' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-                    'bg-slate-100 text-slate-600'
-                  }`}>
+                  <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide ${user.role === 'admin' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                      user.role === 'mufti' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                        user.role === 'editor' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                          'bg-slate-100 text-slate-600'
+                    }`}>
                     {t[user.role] || user.role}
                   </span>
                 ),
@@ -389,11 +388,10 @@ export default function ManageUsers() {
               {
                 headData: t.status,
                 bodyData: (user) => (
-                  <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                    user.isActive
+                  <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${user.isActive
                       ? 'bg-emerald-50 text-emerald-700'
                       : 'bg-red-50 text-red-700'
-                  }`}>
+                    }`}>
                     {user.isActive ? t.active : t.inactive}
                   </span>
                 ),

@@ -82,7 +82,7 @@ function QuickAction({ to, label, sub, icon: Icon, gradient, shadow }) {
 // ─── Main Dashboard ──────────────────────────────────────────────
 export default function Dashboard() {
   const { loggedInUser } = useSelector((state) => state.auth);
-  const [stats, setStats]   = useState(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -110,31 +110,31 @@ export default function Dashboard() {
     );
   }
 
-  const tArticles     = stats?.totalArticles     ?? 0;
-  const tFatwas       = stats?.totalFatwas       ?? 0;
+  const tArticles = stats?.totalArticles ?? 0;
+  const tFatwas = stats?.totalFatwas ?? 0;
   const tPublications = stats?.totalPublications ?? 0;
-  const tLectures     = stats?.totalLectures     ?? 0;
-  const tQuestions    = stats?.totalQuestions    ?? 0;
-  const pQuestions    = stats?.pendingQuestions  ?? 0;
-  const aQuestions    = tQuestions - pQuestions;
-  const tMessages     = stats?.totalMessages     ?? 0;
-  const tUsers        = stats?.totalUsers        ?? 0;
+  const tLectures = stats?.totalLectures ?? 0;
+  const tQuestions = stats?.totalQuestions ?? 0;
+  const pQuestions = stats?.pendingQuestions ?? 0;
+  const aQuestions = tQuestions - pQuestions;
+  const tMessages = stats?.totalMessages ?? 0;
+  const tUsers = stats?.totalUsers ?? 0;
 
   const now = new Date();
   const hour = now.getHours();
   const greeting = hour < 12 ? 'صبح بخیر' : hour < 17 ? 'دوپہر بخیر' : 'شام بخیر';
 
   const barData = [
-    { name: 'مقالات',   value: tArticles },
-    { name: 'فتاویٰ',   value: tFatwas },
+    { name: 'مقالات', value: tArticles },
+    { name: 'فتاویٰ', value: tFatwas },
     { name: 'مطبوعات', value: tPublications },
-    { name: 'بیانات',  value: tLectures },
-    { name: 'سوالات',  value: tQuestions },
+    { name: 'بیانات', value: tLectures },
+    { name: 'سوالات', value: tQuestions },
   ];
 
   const pieData = [
     { name: 'جواب دیے گئے', value: aQuestions },
-    { name: 'زیرِ التوا',    value: pQuestions },
+    { name: 'زیرِ التوا', value: pQuestions },
   ];
 
   const monthlyActivityData = [
@@ -179,25 +179,25 @@ export default function Dashboard() {
   ];
 
   const STAT_CARDS = [
-    { label: 'کل مقالات',        value: tArticles,     icon: FileText,    gradient: 'linear-gradient(135deg,#6366f1,#4f46e5)', shadow: 'rgba(99,102,241,0.3)' },
-    { label: 'کل فتاویٰ',        value: tFatwas,       icon: Bookmark,    gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', shadow: 'rgba(245,158,11,0.3)' },
-    { label: 'کل صارفین',        value: tUsers,        icon: Users,       gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', shadow: 'rgba(139,92,246,0.3)' },
-    { label: 'زیرِ التوا سوالات', value: pQuestions,   icon: Clock,       gradient: 'linear-gradient(135deg,#ef4444,#dc2626)', shadow: 'rgba(239,68,68,0.3)',   sub: `کل ${tQuestions} سوالات` },
-    { label: 'مطبوعات',          value: tPublications, icon: BookOpen,    gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)', shadow: 'rgba(20,184,166,0.3)' },
-    { label: 'بیانات',           value: tLectures,     icon: Mic,         gradient: 'linear-gradient(135deg,#ec4899,#db2777)', shadow: 'rgba(236,72,153,0.3)' },
-    { label: 'کل پیغامات',       value: tMessages,     icon: Mail,        gradient: 'linear-gradient(135deg,#64748b,#475569)', shadow: 'rgba(100,116,139,0.3)' },
-    { label: 'جواب دیے گئے',    value: aQuestions,    icon: CheckCircle, gradient: 'linear-gradient(135deg,#10b981,#059669)', shadow: 'rgba(16,185,129,0.3)' },
+    { label: 'کل مقالات', value: tArticles, icon: FileText, gradient: 'linear-gradient(135deg,#6366f1,#4f46e5)', shadow: 'rgba(99,102,241,0.3)' },
+    { label: 'کل فتاویٰ', value: tFatwas, icon: Bookmark, gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', shadow: 'rgba(245,158,11,0.3)' },
+    { label: 'کل صارفین', value: tUsers, icon: Users, gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', shadow: 'rgba(139,92,246,0.3)' },
+    { label: 'زیرِ التوا سوالات', value: pQuestions, icon: Clock, gradient: 'linear-gradient(135deg,#ef4444,#dc2626)', shadow: 'rgba(239,68,68,0.3)', sub: `کل ${tQuestions} سوالات` },
+    { label: 'مطبوعات', value: tPublications, icon: BookOpen, gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)', shadow: 'rgba(20,184,166,0.3)' },
+    { label: 'بیانات', value: tLectures, icon: Mic, gradient: 'linear-gradient(135deg,#ec4899,#db2777)', shadow: 'rgba(236,72,153,0.3)' },
+    { label: 'کل پیغامات', value: tMessages, icon: Mail, gradient: 'linear-gradient(135deg,#64748b,#475569)', shadow: 'rgba(100,116,139,0.3)' },
+    { label: 'جواب دیے گئے', value: aQuestions, icon: CheckCircle, gradient: 'linear-gradient(135deg,#10b981,#059669)', shadow: 'rgba(16,185,129,0.3)' },
   ];
 
   const QUICK_ACTIONS = [
-    { to: '/admin/articles',     label: 'نیا مضمون لکھیں',  sub: 'اسلامی احکام شائع کریں',      icon: Plus,         gradient: 'linear-gradient(135deg,#6366f1,#4f46e5)', shadow: 'rgba(99,102,241,0.3)' },
-    { to: '/admin/fatwas',       label: 'نیا فتویٰ شامل کریں', sub: 'فقہی مسائل کے حل',         icon: Bookmark,     gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', shadow: 'rgba(245,158,11,0.3)' },
-    { to: '/admin/questions',    label: 'سوالات کا جائزہ',   sub: `${pQuestions} زیرِ التوا`,   icon: HelpCircle,   gradient: 'linear-gradient(135deg,#ef4444,#dc2626)', shadow: 'rgba(239,68,68,0.3)' },
-    { to: '/admin/publications', label: 'مطبوعہ شامل کریں',  sub: 'کتاب یا وسیلہ اپ لوڈ',      icon: BookOpen,     gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)', shadow: 'rgba(20,184,166,0.3)' },
-    { to: '/admin/lectures',     label: 'بیان شامل کریں',    sub: 'ویڈیو یا آڈیو مواد',          icon: Mic,          gradient: 'linear-gradient(135deg,#ec4899,#db2777)', shadow: 'rgba(236,72,153,0.3)' },
-    { to: '/admin/events',       label: 'پروگرامات کا انتظام', sub: 'آنے والے پروگرام',          icon: CalendarDays, gradient: 'linear-gradient(135deg,#3b82f6,#2563eb)', shadow: 'rgba(59,130,246,0.3)' },
-    { to: '/admin/users',        label: 'صارفین کا انتظام',  sub: `${tUsers} رجسٹرڈ صارفین`,   icon: Users,        gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', shadow: 'rgba(139,92,246,0.3)' },
-    { to: '/admin/settings',     label: 'ویب سائٹ کی ترتیبات', sub: 'فونٹ، SEO، علامہ معلومات', icon: Settings,     gradient: 'linear-gradient(135deg,#64748b,#475569)', shadow: 'rgba(100,116,139,0.3)' },
+    { to: '/admin/articles', label: 'نیا مضمون لکھیں', sub: 'اسلامی احکام شائع کریں', icon: Plus, gradient: 'linear-gradient(135deg,#6366f1,#4f46e5)', shadow: 'rgba(99,102,241,0.3)' },
+    { to: '/admin/fatwas', label: 'نیا فتویٰ شامل کریں', sub: 'فقہی مسائل کے حل', icon: Bookmark, gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', shadow: 'rgba(245,158,11,0.3)' },
+    { to: '/admin/questions', label: 'سوالات کا جائزہ', sub: `${pQuestions} زیرِ التوا`, icon: HelpCircle, gradient: 'linear-gradient(135deg,#ef4444,#dc2626)', shadow: 'rgba(239,68,68,0.3)' },
+    { to: '/admin/publications', label: 'مطبوعہ شامل کریں', sub: 'کتاب یا وسیلہ اپ لوڈ', icon: BookOpen, gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)', shadow: 'rgba(20,184,166,0.3)' },
+    { to: '/admin/lectures', label: 'بیان شامل کریں', sub: 'ویڈیو یا آڈیو مواد', icon: Mic, gradient: 'linear-gradient(135deg,#ec4899,#db2777)', shadow: 'rgba(236,72,153,0.3)' },
+    { to: '/admin/events', label: 'پروگرامات کا انتظام', sub: 'آنے والے پروگرام', icon: CalendarDays, gradient: 'linear-gradient(135deg,#3b82f6,#2563eb)', shadow: 'rgba(59,130,246,0.3)' },
+    { to: '/admin/users', label: 'صارفین کا انتظام', sub: `${tUsers} رجسٹرڈ صارفین`, icon: Users, gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', shadow: 'rgba(139,92,246,0.3)' },
+    { to: '/admin/settings', label: 'ویب سائٹ کی ترتیبات', sub: 'فونٹ، SEO، علامہ معلومات', icon: Settings, gradient: 'linear-gradient(135deg,#64748b,#475569)', shadow: 'rgba(100,116,139,0.3)' },
   ];
 
   return (
@@ -211,9 +211,9 @@ export default function Dashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">
-            {greeting}، {loggedInUser?.name?.split(' ')[0] || 'ایڈمنسٹریٹر'} 👋
+            {greeting}، {loggedInUser?.name?.split(' ')[0] || 'ایڈمنسٹریٹر'}
           </h1>
-          <p className="text-sm text-slate-500 mt-1">آج آپ کے پلیٹ فارم پر یہ سرگرمی ہے۔</p>
+
         </div>
         <Link
           to="/admin/settings"
@@ -333,8 +333,8 @@ export default function Dashboard() {
             <AreaChart data={userGrowthData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="userGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0}/>
+                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />

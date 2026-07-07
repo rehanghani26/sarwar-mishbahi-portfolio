@@ -14,7 +14,7 @@ const SelectInput = forwardRef(
       value = "",
       labelClassName = "",
       selectClassName = "",
-      border = "border border-gray-200 focus:border-gray-400 rounded",
+      border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
       options = [],
       onChange,
       errorMessage,
@@ -26,6 +26,15 @@ const SelectInput = forwardRef(
     },
     ref
   ) => {
+    const cleanInputClass = (classes) => {
+      if (!classes) return "";
+      return classes
+        .split(" ")
+        .filter((c) => !/^(p[xy]?-\d+(\.\d+)?|h-\d+|max-h-\d+|text-sm)$/.test(c))
+        .join(" ");
+    };
+    const cleanedSelectClassName = cleanInputClass(selectClassName);
+
     let borderClassname = errorMessage ? `${border} border-red-500` : border;
 
     return (
@@ -45,7 +54,7 @@ const SelectInput = forwardRef(
         )}
 
         {readOnly ? (
-          <div className={`p-2 bg-gray-50 ${borderClassname}`}>
+          <div className={`pt-2.5 pb-4 px-4 bg-gray-50 text-[16px] leading-relaxed ${borderClassname}`}>
             {value || "Not specified"}
           </div>
         ) : (
@@ -56,7 +65,7 @@ const SelectInput = forwardRef(
             value={value}
             onChange={onChange}
             // className={`p-2 w-full h-10 outline-0 bg-inherit text-[#272828B2] ${border} ${selectClassName}`}
-            className={`p-2 w-full outline-0 ${borderClassname} ${selectClassName}`}
+            className={`pt-2.5 pb-4 px-4 w-full outline-0 text-[16px] leading-relaxed ${borderClassname} ${cleanedSelectClassName}`}
             disabled={disabled}
             readOnly={readOnly}
           >

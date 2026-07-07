@@ -96,7 +96,7 @@ export default function ManagePublications() {
   const openEditForm = (pub) => {
     setActionError(null);
     setEditingId(pub._id);
-    
+
     const categoryMap = {
       'تفسیرِ قرآن': 'QURAN_TAFSEER',
       'علومِ حدیث': 'HADITH_SCIENCES',
@@ -207,23 +207,23 @@ export default function ManagePublications() {
   return (
     <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        
+
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-gray-300 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3">
-            <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
+            <Link to="/admin/dashboard" className="p-2 border-2 border-gray-300 bg-white rounded text-slate-600 hover:text-accent hover:border-accent shrink-0 transition-colors">
               <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Publications' : 'مطبوعات کا انتظام'}</h1>
-              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete books and research papers.' : 'کتابیں اور تحقیقی مقالات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
+
             </div>
           </div>
 
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif border-2 border-primary/60"
             >
               <Plus className="w-4 h-4 text-accent" />
               {language === 'en' ? 'Add Publication' : 'مطبوعہ شامل کریں'}
@@ -233,7 +233,7 @@ export default function ManagePublications() {
 
         {/* Success alert */}
         {success && (
-          <div className={`bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+          <div className={`bg-emerald-50 border-r-4 border-emerald-500 p-4 flex items-start gap-2.5 text-emerald-800 text-xs shadow-sm border-2 border-emerald-200 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{successMsg}</span>
           </div>
@@ -241,37 +241,37 @@ export default function ManagePublications() {
 
         {/* Form vs List Routing */}
         {isFormOpen ? (
-          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
+          <div className="bg-white border-2 border-gray-300 rounded-lg shadow-md overflow-hidden">
+            <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b-2 border-accent/50 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId 
-                  ? (language === 'en' ? 'Edit Publication Details' : 'مطبوعہ کی تفصیلات میں ترمیم کریں') 
+                {editingId
+                  ? (language === 'en' ? 'Edit Publication Details' : 'مطبوعہ کی تفصیلات میں ترمیم کریں')
                   : (language === 'en' ? 'Add New Google Drive Publication' : 'گوگل ڈرائیو کی نئی مطبوعہ شامل کریں')
                 }
               </h2>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-xs text-secondary hover:text-white underline font-light"
+                className="text-xs text-secondary hover:text-white underline font-light border-b border-transparent hover:border-white transition-colors"
               >
                 {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
               </button>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-5">
+
               {/* Alert error */}
               {actionError && (
-                <div className={`bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs shrink-0 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+                <div className={`bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 text-xs border-2 border-red-200 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                   <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
                   <span>{actionError}</span>
                 </div>
               )}
 
               {/* Title & Author */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Publication Title *' : 'مطبوعہ کا عنوان *'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Publication Title *' : 'مطبوعہ کا عنوان *'}</label>
                   <Input
                     type="text"
                     name="title"
@@ -279,12 +279,12 @@ export default function ManagePublications() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Guidance on Principles of Fiqh' : 'مثال: اصول فقہ کی رہنمائی'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Author Name *' : 'مصنف کا نام *'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Author Name *' : 'مصنف کا نام *'}</label>
                   <Input
                     type="text"
                     name="author"
@@ -292,22 +292,22 @@ export default function ManagePublications() {
                     onChange={handleInputChange}
                     required
                     placeholder={language === 'en' ? 'e.g. Mufti Sahib / Dr. Scholar' : 'مثال: مفتی صاحب / ڈاکٹر صاحب'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
               </div>
 
               {/* Category & Language */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Category *' : 'زمرہ *'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Category *' : 'زمرہ *'}</label>
                   <select
                     name="category"
                     value={formFields.category}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2.5 text-sm bg-white border-2 border-gray-300 rounded-md outline-none text-slate-700 focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
@@ -317,13 +317,13 @@ export default function ManagePublications() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Language *' : 'زبان *'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Language *' : 'زبان *'}</label>
                   <select
                     name="blanguage"
                     value={formFields.blanguage}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-border rounded outline-none text-slate-700 focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    className={`w-full px-3 py-2.5 text-sm bg-white border-2 border-gray-300 rounded-md outline-none text-slate-700 focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   >
                     {BOOK_LANGUAGES.map((lang) => (
                       <option key={lang.value} value={lang.value}>
@@ -335,13 +335,13 @@ export default function ManagePublications() {
               </div>
 
               {/* Cover Image File & PDF File */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">
                     {language === 'en' ? 'Cover Image (JPEG/PNG)' : 'کتاب کا سرورق'} {!editingId && ' *'}
                   </label>
                   {coverImageFile ? (
-                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                    <div className="flex flex-col gap-2 p-3 bg-slate-50 border-2 border-dashed border-accent/60 rounded-md">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={coverImageFile.name}>{coverImageFile.name}</span>
                         <span className="text-[10px] text-slate-400 font-mono">({(coverImageFile.size / 1024 / 1024).toFixed(2)} MB)</span>
@@ -356,7 +356,7 @@ export default function ManagePublications() {
                             setPreviewTitle(formFields.title || 'Cover Image Preview');
                             setIsPreviewOpen(true);
                           }}
-                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                          className="flex-grow py-1.5 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-2 border-primary/60"
                         >
                           <Eye className="w-3.5 h-3.5 text-accent" />
                           {language === 'en' ? 'Preview' : 'پیش نظارہ'}
@@ -364,7 +364,7 @@ export default function ManagePublications() {
                         <button
                           type="button"
                           onClick={() => setCoverImageFile(null)}
-                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                          className="py-1.5 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border-2 border-red-300"
                         >
                           {language === 'en' ? 'Remove' : 'حذف کریں'}
                         </button>
@@ -376,7 +376,7 @@ export default function ManagePublications() {
                         type="file"
                         accept="image/*"
                         onChange={(e) => setCoverImageFile(e.target.files[0])}
-                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                        className={`w-full px-3 py-1.5 text-xs bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                       />
                       <button
                         type="button"
@@ -386,7 +386,7 @@ export default function ManagePublications() {
                           setPreviewTitle(formFields.title || 'Current Cover');
                           setIsPreviewOpen(true);
                         }}
-                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                        className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border-2 border-gray-300 hover:border-accent transition-colors"
                       >
                         <Eye className="w-3.5 h-3.5 text-accent" />
                         {language === 'en' ? 'View Current Cover' : 'موجودہ سرورق دیکھیں'}
@@ -398,16 +398,16 @@ export default function ManagePublications() {
                       accept="image/*"
                       onChange={(e) => setCoverImageFile(e.target.files[0])}
                       required={!editingId}
-                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      className={`w-full px-3 py-2 text-xs bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     />
                   )}
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">
                     {language === 'en' ? 'PDF Document' : 'پی ڈی ایف کتاب'} {!editingId && ' *'}
                   </label>
                   {pdfFile ? (
-                    <div className="flex flex-col gap-2 p-2 bg-slate-50 border border-dashed border-accent/40 rounded">
+                    <div className="flex flex-col gap-2 p-3 bg-slate-50 border-2 border-dashed border-accent/60 rounded-md">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-semibold text-slate-700 truncate max-w-[150px]" title={pdfFile.name}>{pdfFile.name}</span>
                         <span className="text-[10px] text-slate-400 font-mono">({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)</span>
@@ -422,7 +422,7 @@ export default function ManagePublications() {
                             setPreviewTitle(formFields.title || 'PDF Preview');
                             setIsPreviewOpen(true);
                           }}
-                          className="flex-grow py-1 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-0"
+                          className="flex-grow py-1.5 px-3 bg-primary text-white text-[11px] font-bold rounded hover:opacity-90 flex items-center justify-center gap-1 cursor-pointer border-2 border-primary/60"
                         >
                           <Eye className="w-3.5 h-3.5 text-accent" />
                           {language === 'en' ? 'Preview' : 'پیش نظارہ'}
@@ -430,7 +430,7 @@ export default function ManagePublications() {
                         <button
                           type="button"
                           onClick={() => setPdfFile(null)}
-                          className="py-1 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-red-200"
+                          className="py-1.5 px-3 bg-red-50 text-red-700 hover:bg-red-100 text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border-2 border-red-300"
                         >
                           {language === 'en' ? 'Remove' : 'حذف کریں'}
                         </button>
@@ -442,7 +442,7 @@ export default function ManagePublications() {
                         type="file"
                         accept="application/pdf"
                         onChange={(e) => setPdfFile(e.target.files[0])}
-                        className={`w-full px-3 py-1.5 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                        className={`w-full px-3 py-1.5 text-xs bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                       />
                       <button
                         type="button"
@@ -452,7 +452,7 @@ export default function ManagePublications() {
                           setPreviewTitle(formFields.title || 'Current PDF');
                           setIsPreviewOpen(true);
                         }}
-                        className="py-1 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border border-border/40"
+                        className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 text-primary text-[11px] font-bold rounded flex items-center justify-center gap-1 cursor-pointer border-2 border-gray-300 hover:border-accent transition-colors"
                       >
                         <Eye className="w-3.5 h-3.5 text-accent" />
                         {language === 'en' ? 'View Current PDF' : 'موجودہ پی ڈی ایف دیکھیں'}
@@ -464,16 +464,16 @@ export default function ManagePublications() {
                       accept="application/pdf"
                       onChange={(e) => setPdfFile(e.target.files[0])}
                       required={!editingId}
-                      className={`w-full px-3 py-2 text-xs bg-slate-50 border border-border rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                      className={`w-full px-3 py-2 text-xs bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     />
                   )}
                 </div>
               </div>
 
               {/* Page Count & Tags */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Page Count' : 'صفحات کی تعداد'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Page Count' : 'صفحات کی تعداد'}</label>
                   <Input
                     type="number"
                     name="pageCount"
@@ -481,19 +481,19 @@ export default function ManagePublications() {
                     onChange={handleInputChange}
                     min="1"
                     placeholder={language === 'en' ? 'e.g. 150' : 'مثال: 150'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Tags (separated by comma)' : 'ٹیگز (کوما سے الگ کریں)'}</label>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Tags (separated by comma)' : 'ٹیگز (کوما سے الگ کریں)'}</label>
                   <Input
                     type="text"
                     name="tags"
                     value={formFields.tags}
                     onChange={handleInputChange}
                     placeholder={language === 'en' ? 'e.g. Aqeedah, Tauheed' : 'مثال: عقائد، توحید'}
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    inputClassName={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors ${language === 'ur' ? 'text-right' : 'text-left'}`}
                     border=""
                   />
                 </div>
@@ -501,7 +501,7 @@ export default function ManagePublications() {
 
               {/* Summary */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'Short Summary *' : 'مختصر خلاصہ *'}</label>
+                <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'Short Summary *' : 'مختصر خلاصہ *'}</label>
                 <textarea
                   name="summary"
                   value={formFields.summary}
@@ -509,36 +509,36 @@ export default function ManagePublications() {
                   required
                   placeholder={language === 'en' ? 'Provide a brief overview of this book...' : 'اس کتاب کا مختصر جائزہ فراہم کریں...'}
                   rows={3}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
               {/* References */}
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{language === 'en' ? 'References / Sources (separated by comma)' : 'حوالہ جات / مراجع (کوما سے الگ کریں)'}</label>
+                <label className="block text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wider">{language === 'en' ? 'References / Sources (separated by comma)' : 'حوالہ جات / مراجع (کوما سے الگ کریں)'}</label>
                 <textarea
                   name="references"
                   value={formFields.references}
                   onChange={handleInputChange}
                   placeholder={language === 'en' ? 'e.g. Fath al-Bari, Hadith No. 123' : 'مثال: فتح الباری، حدیث نمبر 123'}
                   rows={2}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent focus:bg-white transition-all resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                  className={`w-full px-3 py-2 text-sm bg-white border-2 border-gray-300 rounded-md outline-none focus:border-primary focus:bg-white transition-colors resize-y ${language === 'ur' ? 'text-right' : 'text-left'}`}
                 ></textarea>
               </div>
 
               {/* Action operations */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-start gap-3">
+              <div className="pt-5 border-t-2 border-gray-200 flex items-center justify-start gap-3">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border border-border text-slate-600 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
+                  className="px-5 py-2.5 border-2 border-gray-400 text-slate-700 rounded text-xs font-bold hover:bg-slate-50 transition-colors uppercase tracking-wider font-serif"
                 >
                   {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif disabled:opacity-50 border-2 border-primary/60"
                 >
                   <Save className="w-4 h-4 text-accent" />
                   {actionLoading ? (language === 'en' ? 'Saving...' : 'محفوظ کیا جا رہا ہے...') : (language === 'en' ? 'Save Book' : 'کتاب محفوظ کریں')}
@@ -549,7 +549,7 @@ export default function ManagePublications() {
           </div>
         ) : (
           /* Publications List Table */
-          <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white border-2 border-gray-300 rounded-lg shadow-md overflow-hidden">
             <Table
               loadingTableContent={loading}
               data={publications}
@@ -558,21 +558,21 @@ export default function ManagePublications() {
                 {
                   headData: language === 'en' ? 'Title' : 'عنوان',
                   bodyData: (pub) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.title}</span>,
-                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
                 },
                 {
                   headData: language === 'en' ? 'Author' : 'مصنف',
                   bodyData: (pub) => <span className={`font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.author}</span>,
-                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
                 },
                 {
                   headData: language === 'en' ? 'Category' : 'زمرہ',
                   bodyData: (pub) => (
-                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/20">
                       {language === 'en' ? pub.category : (PUBLICATION_TRANSLATIONS[pub.category] || pub.category)}
                     </span>
                   ),
-                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
                 },
                 {
                   headData: language === 'en' ? 'Language' : 'زبان',
@@ -581,7 +581,7 @@ export default function ManagePublications() {
                       {language === 'en' ? pub.blanguage : (BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage)}
                     </span>
                   ),
-                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
                 },
                 {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
@@ -592,7 +592,7 @@ export default function ManagePublications() {
                           href={pub.pdf.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors flex items-center justify-center"
+                          className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors flex items-center justify-center border border-transparent hover:border-gray-300"
                           title={language === 'en' ? 'View PDF' : 'کتاب دیکھیں'}
                         >
                           <Eye className="w-4 h-4" />
@@ -600,23 +600,26 @@ export default function ManagePublications() {
                       )}
                       <button
                         onClick={() => openEditForm(pub)}
-                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
+                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors border border-transparent hover:border-amber-300"
                         title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(pub._id)}
-                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-300"
                         title={language === 'en' ? 'Delete' : 'حذف کریں'}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   ),
-                  tdClassName: language === 'ur' ? 'text-left' : 'text-right'
+                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-left' : 'text-right'}`
                 }
               ]}
+              // Optional: Add a border to table header
+              theadClassName="border-b-2 border-gray-300"
+              thClassName="px-4 py-3 text-xs font-bold text-slate-600 uppercase tracking-wider border-b-2 border-gray-300"
             />
           </div>
         )}

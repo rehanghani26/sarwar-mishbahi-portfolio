@@ -135,7 +135,7 @@ const PaginatedSelectInput = ({
 
         {/* Input Field with inline selected options (single line scrollable) */}
         <div
-          className={`flex items-center gap-1 p-2 border border-gray-300 rounded cursor-text overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 ${inputClassName}`}
+          className={`flex items-center gap-1 py-2.5 px-3 border border-slate-300 hover:border-slate-400 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary rounded-md outline-none transition-colors cursor-text overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 ${inputClassName}`}
           onClick={!disabled && handleInputClick}
           style={{ whiteSpace: "nowrap" }}
         >

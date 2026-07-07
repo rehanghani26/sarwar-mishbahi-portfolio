@@ -144,7 +144,7 @@ export default function ManageFatwas() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Fatwas' : 'فتاویٰ کا انتظام'}</h1>
-              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete Islamic fatwas.' : 'عالم صاحب کے شرعی احکام اور فتاویٰ شامل کریں، تدوین کریں یا حذف کریں۔'}</p>
+
             </div>
           </div>
 
@@ -335,7 +335,7 @@ export default function ManageFatwas() {
                   bodyData: (fatwa) => (
                     <div className="inline-flex items-center gap-2">
                       <Link
-                        to={`/fatwas/${fatwa._id}`}
+                        to={`/fatwas/${fatwa.slug}`}
                         className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors"
                         title={language === 'en' ? 'View Fatwa' : 'فتویٰ دیکھیں'}
                       >

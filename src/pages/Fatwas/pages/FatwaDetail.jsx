@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, HelpCircle, FileText, Download, ExternalLink, MessageCircle } from 'lucide-react';
-import { getFatwaById, getComments } from '@/services';
+import { getFatwaBySlug, getComments, getFatwas } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { FatwaCard, PdfViewer, CommentsSection } from '@/components';
 import { FATWA_CATEGORY_TRANSLATIONS } from '@/utils/categories';
 
 export default function FatwaDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
@@ -23,7 +23,18 @@ export default function FatwaDetail() {
       try {
         setLoading(true);
         setError(null);
-        const data = await getFatwaById(id);
+        let activeSlug = slug;
+
+        // If parameter is a 24-character ObjectID hex representation, resolve to slug
+        if (/^[0-9a-fA-F]{24}$/.test(slug)) {
+          const res = await getFatwas({ limit: 1000 });
+          const matched = res.fatwas?.find(f => f._id === slug);
+          if (matched) {
+            activeSlug = matched.slug;
+          }
+        }
+
+        const data = await getFatwaBySlug(activeSlug);
         setCurrent(data);
 
         // Fetch comments to display count in metadata
@@ -40,7 +51,7 @@ export default function FatwaDetail() {
       }
     };
     loadFatwa();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

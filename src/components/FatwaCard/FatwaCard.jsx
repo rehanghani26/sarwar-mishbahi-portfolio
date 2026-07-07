@@ -8,7 +8,7 @@ export default function FatwaCard({ fatwa }) {
   const { settings } = useSettings();
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
-  const { _id, title, category, question, detailedAnswer, publishDate, viewCount } = fatwa;
+  const { slug, title, category, question, detailedAnswer, publishDate, viewCount } = fatwa;
 
   const formattedDate = new Date(publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
@@ -22,7 +22,7 @@ export default function FatwaCard({ fatwa }) {
     : '';
 
   return (
-    <Link to={`/fatwas/${_id}`} className="premium-card p-6 flex flex-col h-full group text-start hover:no-underline text-inherit cursor-pointer">
+    <Link to={`/fatwas/${slug}`} className="premium-card p-6 flex flex-col h-full group text-start hover:no-underline text-inherit cursor-pointer">
 
       {/* Category and stats metadata */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 shrink-0">

@@ -136,7 +136,7 @@ export default function ManageEvents() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
-              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scheduled events and gatherings.' : 'طے شدہ پروگرام اور اجتماعات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
+
             </div>
           </div>
 
@@ -164,8 +164,8 @@ export default function ManageEvents() {
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
             <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId 
-                  ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں') 
+                {editingId
+                  ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں')
                   : (language === 'en' ? 'Add New Educational Event' : 'نیا تعلیمی پروگرام شامل کریں')
                 }
               </h2>

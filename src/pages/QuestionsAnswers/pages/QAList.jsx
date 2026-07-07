@@ -40,9 +40,9 @@ export default function QAList() {
       setError(null);
       const data = await getPublicQuestions({ category, search, page: pageNum, limit: 6 });
       setQuestions(data.questions || []);
-      setPages(data.pages || 1);
-      setPage(data.page || 1);
-      setTotal(data.total || 0);
+      setPages(data.totalPages || 1);
+      setPage(data.currentPage || 1);
+      setTotal(data.totalQuestions || 0);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to load questions');
     } finally {

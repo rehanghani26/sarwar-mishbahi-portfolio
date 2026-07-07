@@ -56,7 +56,7 @@ export default function AppRoutes() {
         <Route path="articles/:slug" element={<ArticleDetail />} />
 
         <Route path="fatwas" element={<FatwasList />} />
-        <Route path="fatwas/:id" element={<FatwaDetail />} />
+        <Route path="fatwas/:slug" element={<FatwaDetail />} />
 
         <Route path="ask" element={<AskQuestion />} />
         <Route path="qa" element={<QAList />} />
