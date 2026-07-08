@@ -40,9 +40,9 @@ export default function QAList() {
       setError(null);
       const data = await getPublicQuestions({ category, search, page: pageNum, limit: 6 });
       setQuestions(data.questions || []);
-      setPages(data.pages || 1);
-      setPage(data.page || 1);
-      setTotal(data.total || 0);
+      setPages(data.totalPages || 1);
+      setPage(data.currentPage || 1);
+      setTotal(data.totalQuestions || 0);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to load questions');
     } finally {
@@ -75,7 +75,7 @@ export default function QAList() {
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className=" mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
@@ -218,8 +218,8 @@ export default function QAList() {
                 key={pNum + 1}
                 onClick={() => handlePageChange(pNum + 1)}
                 className={`w-8.5 h-8.5 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                    ? 'bg-primary border-primary text-white'
-                    : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  ? 'bg-primary border-primary text-white'
+                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
               >
                 {pNum + 1}

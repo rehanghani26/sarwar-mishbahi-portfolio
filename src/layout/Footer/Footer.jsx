@@ -12,7 +12,7 @@ export default function Footer() {
 
   const scholarName = settings?.scholarInfo?.fullName || '';
   const scholarTitle = settings?.scholarInfo?.title || '';
-  
+
   const address = settings?.contactInfo?.address || '';
   const phone = settings?.contactInfo?.phone || '';
   const whatsapp = settings?.contactInfo?.whatsapp || '';
@@ -21,7 +21,7 @@ export default function Footer() {
   const socialLinks = settings?.socialLinks || {};
 
   return (
-    <footer 
+    <footer
       style={{ backgroundColor: COLORS.background, color: COLORS.textPrimary, borderColor: COLORS.border }}
       className="islamic-pattern relative border-t-2 pt-16 pb-8"
     >
@@ -29,7 +29,7 @@ export default function Footer() {
       <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: COLORS.accent }}></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" dir={language === 'ur' ? 'rtl' : 'ltr'}>
-        
+
         {/* Column 1: Biography / Mission */}
         <div className={language === 'ur' ? 'text-right' : 'text-left'}>
           <div className="flex items-center gap-2 mb-4 justify-start">
@@ -43,10 +43,10 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-2.5 justify-start">
             {socialLinks.facebook && (
-              <a 
-                href={socialLinks.facebook} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ color: COLORS.primary, borderColor: COLORS.border }}
                 className="p-2 rounded bg-white border hover:text-white theme-hover-bg-accent transition-colors"
               >
@@ -54,10 +54,10 @@ export default function Footer() {
               </a>
             )}
             {socialLinks.youtube && (
-              <a 
-                href={socialLinks.youtube} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={socialLinks.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ color: COLORS.primary, borderColor: COLORS.border }}
                 className="p-2 rounded bg-white border hover:text-white theme-hover-bg-accent transition-colors"
               >
@@ -65,10 +65,10 @@ export default function Footer() {
               </a>
             )}
             {socialLinks.twitter && (
-              <a 
-                href={socialLinks.twitter} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ color: COLORS.primary, borderColor: COLORS.border }}
                 className="p-2 rounded bg-white border hover:text-white theme-hover-bg-accent transition-colors"
               >
@@ -76,10 +76,10 @@ export default function Footer() {
               </a>
             )}
             {socialLinks.instagram && (
-              <a 
-                href={socialLinks.instagram} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ color: COLORS.primary, borderColor: COLORS.border }}
                 className="p-2 rounded bg-white border hover:text-white theme-hover-bg-accent transition-colors"
               >
@@ -91,7 +91,7 @@ export default function Footer() {
 
         {/* Column 2: Sitemap Navigation */}
         <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-          <h3 
+          <h3
             style={{ color: COLORS.primary, borderColor: COLORS.border }}
             className="font-semibold text-md mb-4 border-b pb-2 uppercase tracking-wider"
           >
@@ -99,8 +99,8 @@ export default function Footer() {
           </h3>
           <ul className="space-y-2.5 text-sm font-light">
             <li>
-              <Link 
-                to="/about" 
+              <Link
+                to="/about"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -108,8 +108,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/articles" 
+              <Link
+                to="/articles"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -117,8 +117,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/fatwas" 
+              <Link
+                to="/fatwas"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -126,8 +126,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/qa" 
+              <Link
+                to="/qa"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -135,8 +135,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/publications" 
+              <Link
+                to="/publications"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -144,8 +144,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/lectures" 
+              <Link
+                to="/lectures"
                 style={{ color: COLORS.textSecondary }}
                 className="hover:underline transition-all flex items-center gap-1 justify-start theme-hover-text-primary"
               >
@@ -157,7 +157,7 @@ export default function Footer() {
 
         {/* Column 3: Contact details */}
         <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-          <h3 
+          <h3
             style={{ color: COLORS.primary, borderColor: COLORS.border }}
             className="font-semibold text-md mb-4 border-b pb-2 uppercase tracking-wider"
           >
@@ -174,7 +174,7 @@ export default function Footer() {
             </li>
             {whatsapp && (
               <li className="flex items-center gap-2.5 justify-start">
-                <span 
+                <span
                   style={{ color: COLORS.textSecondary, backgroundColor: COLORS.secondary, borderColor: COLORS.border }}
                   className="font-bold text-xs rounded px-2 py-0.5 border"
                 >
@@ -192,7 +192,7 @@ export default function Footer() {
 
         {/* Column 4: Newsletter Submission Mock */}
         <div className={language === 'ur' ? 'text-right' : 'text-left'}>
-          <h3 
+          <h3
             style={{ color: COLORS.primary, borderColor: COLORS.border }}
             className="font-semibold text-md mb-4 border-b pb-2 uppercase tracking-wider"
           >
@@ -201,10 +201,10 @@ export default function Footer() {
           <p className="text-xs mb-4 font-light leading-relaxed" style={{ color: COLORS.textSecondary }}>
             {language === 'en' ? 'Subscribe to receive updates about new Islamic articles, publications, or fatwas directly.' : 'نئے اسلامی مضامین، مطبوعات یا فتاویٰ شائع ہونے پر براہ راست معلومات حاصل کرنے کے لیے سبسکرائب کریں۔'}
           </p>
-          <form 
-            onSubmit={(e) => e.preventDefault()} 
+          <form
+            onSubmit={(e) => e.preventDefault()}
             style={{ borderColor: COLORS.border }}
-            className="flex border rounded overflow-hidden shadow-xs" 
+            className="flex border rounded overflow-hidden shadow-xs"
             dir={language === 'ur' ? 'rtl' : 'ltr'}
           >
             <Input
@@ -226,7 +226,7 @@ export default function Footer() {
       </div>
 
       {/* Footer base metadata */}
-      <div 
+      {/* <div 
         style={{ borderColor: COLORS.border }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500" 
         dir={language === 'ur' ? 'rtl' : 'ltr'}
@@ -243,7 +243,7 @@ export default function Footer() {
             <Shield className="w-3.5 h-3.5" /> {language === 'en' ? 'Admin Panel' : 'ایڈمن پینل'}
           </Link>
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 }

@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import { HelpCircle, CheckCircle, AlertTriangle, Send } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { HelpCircle, CheckCircle, AlertTriangle, Send, User, Mail, Phone, Lock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { submitQuestion } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
+import { QA_CATEGORIES } from '@/utils/categories';
 
-import { QA_CATEGORIES, QA_TRANSLATIONS } from '@/utils/categories';
+/* ── Theme Colors ── */
+const PALETTE = {
+  primary: '#7B654D',      // Elegant brown
+  secondary: '#E5D8CA',    // Light beige
+  background: '#FAF7F2',   // Warm off-white
+  text: '#2D2A26',         // Dark text
+  border: '#E8E2DA',       // Warm border
+  white: '#FFFFFF',
+};
 
 export default function AskQuestion() {
+  const navigate = useNavigate();
   const { settings } = useSettings();
+  const { isAuthenticated, loggedInUser } = useSelector((s) => s.auth);
+
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const [formData, setFormData] = useState({
@@ -24,6 +38,18 @@ export default function AskQuestion() {
   const [success, setSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
+  // Auto-populate logged in user info
+  useEffect(() => {
+    if (isAuthenticated && loggedInUser) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: loggedInUser.name || '',
+        email: loggedInUser.loginEmail || loggedInUser.email || '',
+        phoneNumber: loggedInUser.loginPhone || loggedInUser.contactPhone || '',
+      }));
+    }
+  }, [isAuthenticated, loggedInUser]);
+
   const categories = QA_CATEGORIES;
 
   const handleInputChange = (e) => {
@@ -35,6 +61,11 @@ export default function AskQuestion() {
     e.preventDefault();
     setActionError(null);
 
+    if (!isAuthenticated) {
+      navigate('/admin/login');
+      return;
+    }
+
     if (!formData.fullName || !formData.email || !formData.questionTitle || !formData.detailedQuestion) {
       return;
     }
@@ -45,9 +76,9 @@ export default function AskQuestion() {
       setSuccess(true);
       setSuccessMsg(result.message || (language === 'en' ? 'Your question has been submitted successfully.' : 'آپ کا سوال کامیابی کے ساتھ جمع کرا دیا گیا ہے۔'));
       setFormData({
-        fullName: '',
-        email: '',
-        phoneNumber: '',
+        fullName: loggedInUser?.name || '',
+        email: loggedInUser?.loginEmail || loggedInUser?.email || '',
+        phoneNumber: loggedInUser?.loginPhone || loggedInUser?.contactPhone || '',
         category: 'General Questions',
         questionTitle: '',
         detailedQuestion: '',
@@ -59,171 +90,252 @@ export default function AskQuestion() {
     }
   };
 
+  const t = {
+    en: {
+      askQuestion: "Ask Question",
+      subtitle: "Send your query directly to the scholar/mufti",
+      loginRequired: "You must be signed in to submit a question to the scholar.",
+      loginBtn: "Sign In to Ask a Question",
+      successTitle: "Question Submitted",
+      askAnother: "Ask Another Question",
+      fullName: "Full Name *",
+      email: "Email Address *",
+      phone: "Phone Number (Optional)",
+      category: "Select Category *",
+      title: "Question Title *",
+      titlePlaceholder: "e.g. Zakat calculation on retirement funds",
+      detail: "Detailed Question *",
+      detailPlaceholder: "Provide all relevant details to explain your query to the scholar...",
+      sendBtn: "Send to Scholar",
+      sending: "Sending question...",
+      backPortal: "Back to Official Portal"
+    },
+    ur: {
+      askQuestion: "سوال پوچھیں",
+      subtitle: "اپنا سوال براہِ راست عالم/مفتی صاحب کو ارسال کریں",
+      loginRequired: "عالم صاحب کو سوال ارسال کرنے کے لیے آپ کا لاگ ان ہونا ضروری ہے۔",
+      loginBtn: "سوال پوچھنے کے لیے لاگ ان کریں",
+      successTitle: "سوال موصول ہو گیا",
+      askAnother: "ایک اور سوال پوچھیں",
+      fullName: "مکمل نام *",
+      email: "ای میل ایڈریس *",
+      phone: "فون نمبر (اختیاری)",
+      category: "زمرہ منتخب کریں *",
+      title: "سوال کا عنوان *",
+      titlePlaceholder: "مثال: ریٹائرمنٹ فنڈز پر زکوٰۃ کا حساب",
+      detail: "تفصیلی سوال *",
+      detailPlaceholder: "عالم صاحب کو اپنا مسئلہ سمجھانے کے لیے تمام متعلقہ تفصیلات فراہم کریں...",
+      sendBtn: "عالم صاحب کو بھیجیں",
+      sending: "سوال بھیجا جا رہا ہے...",
+      backPortal: "سرکاری پورٹل پر واپس جائیں"
+    }
+  }[language === 'ur' ? 'ur' : 'en'];
+
   return (
-    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-xl mx-auto px-4 sm:px-6">
+    <div className={`py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} style={{ backgroundColor: PALETTE.background }} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+      <div className="w-full px-4 sm:px-8 lg:px-12">
+
+        {/* Back Link */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider mb-6 transition-all hover:opacity-85"
+          style={{ color: PALETTE.primary }}
+        >
+          {language === 'en' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          {t.backPortal}
+        </Link>
 
         {/* Success Banner */}
         {success ? (
-          <div className="premium-card p-8 shadow-sm text-center">
-            <CheckCircle className="w-16 h-16 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-primary dark:text-emerald-400 font-serif mb-3">
-              {language === 'en' ? 'Question Received' : 'سوال موصول ہو گیا'}
+          <div className="bg-white border rounded-2xl p-10 text-center shadow-xs" style={{ borderColor: PALETTE.border }}>
+            <CheckCircle className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold font-serif mb-3" style={{ color: PALETTE.primary }}>
+              {t.successTitle}
             </h2>
-            <p className="text-slate-700 dark:text-slate-350 text-sm leading-relaxed mb-6 font-light">{successMsg}</p>
+            <p className="text-slate-700 text-sm leading-relaxed mb-6 font-medium">{successMsg}</p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded uppercase tracking-wider font-serif hover:bg-primary/90 transition-colors"
+              className="px-6 py-2.5 text-white font-bold text-xs uppercase tracking-wider rounded-md transition-all cursor-pointer border-0"
+              style={{ backgroundColor: PALETTE.primary }}
             >
-              {language === 'en' ? 'Ask Another Question' : 'ایک اور سوال پوچھیں'}
+              {t.askAnother}
             </button>
           </div>
         ) : (
-          <div className="premium-card shadow-sm overflow-hidden text-start">
+          <div className="bg-white border rounded-2xl shadow-xs overflow-hidden" style={{ borderColor: PALETTE.border }}>
 
-            {/* Header Title */}
-            <div className={`bg-primary islamic-pattern text-white p-6 relative border-b border-accent/35 flex items-center gap-3 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-              <HelpCircle className="w-8 h-8 text-accent shrink-0" />
+            {/* Header Banner */}
+            <div
+              style={{ backgroundColor: PALETTE.primary, borderColor: PALETTE.border }}
+              className="text-white p-6 sm:p-8 border-b-2 flex items-center gap-4"
+            >
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border border-white/20 shrink-0">
+                <HelpCircle className="w-6 h-6 text-[#E5D8CA]" />
+              </div>
               <div>
-                <h1 className="text-xl font-bold text-white font-serif">
-                  {language === 'en' ? 'Ask Question' : 'سوال پوچھیں'}
+                <h1 className="text-xl sm:text-2xl font-bold font-serif">
+                  {t.askQuestion}
                 </h1>
-                <p className="text-[10px] text-secondary mt-0.5">
-                  {language === 'en' ? 'Send your question directly to the scholar/mufti' : 'اپنا سوال براہِ راست عالم/مفتی صاحب کو ارسال کریں'}
+                <p className="text-xs text-slate-200 mt-1 font-bold">
+                  {t.subtitle}
                 </p>
               </div>
             </div>
 
-            {/* Form Fields */}
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-
-              {/* Alert Message */}
-              {actionError && (
-                <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-4 flex items-start gap-2 text-red-700 dark:text-red-400 text-xs shrink-0">
-                  <AlertTriangle className="w-4.5 h-4.5 shrink-0" />
-                  <span>{actionError}</span>
-                </div>
-              )}
-
-              {/* Full Name */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                  {language === 'en' ? 'Full Name *' : 'مکمل نام *'}
-                </label>
-                <Input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  required
-                  placeholder={language === 'en' ? 'Enter your name' : 'اپنا نام لکھیں'}
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                  border=""
-                />
-              </div>
-
-              {/* Email & Phone */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                    {language === 'en' ? 'Email Address *' : 'ای میل ایڈریس *'}
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="name@example.com"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                    border=""
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                    {language === 'en' ? 'Phone Number (Optional)' : 'فون نمبر (اختیاری)'}
-                  </label>
-                  <Input
-                    type="text"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                    placeholder="+92 300 1234567"
-                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                    border=""
-                  />
-                </div>
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                  {language === 'en' ? 'Select Category *' : 'زمرہ منتخب کریں *'}
-                </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-emerald-500 rounded outline-none ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                >
-                   {categories.map((cat) => (
-                    <option key={cat.value} value={cat.value}>
-                      {language === 'ur' ? cat.labelUr : cat.labelEn}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Question Title */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                  {language === 'en' ? 'Question Title *' : 'سوال کا عنوان *'}
-                </label>
-                <Input
-                  type="text"
-                  name="questionTitle"
-                  value={formData.questionTitle}
-                  onChange={handleInputChange}
-                  required
-                  placeholder={language === 'en' ? 'e.g. Zakat calculation on retirement funds' : 'مثال: ریٹائرمنٹ فنڈز پر زکوٰۃ کا حساب'}
-                  inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                  border=""
-                />
-              </div>
-
-              {/* Question Detail */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">
-                  {language === 'en' ? 'Detailed Question *' : 'تفصیلی سوال *'}
-                </label>
-                <textarea
-                  name="detailedQuestion"
-                  value={formData.detailedQuestion}
-                  onChange={handleInputChange}
-                  required
-                  placeholder={language === 'en' ? 'Provide all relevant details to explain your query to the scholar...' : 'عالم صاحب کو اپنا مسئلہ سمجھانے کے لیے تمام متعلقہ تفصیلات فراہم کریں...'}
-                  rows={6}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-y placeholder:text-slate-400 ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                ></textarea>
-              </div>
-
-              {/* Submission Button */}
-              <div className="pt-2">
+            {/* Main authentication block check */}
+            {!isAuthenticated ? (
+              <div className="p-8 text-center bg-slate-50/50">
+                <Lock className="w-12 h-12 mx-auto mb-3 text-slate-400" />
+                <p className="text-sm font-bold text-slate-800 mb-5 leading-relaxed">
+                  {t.loginRequired}
+                </p>
                 <button
-                  type="submit"
-                  disabled={actionLoading}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded shadow-sm hover:shadow transition-all uppercase tracking-wider font-serif text-sm disabled:opacity-50"
+                  onClick={() => navigate('/admin/login')}
+                  className="px-6 py-3 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-all cursor-pointer border-0"
+                  style={{ backgroundColor: PALETTE.primary }}
                 >
-                  <Send className="w-4 h-4" />
-                  {actionLoading 
-                    ? (language === 'en' ? 'Submitting question...' : 'سوال جمع کیا جا رہا ہے...') 
-                    : (language === 'en' ? 'Send to Scholar' : 'عالم صاحب کو بھیجیں')
-                  }
+                  {t.loginBtn}
                 </button>
               </div>
+            ) : (
+              /* Form Fields (Full width, clean borders, no animations) */
+              <form onSubmit={handleFormSubmit} className="p-6 sm:p-8 space-y-6">
 
-            </form>
+                {actionError && (
+                  <div className="bg-red-50 border-r-4 border-red-500 p-4 flex items-start gap-2.5 text-red-700 text-xs rounded">
+                    <AlertTriangle className="w-4.5 h-4.5 shrink-0 mt-0.5" />
+                    <span className="font-bold">{actionError}</span>
+                  </div>
+                )}
+
+                {/* Grid for Name, Email and Phone */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                      {t.fullName}
+                    </label>
+                    <div className="flex items-center gap-2 px-3 py-2 border bg-slate-50/80 rounded" style={{ borderColor: PALETTE.border }}>
+                      <User className="w-4 h-4 text-slate-400 shrink-0" />
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        required
+                        disabled
+                        className="w-full text-sm outline-none bg-transparent text-slate-700 font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                      {t.email}
+                    </label>
+                    <div className="flex items-center gap-2 px-3 py-2 border bg-slate-50/80 rounded" style={{ borderColor: PALETTE.border }}>
+                      <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        disabled
+                        className="w-full text-sm outline-none bg-transparent text-slate-700 font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                      {t.phone}
+                    </label>
+                    <div className="flex items-center gap-2 px-3 py-2 border rounded bg-white" style={{ borderColor: PALETTE.border }}>
+                      <Phone className="w-4 h-4 text-slate-400 shrink-0" />
+                      <input
+                        type="text"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        className="w-full text-sm outline-none bg-transparent text-slate-800 font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Category selection */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                    {t.category}
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2.5 text-sm bg-white border rounded outline-none text-slate-700 font-bold focus:border-stone-500 transition-colors"
+                    style={{ borderColor: PALETTE.border }}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.value} value={cat.value}>
+                        {language === 'ur' ? cat.labelUr : cat.labelEn}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Question Title */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                    {t.title}
+                  </label>
+                  <input
+                    type="text"
+                    name="questionTitle"
+                    value={formData.questionTitle}
+                    onChange={handleInputChange}
+                    required
+                    placeholder={t.titlePlaceholder}
+                    className="w-full px-3 py-2.5 text-sm bg-white border rounded outline-none text-slate-800 font-bold focus:border-stone-500 transition-colors"
+                    style={{ borderColor: PALETTE.border }}
+                  />
+                </div>
+
+                {/* Question Detail */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 uppercase mb-2">
+                    {t.detail}
+                  </label>
+                  <textarea
+                    name="detailedQuestion"
+                    value={formData.detailedQuestion}
+                    onChange={handleInputChange}
+                    required
+                    placeholder={t.detailPlaceholder}
+                    rows={6}
+                    className="w-full px-3 py-2.5 text-sm bg-white border rounded outline-none text-slate-800 font-bold focus:border-stone-500 transition-colors resize-y leading-relaxed"
+                    style={{ borderColor: PALETTE.border }}
+                  />
+                </div>
+
+                {/* Submit Action */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={actionLoading}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 text-white font-bold rounded shadow-xs transition-colors text-sm disabled:opacity-50 border-0 cursor-pointer"
+                    style={{ backgroundColor: PALETTE.primary }}
+                  >
+                    <Send className="w-4 h-4" />
+                    {actionLoading ? t.sending : t.sendBtn}
+                  </button>
+                </div>
+
+              </form>
+            )}
           </div>
         )}
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle, Eye, Upload } from 'lucide-react';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, PdfViewer } from '@/components';
+import { Input, PdfViewer, Table } from '@/components';
 
 import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS } from '@/utils/categories';
 
@@ -485,67 +485,74 @@ export default function ManageArticles() {
         ) : (
           /* Articles List Table */
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              </div>
-            ) : articles && articles.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Category' : 'زمرہ'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Publish Date' : 'اشاعت کی تاریخ'}</th>
-                      <th className="px-6 py-4 text-center">{language === 'en' ? 'Views' : 'مشاہدات'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>{language === 'en' ? 'Actions' : 'اقدامات'}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
-                    {articles.map((article) => (
-                      <tr key={article._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{article.title}</td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
-                            {language === 'en' ? article.category : (ARTICLE_TRANSLATIONS[article.category] || article.category)}
-                          </span>
-                        </td>
-                        <td className={`px-6 py-4 font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          {new Date(article.publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}
-                        </td>
-                        <td className="px-6 py-4 text-center font-semibold text-xs text-accent">
-                          {article.viewCount || 0}
-                        </td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
-                          <div className="inline-flex items-center gap-2">
-                            <button
-                              onClick={() => openEditForm(article)}
-                              className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
-                              title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(article._id)}
-                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title={language === 'en' ? 'Delete Article' : 'مضمون حذف کریں'}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <FileText className="w-12 h-12 text-accent mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No articles written yet' : 'کوئی مضمون نہیں لکھا گیا'}</h3>
-                <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Write Article" button to publish your first article.' : 'اپنا پہلا مضمون شائع کرنے کے لیے "مضمون لکھیں" بٹن پر کلک کریں۔'}</p>
-              </div>
-            )}
+            <Table
+              loadingTableContent={loading}
+              data={articles}
+              noRecordText={language === 'en' ? 'No articles written yet' : 'کوئی مضمون نہیں لکھا گیا'}
+              tableLayout={[
+                {
+                  headData: language === 'en' ? 'Title' : 'عنوان',
+                  bodyData: (article) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{article.title}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Category' : 'زمرہ',
+                  bodyData: (article) => (
+                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                      {language === 'en' ? article.category : (ARTICLE_TRANSLATIONS[article.category] || article.category)}
+                    </span>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Publish Date' : 'اشاعت کی تاریخ',
+                  bodyData: (article) => (
+                    <span className={`font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+                      {new Date(article.publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}
+                    </span>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Views' : 'مشاہدات',
+                  bodyData: (article) => (
+                    <span className="font-semibold text-xs text-accent">
+                      {article.viewCount || 0}
+                    </span>
+                  ),
+                  tdClassName: "text-center"
+                },
+                {
+                  headData: language === 'en' ? 'Actions' : 'اقدامات',
+                  bodyData: (article) => (
+                    <div className="inline-flex items-center gap-2">
+                      <Link
+                        to={`/articles/${article._id}`}
+                        className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors"
+                        title={language === 'en' ? 'View Article' : 'مضمون دیکھیں'}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => openEditForm(article)}
+                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
+                        title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(article._id)}
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                        title={language === 'en' ? 'Delete Article' : 'مضمون حذف کریں'}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-left' : 'text-right'
+                }
+              ]}
+            />
           </div>
         )}
       </div>

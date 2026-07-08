@@ -10,7 +10,7 @@ const Search = ({
   name = "",
   type = "text",
   className = "",
-  border = "border border-gray-200 hover:border-gray-400 rounded",
+  border = "border border-slate-300 hover:border-slate-400 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary rounded-md outline-none transition-colors",
   placeholder = "",
   placeholderClassName = "",
   value = "",
@@ -30,7 +30,7 @@ const Search = ({
     <>
       <div
         // className={`p-2 flex gap-2 items-center border border-border hover:bg-background focus:border-primary focus:shadow-primary/30 ${className}`}
-        className={`p-2 h-10 flex gap-0.5 items-center ${border} ${className}`}
+        className={`py-3 px-4 h-[52px] flex gap-0.5 items-center ${border} ${className}`}
       >
         <label htmlFor={id}>
           <Icon svg={search} className=" text-gray-400" />
@@ -44,7 +44,7 @@ const Search = ({
           onClick={onClick}
           onKeyDown={handleKeyDown}
           // className="w-full outline-0 placeholder-textSecondary hover:bg-background"
-          className={`w-full outline-0 placeholder-gray-500 ${placeholderClassName}`}
+          className={`w-full outline-0 text-[16px] leading-relaxed placeholder-gray-500 ${placeholderClassName}`}
           placeholder={placeholder}
         />
 

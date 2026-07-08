@@ -13,7 +13,7 @@ const getLocalSettings = (apiData) => {
     ...apiData,
     language: localLang,
     englishFont: localStorage.getItem('site_english_font') || apiData?.englishFont || 'Inter',
-    urduFont: localStorage.getItem('site_urdu_font') || apiData?.urduFont || 'Noto Sans Arabic',
+    urduFont: localStorage.getItem('site_urdu_font') || apiData?.urduFont || 'Pyami Nastaliq',
   };
 };
 

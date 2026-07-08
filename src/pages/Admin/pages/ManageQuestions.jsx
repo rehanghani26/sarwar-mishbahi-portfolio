@@ -22,7 +22,7 @@ const ManageQuestions = () => {
     setLoading(true);
     try {
       const data = await getAdminQuestions();
-      setQuestions(data);
+      setQuestions(data?.questions || []);
     } catch (err) {
       console.error('Failed to load questions', err);
     } finally {
@@ -75,7 +75,7 @@ const ManageQuestions = () => {
     }
   };
 
-  const pendingCount = questions ? questions.filter((q) => q.status === 'pending').length : 0;
+  const pendingCount = Array.isArray(questions) ? questions.filter((q) => q?.status === 'pending').length : 0;
 
   return (
     <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
@@ -112,24 +112,24 @@ const ManageQuestions = () => {
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
               </div>
-            ) : questions && questions.length > 0 ? (
+            ) : questions && questions?.length > 0 ? (
               <div className="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
-                {questions.map((q) => {
-                  const isSelected = activeQuestion?._id === q._id;
-                  const isPending = q.status === 'pending';
+                {questions?.map?.((q) => {
+                  const isSelected = activeQuestion?._id === q?._id;
+                  const isPending = q?.status === 'pending';
                   return (
                     <div
-                      key={q._id}
+                      key={q?._id}
                       onClick={() => selectQuestion(q)}
                       className={`p-4 cursor-pointer hover:bg-slate-50/70 transition-colors ${isSelected ? 'bg-slate-100/80 border-r-4 border-accent' : ''
                         }`}
                     >
                       <div className={`flex items-center justify-between gap-3 mb-1.5 text-[10px] text-slate-400 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
-                        <span className="font-semibold text-slate-500">{language === 'en' ? q.category : (categoryTranslations[q.category] || q.category)}</span>
-                        <span>{new Date(q.createdAt).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>
+                        <span className="font-semibold text-slate-500">{language === 'en' ? q?.category : (categoryTranslations[q?.category] || q?.category)}</span>
+                        <span>{new Date(q?.createdAt).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>
                       </div>
-                      <h4 className={`text-sm font-bold text-slate-800 line-clamp-1 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>{q.questionTitle}</h4>
-                      <p className={`text-xs text-slate-400 line-clamp-1 mt-1 font-light ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'From: ' : 'منجانب: '}{q.fullName}</p>
+                      <h4 className={`text-sm font-bold text-slate-800 line-clamp-1 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>{q?.questionTitle}</h4>
+                      <p className={`text-xs text-slate-400 line-clamp-1 mt-1 font-light ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'From: ' : 'منجانب: '}{q?.fullName}</p>
 
                       <div className={`flex items-center justify-between mt-3.5 ${language === 'ur' ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
                         <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
@@ -142,8 +142,8 @@ const ManageQuestions = () => {
 
                         {!isPending && (
                           <span className="text-slate-400 flex items-center gap-0.5 text-[9px] font-semibold">
-                            {q.isPublic ? <Eye className="w-3.5 h-3.5 text-emerald-600" /> : <EyeOff className="w-3.5 h-3.5 text-slate-400" />}
-                            {q.isPublic
+                            {q?.isPublic ? <Eye className="w-3.5 h-3.5 text-emerald-600" /> : <EyeOff className="w-3.5 h-3.5 text-slate-400" />}
+                            {q?.isPublic
                               ? (language === 'en' ? 'Public' : 'پبلک')
                               : (language === 'en' ? 'Private' : 'پرائیویٹ')
                             }
@@ -196,24 +196,24 @@ const ManageQuestions = () => {
               <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded border border-slate-100 font-serif ${language === 'ur' ? 'text-right' : 'text-left'}`}>
                 <div>
                   <span className="block font-bold text-slate-400 uppercase">{language === 'en' ? 'From:' : 'منجانب:'}</span>
-                  <span className="text-slate-700 font-semibold">{activeQuestion.fullName}</span>
-                  <span className="block text-slate-400 mt-0.5">({activeQuestion.email})</span>
-                  {activeQuestion.phoneNumber && <span className="block text-slate-400">{language === 'en' ? 'Phone:' : 'فون:'} {activeQuestion.phoneNumber}</span>}
+                  <span className="text-slate-700 font-semibold">{activeQuestion?.fullName}</span>
+                  <span className="block text-slate-400 mt-0.5">({activeQuestion?.email})</span>
+                  {activeQuestion?.phoneNumber && <span className="block text-slate-400">{language === 'en' ? 'Phone:' : 'فون:'} {activeQuestion?.phoneNumber}</span>}
                 </div>
                 <div>
                   <span className="block font-bold text-slate-400 uppercase">{language === 'en' ? 'Category & Date:' : 'زمرہ اور تاریخ:'}</span>
-                  <span className="text-slate-700 font-semibold">{language === 'en' ? activeQuestion.category : (categoryTranslations[activeQuestion.category] || activeQuestion.category)}</span>
-                  <span className="block text-slate-400 mt-0.5">{language === 'en' ? 'Submitted:' : 'جمع کرایا گیا:'} {new Date(activeQuestion.createdAt).toLocaleString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>
+                  <span className="text-slate-700 font-semibold">{language === 'en' ? activeQuestion?.category : (categoryTranslations[activeQuestion?.category] || activeQuestion?.category)}</span>
+                  <span className="block text-slate-400 mt-0.5">{language === 'en' ? 'Submitted:' : 'جمع کرایا گیا:'} {new Date(activeQuestion?.createdAt).toLocaleString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>
                 </div>
               </div>
 
               {/* Title & Question details */}
               <div>
                 <h3 className="text-sm font-bold text-slate-800 font-serif mb-2">
-                  {language === 'en' ? 'Question:' : 'سوال:'} {activeQuestion.questionTitle}
+                  {language === 'en' ? 'Question:' : 'سوال:'} {activeQuestion?.questionTitle}
                 </h3>
                 <div className={`bg-background p-4 rounded text-xs leading-relaxed text-slate-600 italic border-slate-200 ${language === 'ur' ? 'border-r-2 border-accent text-right' : 'border-l-2 border-accent text-left'}`}>
-                  "{activeQuestion.detailedQuestion}"
+                  "{activeQuestion?.detailedQuestion}"
                 </div>
               </div>
 

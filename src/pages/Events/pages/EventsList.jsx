@@ -18,7 +18,7 @@ export default function EventsList() {
         setLoading(true);
         setError(null);
         const data = await getEvents();
-        setEvents(data || []);
+        setEvents(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.response?.data?.message || err.message || 'Failed to load events');
       } finally {
@@ -29,12 +29,12 @@ export default function EventsList() {
   }, []);
 
   const nowTime = Date.now();
-  const upcomingEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() > nowTime) : [];
-  const pastEvents = events ? events.filter((e) => new Date(e.eventDate).getTime() <= nowTime) : [];
+  const upcomingEvents = events?.filter ? events.filter((e) => new Date(e?.eventDate).getTime() > nowTime) : [];
+  const pastEvents = events?.filter ? events.filter((e) => new Date(e?.eventDate).getTime() <= nowTime) : [];
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className=" mx-auto px-4 sm:px-6">
 
         {/* Header Title */}
         <div className="mb-12 text-center">

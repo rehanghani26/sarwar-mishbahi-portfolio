@@ -36,7 +36,7 @@ export default function LecturesList() {
       setLoading(true);
       setError(null);
       const data = await getLectures({ category, search });
-      setLectures(data || []);
+      setLectures(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to load lectures');
     } finally {
@@ -74,7 +74,7 @@ export default function LecturesList() {
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
@@ -129,8 +129,8 @@ export default function LecturesList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-primary border-primary text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+              ? 'bg-primary border-primary text-white shadow-sm'
+              : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
               }`}
           >
             {language === 'en' ? 'All Media' : 'تمام میڈیا'}
@@ -140,8 +140,8 @@ export default function LecturesList() {
               key={cat.value}
               onClick={() => handleCategoryChange(cat.value)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
-                  ? 'bg-primary border-primary text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+                ? 'bg-primary border-primary text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
               {language === 'ur' ? cat.labelUr : cat.labelEn}
@@ -223,7 +223,7 @@ export default function LecturesList() {
                 <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white gap-4">
                   <Play className="w-12 h-12 text-accent" />
                   <p className="text-sm text-slate-300 max-w-sm font-light">
-                    {language === 'en' 
+                    {language === 'en'
                       ? `This video link is located on an external platform (${activeMedia.category}).`
                       : `یہ ویڈیو لنک بیرونی پلیٹ فارم (${categoryTranslations[activeMedia.category] || activeMedia.category}) پر موجود ہے۔`
                     }

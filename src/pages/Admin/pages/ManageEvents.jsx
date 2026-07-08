@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input } from '../../../components/Input';
+import { Input, Table } from '@/components';
 
 export default function ManageEvents() {
   const { settings } = useSettings();
@@ -136,7 +136,7 @@ export default function ManageEvents() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Events' : 'پروگراموں کا انتظام'}</h1>
-              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scheduled events and gatherings.' : 'طے شدہ پروگرام اور اجتماعات شامل کریں، اپ ڈیٹ کریں یا حذف کریں'}</p>
+
             </div>
           </div>
 
@@ -164,8 +164,8 @@ export default function ManageEvents() {
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
             <div className="bg-primary islamic-pattern text-white px-6 py-4 border-b border-accent/35 flex items-center justify-between">
               <h2 className="font-bold text-sm sm:text-md font-serif">
-                {editingId 
-                  ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں') 
+                {editingId
+                  ? (language === 'en' ? 'Edit Event Details' : 'پروگرام کی تفصیلات میں ترمیم کریں')
                   : (language === 'en' ? 'Add New Educational Event' : 'نیا تعلیمی پروگرام شامل کریں')
                 }
               </h2>
@@ -284,59 +284,50 @@ export default function ManageEvents() {
         ) : (
           /* Events List Table */
           <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              </div>
-            ) : events && events.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-border">
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Title' : 'عنوان'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Date' : 'تاریخ'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{language === 'en' ? 'Location' : 'مقام'}</th>
-                      <th className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>{language === 'en' ? 'Actions' : 'اقدامات'}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
-                    {events.map((ev) => (
-                      <tr key={ev._id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className={`px-6 py-4 font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{ev.title}</td>
-                        <td className={`px-6 py-4 font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                          {new Date(ev.eventDate).toLocaleString(language === 'ur' ? 'ur-PK' : 'en-US')}
-                        </td>
-                        <td className={`px-6 py-4 text-xs font-light max-w-xs truncate text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{ev.location}</td>
-                        <td className={`px-6 py-4 ${language === 'ur' ? 'text-left' : 'text-right'}`}>
-                          <div className="inline-flex items-center gap-2">
-                            <button
-                              onClick={() => openEditForm(ev)}
-                              className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
-                              title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(ev._id)}
-                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
-                              title={language === 'en' ? 'Delete' : 'حذف کریں'}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <Calendar className="w-12 h-12 text-accent mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-700 font-serif">{language === 'en' ? 'No events scheduled yet' : 'کوئی پروگرام طے شدہ نہیں ہے'}</h3>
-                <p className="text-slate-400 text-xs mt-1">{language === 'en' ? 'Click "Add Event" button to schedule your first event.' : 'اپنا پہلا پروگرام شیڈول کرنے کے لیے "پروگرام شامل کریں" بٹن پر کلک کریں۔'}</p>
-              </div>
-            )}
+            <Table
+              loadingTableContent={loading}
+              data={events}
+              noRecordText={language === 'en' ? 'No events scheduled yet' : 'کوئی پروگرام طے شدہ نہیں ہے'}
+              tableLayout={[
+                {
+                  headData: language === 'en' ? 'Title' : 'عنوان',
+                  bodyData: (ev) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{ev.title}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Date' : 'تاریخ',
+                  bodyData: (ev) => <span className={`font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>{new Date(ev.eventDate).toLocaleString(language === 'ur' ? 'ur-PK' : 'en-US')}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Location' : 'مقام',
+                  bodyData: (ev) => <span className={`text-xs font-light max-w-xs truncate text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>{ev.location}</span>,
+                  tdClassName: language === 'ur' ? 'text-right' : 'text-left'
+                },
+                {
+                  headData: language === 'en' ? 'Actions' : 'اقدامات',
+                  bodyData: (ev) => (
+                    <div className="inline-flex items-center gap-2">
+                      <button
+                        onClick={() => openEditForm(ev)}
+                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
+                        title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(ev._id)}
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                        title={language === 'en' ? 'Delete' : 'حذف کریں'}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                  tdClassName: language === 'ur' ? 'text-left' : 'text-right'
+                }
+              ]}
+            />
           </div>
         )}
 

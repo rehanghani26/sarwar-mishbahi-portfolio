@@ -17,7 +17,7 @@ const Input = forwardRef(
       autoComplete = "off",
       label = "",
       className = "",
-      border = "border border-gray-200 focus:border-gray-400 rounded",
+      border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
       inputClassName = "",
       labelClassName = "",
       placeholder = "",
@@ -92,6 +92,15 @@ const Input = forwardRef(
       ? (value || "").replace(/[^a-zA-Z0-9\s]/g, "")
       : value || "";
 
+    const cleanInputClass = (classes) => {
+      if (!classes) return "";
+      return classes
+        .split(" ")
+        .filter((c) => !/^(p[xy]?-\d+(\.\d+)?|h-\d+|max-h-\d+|text-sm)$/.test(c))
+        .join(" ");
+    };
+    const cleanedInputClassName = cleanInputClass(inputClassName);
+
     const remainingCharacters = limit
       ? Math.max(0, limit - displayValue.length)
       : null;
@@ -116,7 +125,7 @@ const Input = forwardRef(
 
         {readOnly ? (
           <div
-            className={`p-2 bg-gray-50 ${borderClassname} ${inputClassName} ${textOverflow ? "overflow-x-auto whitespace-nowrap" : "truncate"
+            className={`pt-2.5 pb-4 px-4 bg-gray-50 text-[16px] leading-relaxed ${borderClassname} ${cleanedInputClassName} ${textOverflow ? "overflow-x-auto whitespace-nowrap" : "truncate"
               }`}
           >
             {type === "date"
@@ -126,7 +135,7 @@ const Input = forwardRef(
         ) : (
           <input
             type={type}
-            className={`p-2 w-full outline-0 ${placeholderClassName} ${borderClassname} `}
+            className={`pt-2.5 pb-4 px-4 w-full outline-0 text-[16px] leading-relaxed ${placeholderClassName} ${borderClassname} ${cleanedInputClassName}`}
             id={id}
             name={name}
             title={title}

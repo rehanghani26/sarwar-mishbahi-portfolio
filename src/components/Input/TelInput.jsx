@@ -5,7 +5,7 @@ import { ErrorMessage, Label } from ".";
 
 function TelInput({
   className = "",
-  border = "border border-gray-200 focus:border-gray-400 rounded",
+  border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
   inputClassName = "",
   labelClassName = "",
   id = "",
@@ -22,6 +22,15 @@ function TelInput({
   disabled = false,
   readOnly = false,
 }) {
+  const cleanInputClass = (classes) => {
+    if (!classes) return "";
+    return classes
+      .split(" ")
+      .filter((c) => !/^(p[xy]?-\d+(\.\d+)?|h-\d+|max-h-\d+|text-sm)$/.test(c))
+      .join(" ");
+  };
+  const cleanedInputClassName = cleanInputClass(inputClassName);
+
   let borderClassname = errorMessage ? `${border} border-red-500` : border;
 
   function handleChange(e) {
@@ -41,13 +50,13 @@ function TelInput({
       />
 
       {readOnly ? (
-        <div className={`p-2 truncate bg-gray-50 ${borderClassname}`}>
+        <div className={`pt-2.5 pb-4 px-4 truncate bg-gray-50 text-[16px] leading-relaxed ${borderClassname}`}>
           {value || "Not specified"}
         </div>
       ) : (
         <input
           type="tel"
-          className={`p-2 w-full outline-0 placeholder-gray-500 ${borderClassname} ${inputClassName}`}
+          className={`pt-2.5 pb-4 px-4 w-full outline-0 text-[16px] leading-relaxed placeholder-gray-500 ${borderClassname} ${cleanedInputClassName}`}
           id={id}
           name={name}
           title={title}

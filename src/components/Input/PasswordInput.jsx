@@ -9,7 +9,7 @@ import { eye, eyeOff } from "../../assets";
 import { ErrorMessage, Label } from ".";
 
 const PasswordInput = ({
-  border = "border border-gray-200 focus:border-gray-400 rounded",
+  border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
   className = "",
   inputClassName = "",
   labelClassName = "",
@@ -30,6 +30,15 @@ const PasswordInput = ({
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [passwordStrengthScore, setPasswordStrengthScore] = useState(0);
   const [passwordError, setPasswordError] = useState("");
+
+  const cleanInputClass = (classes) => {
+    if (!classes) return "";
+    return classes
+      .split(" ")
+      .filter((c) => !/^(p[xy]?-\d+(\.\d+)?|h-\d+|max-h-\d+|text-sm)$/.test(c))
+      .join(" ");
+  };
+  const cleanedInputClassName = cleanInputClass(inputClassName);
 
   let borderClassname = errorMessage ? `${border} border-red-500` : border;
 
@@ -88,7 +97,7 @@ const PasswordInput = ({
         </div>
       )}
       {readOnly ? (
-        <p className={`p-2 bg-gray-50 ${borderClassname}`}>{value}</p>
+        <p className={`pt-2.5 pb-4 px-4 bg-gray-50 text-[16px] leading-relaxed ${borderClassname}`}>{value}</p>
       ) : (
         <div className="flex items-center">
           <input
@@ -98,7 +107,7 @@ const PasswordInput = ({
             title={title}
             placeholder={placeholder}
             value={value}
-            className={`p-2 max-h-10 w-full outline-0 placeholder-gray-500 bg-inherit ${borderClassname} ${inputClassName}`}
+            className={`pt-2.5 pb-4 px-4 max-h-[52px] w-full outline-0 text-[16px] leading-relaxed placeholder-gray-500 bg-inherit ${borderClassname} ${cleanedInputClassName}`}
             required={required}
             onChange={onChange}
             disabled={disabled}

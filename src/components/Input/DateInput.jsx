@@ -7,7 +7,7 @@ import { ErrorMessage, Label } from ".";
 
 const DateInput = ({
   type = "date",
-  border = "border border-gray-200 focus:border-gray-400 rounded",
+  border = "border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-md outline-none transition-colors",
   className = "",
   inputClassName = "",
   labelClassName = "",
@@ -26,6 +26,15 @@ const DateInput = ({
   required = false,
   icon,
 }) => {
+  const cleanInputClass = (classes) => {
+    if (!classes) return "";
+    return classes
+      .split(" ")
+      .filter((c) => !/^(p[xy]?-\d+(\.\d+)?|h-\d+|max-h-\d+|text-sm)$/.test(c))
+      .join(" ");
+  };
+  const cleanedInputClassName = cleanInputClass(inputClassName);
+
   let borderClassname = errorMessage ? `${border} border-red-500` : border;
   const date = value?.slice(0, 10);
 
@@ -41,13 +50,13 @@ const DateInput = ({
       />
 
       {readOnly ? (
-        <div className={`p-2 bg-gray-50 ${borderClassname}`}>
+        <div className={`pt-2.5 pb-4 px-4 bg-gray-50 text-[16px] leading-relaxed ${borderClassname}`}>
           {date || "Not specified"}
         </div>
       ) : (
         <input
           type={type}
-          className={`p-2 w-full outline-0 placeholder-gray-500 ${borderClassname} ${inputClassName}`}
+          className={`pt-2.5 pb-4 px-4 w-full outline-0 text-[16px] leading-relaxed placeholder-gray-500 ${borderClassname} ${cleanedInputClassName}`}
           id={id}
           name={name}
           title={title}

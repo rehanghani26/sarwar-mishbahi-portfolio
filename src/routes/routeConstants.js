@@ -20,6 +20,7 @@ export const ROUTES = {
 
   // Admin routes
   ADMIN_LOGIN: '/admin/login',
+  ADMIN_SIGNUP: '/admin/signup',
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_ARTICLES: '/admin/articles',
   ADMIN_FATWAS: '/admin/fatwas',
@@ -28,4 +29,5 @@ export const ROUTES = {
   ADMIN_LECTURES: '/admin/lectures',
   ADMIN_EVENTS: '/admin/events',
   ADMIN_SETTINGS: '/admin/settings',
+  ADMIN_USERS: '/admin/users',
 };

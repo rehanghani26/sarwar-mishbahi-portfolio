@@ -1,6 +1,7 @@
 import React from 'react';
 import { Award, BookOpen, GraduationCap, Briefcase, Bookmark, Milestone } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
+import { ImageViewer } from '@/components';
 
 export default function About() {
   const { settings } = useSettings();
@@ -11,9 +12,9 @@ export default function About() {
   const fullName = scholar.fullName || '';
   const title = scholar.title || '';
   const bio = scholar.bio || '';
-  const education = scholar.education || { 
-    madrasah: language === 'en' ? 'Not Available' : 'دستیاب نہیں', 
-    university: language === 'en' ? 'Not Available' : 'دستیاب نہیں' 
+  const education = scholar.education || {
+    madrasah: language === 'en' ? 'Not Available' : 'دستیاب نہیں',
+    university: language === 'en' ? 'Not Available' : 'دستیاب نہیں'
   };
   const qualifications = scholar.qualifications || [];
   const expertise = scholar.areasOfExpertise || [];
@@ -24,14 +25,25 @@ export default function About() {
 
   return (
     <div className={`bg-background py-12 transition-colors duration-200 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        
+      <div className=" mx-auto px-4 sm:px-6">
+
         {/* Biography Header */}
         <div className="premium-card p-8 mb-8 relative overflow-hidden text-start">
           <div className="absolute top-0 left-0 right-0 h-1.5 scholar-gradient-bg"></div>
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
-              <BookOpen className="w-12 h-12 text-accent dark:text-accent" />
+            <div className="w-24 h-24 rounded-full bg-slate-50 flex items-center justify-center shadow-md shrink-0 overflow-hidden border border-slate-200">
+              {scholar.photo ? (
+                <ImageViewer
+                  src={scholar.photo}
+                  alt={fullName}
+                  thumbnailSize={4}
+                  thumbnailBorderRadius="rounded-full"
+                  thumbnailObjectFit="cover"
+                  showZoomIcon={false}
+                />
+              ) : (
+                <BookOpen className="w-12 h-12 text-accent dark:text-accent" />
+              )}
             </div>
             <div className={`text-center ${language === 'ur' ? 'md:text-right' : 'md:text-left'}`}>
               <span className="text-xs font-bold text-accent uppercase tracking-widest font-serif block mb-1">
@@ -51,7 +63,7 @@ export default function About() {
 
         {/* Modular Grid Information Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          
+
           {/* Qualifications & Education */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-textPrimary font-serif flex items-center gap-2 mb-4 border-b border-border pb-2">
@@ -117,7 +129,7 @@ export default function About() {
 
         {/* Experience & Associated Institutions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          
+
           {/* Experience */}
           <div className="premium-card p-6 text-start">
             <h2 className="text-md font-bold text-textPrimary font-serif flex items-center gap-2 mb-4 border-b border-border pb-2">

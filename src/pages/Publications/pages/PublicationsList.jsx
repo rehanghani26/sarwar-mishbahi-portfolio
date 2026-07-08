@@ -71,7 +71,7 @@ export default function PublicationsList() {
 
   return (
     <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Title */}
         <div className="mb-10 text-center">
@@ -128,8 +128,8 @@ export default function PublicationsList() {
           <button
             onClick={() => handleCategoryChange('')}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-                ? 'bg-primary border-primary text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+              ? 'bg-primary border-primary text-white shadow-sm'
+              : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
               }`}
           >
             {language === 'en' ? 'All Topics' : 'تمام زمرے'}
@@ -139,8 +139,8 @@ export default function PublicationsList() {
               key={cat.value}
               onClick={() => handleCategoryChange(cat.value)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
-                  ? 'bg-primary border-primary text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
+                ? 'bg-primary border-primary text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
                 }`}
             >
               {language === 'ur' ? cat.labelUr : cat.labelEn}
@@ -176,8 +176,8 @@ export default function PublicationsList() {
                     key={pNum + 1}
                     onClick={() => handlePageChange(pNum + 1)}
                     className={`w-8 h-8 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                        ? 'bg-primary border-primary text-white'
-                        : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      ? 'bg-primary border-primary text-white'
+                      : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                   >
                     {pNum + 1}

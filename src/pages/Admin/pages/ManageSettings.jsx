@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search } from 'lucide-react';
+import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search, User } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
+import { ImageViewer } from '@/components';
 
 export default function ManageSettings() {
   const { settings, loading, error, updateSuccess, updateSettings, clearErrors } = useSettings();
@@ -122,7 +123,7 @@ export default function ManageSettings() {
           .split(',')
           .map((s) => s.trim())
           .filter((s) => s)
-          : [];
+        : [];
 
     const payload = {
       scholarInfo: {
@@ -190,9 +191,7 @@ export default function ManageSettings() {
               <h1 className="text-2xl font-bold text-primary font-serif">
                 {language === 'en' ? 'Website Settings' : 'ویب سائٹ کی ترتیبات'}
               </h1>
-              <p className="text-xs text-slate-400 font-light font-sans">
-                {language === 'en' ? 'Change biography, contact numbers and SEO tags' : 'سوانح حیات، رابطے کے نمبرز اور SEO ٹیگز تبدیل کریں'}
-              </p>
+
             </div>
           </div>
         </div>
@@ -263,6 +262,43 @@ export default function ManageSettings() {
                     border=""
                     inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                    {language === 'en' ? 'Scholar Photo URL' : 'عالم کی تصویر کا یو آر ایل'}
+                  </label>
+                  <Input
+                    type="text"
+                    value={scholarInfo.photo || ""}
+                    onChange={(e) => setScholarInfo({ ...scholarInfo, photo: e.target.value })}
+                    border=""
+                    inputClassName={`w-full px-3 py-2 text-sm bg-slate-50 border border-border rounded outline-none focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                    placeholder="https://example.com/photo.jpg"
+                  />
+                </div>
+                <div className="flex flex-col items-center sm:items-start">
+                  <span className="block text-xs font-bold text-slate-500 uppercase mb-1.5 self-center sm:self-start">
+                    {language === 'en' ? 'Photo Preview' : 'تصویر کا پیش نظارہ'}
+                  </span>
+                  <div className="flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg p-1 min-h-[44px]">
+                    {scholarInfo.photo ? (
+                      <ImageViewer
+                        src={scholarInfo.photo}
+                        alt={scholarInfo.fullName || "Scholar Photo"}
+                        thumbnailSize={2}
+                        thumbnailBorderRadius="rounded"
+                        thumbnailObjectFit="cover"
+                        showZoomIcon={false}
+                      />
+                    ) : (
+                      <div className="w-10 h-10 flex items-center justify-center text-slate-400 bg-slate-100 rounded border border-dashed border-slate-300">
+                        <User className="w-5 h-5" />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -619,14 +655,14 @@ export default function ManageSettings() {
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs animate-backdrop-fade cursor-pointer"
             onClick={() => modalStep !== 'success' && setShowConfirmModal(false)}
           />
-          
+
           {/* Modal Box */}
-          <div 
-            className={`relative bg-white dark:bg-slate-900 border border-border dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transition-all duration-300 transform animate-modal-entrance ${language === 'ur' ? 'text-right' : 'text-left'}`} 
+          <div
+            className={`relative bg-white dark:bg-slate-900 border border-border dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transition-all duration-300 transform animate-modal-entrance ${language === 'ur' ? 'text-right' : 'text-left'}`}
             dir={language === 'ur' ? 'rtl' : 'ltr'}
           >
             {modalStep === 'confirm' ? (
@@ -640,13 +676,13 @@ export default function ManageSettings() {
                       {language === 'en' ? 'Confirm Website Settings Update' : 'ویب سائٹ کی ترتیبات اپ ڈیٹ کی تصدیق'}
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {language === 'en' 
-                        ? 'Are you sure you want to save the new biography, contact and SEO configuration?' 
+                      {language === 'en'
+                        ? 'Are you sure you want to save the new biography, contact and SEO configuration?'
                         : 'کیا آپ واقعی سوانح، رابطے اور SEO کی نئی ترتیبات محفوظ کرنا چاہتے ہیں؟'}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className={`flex items-center gap-2.5 justify-end ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
                   <button
                     type="button"
@@ -672,11 +708,11 @@ export default function ManageSettings() {
                   <div className="success-circle-draw absolute inset-0 rounded-full border-4 border-emerald-500 animate-draw-circle" />
                   <div className="success-check-icon absolute inset-0 flex items-center justify-center text-emerald-500">
                     <svg className="w-10 h-10 stroke-current stroke-3 fill-none" viewBox="0 0 24 24">
-                      <path 
-                        className="animate-draw-check" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        d="M5 13l4 4L19 7" 
+                      <path
+                        className="animate-draw-check"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
                       />
                     </svg>
                   </div>
@@ -685,13 +721,14 @@ export default function ManageSettings() {
                   {language === 'en' ? 'Settings Saved Successfully!' : 'ترتیبات کامیابی سے محفوظ ہو گئیں!'}
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 text-center font-light">
-                  {language === 'en' 
-                    ? 'The website layout and metadata have been updated.' 
+                  {language === 'en'
+                    ? 'The website layout and metadata have been updated.'
                     : 'ویب سائٹ کی ظاہری شکل اور معلومات کامیابی سے تبدیل ہو چکی ہیں۔'}
                 </p>
-                
+
                 {/* Custom style for 2-second draw/rotation animations */}
-                <style dangerouslySetInnerHTML={{__html: `
+                <style dangerouslySetInnerHTML={{
+                  __html: `
                   @keyframes draw-circle {
                     0% { clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%); }
                     25% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%); }
