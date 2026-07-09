@@ -111,14 +111,14 @@ export default function CommentsSection({ contentType, contentId, language }) {
 
   const handleInputFocus = () => {
     if (!isAuthenticated) {
-      navigate('/admin/login');
+      navigate('/login');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
 
@@ -195,7 +195,7 @@ export default function CommentsSection({ contentType, contentId, language }) {
               <div className="text-center py-2 flex items-center justify-between gap-4 flex-wrap">
                 <span className="text-xs font-bold text-slate-600">{t.loginRequired}</span>
                 <button
-                  onClick={() => navigate('/admin/login')}
+                  onClick={() => navigate('/login')}
                   style={{ backgroundColor: COLORS.primary }}
                   className="px-4 py-1.5 text-white font-bold text-xs uppercase tracking-wider cursor-pointer"
                 >

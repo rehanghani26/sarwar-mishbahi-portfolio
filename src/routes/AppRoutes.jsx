@@ -43,8 +43,8 @@ export default function AppRoutes() {
 
       {/* ── Authentication pages (English + LTR, no Navbar/Footer) ── */}
       <Route element={<AuthLayout />}>
-        <Route path="/admin/login" element={<Login />} />
-        <Route path="/admin/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Route>
 
       {/* ── Public site (Urdu + RTL, has Navbar + Footer) ── */}

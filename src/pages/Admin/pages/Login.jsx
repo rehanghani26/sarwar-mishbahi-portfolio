@@ -36,9 +36,8 @@ function Field({ label, required, hint, error, icon: Icon, children }) {
         {Icon && (
           <Icon
             size={17}
-            className={`shrink-0 transition-colors duration-200 ${
-              error ? 'text-red-400' : 'text-slate-400 group-focus-within:text-primary'
-            }`}
+            className={`shrink-0 transition-colors duration-200 ${error ? 'text-red-400' : 'text-slate-400 group-focus-within:text-primary'
+              }`}
           />
         )}
         {children}
@@ -56,15 +55,15 @@ function Field({ label, required, hint, error, icon: Icon, children }) {
 }
 
 export default function Login() {
-  const navigate  = useNavigate();
-  const dispatch  = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isAuthenticated, loading, error, userRole } = useSelector((s) => s.auth);
 
-  const [identifier, setIdentifier]   = useState('');
-  const [password,   setPassword]     = useState('');
-  const [showPass,   setShowPass]     = useState(false);
-  const [touched,    setTouched]      = useState({ identifier: false, password: false });
-  const [localError, setLocalError]   = useState(null);
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [touched, setTouched] = useState({ identifier: false, password: false });
+  const [localError, setLocalError] = useState(null);
 
   /* Redirect after auth */
   useEffect(() => {
@@ -268,7 +267,7 @@ export default function Login() {
             <p className="mt-6 text-center text-xs text-slate-500">
               Don&apos;t have an account?{' '}
               <Link
-                to="/admin/signup"
+                to="/signup"
                 className="text-primary hover:text-primary/80 font-bold transition-colors underline underline-offset-2"
               >
                 Create one here

@@ -2,8 +2,8 @@
 export const LOCAL_URL = "http://localhost:5000";
 export const PROD_URL = "https://jamia-madarsha-server.onrender.com";
 
-// Auto detect environment
-export const BACKEND_URL = PROD_URL;
+// Auto detect environment 
+export const BACKEND_URL = LOCAL_URL;
 
 export const BASE_URL = `${BACKEND_URL}/api`;
 

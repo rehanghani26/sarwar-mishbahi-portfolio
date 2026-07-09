@@ -13,5 +13,5 @@ export default function AdminRoute() {
     );
   }
 
-  return isAuthenticated && userRole === 'admin' ? <Outlet /> : <Navigate to="/admin/login" replace />;
+  return isAuthenticated && userRole === 'admin' ? <Outlet /> : <Navigate to="/login" replace />;
 }

@@ -28,8 +28,8 @@
 //       // Clear stored credentials and redirect to login
 //       localStorage.removeItem('adminToken');
 //       localStorage.removeItem('adminInfo');
-//       if (window.location.pathname !== '/admin/login') {
-//         window.location.href = '/admin/login';
+//       if (window.location.pathname !== '/login') {
+//         window.location.href = '/login';
 //       }
 //     }
 //     return Promise.reject(error);
@@ -54,9 +54,12 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Redirect to login page
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      // Clear stale credentials so isAuthenticated resets to false on next load
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminInfo');
+      // Redirect to login page (only if not already there)
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
       }
     }
 

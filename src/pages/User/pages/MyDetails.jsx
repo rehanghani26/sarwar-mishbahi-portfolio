@@ -267,7 +267,7 @@ export default function MyDetails() {
       .finally(() => setLoadingQ(false));
   }, [isAuthenticated]);
 
-  if (!isAuthenticated) return <Navigate to="/admin/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   const user = loggedInUser;
 

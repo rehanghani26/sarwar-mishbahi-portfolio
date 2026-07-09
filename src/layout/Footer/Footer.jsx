@@ -236,7 +236,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center gap-4">
           <Link 
-            to="/admin/login" 
+            to="/login" 
             style={{ color: COLORS.primary }}
             className="transition-colors flex items-center gap-1 font-semibold theme-hover-text-accent"
           >

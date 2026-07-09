@@ -86,7 +86,7 @@ export default function AdminLayout() {
     await logoutUser();
     dispatch(logout());
     toast.success('کامیابی سے لاگ آؤٹ ہو گئے');
-    navigate('/admin/login');
+    navigate('/login');
   };
 
   const sidebarW = collapsed ? 'w-[68px]' : 'w-64';
@@ -216,7 +216,7 @@ export default function AdminLayout() {
             </div>
           )}
           <button
-            onClick={handleLogout}
+            onClick={() => { handleLogout() }}
             title={collapsed ? 'لاگ آؤٹ' : ''}
             className="flex items-center gap-2 w-full px-3 py-2 rounded-xl text-sm font-medium"
             style={{

@@ -182,7 +182,7 @@ export default function ArticleDetail() {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
     if (!commentText.trim()) {
@@ -215,7 +215,7 @@ export default function ArticleDetail() {
   // Submit reply
   const handleReplySubmit = async (commentId) => {
     if (!isAuthenticated) {
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
     if (!replyText.trim()) {
@@ -516,7 +516,7 @@ export default function ArticleDetail() {
               <AlertCircle className="w-8 h-8 text-amber-600 mx-auto mb-2" />
               <p className="text-sm font-bold text-slate-800 mb-4">تبصرہ کرنے کے لیے آپ کا سائن ان ہونا ضروری ہے۔</p>
               <button
-                onClick={() => navigate('/admin/login')}
+                onClick={() => navigate('/login')}
                 className="px-6 py-2 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer border-0"
                 style={{ backgroundColor: PALETTE.primary }}
               >

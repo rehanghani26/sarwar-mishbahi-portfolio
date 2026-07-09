@@ -44,9 +44,8 @@ function Field({ label, required, hint, error, icon: Icon, children }) {
         {Icon && (
           <Icon
             size={17}
-            className={`shrink-0 transition-colors duration-200 ${
-              error ? 'text-red-400' : 'text-slate-400 group-focus-within:text-primary'
-            }`}
+            className={`shrink-0 transition-colors duration-200 ${error ? 'text-red-400' : 'text-slate-400 group-focus-within:text-primary'
+              }`}
           />
         )}
         {children}
@@ -82,9 +81,8 @@ function PasswordStrength({ password }) {
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-              i <= score ? colors[score] : 'bg-slate-200'
-            }`}
+            className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-slate-200'
+              }`}
           />
         ))}
       </div>
@@ -100,14 +98,14 @@ export default function Signup() {
   const dispatch = useDispatch();
   const { isAuthenticated, loading, error, userRole } = useSelector((s) => s.auth);
 
-  const [name,            setName]            = useState('');
-  const [identifier,      setIdentifier]      = useState('');
-  const [contactPhone,    setContactPhone]    = useState('');
-  const [password,        setPassword]        = useState('');
+  const [name, setName] = useState('');
+  const [identifier, setIdentifier] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPass,        setShowPass]        = useState(false);
-  const [showConfirm,     setShowConfirm]     = useState(false);
-  const [localError,      setLocalError]      = useState(null);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [localError, setLocalError] = useState(null);
   const [touched, setTouched] = useState({
     name: false, identifier: false, password: false, confirmPassword: false,
   });
@@ -372,7 +370,7 @@ export default function Signup() {
             <p className="mt-6 text-center text-xs text-slate-500">
               Already have an account?{' '}
               <Link
-                to="/admin/login"
+                to="/login"
                 className="text-primary hover:text-primary/80 font-bold transition-colors underline underline-offset-2"
               >
                 Sign in here

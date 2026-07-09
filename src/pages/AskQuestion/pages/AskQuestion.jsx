@@ -62,7 +62,7 @@ export default function AskQuestion() {
     setActionError(null);
 
     if (!isAuthenticated) {
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
 
@@ -190,7 +190,7 @@ export default function AskQuestion() {
                   {t.loginRequired}
                 </p>
                 <button
-                  onClick={() => navigate('/admin/login')}
+                  onClick={() => navigate('/login')}
                   className="px-6 py-3 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-all cursor-pointer border-0"
                   style={{ backgroundColor: PALETTE.primary }}
                 >

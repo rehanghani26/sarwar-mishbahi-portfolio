@@ -318,7 +318,7 @@ export default function Navbar() {
                     </Link>
                   )}
                   <button
-                    onClick={handleLogout}
+                    onClick={() => { handleLogout() }}
                     className="mt-3 flex items-center justify-center gap-2 w-full px-3 py-2 text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 rounded border border-red-150 transition-colors"
                   >
                     <LogOut className="w-3.5 h-3.5" />
@@ -338,7 +338,7 @@ export default function Navbar() {
                 سوال
               </Link>
               <Link
-                to="/admin/login"
+                to="/login"
                 title={language === "en" ? "Login / Signup" : "لاگ ان / سائن اپ"}
                 className="flex items-center justify-center p-2.5 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary transition-all duration-200 shadow-xs"
               >
@@ -360,7 +360,7 @@ export default function Navbar() {
           )}
           {!isAuthenticated && userRole !== "admin" && (
             <Link
-              to="/admin/login"
+              to="/login"
               className="p-1.5 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary transition-all duration-200 shadow-xs flex items-center justify-center"
               title={language === "en" ? "Login / Signup" : "لاگ ان / سائن اپ"}
             >
@@ -533,7 +533,7 @@ export default function Navbar() {
                   </Link>
 
                   <button
-                    onClick={handleLogout}
+                    onClick={() => { handleLogout }}
                     className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded border border-red-200 animate-fade-in"
                   >
                     <LogOut className="w-4 h-4" />
@@ -542,7 +542,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <Link
-                  to="/admin/login"
+                  to="/login"
                   onClick={closeMenu}
                   style={{ backgroundColor: COLORS.background, color: COLORS.textSecondary, borderColor: COLORS.border }}
                   className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold rounded border hover:bg-slate-200 hover:text-[var(--color-primary)] transition-colors"

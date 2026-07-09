@@ -19,8 +19,8 @@ export const ROUTES = {
   CONTACT: '/contact',
 
   // Admin routes
-  ADMIN_LOGIN: '/admin/login',
-  ADMIN_SIGNUP: '/admin/signup',
+  ADMIN_LOGIN: '/login',
+  ADMIN_SIGNUP: '/signup',
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_ARTICLES: '/admin/articles',
   ADMIN_FATWAS: '/admin/fatwas',
