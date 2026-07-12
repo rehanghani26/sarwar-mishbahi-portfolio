@@ -137,30 +137,42 @@ export default function Home() {
   const email = settings?.contactInfo?.email || '';
 
   const FEATURES = [
-    {
-      icon: BookOpen,
-      title: language === 'en' ? 'Authentic Knowledge ' : 'مستند علم',
-      description: language === 'en' ? 'Islamic content based on Quran, Hadith, and Fiqh.' : 'قرآن، حدیث اور فقہ پر مبنی علمی مواد۔',
-      to: '/articles',
-    },
-    {
-      icon: ShieldCheck,
-      title: language === 'en' ? 'Verified Fatwas' : 'تصدیق شدہ فتاویٰ',
-      description: language === 'en' ? 'Get verified rulings from trusted scholars.' : 'مستند علما سے تصدیق شدہ فتاویٰ حاصل کریں۔',
-      to: '/fatwas',
-    },
-    {
-      icon: FileText,
-      title: language === 'en' ? 'Scholarly Articles' : 'تحقیقی مقالات',
-      description: language === 'en' ? 'Detailed Islamic research papers written with evidence.' : 'تحقیق اور دلائل کے ساتھ لکھے گئے تفصیلی اسلامی مقالات۔',
-      to: '/articles',
-    },
-    {
-      icon: Users,
-      title: language === 'en' ? 'Social Guidance' : 'معاشرتی رہنمائی',
-      description: language === 'en' ? 'Shariah-compliant guidance and solutions for daily issues.' : 'روزمرہ کے مسائل کے بارے میں شریعت کے مطابق رہنمائی اور حل۔',
-      to: '/qa',
-    },
+  {
+  icon: BookOpen,
+  title: language === 'en' ? 'Articles' : 'مقالات',
+  description:
+    language === 'en'
+      ? 'Research-based Islamic articles covering Quran, Hadith, Fiqh, beliefs, contemporary issues, and educational topics.'
+      : 'قرآن، حدیث، فقہ، عقائد، عصری مسائل اور اسلامی تعلیمات پر مبنی تحقیقی و مستند مقالات۔',
+  to: '/articles',
+},
+  {
+  icon: ShieldCheck,
+  title: language === 'en' ? 'Fiqh & Fatwas' : 'فقہ و فتاویٰ',
+  description:
+    language === 'en'
+      ? 'Authentic Islamic rulings and jurisprudential guidance based on the Quran, Sunnah, and reliable scholarship.'
+      : 'قرآن، سنت اور معتبر فقہی مصادر کی روشنی میں مستند فقہی مسائل اور فتاویٰ۔',
+  to: '/fatwas',
+},
+{
+  icon: BookOpen,
+  title: language === 'en' ? 'Books' : 'کتابیں',
+  description:
+    language === 'en'
+      ? 'Read and download books on various topics.'
+      : 'مختلف موضوعات پر مشتمل کتابوں کا مطالعہ کریں اور ڈاؤن لوڈ کریں۔',
+  to: '/books',
+},
+{
+  icon: Users,
+  title: language === 'en' ? 'Questions & Answers' : 'سوال و جواب',
+  description:
+    language === 'en'
+      ? 'Find answers to frequently asked Islamic questions and benefit from authentic guidance.'
+      : 'اسلامی مسائل سے متعلق سوالات کے مستند جوابات اور رہنمائی حاصل کریں۔',
+  to: '/qa',
+},
   ];
 
   return (

@@ -1,40 +1,131 @@
-import { COLORS } from '@/utils/themeColors';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { COLORS } from "@/utils/themeColors";
 
-/**
- * AnimatedFeatureCard
- * Redesigned to be a static, premium academic feature card with no animations.
- */
-export default function AnimatedFeatureCard({ icon: Icon, title, description, to }) {
-    return (
-        <div 
-            style={{ borderColor: COLORS.border }}
-            className="relative rounded-xl border bg-white p-5 h-full flex flex-col items-center text-center shadow-xs"
+export default function AnimatedFeatureCard({
+  icon: Icon,
+  title,
+  description,
+  to,
+}) {
+  return (
+    <Link to={to} className="group block h-full">
+      <div
+        style={{
+          borderColor: COLORS.border,
+        }}
+        className="
+          relative
+          h-full
+          overflow-hidden
+          rounded-2xl
+          border
+          bg-white
+          p-6
+          text-center
+          shadow-sm
+          transition-all
+          duration-300
+          hover:-translate-y-2
+          hover:shadow-2xl
+        "
+      >
+        {/* Decorative Background */}
+        <div
+          style={{
+            background: COLORS.primary,
+          }}
+          className="
+            absolute
+            -top-8
+            -right-8
+            h-28
+            w-28
+            rounded-full
+            opacity-[0.05]
+          "
+        />
+
+        {/* Icon */}
+        <div
+          style={{
+            backgroundColor: COLORS.secondary,
+            color: COLORS.primary,
+            borderColor: COLORS.border,
+          }}
+          className="
+            relative
+            mx-auto
+            mb-5
+            flex
+            h-16
+            w-16
+            items-center
+            justify-center
+            rounded-2xl
+            border
+            shadow-md
+            transition-all
+            duration-300
+            group-hover:scale-110
+            group-hover:rotate-3
+          "
         >
-            {/* Icon Container */}
-            <div 
-                style={{ backgroundColor: COLORS.secondary, color: COLORS.primary }}
-                className="w-12 h-12 rounded-full flex items-center justify-center mb-4 shrink-0"
-            >
-                <Icon className="w-5 h-5" />
-            </div>
-
-            {/* Title */}
-            <h3 style={{ color: COLORS.primary }} className="text-sm font-bold mb-2 font-serif">{title}</h3>
-
-            {/* Description */}
-            <p className="text-textSecondary text-[11px] font-light leading-relaxed mb-4 flex-grow">{description}</p>
-
-            {/* Action Link */}
-            <Link
-                to={to}
-                style={{ color: COLORS.primary }}
-                className="mt-auto inline-flex items-center gap-1 text-[11px] font-bold hover:text-accent transition-colors"
-            >
-                مزید جانیں <ArrowLeft className="w-3 h-3 text-accent" />
-            </Link>
+          <Icon className="h-7 w-7" />
         </div>
-    );
+
+        {/* Title */}
+        <h3
+          style={{ color: COLORS.primary }}
+          className="
+            mb-3
+            text-lg
+            font-bold
+            leading-relaxed
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p
+          className="
+            text-sm
+            leading-7
+            text-gray-600
+            min-h-[85px]
+          "
+        >
+          {description}
+        </p>
+
+        {/* Divider */}
+        <div
+          style={{ backgroundColor: COLORS.border }}
+          className="mx-auto my-5 h-px w-14"
+        />
+
+        {/* Button */}
+        <div
+          style={{
+            color: COLORS.primary,
+          }}
+          className="
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            font-semibold
+            transition-all
+            duration-300
+            group-hover:gap-3
+          "
+        >
+          مزید جانیں
+          <ArrowLeft className="h-4 w-4" />
+        </div>
+      </div>
+    </Link>
+  );
 }
