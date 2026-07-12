@@ -68,9 +68,9 @@ export default function Login() {
   /* Redirect after auth */
   useEffect(() => {
     dispatch(clearAuthError());
-    if (isAuthenticated) {
-      navigate(userRole === 'admin' ? '/admin/dashboard' : '/');
-    }
+    // if (isAuthenticated) {
+    //   navigate(userRole === 'admin' ? '/admin/dashboard' : '/');
+    // }
   }, [isAuthenticated, userRole, navigate, dispatch]);
 
   /* Per-field inline validation */

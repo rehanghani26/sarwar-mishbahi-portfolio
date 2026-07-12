@@ -65,7 +65,6 @@ export default function AppRoutes() {
         <Route path="events" element={<EventsList />} />
         <Route path="contact" element={<ContactPage />} />
         <Route path="my-details" element={<MyDetails />} />
-
         {/* 404 */}
         <Route path="*" element={<PageNotFound />} />
       </Route>

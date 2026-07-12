@@ -84,9 +84,9 @@ export default function AdminLayout() {
 
   const handleLogout = async () => {
     await logoutUser();
-    dispatch(logout());
+    // dispatch(logout());
     toast.success('کامیابی سے لاگ آؤٹ ہو گئے');
-    navigate('/login');
+    // navigate('/login');
   };
 
   const sidebarW = collapsed ? 'w-[68px]' : 'w-64';
