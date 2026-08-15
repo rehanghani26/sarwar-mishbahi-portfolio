@@ -109,7 +109,7 @@ export default function Login() {
   };
 
   if (isAuthenticated) {
-    return <Navigate to={userRole === 'admin' ? '/admin/dashboard' : '/'} replace />;
+    return <Navigate to="/" replace />;
   }
 
   const displayError = localError || error;

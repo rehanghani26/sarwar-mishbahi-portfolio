@@ -113,9 +113,9 @@ export default function Signup() {
   useEffect(() => {
     dispatch(clearAuthError());
     if (isAuthenticated) {
-      navigate(userRole === 'admin' ? '/admin/dashboard' : '/');
+      navigate('/');
     }
-  }, [isAuthenticated, userRole, navigate, dispatch]);
+  }, [isAuthenticated, navigate, dispatch]);
 
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRx = /^[6-9]\d{9}$/;
