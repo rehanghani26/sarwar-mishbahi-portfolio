@@ -190,24 +190,24 @@ export default function ManageArticles() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 text-right" dir="rtl">
           <div className="flex items-center gap-3">
             <Link to="/admin/dashboard" className="p-2 border border-border bg-white rounded text-slate-500 hover:text-accent shrink-0">
-              <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
+              <ArrowRight className="w-4.5 h-4.5" />
             </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Articles' : 'مقالات کا انتظام'}</h1>
-              <p className="text-xs text-slate-400 font-light">{language === 'en' ? 'Add, edit, or delete scholarly articles.' : 'عالم صاحب کے مقالات شامل کریں، تبدیل کریں یا حذف کریں۔'}</p>
+            <div className="flex flex-col gap-1.5">
+              <h1 className="text-2xl font-bold text-primary font-serif leading-normal">مقالات کا انتظام</h1>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">عالم صاحب کے مقالات شامل کریں، تبدیل کریں یا حذف کریں۔</p>
             </div>
           </div>
 
           {!isFormOpen && (
             <button
               onClick={openCreateForm}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif cursor-pointer"
             >
               <Plus className="w-4 h-4 text-accent" />
-              {language === 'en' ? 'Write Article' : 'مضمون لکھیں'}
+              مضمون لکھیں
             </button>
           )}
         </div>
@@ -488,6 +488,9 @@ export default function ManageArticles() {
             <Table
               loadingTableContent={loading}
               data={articles}
+              language={language}
+              pageSize={10}
+              onRowClick={(article) => openEditForm(article)}
               noRecordText={language === 'en' ? 'No articles written yet' : 'کوئی مضمون نہیں لکھا گیا'}
               tableLayout={[
                 {
@@ -526,22 +529,21 @@ export default function ManageArticles() {
                   headData: language === 'en' ? 'Actions' : 'اقدامات',
                   bodyData: (article) => (
                     <div className="inline-flex items-center gap-2">
-                      <Link
-                        to={`/articles/${article._id}`}
-                        className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors"
-                        title={language === 'en' ? 'View Article' : 'مضمون دیکھیں'}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Link>
                       <button
-                        onClick={() => openEditForm(article)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditForm(article);
+                        }}
                         className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors"
                         title={language === 'en' ? 'Edit Article' : 'مضمون کی تدوین کریں'}
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(article._id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(article._id);
+                        }}
                         className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
                         title={language === 'en' ? 'Delete Article' : 'مضمون حذف کریں'}
                       >

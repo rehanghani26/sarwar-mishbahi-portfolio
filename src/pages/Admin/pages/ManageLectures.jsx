@@ -292,6 +292,8 @@ export default function ManageLectures() {
             <Table
               loadingTableContent={loading}
               data={lectures}
+              language={language}
+              pageSize={10}
               noRecordText={language === 'en' ? 'No lectures uploaded yet' : 'کوئی بیان اپ لوڈ نہیں کیا گیا'}
               tableLayout={[
                 {

@@ -111,6 +111,7 @@ export default function Navbar() {
     { label: language === "en" ? "Publications" : "کتب و رسائل", href: "/publications", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.publications },
     { label: language === "en" ? "Articles" : "مضامین و مقالات", href: "/articles", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.articles },
     { label: language === "en" ? "Lectures" : "خطبات", href: "/lectures", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.lectures },
+    { label: language === "en" ? "Videos" : "ویڈیوز", href: "/youtube-videos", hasDropdown: false },
     { label: language === "en" ? "Q&A" : "سوال و جواب", href: "/qa", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.qa },
     { label: language === "en" ? "Events" : "پروگرام", href: "/events", hasDropdown: false },
     { label: language === "en" ? "Contact" : "رابطہ", href: "/contact", hasDropdown: false }

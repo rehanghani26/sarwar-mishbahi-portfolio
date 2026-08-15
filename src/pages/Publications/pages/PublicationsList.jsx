@@ -1,11 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, BookOpen } from 'lucide-react';
+import { Search, SlidersHorizontal, BookOpen, Book, Download } from 'lucide-react';
 import { getPublications } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { PublicationCard, Input } from '@/components';
+import { PublicationCard } from '@/components';
+import { COLORS } from '@/utils/themeColors';
+import { PUBLICATION_CATEGORIES, PUBLICATION_TRANSLATIONS } from '@/utils/categories';
 
-import { PUBLICATION_CATEGORIES, PUBLICATION_TRANSLATIONS, PUBLICATION_EN_LABELS } from '@/utils/categories';
+/* ─── Sidebar section header (dark brown + icon) ─────────── */
+function SidebarHeader({ label, icon: Icon = Book }) {
+  return (
+    <div
+      className="flex items-center justify-between px-4 py-3"
+      style={{ backgroundColor: COLORS.primary }}
+    >
+      <span className="text-base font-bold text-white font-serif">{label}</span>
+      <Icon className="w-4 h-4" style={{ color: COLORS.accent }} />
+    </div>
+  );
+}
+
+/* ─── Sidebar link ─────────────────────────────────────────────── */
+function SidebarLink({ label, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full text-right px-4 py-2.5 text-sm font-medium transition-all rounded-sm flex items-center justify-between border-b last:border-b-0 hover:bg-slate-50"
+      style={{
+        color: active ? COLORS.primary : COLORS.textPrimary,
+        fontWeight: active ? 700 : 500,
+        backgroundColor: active ? `${COLORS.secondary}70` : 'transparent',
+        borderColor: `${COLORS.border}50`,
+      }}
+    >
+      <span>{label}</span>
+      <span className="text-xs" style={{ color: COLORS.accent }}>•</span>
+    </button>
+  );
+}
 
 export default function PublicationsList() {
   const { settings } = useSettings();
@@ -19,9 +52,10 @@ export default function PublicationsList() {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [total, setTotal] = useState(0);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  const isRTL = language === 'ur';
 
   useEffect(() => {
     if (queryCategory !== null) {
@@ -31,20 +65,17 @@ export default function PublicationsList() {
     }
   }, [queryCategory]);
 
-  const categories = PUBLICATION_CATEGORIES;
-
   const loadPublications = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getPublications({ category, search, page: pageNum, limit: 6 });
-      // Backend returns { books, page, pages, total }
+      const data = await getPublications({ category, search, page: pageNum, limit: 10 });
       setPublications(data.books || []);
       setPages(data.pages || 1);
       setPage(data.page || 1);
       setTotal(data.total || 0);
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to load publications');
+      setError(err.response?.data?.message || err.message || 'Failed to load');
     } finally {
       setLoading(false);
     }
@@ -69,143 +100,195 @@ export default function PublicationsList() {
     window.scrollTo(0, 0);
   };
 
-  return (
-    <div className={`bg-background dark:bg-slate-900 py-12 min-h-screen ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+  const categories = PUBLICATION_CATEGORIES;
 
-        {/* Header Title */}
-        <div className="mb-10 text-center">
-          <span className="text-xs font-bold text-accent dark:text-amber-500 uppercase tracking-widest font-serif block mb-1">
-            {language === 'en' ? 'SCIENTIFIC WORKS' : 'علمی تصانیف'}
+  return (
+    <div
+      dir={isRTL ? 'rtl' : 'ltr'}
+      className="min-h-screen py-8"
+      style={{ backgroundColor: COLORS.background }}
+    >
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ── Page heading ── */}
+        <div className="text-center mb-8">
+          <span
+            className="text-xs font-bold uppercase tracking-widest block mb-1 font-serif"
+            style={{ color: COLORS.accent }}
+          >
+            {isRTL ? 'علمی تصانیف' : 'SCIENTIFIC WORKS'}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-primary dark:text-accent font-serif tracking-wide">
-            {language === 'en' ? 'Books & Publications' : 'کتب و مطبوعات'}
-          </h1>
-          <p className="text-slate-550 dark:text-slate-400 text-sm font-light mt-2 max-w-md mx-auto">
-            {language === 'en' ? 'Access and study books, articles, and educational notes on Google Drive.' : 'گوگل ڈرائیو پر موجود کتابیں، مقالات اور تعلیمی نوٹس حاصل کریں اور ان کا مطالعہ کریں۔'}
+
+          <div className="flex items-center justify-center gap-4 mb-2">
+            {/* decorative diamond */}
+            <span style={{ color: COLORS.accent }} className="text-2xl select-none">❖</span>
+            <h1
+              className="text-3xl sm:text-4xl font-extrabold font-serif"
+              style={{ color: COLORS.primary }}
+            >
+              {isRTL ? 'کتب و مطبوعات' : 'Books & Publications'}
+            </h1>
+            <span style={{ color: COLORS.accent }} className="text-2xl select-none">❖</span>
+          </div>
+
+          <p className="text-sm font-light" style={{ color: COLORS.textSecondary }}>
+            {isRTL
+              ? 'گوگل ڈرائیو پر موجود کتابیں، مقالات اور تعلیمی نوٹس حاصل کریں اور ان کا مطالعہ کریں۔'
+              : 'Access and study books, articles, and educational notes on Google Drive.'}
           </p>
         </div>
 
-        {/* Search & Filter Toolbar */}
-        <div className={`premium-card p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-5 ${language === 'ur' ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+        {/* ── Two-column layout ── */}
+        <div className={`flex flex-col lg:flex-row gap-6 ${isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-start`}>
 
-          {/* Search Form */}
-          <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
-            <Input
-              type="text"
-              placeholder={language === 'en' ? 'Search publications...' : 'مطبوعات تلاش کریں...'}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              inputClassName={`w-full pr-9 pl-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 text-slate-800 dark:text-white rounded outline-none focus:border-accent dark:focus:border-accent focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400 ${language === 'ur' ? 'text-right text-pr-9' : 'text-left pl-9'}`}
-              border=""
-            />
-            <button type="submit" className={`absolute ${language === 'ur' ? 'right-3' : 'left-3'} top-2.5 text-slate-400 hover:text-primary dark:hover:text-accent`}>
-              <Search className="w-4.5 h-4.5" />
-            </button>
-          </form>
+          {/* ── MAIN: publication cards ── */}
+          <div className="flex-1 min-w-0 w-full">
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: COLORS.primary }} />
+              </div>
+            ) : publications && publications.length > 0 ? (
+              <>
+                <div className="flex flex-col gap-4 mb-10">
+                  {publications.map((pub) => (
+                    <PublicationCard key={pub._id} publication={pub} />
+                  ))}
+                </div>
 
-          {/* Category Dropdown */}
-          <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-start md:justify-end">
-            <SlidersHorizontal className="w-4.5 h-4.5 text-slate-400" />
-            <select
-              value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-border dark:border-slate-700 rounded outline-none text-slate-700 dark:text-slate-300 focus:border-accent dark:focus:border-accent ${language === 'ur' ? 'text-right' : 'text-left'}`}
-            >
-              <option value="">{language === 'en' ? 'All Categories' : 'تمام زمرے'}</option>
-              {categories.map((cat) => (
-                <option key={cat.value} value={cat.value}>
-                  {language === 'ur' ? cat.labelUr : cat.labelEn}
-                </option>
-              ))}
-            </select>
-          </div>
-
-        </div>
-
-        {/* Quick Topics Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10 shrink-0">
-          <button
-            onClick={() => handleCategoryChange('')}
-            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === ''
-              ? 'bg-primary border-primary text-white shadow-sm'
-              : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
-              }`}
-          >
-            {language === 'en' ? 'All Topics' : 'تمام زمرے'}
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => handleCategoryChange(cat.value)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${selectedCategory === cat.value
-                ? 'bg-primary border-primary text-white shadow-sm'
-                : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-accent dark:hover:border-accent hover:text-primary dark:hover:text-accent'
-                }`}
-            >
-              {language === 'ur' ? cat.labelUr : cat.labelEn}
-            </button>
-          ))}
-        </div>
-
-        {/* Content list Grid */}
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
-        ) : publications && publications.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {publications.map((pub) => (
-                <PublicationCard key={pub._id} publication={pub} />
-              ))}
-            </div>
-
-            {/* Pagination Controls */}
-            {pages > 1 && (
-              <div className="flex justify-center items-center gap-1.5 pt-4 text-slate-800 dark:text-white">
-                <button
-                  onClick={() => handlePageChange(Math.max(1, page - 1))}
-                  disabled={page === 1}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                >
-                  {language === 'en' ? 'Previous' : 'پچھلا'}
-                </button>
-                {[...Array(pages).keys()].map((pNum) => (
-                  <button
-                    key={pNum + 1}
-                    onClick={() => handlePageChange(pNum + 1)}
-                    className={`w-8 h-8 rounded text-xs font-bold border transition-colors ${page === pNum + 1
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white dark:bg-slate-800 border-border dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                      }`}
-                  >
-                    {pNum + 1}
-                  </button>
-                ))}
-                <button
-                  onClick={() => handlePageChange(Math.min(pages, page + 1))}
-                  disabled={page === pages}
-                  className="px-3.5 py-1.5 rounded text-xs font-bold border border-border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                >
-                  {language === 'en' ? 'Next' : 'اگلا'}
-                </button>
+                {/* Pagination */}
+                {pages > 1 && (
+                  <div className="flex justify-center items-center gap-1.5 pt-4">
+                    <button
+                      onClick={() => handlePageChange(Math.max(1, page - 1))}
+                      disabled={page === 1}
+                      className="px-3.5 py-1.5 rounded text-xs font-bold border disabled:opacity-40 transition-colors"
+                      style={{ borderColor: COLORS.border, backgroundColor: COLORS.white, color: COLORS.textSecondary }}
+                    >
+                      {isRTL ? 'پچھلا' : 'Previous'}
+                    </button>
+                    {[...Array(pages).keys()].map((pNum) => (
+                      <button
+                        key={pNum + 1}
+                        onClick={() => handlePageChange(pNum + 1)}
+                        className="w-8 h-8 rounded text-xs font-bold border transition-colors"
+                        style={{
+                          backgroundColor: page === pNum + 1 ? COLORS.primary : COLORS.white,
+                          borderColor: page === pNum + 1 ? COLORS.primary : COLORS.border,
+                          color: page === pNum + 1 ? '#fff' : COLORS.textSecondary,
+                        }}
+                      >
+                        {pNum + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(Math.min(pages, page + 1))}
+                      disabled={page === pages}
+                      className="px-3.5 py-1.5 rounded text-xs font-bold border disabled:opacity-40 transition-colors"
+                      style={{ borderColor: COLORS.border, backgroundColor: COLORS.white, color: COLORS.textSecondary }}
+                    >
+                      {isRTL ? 'اگلا' : 'Next'}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-16 rounded-lg border" style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}>
+                <BookOpen className="w-12 h-12 mx-auto mb-4" style={{ color: COLORS.accent }} />
+                <h3 className="text-lg font-bold font-serif mb-1" style={{ color: COLORS.textPrimary }}>
+                  {isRTL ? 'کوئی مطبوعہ دستیاب نہیں ہے' : 'No publications available'}
+                </h3>
+                <p className="text-xs" style={{ color: COLORS.textSecondary }}>
+                  {isRTL ? 'براہ کرم تلاش کے الفاظ یا فلٹر تبدیل کریں۔' : 'Try changing the search or filters.'}
+                </p>
               </div>
             )}
-          </>
-        ) : (
-          <div className="text-center py-16 premium-card">
-            <BookOpen className="w-12 h-12 text-accent mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-700 dark:text-white font-serif">
-              {language === 'en' ? 'No publications available' : 'کوئی مطبوعہ دستیاب نہیں ہے'}
-            </h3>
-            <p className="text-slate-550 dark:text-slate-400 text-xs mt-1">
-              {language === 'en' ? 'Please try changing the search terms or topic filters.' : 'براہ کرم تلاش کے الفاظ یا موضوع کے فلٹرز کو تبدیل کرنے کی کوشش کریں۔'}
-            </p>
           </div>
-        )}
 
+          {/* ── SIDEBAR ── */}
+          <aside className="w-full lg:w-72 xl:w-80 shrink-0">
 
+            {/* Search Books widget */}
+            <div className="mb-6 rounded-sm overflow-hidden border shadow-sm" style={{ borderColor: COLORS.border }}>
+              <SidebarHeader label={isRTL ? 'کتب تلاش کریں' : 'Search Books'} icon={Search} />
+              <div className="p-3" style={{ backgroundColor: COLORS.white }}>
+                <form onSubmit={handleSearchSubmit} className="relative">
+                  <input
+                    type="text"
+                    placeholder={isRTL ? 'مطبوعات تلاش کریں...' : 'Search publications...'}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full border rounded px-3 py-2 text-sm outline-none transition-all"
+                    style={{
+                      borderColor: COLORS.border,
+                      backgroundColor: COLORS.background,
+                      color: COLORS.textPrimary,
+                      textAlign: isRTL ? 'right' : 'left',
+                      paddingRight: isRTL ? '2.25rem' : '0.75rem',
+                      paddingLeft: isRTL ? '0.75rem' : '2.25rem',
+                    }}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                  />
+                  <button
+                    type="submit"
+                    className="absolute top-2.5 transition-opacity hover:opacity-70 cursor-pointer"
+                    style={{
+                      [isRTL ? 'right' : 'left']: '0.65rem',
+                      color: COLORS.accent,
+                    }}
+                  >
+                    <Search className="w-4 h-4" />
+                  </button>
+                </form>
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchTerm('');
+                      loadPublications(1, selectedCategory, '');
+                    }}
+                    className="mt-2 text-xs text-slate-500 hover:text-primary underline block text-center w-full"
+                  >
+                    {isRTL ? 'تلاش ختم کریں' : 'Clear search'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Related books */}
+            <div className="mb-6 rounded-sm overflow-hidden border shadow-sm" style={{ borderColor: COLORS.border }}>
+              <SidebarHeader label={isRTL ? 'مربوط کتابیں' : 'Related Books'} />
+              <div
+                className="p-1"
+                style={{ backgroundColor: COLORS.white }}
+              >
+                <SidebarLink
+                  label={isRTL ? 'تمام کتب' : 'All Books'}
+                  active={selectedCategory === ''}
+                  onClick={() => handleCategoryChange('')}
+                />
+              </div>
+            </div>
+
+            {/* Topics / Categories */}
+            <div className="rounded-sm overflow-hidden border shadow-sm" style={{ borderColor: COLORS.border }}>
+              <SidebarHeader label={isRTL ? 'مضامین کریں' : 'Topics'} />
+              <div
+                className="p-1"
+                style={{ backgroundColor: COLORS.white }}
+              >
+                {categories.map((cat) => (
+                  <SidebarLink
+                    key={cat.value}
+                    label={isRTL ? cat.labelUr : cat.labelEn}
+                    active={selectedCategory === cat.value}
+                    onClick={() => handleCategoryChange(cat.value)}
+                  />
+                ))}
+              </div>
+            </div>
+
+          </aside>
+        </div>
       </div>
     </div>
   );

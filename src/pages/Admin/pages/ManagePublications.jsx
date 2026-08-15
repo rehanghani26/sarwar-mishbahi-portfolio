@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle, Eye } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle, Eye, Search } from 'lucide-react';
 import { getPublications, createPublication, updatePublication, deletePublication } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
 import { Input, PdfViewer, Table } from '@/components';
+import { BACKEND_URL } from '@/constants/urls';
 
 import { CATEGORY_MAP, PUBLICATION_TRANSLATIONS, BOOK_LANGUAGE_TRANSLATIONS } from '@/utils/categories';
 
@@ -47,13 +48,24 @@ export default function ManagePublications() {
   const [previewTitle, setPreviewTitle] = useState('Preview');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  // Pagination & Filter State
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const limit = 10;
+
   const categories = CATEGORY_MAP.publications;
 
-  const loadPublications = async () => {
+  const loadPublications = async (pageNum = page, category = selectedCategory, search = searchTerm) => {
     try {
       setLoading(true);
-      const data = await getPublications();
-      setPublications(Array.isArray(data) ? data : (data.books || []));
+      const data = await getPublications({ page: pageNum, limit, category, search });
+      setPublications(data.books || (Array.isArray(data) ? data : []));
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
     } catch (err) {
       console.error('Failed to load publications:', err);
     } finally {
@@ -62,8 +74,26 @@ export default function ManagePublications() {
   };
 
   useEffect(() => {
-    loadPublications();
-  }, []);
+    loadPublications(page, selectedCategory, searchTerm);
+  }, [page, selectedCategory]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setPage(1);
+    loadPublications(1, selectedCategory, searchTerm);
+  };
+
+  const handleCategoryFilter = (cat) => {
+    setSelectedCategory(cat);
+    setPage(1);
+    loadPublications(1, cat, searchTerm);
+  };
+
+  const handlePageChange = (pageNum) => {
+    setPage(pageNum);
+    loadPublications(pageNum, selectedCategory, searchTerm);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -205,18 +235,17 @@ export default function ManagePublications() {
   };
 
   return (
-    <div className={`bg-background py-10 min-h-[80vh] ${language === 'ur' ? 'text-right' : 'text-left'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
+    <div className="bg-background py-10 min-h-[80vh] text-right" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Module Header */}
-        <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-gray-300 pb-5 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-gray-300 pb-5 text-right">
           <div className="flex items-center gap-3">
             <Link to="/admin/dashboard" className="p-2 border-2 border-gray-300 bg-white rounded text-slate-600 hover:text-accent hover:border-accent shrink-0 transition-colors">
-              <ArrowRight className={`w-4.5 h-4.5 ${language === 'en' ? 'rotate-180' : ''}`} />
+              <ArrowRight className="w-4.5 h-4.5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-primary font-serif">{language === 'en' ? 'Manage Publications' : 'مطبوعات کا انتظام'}</h1>
-
+              <h1 className="text-2xl font-bold text-primary font-serif">مطبوعات و کتب کا انتظام</h1>
             </div>
           </div>
 
@@ -226,7 +255,7 @@ export default function ManagePublications() {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-bold shadow-sm transition-all uppercase tracking-wider font-serif border-2 border-primary/60"
             >
               <Plus className="w-4 h-4 text-accent" />
-              {language === 'en' ? 'Add Publication' : 'مطبوعہ شامل کریں'}
+              مطبوعہ شامل کریں
             </button>
           )}
         </div>
@@ -548,79 +577,145 @@ export default function ManagePublications() {
             </form>
           </div>
         ) : (
-          /* Publications List Table */
-          <div className="bg-white border-2 border-gray-300 rounded-lg shadow-md overflow-hidden">
-            <Table
-              loadingTableContent={loading}
-              data={publications}
-              noRecordText={language === 'en' ? 'No publications listed yet' : 'کوئی مطبوعہ درج نہیں ہے'}
-              tableLayout={[
-                {
-                  headData: language === 'en' ? 'Title' : 'عنوان',
-                  bodyData: (pub) => <span className={`font-bold font-serif max-w-xs truncate ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.title}</span>,
-                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
-                },
-                {
-                  headData: language === 'en' ? 'Author' : 'مصنف',
-                  bodyData: (pub) => <span className={`font-light text-xs ${language === 'ur' ? 'text-right' : 'text-left'}`}>{pub.author}</span>,
-                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
-                },
-                {
-                  headData: language === 'en' ? 'Category' : 'زمرہ',
-                  bodyData: (pub) => (
-                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/20">
-                      {language === 'en' ? pub.category : (PUBLICATION_TRANSLATIONS[pub.category] || pub.category)}
-                    </span>
-                  ),
-                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
-                },
-                {
-                  headData: language === 'en' ? 'Language' : 'زبان',
-                  bodyData: (pub) => (
-                    <span className={`text-xs font-semibold text-slate-500 ${language === 'ur' ? 'text-right' : 'text-left'}`}>
-                      {language === 'en' ? pub.blanguage : (BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage)}
-                    </span>
-                  ),
-                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-right' : 'text-left'}`
-                },
-                {
-                  headData: language === 'en' ? 'Actions' : 'اقدامات',
-                  bodyData: (pub) => (
-                    <div className="inline-flex items-center gap-2">
-                      {pub.pdf?.url && (
-                        <a
-                          href={pub.pdf.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 text-slate-550 hover:bg-slate-100 rounded transition-colors flex items-center justify-center border border-transparent hover:border-gray-300"
-                          title={language === 'en' ? 'View PDF' : 'کتاب دیکھیں'}
+          /* Publications List Table with Toolbar and Pagination */
+          <div className="space-y-4">
+            {/* Search & Filter Toolbar */}
+            <div className="bg-white border-2 border-gray-300 rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+              <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-72">
+                <input
+                  type="text"
+                  placeholder="مطبوعات تلاش کریں..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full border-2 border-gray-300 rounded px-3 py-1.5 text-xs outline-none focus:border-primary transition-colors pr-8 pl-3 text-right"
+                  dir="rtl"
+                />
+                <button
+                  type="submit"
+                  className="absolute top-2 text-slate-400 hover:text-primary right-2.5"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </form>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => handleCategoryFilter(e.target.value)}
+                  className="border-2 border-gray-300 rounded px-3 py-1.5 text-xs outline-none bg-white text-slate-700 focus:border-primary text-right"
+                  dir="rtl"
+                >
+                  <option value="">تمام زمرے</option>
+                  {categories.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.labelUr}
+                    </option>
+                  ))}
+                </select>
+
+                <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded border border-gray-200 shrink-0">
+                  مجموعی: {total}
+                </span>
+              </div>
+            </div>
+
+            {/* Main Table with Integrated Pagination */}
+            <div className="bg-white border-2 border-gray-300 rounded-lg shadow-md overflow-hidden">
+              <Table
+                loadingTableContent={loading}
+                data={publications}
+                noRecordText="کوئی مطبوعہ درج نہیں ہے"
+                currentPage={page}
+                totalPages={pages}
+                totalItems={total}
+                pageSize={limit}
+                onPageChange={handlePageChange}
+                onRowClick={(pub) => openEditForm(pub)}
+                language="ur"
+                tableLayout={[
+                  {
+                    headData: 'غلاف',
+                    bodyData: (pub) => {
+                      const imgSrc = pub.coverImage?.url || (typeof pub.coverImage === 'string' ? pub.coverImage : null);
+                      const finalUrl = imgSrc ? (imgSrc.startsWith('/') ? `${BACKEND_URL}${imgSrc}` : imgSrc) : null;
+                      return (
+                        <div className="w-10 h-14 rounded overflow-hidden shadow-sm border border-gray-200 bg-slate-100 flex items-center justify-center shrink-0 mx-auto">
+                          {finalUrl ? (
+                            <img
+                              src={finalUrl}
+                              alt={pub.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                          ) : (
+                            <Book className="w-5 h-5 text-slate-400" />
+                          )}
+                        </div>
+                      );
+                    },
+                    tdClassName: "border-b border-gray-200 py-2.5 text-center w-14 shrink-0"
+                  },
+                  {
+                    headData: 'عنوان',
+                    bodyData: (pub) => <span className="font-bold font-serif max-w-xs truncate block text-right">{pub.title}</span>,
+                    tdClassName: "border-b border-gray-200 py-3 text-right"
+                  },
+                  {
+                    headData: 'مصنف',
+                    bodyData: (pub) => <span className="font-light text-xs text-right">{pub.author}</span>,
+                    tdClassName: "border-b border-gray-200 py-3 text-right"
+                  },
+                  {
+                    headData: 'زمرہ',
+                    bodyData: (pub) => (
+                      <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/20">
+                        {PUBLICATION_TRANSLATIONS[pub.category] || pub.category}
+                      </span>
+                    ),
+                    tdClassName: "border-b border-gray-200 py-3 text-right"
+                  },
+                  {
+                    headData: 'زبان',
+                    bodyData: (pub) => (
+                      <span className="text-xs font-semibold text-slate-500 text-right">
+                        {BOOK_LANGUAGE_TRANSLATIONS[pub.blanguage] || pub.blanguage}
+                      </span>
+                    ),
+                    tdClassName: "border-b border-gray-200 py-3 text-right"
+                  },
+                  {
+                    headData: 'اقدامات',
+                    bodyData: (pub) => (
+                      <div className="inline-flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEditForm(pub);
+                          }}
+                          className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors border border-transparent hover:border-amber-300"
+                          title="ترمیم کریں"
                         >
-                          <Eye className="w-4 h-4" />
-                        </a>
-                      )}
-                      <button
-                        onClick={() => openEditForm(pub)}
-                        className="p-1.5 text-accent hover:bg-amber-50 rounded transition-colors border border-transparent hover:border-amber-300"
-                        title={language === 'en' ? 'Edit' : 'ترمیم کریں'}
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(pub._id)}
-                        className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-300"
-                        title={language === 'en' ? 'Delete' : 'حذف کریں'}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ),
-                  tdClassName: `border-b border-gray-200 py-3 ${language === 'ur' ? 'text-left' : 'text-right'}`
-                }
-              ]}
-              // Optional: Add a border to table header
-              theadClassName="border-b-2 border-gray-300"
-              thClassName="px-4 py-3 text-xs font-bold text-slate-600 uppercase tracking-wider border-b-2 border-gray-300"
-            />
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(pub._id);
+                          }}
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-300"
+                          title="حذف کریں"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                    tdClassName: "border-b border-gray-200 py-3 text-left"
+                  }
+                ]}
+                theadClassName="border-b-2 border-gray-300 bg-primary"
+                thClassName="px-4 py-3 text-xs font-bold text-white uppercase tracking-wider border-b-2 border-gray-300"
+              />
+            </div>
           </div>
         )}
 

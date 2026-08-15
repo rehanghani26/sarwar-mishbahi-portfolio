@@ -20,6 +20,7 @@ import EventsList from '../pages/Events/pages/EventsList';
 import ContactPage from '../pages/Contact/pages/ContactPage';
 import PageNotFound from '../pages/PageNotFound/pages/PageNotFound';
 import MyDetails from '../pages/User/pages/MyDetails';
+import YouTubeVideos from '../pages/YouTubeVideos/YouTubeVideos';
 
 // Admin Page Imports
 import Login from '../pages/Admin/pages/Login';
@@ -33,6 +34,7 @@ import ManageLectures from '../pages/Admin/pages/ManageLectures';
 import ManageEvents from '../pages/Admin/pages/ManageEvents';
 import ManageSettings from '../pages/Admin/pages/ManageSettings';
 import ManageUsers from '../pages/Admin/pages/ManageUsers';
+import YouTubeManager from '../pages/Admin/pages/YouTubeManager';
 
 // Route Guard
 import { AdminRoute } from '@/components';
@@ -65,6 +67,7 @@ export default function AppRoutes() {
         <Route path="events" element={<EventsList />} />
         <Route path="contact" element={<ContactPage />} />
         <Route path="my-details" element={<MyDetails />} />
+        <Route path="youtube-videos" element={<YouTubeVideos />} />
         {/* 404 */}
         <Route path="*" element={<PageNotFound />} />
       </Route>
@@ -81,6 +84,7 @@ export default function AppRoutes() {
           <Route path="/admin/events" element={<ManageEvents />} />
           <Route path="/admin/settings" element={<ManageSettings />} />
           <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/youtube" element={<YouTubeManager />} />
         </Route>
       </Route>
 

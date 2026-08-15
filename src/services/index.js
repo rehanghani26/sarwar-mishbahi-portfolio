@@ -9,6 +9,7 @@ export * from './fatwa';
 export * from './user';
 export * from './profile';
 export * from './comment';
+export * from './youtube';
 
 
 

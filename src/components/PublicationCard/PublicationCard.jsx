@@ -1,55 +1,30 @@
-import React, { useState } from 'react';
-import { Book, Download, ExternalLink, FileText } from 'lucide-react';
-import { useSettings } from '@/hooks/useSettings';
-import { COLORS } from '@/utils/themeColors';
-import { BACKEND_URL } from '@/constants/urls';
-import { PUBLICATION_CATEGORY_TRANSLATIONS, BOOK_LANGUAGE_TRANSLATIONS } from '@/utils/categories';
-import { PdfViewer } from '../PdfViewer';
-
-function BookCoverPlaceholder({ title, category }) {
-  return (
-    <div
-      style={{ backgroundColor: COLORS.primary, borderColor: COLORS.accent }}
-      className="w-[110px] h-[150px] shrink-0 border-2 rounded-md shadow-md flex flex-col items-center justify-between p-3 relative overflow-hidden select-none"
-    >
-      {/* Decorative inner gold border frame */}
-      <div
-        style={{ borderColor: 'rgba(184, 156, 125, 0.25)' }}
-        className="absolute inset-1.5 border rounded"
-      />
-
-      {/* Mini top tag */}
-      <span className="text-[8px] font-bold text-accent/80 z-10 tracking-widest uppercase text-center line-clamp-1">
-        {category || 'Islamic Book'}
-      </span>
-
-      {/* Center decoration icon */}
-      <Book className="w-8 h-8 text-accent/50 z-10" />
-
-      {/* Title snippet */}
-      <span
-        className="text-[9px] font-semibold text-white/90 z-10 text-center line-clamp-2 leading-tight font-serif"
-        dir="rtl"
-      >
-        {title}
-      </span>
-    </div>
-  );
-}
+import React, { useState } from "react";
+import {
+  Book,
+  Download,
+  ExternalLink,
+  Calendar,
+  User,
+  FileText,
+} from "lucide-react";
+import { COLORS } from "@/utils/themeColors";
+import { BACKEND_URL } from "@/constants/urls";
+import {
+  PUBLICATION_CATEGORY_TRANSLATIONS,
+  BOOK_LANGUAGE_TRANSLATIONS,
+} from "@/utils/categories";
+import { PdfViewer } from "../PdfViewer";
 
 export default function PublicationCard({ publication }) {
-  const { settings } = useSettings();
-  const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
   const [isPdfOpen, setIsPdfOpen] = useState(false);
 
-  // Backend model fields:
-  // title, slug, summary, category, author, blanguage, pageCount,
-  // coverImage: { url, public_id }, pdf: { url, public_id }, publishDate, viewCount, downloadCount
+  if (!publication) return null;
+
   const {
     title,
     summary,
     category,
-    blanguage,
+    blanguage = "Urdu",
     author,
     publishDate,
     coverImage,
@@ -58,142 +33,244 @@ export default function PublicationCard({ publication }) {
   } = publication;
 
   const formattedDate = publishDate
-    ? new Date(publishDate).toLocaleDateString(language === 'ur' ? 'ur-PK' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
+    ? new Date(publishDate).toLocaleDateString("ur-PK", {
+        year: "numeric",
+        month: "long",
       })
-    : '';
+    : "";
 
-  // coverImage is { url, public_id } from backend
   const getCoverImageSrc = (img) => {
     if (!img) return null;
-    const url = typeof img === 'object' ? img.url : img;
+    const url = typeof img === "object" ? img.url : img;
     if (!url) return null;
-    if (url.startsWith('/')) return `${BACKEND_URL}${url}`;
+    if (url.startsWith("/")) return `${BACKEND_URL}${url}`;
     return url;
   };
 
-  // pdf is { url, public_id } from backend
-  const pdfUrl = pdf?.url || (typeof pdf === 'string' ? pdf : null);
-
+  const pdfUrl = pdf?.url || (typeof pdf === "string" ? pdf : null);
   const coverImageSrc = getCoverImageSrc(coverImage);
-  const isRTL = language === 'ur';
+
+  const categoryLabel =
+    PUBLICATION_CATEGORY_TRANSLATIONS[category] || category || "کتب و رسائل";
+  const languageLabel =
+    BOOK_LANGUAGE_TRANSLATIONS[blanguage] || blanguage || "اردو";
 
   return (
-    <div
-      style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
-      className={`border rounded-xl p-5 flex flex-col sm:flex-row gap-5 hover:shadow-md transition-all group relative overflow-hidden ${isRTL ? 'text-right' : 'text-left'}`}
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      {/* Book Cover Image Container */}
-      <div className="flex justify-center sm:justify-start shrink-0">
-        {coverImageSrc ? (
-          <img
-            src={coverImageSrc}
-            alt={title}
-            className="w-[110px] h-[150px] shrink-0 object-cover rounded-md shadow-md border"
-            style={{ borderColor: COLORS.border }}
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-          />
-        ) : (
-          <BookCoverPlaceholder title={title} category={category} />
-        )}
-      </div>
-
-      {/* Book details container */}
-      <div className="flex flex-col flex-grow min-w-0 justify-between">
-        <div>
-          {/* Category Badge & Language */}
-          <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-100 shrink-0">
-            <span
-              style={{ backgroundColor: COLORS.secondary, color: COLORS.primary }}
-              className="text-xs font-bold px-2.5 py-1 rounded-full text-[10px]"
+    <>
+      <div
+        dir="rtl"
+        className="rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 text-right border"
+        style={{
+          backgroundColor: COLORS.background || "#FAF6F0",
+          borderColor: COLORS.border || "#EBDCCB",
+        }}
+      >
+        {/* ══════════════════════════════════════════════════════════════
+            RIGHT SIDE: Content, Meta, Description & Action Buttons
+        ══════════════════════════════════════════════════════════════ */}
+        <div className="flex-1 flex flex-col justify-between text-right z-10 w-full space-y-3">
+          <div>
+            {/* Top Bar: Category Pill on the Right, Language on the Left */}
+            <div
+              className="flex items-center justify-between pb-2 border-b"
+              style={{ borderColor: `${COLORS.border}80` }}
             >
-              {language === 'ur' ? (PUBLICATION_CATEGORY_TRANSLATIONS[category] || category) : category}
-            </span>
-            {blanguage && (
-              <span className="text-[10px] text-slate-500 font-medium">
-                {BOOK_LANGUAGE_TRANSLATIONS[blanguage] || blanguage}
+              <span
+                style={{
+                  backgroundColor: COLORS.secondary,
+                  color: COLORS.primary,
+                }}
+                className="text-xs font-bold px-3 py-1 rounded-full text-[11px] shadow-xs"
+              >
+                {categoryLabel}
               </span>
-            )}
-          </div>
+              <span
+                className="text-xs font-semibold"
+                style={{ color: COLORS.accent }}
+              >
+                {languageLabel}
+              </span>
+            </div>
 
-          {/* Title */}
-          <h3
-            style={{ color: COLORS.textPrimary }}
-            className={`text-md font-bold leading-snug mb-1 font-serif line-clamp-2 ${isRTL ? 'text-right' : 'text-left'}`}
-          >
-            {title}
-          </h3>
+            {/* Book Title with original font size & color */}
+            <h3
+              style={{ color: COLORS.primary }}
+              className="text-lg sm:text-xl font-bold leading-snug mb-2 font-serif mt-2"
+            >
+              {title}
+            </h3>
 
-          {/* Author Details & Date */}
-          <div className="flex items-center justify-between mb-2 shrink-0 text-[11px] text-slate-500">
+            {/* Author Meta Row */}
             {author && (
-              <span style={{ color: COLORS.accent }} className="font-semibold">
-                {language === 'en' ? 'Author:' : 'مصنف:'} {author}
-              </span>
+              <div
+                className="flex items-center gap-1.5 text-xs font-semibold mb-2"
+                style={{ color: COLORS.accent }}
+              >
+                <User className="w-3.5 h-3.5 shrink-0" />
+                <span>مصنف: {author}</span>
+              </div>
             )}
-            <span>{formattedDate}</span>
+
+            {/* Date & Page Count Meta Row with original textSecondary color */}
+            <div
+              className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs mb-3"
+              style={{ color: COLORS.textSecondary }}
+            >
+              {pageCount && (
+                <div className="flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 shrink-0" />
+                  <span>{pageCount} صفحات</span>
+                </div>
+              )}
+              {formattedDate && (
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 shrink-0" />
+                  <span>{formattedDate}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Summary / Description with original textPrimary color and size */}
+            {summary && (
+              <p
+                className="text-sm leading-relaxed mb-4 font-light"
+                style={{ color: COLORS.textPrimary }}
+              >
+                {summary}
+              </p>
+            )}
           </div>
 
-          {/* Page count if available */}
-          {pageCount && (
-            <div className="flex items-center gap-1 text-[11px] text-slate-400 mb-2">
-              <FileText className="w-3 h-3" />
-              <span>{pageCount} {language === 'en' ? 'pages' : 'صفحات'}</span>
+          {/* Action Buttons: Read Online & Download with original colors */}
+          <div
+            className="pt-3 border-t flex items-center justify-end gap-3"
+            style={{ borderColor: `${COLORS.border}80` }}
+          >
+            {pdfUrl ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsPdfOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer border transition-colors hover:bg-white"
+                  style={{
+                    borderColor: COLORS.border,
+                    color: COLORS.primary,
+                    backgroundColor: "rgba(255,255,255,0.7)",
+                  }}
+                >
+                  <ExternalLink
+                    className="w-3.5 h-3.5"
+                    style={{ color: COLORS.accent }}
+                  />
+                  <span>آن لائن مطالعہ</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPdfOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-white rounded-xl cursor-pointer border-0 hover:opacity-90 transition-opacity shadow-sm"
+                  style={{ backgroundColor: COLORS.primary }}
+                >
+                  <Download
+                    className="w-4 h-4"
+                    style={{ color: COLORS.accent }}
+                  />
+                  <span>ڈاؤن لوڈ کریں</span>
+                </button>
+              </>
+            ) : (
+              <span
+                className="text-xs italic"
+                style={{ color: COLORS.textSecondary }}
+              >
+                پی ڈی ایف دستیاب نہیں
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════
+            LEFT SIDE: Dark Textured Frame with Open Book / Cover
+        ══════════════════════════════════════════════════════════════ */}
+        <div
+          className="relative w-full md:w-56 lg:w-60 h-56 sm:h-60 rounded-2xl overflow-hidden shadow-md border flex items-center justify-center p-3 shrink-0 select-none"
+          style={{
+            backgroundColor: COLORS.primary,
+            borderColor: `${COLORS.accent}40`,
+          }}
+        >
+          {/* Book Presentation */}
+          {coverImageSrc ? (
+            <div className="relative w-32 sm:w-36 h-44 sm:h-48 rounded shadow-xl overflow-hidden border border-white/20">
+              <img
+                src={coverImageSrc}
+                alt={title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          ) : (
+            /* Open Book Aesthetic Mockup */
+            <div
+              className="relative w-40 sm:w-44 h-32 sm:h-36 rounded-sm shadow-xl border flex items-center justify-center p-2"
+              style={{
+                backgroundColor: COLORS.background || "#F4EBE1",
+                borderColor: COLORS.border,
+              }}
+            >
+              {/* Spine crease */}
+              <div className="absolute inset-y-0 left-1/2 w-2.5 -ml-1.5 bg-gradient-to-r from-black/10 via-black/20 to-black/10 z-10 pointer-events-none"></div>
+
+              {/* Left Page */}
+              <div className="flex-1 h-full pr-1 flex flex-col justify-between py-1 border-r border-black/10 text-right">
+                <span
+                  className="text-[8px] font-bold pb-0.5 truncate block"
+                  style={{ color: COLORS.accent }}
+                >
+                  {categoryLabel}
+                </span>
+                <div className="space-y-1">
+                  <div className="h-1 bg-slate-300/80 rounded w-full"></div>
+                  <div className="h-1 bg-slate-300/80 rounded w-4/5"></div>
+                  <div className="h-1 bg-slate-300/80 rounded w-full"></div>
+                </div>
+                <span className="text-[7px] text-slate-400 text-center font-mono">
+                  148
+                </span>
+              </div>
+
+              {/* Right Page */}
+              <div className="flex-1 h-full pl-1 flex flex-col justify-between py-1 text-right">
+                <span
+                  className="text-[8px] font-extrabold line-clamp-1 block"
+                  style={{ color: COLORS.primary }}
+                >
+                  {title}
+                </span>
+                <div className="space-y-1">
+                  <div className="h-1 bg-slate-300/80 rounded w-full"></div>
+                  <div className="h-1 bg-slate-300/80 rounded w-5/6"></div>
+                  <div className="h-1 bg-slate-300/80 rounded w-2/3"></div>
+                </div>
+                <span className="text-[7px] text-slate-400 text-center font-mono">
+                  149
+                </span>
+              </div>
             </div>
           )}
-
-          {/* Summary/Description */}
-          {summary && (
-            <p className={`text-xs font-light leading-relaxed line-clamp-2 ${isRTL ? 'text-right' : 'text-left'} mb-3`} style={{ color: COLORS.textSecondary }}>
-              {summary}
-            </p>
-          )}
-        </div>
-
-        {/* Action Link Buttons */}
-        <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
-          {pdfUrl ? (
-            <>
-              <button
-                type="button"
-                onClick={() => setIsPdfOpen(true)}
-                style={{ backgroundColor: COLORS.primary }}
-                className="flex-grow flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold text-white rounded hover:opacity-90 transition-opacity cursor-pointer border-0"
-              >
-                <ExternalLink className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
-                {language === 'en' ? 'View PDF' : 'پی ڈی ایف دیکھیں'}
-              </button>
-              <a
-                href={pdfUrl}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ backgroundColor: COLORS.background }}
-                className="flex items-center justify-center p-2 text-slate-600 rounded hover:bg-slate-200 transition-colors decoration-none"
-                title={language === 'en' ? 'Download PDF' : 'پی ڈی ایف ڈاؤن لوڈ کریں'}
-              >
-                <Download className="w-4 h-4" />
-              </a>
-            </>
-          ) : (
-            <span className="text-xs text-slate-400 italic">
-              {language === 'en' ? 'No PDF available' : 'پی ڈی ایف دستیاب نہیں'}
-            </span>
-          )}
         </div>
       </div>
 
-      {/* Lightbox PDF Viewer */}
+      {/* PDF Viewer modal */}
       {isPdfOpen && pdfUrl && (
-        <PdfViewer 
-          url={pdfUrl} 
-          title={title} 
-          isModal={true} 
-          onClose={() => setIsPdfOpen(false)} 
+        <PdfViewer
+          url={pdfUrl}
+          title={title}
+          isModal={true}
+          onClose={() => setIsPdfOpen(false)}
         />
       )}
-    </div>
+    </>
   );
 }

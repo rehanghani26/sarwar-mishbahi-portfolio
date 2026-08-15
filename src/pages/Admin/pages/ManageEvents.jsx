@@ -287,6 +287,8 @@ export default function ManageEvents() {
             <Table
               loadingTableContent={loading}
               data={events}
+              language={language}
+              pageSize={10}
               noRecordText={language === 'en' ? 'No events scheduled yet' : 'کوئی پروگرام طے شدہ نہیں ہے'}
               tableLayout={[
                 {

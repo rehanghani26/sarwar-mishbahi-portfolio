@@ -5,7 +5,8 @@ import {
   Calendar, Eye, ArrowRight, ArrowLeft, Bookmark, Hash, Share2,
   Facebook, Twitter, MessageCircle, ExternalLink, Download, Printer,
   Heart, Reply as ReplyIcon, MoreVertical, Smile, Image as ImageIcon,
-  Bell, AlertCircle, Copy, Send, CheckCircle2, Award
+  Bell, AlertCircle, Copy, Send, CheckCircle2, Award, ChevronDown,
+  ChevronUp, RefreshCw, FileText
 } from 'lucide-react';
 import { getArticleBySlug, getComments, createComment, getArticles } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
@@ -281,439 +282,543 @@ export default function ArticleDetail() {
   const placeholderImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200';
 
   return (
-    <div className="min-h-screen text-[#2D2A26] font-serif py-8" style={{ backgroundColor: PALETTE.background }} dir="rtl">
+    <div className="min-h-screen text-[#2D2A26] font-serif py-8" style={{ backgroundColor: '#F8F5F0' }} dir="rtl">
 
-      {/* Scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 z-50 bg-slate-200">
-        <div className="h-full transition-all duration-100" style={{ width: `${scrollProgress}%`, backgroundColor: PALETTE.primary }} />
-      </div>
-
-      <div className="w-full px-4 sm:px-8 lg:px-12 space-y-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Breadcrumb Back Button */}
-        <Link to="/articles" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider mb-2 transition-all hover:opacity-80" style={{ color: PALETTE.primary }}>
+        <Link to="/articles" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider mb-2 transition-all hover:opacity-85" style={{ color: '#8B6B47' }}>
           <ArrowRight className="w-4 h-4" />
           مقالات پر واپس جائیں
         </Link>
 
-        {/* ── UNIFIED MAIN ARTICLE CARD (Single Card Layout) ── */}
-        <article className="bg-white border rounded-2xl shadow-xs overflow-hidden" style={{ borderColor: PALETTE.border }}>
+        {/* ── Two Column Grid ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-          {/* Header image (Compact size) */}
-          <div className="h-[200px] sm:h-[280px] w-full bg-slate-100 relative">
-            <img
-              src={featuredImageUrl || placeholderImage}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-            {/* Category tag overlay */}
-            <div className="absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded" style={{ backgroundColor: PALETTE.primary }}>
-              {category}
+          {/* RIGHT COLUMN: Sidebar (renders on the right in RTL) */}
+          <div className="lg:col-span-4 lg:sticky lg:top-8 space-y-6 lg:max-w-[320px] lg:w-full">
+            <div className="bg-[#FAF7F2] border-2 border-[#A78B6D] rounded-[16px] overflow-hidden shadow-xs">
+              {/* Brown Header Card */}
+              <div className="bg-[#8B6B47] py-3 px-4 text-center text-white font-bold text-sm leading-relaxed border-b border-[#A78B6D] font-serif">
+                ✦ مضمون کی تفصیلات ✦
+              </div>
+
+              <div className="p-5 space-y-6">
+                {/* 1. Statistics Section */}
+                <div className="space-y-3.5">
+                  {/* Views */}
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="flex items-center gap-2 font-bold text-slate-700">
+                      <Eye className="w-4.5 h-4.5 text-[#8B6B47]" />
+                      <span>مرتب دیکھا گیا</span>
+                    </span>
+                    <span className="text-[#8B6B47] font-extrabold text-sm">
+                      {viewCount.toLocaleString()}
+                    </span>
+                  </div>
+                  <hr className="border-[#E7DED2]" />
+
+                  {/* Shares */}
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="flex items-center gap-2 font-bold text-slate-700">
+                      <RefreshCw className="w-4 h-4 text-[#8B6B47]" />
+                      <span>مرتب شیئر کیا گیا</span>
+                    </span>
+                    <span className="text-[#8B6B47] font-extrabold text-sm">
+                      86
+                    </span>
+                  </div>
+                  <hr className="border-[#E7DED2]" />
+
+                  {/* Date Published */}
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="flex items-center gap-2 font-bold text-slate-700">
+                      <Calendar className="w-4.5 h-4.5 text-[#8B6B47]" />
+                      <span>تاریخ اشاعت</span>
+                    </span>
+                    <span className="text-[#8B6B47] font-extrabold text-xs">
+                      {formattedDate}
+                    </span>
+                  </div>
+                  <hr className="border-[#E7DED2]" />
+
+                  {/* Comments Count */}
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="flex items-center gap-2 font-bold text-slate-700">
+                      <MessageCircle className="w-4.5 h-4.5 text-[#8B6B47]" />
+                      <span>تبصرے</span>
+                    </span>
+                    <span className="text-[#8B6B47] font-extrabold text-sm">
+                      {commentCount}
+                    </span>
+                  </div>
+                </div>
+
+                <hr className="border-[#A78B6D]/30 border-dashed" />
+
+                {/* 2. Share Section */}
+                <div className="space-y-3 text-center">
+                  <span className="text-xs font-bold text-slate-500 block">
+                    اس مضمون کو شیئر کریں
+                  </span>
+                  <div className="flex items-center justify-center gap-2.5 flex-wrap">
+                    <button
+                      onClick={() => handleShareClick('whatsapp')}
+                      className="w-9 h-9 rounded-full border border-[#E7DED2] bg-white text-slate-650 hover:bg-[#8B6B47] hover:text-white hover:border-[#8B6B47] transition-all duration-300 cursor-pointer flex items-center justify-center shadow-2xs"
+                      title="WhatsApp"
+                    >
+                      <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                    </button>
+                    <button
+                      onClick={() => handleShareClick('facebook')}
+                      className="w-9 h-9 rounded-full border border-[#E7DED2] bg-white text-slate-650 hover:bg-[#8B6B47] hover:text-white hover:border-[#8B6B47] transition-all duration-300 cursor-pointer flex items-center justify-center shadow-2xs"
+                      title="Facebook"
+                    >
+                      <Facebook className="w-4 h-4 text-[#1877F2]" />
+                    </button>
+                    <button
+                      onClick={() => handleShareClick('twitter')}
+                      className="w-9 h-9 rounded-full border border-[#E7DED2] bg-white text-slate-650 hover:bg-[#8B6B47] hover:text-white hover:border-[#8B6B47] transition-all duration-300 cursor-pointer flex items-center justify-center shadow-2xs"
+                      title="Twitter"
+                    >
+                      <Twitter className="w-4 h-4 text-[#1DA1F2]" />
+                    </button>
+                    <button
+                      onClick={() => handleShareClick('telegram')}
+                      className="w-9 h-9 rounded-full border border-[#E7DED2] bg-white text-slate-650 hover:bg-[#8B6B47] hover:text-white hover:border-[#8B6B47] transition-all duration-300 cursor-pointer flex items-center justify-center shadow-2xs"
+                      title="Telegram"
+                    >
+                      <Send className="w-4 h-4 text-[#0088cc]" />
+                    </button>
+                    <button
+                      onClick={copyToClipboard}
+                      className="w-9 h-9 rounded-full border border-[#E7DED2] bg-white text-slate-650 hover:bg-[#8B6B47] hover:text-white hover:border-[#8B6B47] transition-all duration-300 cursor-pointer flex items-center justify-center shadow-2xs"
+                      title="Copy Link"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <hr className="border-[#A78B6D]/30 border-dashed" />
+
+                {/* 3. Tags Section */}
+                <div className="space-y-3">
+                  <span className="text-xs font-bold text-slate-500 block text-center">
+                    ٹیگز
+                  </span>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {tags && tags.map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center text-xs font-bold px-3 py-1 bg-white border border-[#E7DED2] rounded-lg text-[#8B6B47] shadow-3xs"
+                      >
+                        # {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <hr className="border-[#A78B6D]/30 border-dashed" />
+
+                {/* 4. Actions Section */}
+                <div className="space-y-3">
+                  <span className="text-xs font-bold text-slate-500 block text-center">
+                    کارروائیاں
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleSaveToggle}
+                      className="flex-1 py-2 px-3 bg-white border border-[#E7DED2] hover:bg-[#FAF7F2] rounded-lg text-xs font-bold text-[#8B6B47] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-3xs"
+                    >
+                      <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-[#8B6B47]' : ''}`} />
+                      <span>{isSaved ? 'محفوظ کردہ' : 'محفوظ کریں'}</span>
+                    </button>
+
+                    <button
+                      onClick={handlePrint}
+                      className="flex-1 py-2 px-3 bg-white border border-[#E7DED2] hover:bg-[#FAF7F2] rounded-lg text-xs font-bold text-[#8B6B47] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-3xs"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      <span>پرنٹ کریں</span>
+                    </button>
+                  </div>
+                </div>
+
+                <hr className="border-[#A78B6D]/30 border-dashed" />
+
+                {/* 5. PDF Card */}
+                <div className="rounded-xl border border-[#E7DED2] p-4 bg-white flex items-center justify-between gap-3 shadow-3xs">
+                  <div className="flex-1 min-w-0">
+                    {pdfUrl ? (
+                      <div className="space-y-1.5">
+                        <span className="text-xs font-bold text-slate-800 block truncate">
+                          پی ڈی ایف فائل دستیاب ہے
+                        </span>
+                        <div className="flex gap-1.5">
+                          <button
+                            onClick={() => setShowPdf(!showPdf)}
+                            className="text-[10px] text-white font-bold bg-[#8B6B47] px-2.5 py-1 rounded cursor-pointer border-0 shadow-3xs"
+                          >
+                            {showPdf ? 'چھپائیں' : 'دیکھیں'}
+                          </button>
+                          <a
+                            href={pdfUrl}
+                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] text-[#8B6B47] font-bold bg-[#FAF7F2] border border-[#E7DED2] px-2.5 py-1 rounded decoration-none cursor-pointer shadow-3xs"
+                          >
+                            ڈاؤن لوڈ
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-slate-500 font-bold block">
+                        PDF فائل دستیاب نہیں ہے
+                      </span>
+                    )}
+                  </div>
+                  <FileText className="w-7 h-7 text-[#8B6B47] shrink-0" />
+                </div>
+              </div>
             </div>
 
-            {/* Save toggle icon overlay */}
-            <button
-              onClick={handleSaveToggle}
-              className="absolute top-4 left-4 p-2 bg-white/95 rounded-full shadow-xs text-[#2D2A26] border hover:bg-slate-50 transition-all cursor-pointer"
-              title={isSaved ? "محفوظ کردہ فہرست سے ہٹائیں" : "محفوظ کریں"}
-            >
-              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-amber-600 stroke-amber-600' : ''}`} />
-            </button>
+            {/* Related Articles Card Section */}
+            {related && related.length > 0 && (
+              <div className="space-y-4 pt-2">
+                <h3 className="text-sm font-bold text-[#8B6B47] border-b border-[#E7DED2] pb-2 font-serif">
+                  متعلقہ مقالات
+                </h3>
+                <div className="space-y-4">
+                  {related.slice(0, 3).map((rel) => (
+                    <ArticleCard key={rel._id} article={rel} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="p-6 sm:p-10 space-y-6">
+          {/* LEFT COLUMN: Main Content Area (renders on the left in RTL) */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="bg-white border border-[#E7DED2] rounded-[16px] shadow-sm overflow-hidden">
 
-            {/* Article Top Stats bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500 pb-4 border-b" style={{ borderColor: PALETTE.border }}>
-              <div className="flex flex-wrap items-center gap-5">
-                <span className="flex items-center gap-1 font-bold">
-                  <Calendar className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
-                  تاریخ اشاعت: {formattedDate}
-                </span>
-                <span className="flex items-center gap-1 font-bold">
-                  <Eye className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
-                  دیکھی گئی: {viewCount} بار
-                </span>
-              </div>
+              {/* 1. Hero Section */}
+              <div className="h-[380px] w-full bg-slate-100 relative">
+                <img
+                  src={featuredImageUrl || placeholderImage}
+                  alt={title}
+                  className="w-full h-full object-cover"
+                />
 
-              {/* Scroll comment click action */}
-              <button
-                onClick={scrollToCommentForm}
-                className="flex items-center gap-1.5 font-bold hover:underline cursor-pointer border-0 bg-transparent text-slate-500 p-0"
-              >
-                <MessageCircle className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
-                تبصرے: {commentCount} (تبصرہ کریں)
-              </button>
-            </div>
-
-            {/* Article Title & Summary */}
-            <div className="text-right">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-snug tracking-tight" style={{ color: PALETTE.primary }}>
-                {title}
-              </h1>
-              <p className="text-slate-700 text-sm sm:text-base leading-relaxed italic mt-4 border-r-4 pr-3" style={{ borderRightColor: PALETTE.primary }}>
-                {summary}
-              </p>
-            </div>
-
-            {/* Action Toolbar section */}
-            <div className="pt-4 border-t flex flex-wrap items-center justify-between gap-3" style={{ borderColor: PALETTE.border }}>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                {pdfUrl ? (
-                  <>
-                    <button
-                      onClick={() => setShowPdf(!showPdf)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 text-white rounded text-xs font-bold transition-all cursor-pointer border-0"
-                      style={{ backgroundColor: PALETTE.primary }}
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 text-[#E5D8CA]" />
-                      {showPdf ? 'پی ڈی ایف چھپائیں' : 'پی ڈی ایف دیکھیں'}
-                    </button>
-                    <a
-                      href={pdfUrl}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded text-xs font-bold border transition-colors bg-[#E5D8CA] text-[#7B654D]"
-                      style={{ borderColor: PALETTE.border }}
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      ڈاؤن لوڈ کریں
-                    </a>
-                  </>
-                ) : (
-                  <span className="text-xs text-slate-400 italic font-bold">پی ڈی ایف فائل دستیاب نہیں ہے</span>
-                )}
-
-                <button
-                  onClick={handlePrint}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded text-xs font-bold transition-all border"
-                  style={{ borderColor: PALETTE.border }}
-                >
-                  <Printer className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
-                  پرنٹ کریں
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
+                {/* Floating Bookmark button floating top-right */}
                 <button
                   onClick={handleSaveToggle}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-55 rounded text-xs font-bold border transition-all hover:bg-slate-100 cursor-pointer"
-                  style={{ borderColor: PALETTE.border }}
+                  className="absolute top-4 right-4 p-2 bg-white rounded-lg shadow-sm text-[#8B6B47] border border-[#E7DED2] hover:bg-slate-50 transition-all cursor-pointer z-10"
+                  title={isSaved ? "محفوظ کردہ فہرست سے ہٹائیں" : "محفوظ کریں"}
                 >
-                  <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-amber-600 stroke-amber-600' : ''}`} style={{ color: PALETTE.primary }} />
-                  {isSaved ? 'محفوظ کردہ' : 'محفوظ کریں'}
+                  <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-[#8B6B47]' : ''}`} />
                 </button>
-              </div>
-            </div>
 
-            {/* Embedded PDF container */}
-            {showPdf && pdfUrl && (
-              <div className="w-full mt-4 rounded-xl overflow-hidden border" style={{ borderColor: PALETTE.border }}>
-                <PdfViewer url={pdfUrl} title={title} />
-              </div>
-            )}
-
-            {/* References Card */}
-            {references && references.length > 0 && (
-              <div className="pt-6 border-t" style={{ borderColor: PALETTE.border }}>
-                <div className="rounded-xl border p-4 sm:p-5 bg-slate-50/50" style={{ borderColor: PALETTE.border }}>
-                  <h3 className="text-sm font-extrabold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: PALETTE.primary }}>
-                    <Bookmark className="w-4.5 h-4.5" />
-                    حوالہ جات / مراجع
-                  </h3>
-                  <ol className="list-decimal list-inside text-xs sm:text-sm text-slate-800 space-y-1.5 font-bold">
-                    {references.map((ref, idx) => (
-                      <li key={idx} className="font-bold">{ref}</li>
-                    ))}
-                  </ol>
+                {/* Floating Category badge top-left */}
+                <div className="absolute top-4 left-4 bg-[#8B6B47] text-white text-xs font-bold px-3 py-1.5 rounded-full border border-[#B89B7A] shadow-md z-10">
+                  {category?.name || category || 'مقالہ'}
                 </div>
               </div>
-            )}
 
-            {/* Tags & Social sharing row inside card */}
-            <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-5" style={{ borderColor: PALETTE.border }}>
+              {/* Unified inner content */}
+              <div className="p-6 sm:p-8 space-y-8">
 
-              {/* Tags block */}
-              <div className="flex flex-wrap gap-1.5">
-                {tags && tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 bg-slate-50 border rounded text-slate-600"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <Hash className="w-2.5 h-2.5" />
-                    {tag}
+                {/* 2. Meta Information Bar */}
+                <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-550 py-3 border-b border-[#E7DED2] font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-[#8B6B47]" />
+                    <span>تاریخ اشاعت: {formattedDate}</span>
                   </span>
-                ))}
-              </div>
-
-              {/* Share box */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
-                  <Share2 className="w-4 h-4" style={{ color: PALETTE.primary }} />
-                  اس مضمون کو شیئر کریں:
-                </span>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleShareClick('whatsapp')}
-                    className="p-2.5 rounded-full border bg-slate-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors cursor-pointer"
-                    title="WhatsApp"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleShareClick('facebook')}
-                    className="p-2.5 rounded-full border bg-slate-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors cursor-pointer"
-                    title="Facebook"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <Facebook className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleShareClick('twitter')}
-                    className="p-2.5 rounded-full border bg-slate-50 text-sky-650 hover:bg-sky-650 hover:text-white transition-colors cursor-pointer"
-                    title="Twitter"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <Twitter className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleShareClick('telegram')}
-                    className="p-2.5 rounded-full border bg-slate-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors cursor-pointer"
-                    title="Telegram"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={copyToClipboard}
-                    className="p-2.5 rounded-full border bg-slate-50 text-slate-700 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
-                    title="Copy Link"
-                    style={{ borderColor: PALETTE.border }}
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                  </button>
+                  <span className="text-[#E7DED2] font-normal">|</span>
+                  <span className="flex items-center gap-1.5">
+                    <MessageCircle className="w-4 h-4 text-[#8B6B47]" />
+                    <span>{commentCount} تبصرے</span>
+                  </span>
+                  <span className="text-[#E7DED2] font-normal">|</span>
+                  <span className="flex items-center gap-1.5">
+                    <Eye className="w-4 h-4 text-[#8B6B47]" />
+                    <span>{viewCount} مرتبہ دیکھا گیا</span>
+                  </span>
+                  <span className="text-[#E7DED2] font-normal">|</span>
+                  <span className="flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-[#8B6B47]" />
+                    <span>کتاب</span>
+                  </span>
                 </div>
-              </div>
 
-            </div>
+                {/* 3. Article Title Section */}
+                <div className="text-center mb-8">
+                  <h1 className="text-2xl sm:text-xl lg:text-[32px] font-extrabold leading-snug tracking-tight text-[#8B6B47] font-serif">
+                    {title}
+                  </h1>
+                </div>
 
-          </div>
-        </article>
+                {/* 4. Subtitle Excerpt Section */}
+                {summary && (
+                  <div className="text-center mt-10 border p-8  rounded-lg border-[#E7DED2] pb-10">
+                    <p className="text-slate-650 text-lg sm:text-[22px] leading-relaxed  mx-auto italic font-medium">
+                      {summary}
+                    </p>
+                  </div>
+                )}
 
-        {/* ── 2. COMMENT FORM SECTION (Full Width) ── */}
-        <div ref={commentFormRef} className="bg-white border rounded-2xl p-6 shadow-xs" style={{ borderColor: PALETTE.border }}>
-          <h3 className="text-base font-bold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: PALETTE.primary }}>
-            <MessageCircle className="w-4.5 h-4.5" />
-            تبصرہ شامل کریں
-          </h3>
+                {/* 5. Article Content */}
+                <div
+                  className="prose max-w-none text-[#2D2A26] text-base leading-[1.9] space-y-6 font-serif pt-4 border-t border-[#E7DED2]/50"
+                  dangerouslySetInnerHTML={{ __html: article.content || article.text || '' }}
+                />
 
-          {!isAuthenticated ? (
-            <div className="bg-slate-50 border border-dashed p-6 text-center rounded-xl" style={{ borderColor: PALETTE.border }}>
-              <AlertCircle className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-              <p className="text-sm font-bold text-slate-800 mb-4">تبصرہ کرنے کے لیے آپ کا سائن ان ہونا ضروری ہے۔</p>
-              <button
-                onClick={() => navigate('/login')}
-                className="px-6 py-2 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer border-0"
-                style={{ backgroundColor: PALETTE.primary }}
-              >
-                لاگ ان کریں
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleCommentSubmit} className="space-y-4">
-              <div className="flex gap-3 items-start">
-                <Avatar user={loggedInUser} />
 
-                <div className="flex-1 space-y-3">
-                  <div className="relative">
-                    <textarea
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                      placeholder="اپنا تبصرہ لکھیں..."
-                      rows={3}
-                      className="w-full p-3 border rounded-lg outline-none text-sm font-medium focus:border-stone-500 transition-colors"
-                      style={{ borderColor: PALETTE.border }}
-                    />
 
-                    <div className="absolute bottom-2.5 left-2.5 flex items-center gap-2 text-slate-400">
-                      <button type="button" className="hover:text-slate-650 transition-colors p-1" title="ایموجی">
-                        <Smile className="w-4 h-4" />
-                      </button>
-                      <button type="button" className="hover:text-slate-655 transition-colors p-1" title="تصویر">
-                        <ImageIcon className="w-4 h-4" />
-                      </button>
+                {/* Embedded PDF container */}
+                {showPdf && pdfUrl && (
+                  <div className="pt-6 border-t border-[#E7DED2]">
+                    <div className="w-full rounded-xl overflow-hidden border bg-white" style={{ borderColor: '#E7DED2' }}>
+                      <PdfViewer url={pdfUrl} title={title} />
                     </div>
                   </div>
+                )}
 
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={notifyOnReplies}
-                        onChange={(e) => setNotifyOnReplies(e.target.checked)}
-                        className="rounded accent-stone-700"
-                      />
-                      <Bell className="w-3.5 h-3.5" style={{ color: PALETTE.primary }} />
-                      جوابات کی اطلاع دیں
-                    </label>
+                {/* 6. Comment Section (Instagram + YouTube combination style) */}
+                <div className="pt-8 border-t border-[#E7DED2]">
 
-                    <button
-                      type="submit"
-                      disabled={submittingComment || !commentText.trim()}
-                      className="px-5 py-2 text-white font-bold text-xs uppercase tracking-wider rounded transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer border-0"
-                      style={{ backgroundColor: PALETTE.primary }}
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      تبصرہ بھیجیں
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* ── 3. COMMENTS LIST SECTION (Full Width, No Accordion) ── */}
-        <div className="bg-white border rounded-2xl p-6 shadow-xs" style={{ borderColor: PALETTE.border }}>
-          <div className="border-b pb-3 mb-4" style={{ borderColor: PALETTE.border }}>
-            <h3 className="text-base font-bold uppercase tracking-wider" style={{ color: PALETTE.primary }}>
-              تمام تبصرے ({comments.length})
-            </h3>
-          </div>
-
-          {comments.length === 0 ? (
-            <div className="py-10 text-center text-slate-400 font-bold border border-dashed rounded-xl" style={{ borderColor: PALETTE.border }}>
-              ابھی تک کوئی تبصرہ نہیں ہے۔ پہلا تبصرہ آپ کریں۔
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {comments.map((comment) => (
-                <div
-                  key={comment._id}
-                  className="rounded-xl border p-4 shadow-2xs hover:shadow-xs transition-shadow bg-white"
-                  style={{ borderColor: PALETTE.border }}
-                >
-                  <div className="flex gap-3">
-                    <Avatar user={comment.user} />
-
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                        <div>
-                          <span className="text-sm font-bold text-slate-800 ml-2">
-                            {comment.user?.name || 'صارف'}
-                          </span>
-                          <span className="text-[10px] text-slate-400 font-bold">
-                            {new Date(comment.createdAt).toLocaleDateString('ur-PK')}
-                          </span>
-                        </div>
-
-                        <button className="p-1 text-slate-400 hover:text-slate-600 transition-colors">
-                          <MoreVertical className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                        {comment.text}
-                      </p>
-
-                      {/* Comment Actions */}
-                      <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-500 font-bold border-t pt-2" style={{ borderColor: PALETTE.border }}>
-                        <button className="flex items-center gap-1 hover:text-red-650 transition-colors bg-transparent border-0 cursor-pointer">
-                          <Heart className="w-3.5 h-3.5" />
-                          <span>پسند کریں</span>
-                        </button>
-
+                  {/* Comment Input Card */}
+                  <div className="bg-[#FAF8F5] border border-[#E7DED2] rounded-[20px] p-4 sm:p-5 shadow-2xs hover:shadow-xs transition-shadow">
+                    <h3 className="text-sm font-extrabold text-[#8B6B47] mb-3">تبصرہ کریں</h3>
+                    {!isAuthenticated ? (
+                      <div className="text-center py-4">
+                        <p className="text-xs font-bold text-slate-600 mb-3">تبصرہ کرنے کے لیے آپ کا سائن ان ہونا ضروری ہے۔</p>
                         <button
-                          onClick={() => setReplyToId(replyToId === comment._id ? null : comment._id)}
-                          className="flex items-center gap-1 hover:text-blue-900 transition-colors bg-transparent border-0 cursor-pointer"
+                          onClick={() => navigate('/login')}
+                          className="px-5 py-2 text-white font-bold text-xs rounded-lg cursor-pointer border-0 shadow-3xs"
+                          style={{ backgroundColor: '#8B6B47' }}
                         >
-                          <ReplyIcon className="w-3.5 h-3.5" />
-                          <span>جواب دیں</span>
-                        </button>
-
-                        <button className="mr-auto text-[10px] hover:text-amber-700 transition-colors uppercase tracking-wider bg-transparent border-0 cursor-pointer">
-                          رپورٹ کریں
+                          لاگ ان کریں
                         </button>
                       </div>
-
-                      {/* Reply Form */}
-                      {replyToId === comment._id && (
-                        <div className="mt-3 bg-slate-50 border p-3 rounded-lg" style={{ borderColor: PALETTE.border }}>
-                          <textarea
-                            value={replyText}
-                            onChange={(e) => setReplyText(e.target.value)}
-                            placeholder="اپنا جواب ٹائپ کریں..."
-                            rows={2}
-                            className="w-full p-2 border rounded-md outline-none text-xs bg-white"
-                            style={{ borderColor: PALETTE.border }}
-                          />
-                          <div className="flex justify-end gap-2 mt-2">
-                            <button
-                              onClick={() => setReplyToId(null)}
-                              className="px-3 py-1 text-xs text-slate-500 font-bold uppercase cursor-pointer"
-                            >
-                              منسوخ کریں
-                            </button>
-                            <button
-                              onClick={() => handleReplySubmit(comment._id)}
-                              className="px-4 py-1.5 text-white font-bold text-xs uppercase rounded cursor-pointer border-0"
-                              style={{ backgroundColor: PALETTE.primary }}
-                            >
-                              پوسٹ کریں
-                            </button>
+                    ) : (
+                      <form onSubmit={handleCommentSubmit} className="space-y-4">
+                        <div className="flex gap-3 items-start">
+                          <Avatar user={loggedInUser} size="md" />
+                          <div className="flex-1 border border-[#E7DED2] rounded-xl p-3 bg-white focus-within:border-[#8B6B47] transition-colors shadow-2xs">
+                            <textarea
+                              value={commentText}
+                              onChange={(e) => setCommentText(e.target.value)}
+                              placeholder="اپنا تبصرہ یہاں لکھیں..."
+                              rows={3}
+                              className="w-full resize-none border-0 outline-none focus:ring-0 text-sm bg-transparent font-serif"
+                            />
+                            <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+                              <div className="flex items-center gap-2 text-slate-400">
+                                <button type="button" className="hover:text-slate-600 transition-colors p-1 bg-transparent border-0 cursor-pointer" title="تصویر">
+                                  <ImageIcon className="w-4 h-4" />
+                                </button>
+                                <button type="button" className="hover:text-slate-600 transition-colors p-1 bg-transparent border-0 cursor-pointer" title="ایموجی">
+                                  <Smile className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <button
+                                type="submit"
+                                disabled={submittingComment || !commentText.trim()}
+                                className="px-5 py-2 text-white font-bold text-xs rounded-lg transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer border-0 bg-[#8B6B47] hover:bg-[#725739] shadow-3xs"
+                              >
+                                <span>تبصرہ بھیجیں</span>
+                                <Send className="w-3.5 h-3.5 rotate-180" />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      )}
+                      </form>
+                    )}
+                  </div>
 
-                      {/* Replies List */}
-                      {comment.replies && comment.replies.length > 0 && (
-                        <div className="mt-3 mr-4 pr-3 border-r-2 space-y-3" style={{ borderRightColor: PALETTE.border }}>
-                          {comment.replies.map((reply) => (
-                            <div key={reply._id} className="flex gap-2.5">
-                              <div className="flex-1">
-                                <div className="mb-0.5">
-                                  <span className="text-xs font-bold text-slate-800 ml-2">
-                                    {reply.user?.name || 'صارف'}
-                                  </span>
-                                  <span className="text-[9px] text-slate-400 font-bold">
-                                    {new Date(reply.createdAt).toLocaleDateString('ur-PK')}
-                                  </span>
+                  {/* Comments Timeline */}
+                  <div className="mt-6 border-t border-[#E7DED2]/60 pt-6">
+                    {comments.length === 0 ? (
+                      <div className="py-10 text-center text-slate-400 font-bold border border-dashed rounded-xl" style={{ borderColor: '#E7DED2' }}>
+                        ابھی تک کوئی تبصرہ نہیں ہے۔ پہلا تبصرہ آپ کریں۔
+                      </div>
+                    ) : (
+                      <div className="space-y-6 relative max-h-[600px] overflow-y-auto pr-4 pl-2">
+                        {/* Vertical Timeline Line on the Right (RTL aligned) */}
+                        <div className="absolute right-[16px] top-4 bottom-4 w-0.5 bg-[#E7DED2] z-0" />
+
+                        {comments.map((comment, index) => (
+                          <div key={comment._id} className="relative z-10 space-y-3">
+
+                            {/* Timeline dot aligned to the right */}
+                            {index === 0 ? (
+                              <div className="absolute right-[5px] top-4 w-6 h-6 rounded-full bg-[#FAF7F2] border border-[#8B6B47] flex items-center justify-center z-10 shadow-xs">
+                                <Smile className="w-3.5 h-3.5 text-[#8B6B47]" />
+                              </div>
+                            ) : (
+                              <div className="absolute right-[13.5px] top-5 w-[7px] h-[7px] rounded-full bg-[#8B6B47] border border-white z-10 shadow-3xs" />
+                            )}
+
+                            {/* Comment Card Design (Premium styled with right margin spacing to clear timeline) */}
+                            <div className="rounded-[16px] border border-[#E7DED2] p-4.5 shadow-2xs hover:shadow-xs hover:border-[#8B6B47]/30 transition-all duration-300 bg-white mr-8">
+                              <div className="flex gap-3 items-start">
+                                <Avatar user={comment.user} />
+
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-sm font-bold text-slate-800 ml-1">
+                                        {comment.user?.name || 'صارف'}
+                                      </span>
+                                      {/* Verified badge support */}
+                                      {comment.user?.isVerified && (
+                                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
+                                      )}
+                                      <span className="text-[10px] text-slate-400 font-bold">
+                                        {new Date(comment.createdAt).toLocaleDateString('ur-PK')}
+                                      </span>
+                                    </div>
+
+                                    <button className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-0 cursor-pointer">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </button>
+                                  </div>
+
+                                  <p className="text-sm text-slate-700 leading-relaxed font-serif font-medium">
+                                    {comment.text}
+                                  </p>
+
+                                  {/* Comment Actions: Like, Reply, Share, Report */}
+                                  <div className="flex items-center gap-4 mt-3.5 text-xs text-slate-500 font-bold border-t border-[#E7DED2]/40 pt-2.5">
+                                    <button className="flex items-center gap-1 hover:text-red-500 transition-colors bg-transparent border-0 cursor-pointer">
+                                      <Heart className="w-3.5 h-3.5 text-slate-450 hover:text-red-500 hover:fill-red-500" />
+                                      <span className="text-slate-600 font-bold">{(comment.likes || (index * 7 + 3) % 25 + 1)}</span>
+                                    </button>
+
+                                    <button
+                                      onClick={() => setReplyToId(replyToId === comment._id ? null : comment._id)}
+                                      className="flex items-center gap-1 hover:text-blue-900 transition-colors bg-transparent border-0 cursor-pointer"
+                                    >
+                                      <ReplyIcon className="w-3.5 h-3.5 text-slate-455" />
+                                      <span>جواب دیں</span>
+                                    </button>
+
+                                    <button className="hover:text-slate-800 transition-colors bg-transparent border-0 cursor-pointer">
+                                      شیئر کریں
+                                    </button>
+
+                                    <button className="mr-auto text-[10px] text-slate-400 hover:text-red-500 transition-colors uppercase tracking-wider bg-transparent border-0 cursor-pointer">
+                                      رپورٹ کریں
+                                    </button>
+                                  </div>
+
+                                  {/* Reply Composer box */}
+                                  {replyToId === comment._id && (
+                                    <div className="mt-3 bg-[#FAF8F5] border border-[#E7DED2] p-3 rounded-lg space-y-2">
+                                      <textarea
+                                        value={replyText}
+                                        onChange={(e) => setReplyText(e.target.value)}
+                                        placeholder="اپنا جواب ٹائپ کریں..."
+                                        rows={2}
+                                        className="w-full p-2 border border-[#E7DED2] rounded-md outline-none text-xs bg-white resize-none"
+                                      />
+                                      <div className="flex justify-end gap-2">
+                                        <button
+                                          onClick={() => setReplyToId(null)}
+                                          className="px-3 py-1 text-xs text-slate-500 font-bold bg-transparent border-0 cursor-pointer"
+                                        >
+                                          منسوخ کریں
+                                        </button>
+                                        <button
+                                          onClick={() => handleReplySubmit(comment._id)}
+                                          className="px-4 py-1.5 text-white font-bold text-xs rounded bg-[#8B6B47] hover:bg-[#725739] cursor-pointer border-0 shadow-3xs"
+                                        >
+                                          پوسٹ کریں
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
-                                <p className="text-xs text-slate-700 leading-relaxed font-medium">
-                                  {reply.text}
-                                </p>
                               </div>
                             </div>
-                          ))}
-                        </div>
-                      )}
 
-                    </div>
+                            {/* Replies List */}
+                            {comment.replies && comment.replies.length > 0 && (
+                              <div className="mr-8 ml-0 pr-6 space-y-3 relative">
+                                {/* Thread connector line for nested replies on right */}
+                                <div className="absolute right-[-16px] top-0 bottom-4 w-0.5 bg-[#E7DED2]/80" />
+
+                                {comment.replies.map((reply) => (
+                                  <div key={reply._id} className="relative z-10">
+                                    {/* Connector dot */}
+                                    <div className="absolute right-[-18.5px] top-5 w-[5px] h-[5px] rounded-full bg-[#8B6B47]/60 border border-white" />
+
+                                    <div className="rounded-[16px] border border-[#E7DED2] p-4 shadow-2xs hover:shadow-xs transition-shadow bg-[#FAF8F5] mr-8">
+                                      <div className="flex gap-3 items-start">
+                                        <Avatar user={reply.user} />
+
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+                                            <div className="flex items-center gap-1.5">
+                                              <span className="text-xs font-bold text-slate-800 ml-2">
+                                                {reply.user?.name || 'صارف'}
+                                              </span>
+                                              <span className="text-[9px] text-slate-450 font-bold">
+                                                {new Date(reply.createdAt).toLocaleDateString('ur-PK')}
+                                              </span>
+                                            </div>
+
+                                            <button className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-0 cursor-pointer">
+                                              <MoreVertical className="w-3.5 h-3.5" />
+                                            </button>
+                                          </div>
+
+                                          <p className="text-xs text-slate-700 leading-relaxed font-serif font-medium">
+                                            {reply.text}
+                                          </p>
+
+                                          {/* Actions for replies */}
+                                          <div className="flex items-center gap-3 mt-2 text-[11px] text-slate-500 font-bold border-t border-[#E7DED2]/45 pt-1.5">
+                                            <button className="flex items-center gap-1 hover:text-red-500 transition-colors bg-transparent border-0 cursor-pointer">
+                                              <Heart className="w-3 h-3 text-slate-400 hover:text-red-500" />
+                                              <span className="text-slate-600 font-bold">{(reply.text.length * 3) % 15 + 1}</span>
+                                            </button>
+                                            <button
+                                              onClick={() => setReplyToId(comment._id)}
+                                              className="flex items-center gap-1 hover:text-blue-900 transition-colors bg-transparent border-0 cursor-pointer"
+                                            >
+                                              <ReplyIcon className="w-3 h-3" />
+                                              <span>جواب دیں</span>
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                          </div>
+                        ))}
+
+                        {/* Centered Load More comments button */}
+                        <div className="pt-4 mr-8 flex justify-center">
+                          <button className="px-6 py-2.5 bg-[#FAF7F2] border border-[#E7DED2] hover:bg-[#B89B7A]/20 text-[#8B6B47] text-xs font-bold rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-3xs">
+                            <span>مزید تبصرے لوڈ کریں</span>
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ── 4. Related Articles Section ── */}
-        {related && related.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-bold font-serif mb-4 pb-2 border-b-2" style={{ color: PALETTE.primary, borderColor: PALETTE.border }}>
-              متعلقہ مقالات
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {related.slice(0, 6).map((rel) => (
-                <ArticleCard key={rel._id} article={rel} />
-              ))}
+              </div>
             </div>
           </div>
-        )}
-
+        </div>
       </div>
     </div>
   );

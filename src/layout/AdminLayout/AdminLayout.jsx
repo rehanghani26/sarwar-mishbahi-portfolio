@@ -20,6 +20,7 @@ import {
   ChevronLeft,
   Bell,
   MessageSquare,
+  Youtube,
 } from 'lucide-react';
 import { logout } from '@/store/slices/authSlice';
 import { logoutUser } from '@/services';
@@ -37,6 +38,7 @@ const NAV_LINKS = [
   { to: '/admin/events', label: 'پروگرامات', icon: CalendarDays },
   { to: '/admin/users', label: 'صارفین', icon: Users },
   { to: '/admin/settings', label: 'ترتیبات', icon: Settings },
+  { to: '/admin/youtube', label: 'یوٹیوب', icon: Youtube },
 ];
 
 // Premium gradient sidebar palette
@@ -107,11 +109,11 @@ export default function AdminLayout() {
       <aside
         style={{ background: SB.bg, borderRight: `1px solid ${SB.border}` }}
         className={`
-          fixed inset-y-0 left-0 z-30 flex flex-col
+          fixed inset-y-0 left-0 z-30 flex flex-col h-screen
           ${sidebarW}
           transition-[width] duration-300 ease-in-out
           shadow-[4px_0_32px_rgba(0,0,0,0.35)]
-          lg:translate-x-0 lg:static lg:z-auto
+          lg:translate-x-0 lg:static lg:z-auto lg:h-screen
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >

@@ -332,6 +332,8 @@ export default function ManageUsers() {
           <Table
             loadingTableContent={loading}
             data={users}
+            language={language}
+            pageSize={10}
             noRecordText={t.noUsers}
             tableLayout={[
               {
