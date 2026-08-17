@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PageContainer from '../../../components/PageContainer/PageContainer'
+import { ConfirmationBox } from '@/components'
 
 export default function NewQuestions() {
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+
   const fatawa = [
     {
       q: 'سوال: کیا قربانی کے جانور (جیسے گائے) میں عقیقہ کا حصہ ڈالا جا سکتا ہے؟ اور کیا اس کے لیے اسی جانور میں قربانی کا حصہ ڈالنا بھی شرط ہے؟',
@@ -29,8 +32,8 @@ export default function NewQuestions() {
             اگر آپ کو کوئی شرعی مسئلہ درپیش ہے، تو آپ نیچے دیے گئے بٹن پر کلک کر کے اپنا سوال براہِ راست دارالافتاء کے مفتیانِ کرام کو بھیج سکتے ہیں۔
           </p>
           <button
-            onClick={() => alert('آن لائن فتویٰ فارم ابھی ڈیمو موڈ میں ہے اور جلد فعال کر دیا جائے گا۔')}
-            className="bg-primary text-white py-2 px-5 text-[16px] font-bold hover:bg-primary transition-colors"
+            onClick={() => setShowQuestionModal(true)}
+            className="bg-primary text-white py-2 px-5 text-[16px] font-bold hover:bg-primary transition-colors cursor-pointer"
           >
             ✉️ اپنا سوال بھیجیں
           </button>
@@ -51,6 +54,18 @@ export default function NewQuestions() {
           ))}
         </div>
       </div>
+
+      {/* Confirmation / Alert Box */}
+      <ConfirmationBox
+        isOpen={showQuestionModal}
+        onClose={() => setShowQuestionModal(false)}
+        title="آن لائن فتویٰ فارم"
+        message="آن لائن فتویٰ فارم ابھی ڈیمو موڈ میں ہے اور جلد فعال کر دیا جائے گا۔"
+        type="info"
+        confirmText="ٹھیک ہے"
+        showCancel={false}
+      />
     </PageContainer>
   )
 }
+

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
-  FileText,
+  BookOpen,
   Download,
   ExternalLink,
   Calendar,
   User,
+  FileText,
   Eye,
   Share2,
   ArrowRight,
@@ -13,24 +14,30 @@ import {
   Copy,
   Check,
   Globe,
+  Layers,
   Printer,
   Sparkles,
   Maximize2,
   Minimize2,
   Bookmark,
-  MessageSquare
+  MessageSquare,
+  Facebook,
+  Twitter
 } from "lucide-react";
-import { getArticleBySlug, getArticles } from "@/services";
+import { getPublicationBySlug, getPublications } from "@/services";
 import { useSettings } from "@/hooks/useSettings";
 import { COLORS } from "@/utils/themeColors";
 import { BACKEND_URL } from "@/constants/urls";
-import { ARTICLE_CATEGORY_TRANSLATIONS } from "@/utils/categories";
+import {
+  PUBLICATION_CATEGORY_TRANSLATIONS,
+  BOOK_LANGUAGE_TRANSLATIONS,
+} from "@/utils/categories";
 import { PdfViewer } from "@/components";
 import CommentsSection from "@/components/CommentsSection";
 import toast from "react-hot-toast";
 
-export default function ArticleDetail() {
-  const { slug, id } = useParams();
+export default function BookDetail() {
+  const { id, slug } = useParams();
   const rawParam = slug || id;
   const navigate = useNavigate();
   const { settings } = useSettings();
@@ -38,15 +45,15 @@ export default function ArticleDetail() {
     settings?.language === "ur" || settings?.language === "Urdu" ? "ur" : "en";
   const isRTL = language === "ur";
 
-  const [article, setArticle] = useState(null);
-  const [relatedArticles, setRelatedArticles] = useState([]);
+  const [book, setBook] = useState(null);
+  const [relatedBooks, setRelatedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [showEmbeddedPdf, setShowEmbeddedPdf] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const getImageSrc = (img) => {
+  const getCoverImageSrc = (img) => {
     if (!img) return null;
     const url = typeof img === "object" ? img.url : img;
     if (!url) return null;
@@ -55,7 +62,7 @@ export default function ArticleDetail() {
   };
 
   useEffect(() => {
-    const loadArticleData = async () => {
+    const loadBookData = async () => {
       try {
         setLoading(true);
         setError(null);
@@ -65,35 +72,35 @@ export default function ArticleDetail() {
 
         // If parameter is a 24-character ObjectID hex representation, resolve to slug
         if (rawParam && /^[0-9a-fA-F]{24}$/.test(rawParam)) {
-          const res = await getArticles({ limit: 1000 });
-          const matched = res.articles?.find((a) => a._id === rawParam);
+          const res = await getPublications({ limit: 1000 });
+          const matched = res.books?.find((b) => b._id === rawParam);
           if (matched && matched.slug) {
             activeSlug = matched.slug;
           }
         }
 
-        const data = await getArticleBySlug(activeSlug);
-        const articleData = data.article || data;
-        setArticle(articleData);
+        const data = await getPublicationBySlug(activeSlug);
+        const bookData = data.book || data;
+        setBook(bookData);
 
-        // Fetch related articles
+        // Fetch other books for related section
         try {
-          const allRes = await getArticles({
-            category: articleData.category,
+          const allRes = await getPublications({
+            category: bookData.category,
             limit: 4,
           });
-          const otherArticles = (allRes.articles || []).filter(
-            (a) => a._id !== articleData._id
+          const otherBooks = (allRes.books || []).filter(
+            (b) => b._id !== bookData._id
           );
-          setRelatedArticles(otherArticles.slice(0, 3));
+          setRelatedBooks(otherBooks.slice(0, 3));
         } catch (rErr) {
-          console.warn("Failed to load related articles", rErr);
+          console.warn("Failed to load related books", rErr);
         }
       } catch (err) {
         setError(
           err.response?.data?.message ||
             err.message ||
-            (isRTL ? "مضمون لوڈ کرنے میں ناکامی" : "Failed to load article")
+            (isRTL ? "کتاب لوڈ کرنے میں ناکامی" : "Failed to load book")
         );
       } finally {
         setLoading(false);
@@ -101,7 +108,7 @@ export default function ArticleDetail() {
     };
 
     if (rawParam) {
-      loadArticleData();
+      loadBookData();
     }
   }, [rawParam, isRTL]);
 
@@ -114,10 +121,10 @@ export default function ArticleDetail() {
         url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
         break;
       case "twitter":
-        url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(article?.title || "")}`;
+        url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(book?.title || "")}`;
         break;
       case "whatsapp":
-        url = `https://api.whatsapp.com/send?text=${encodeURIComponent((article?.title || "") + " - " + shareUrl)}`;
+        url = `https://api.whatsapp.com/send?text=${encodeURIComponent((book?.title || "") + " - " + shareUrl)}`;
         break;
       default:
         break;
@@ -149,13 +156,13 @@ export default function ArticleDetail() {
           style={{ borderColor: COLORS.primary }}
         />
         <span className="text-sm font-medium" style={{ color: COLORS.textSecondary }}>
-          {isRTL ? "مضمون کی تفصیلات لوڈ ہو رہی ہیں..." : "Loading article details..."}
+          {isRTL ? "کتاب کی تفصیلات لوڈ ہو رہی ہیں..." : "Loading book details..."}
         </span>
       </div>
     );
   }
 
-  if (error || !article) {
+  if (error || !book) {
     return (
       <div
         className="min-h-screen flex flex-col items-center justify-center p-6 text-center"
@@ -166,23 +173,23 @@ export default function ArticleDetail() {
           className="w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-sm"
           style={{ backgroundColor: `${COLORS.primary}15` }}
         >
-          <FileText className="w-8 h-8" style={{ color: COLORS.primary }} />
+          <BookOpen className="w-8 h-8" style={{ color: COLORS.primary }} />
         </div>
         <h2
           className="text-2xl font-bold font-serif mb-2"
           style={{ color: COLORS.textPrimary }}
         >
-          {isRTL ? "مضمون دستیاب نہیں ہے" : "Article Not Found"}
+          {isRTL ? "کتاب دستیاب نہیں ہے" : "Book Not Found"}
         </h2>
         <p className="text-sm max-w-md mb-6" style={{ color: COLORS.textSecondary }}>
-          {error || (isRTL ? "مطلوبہ مضمون موجود نہیں ہے یا ہٹا دیا گیا ہے۔" : "The requested article does not exist or has been removed.")}
+          {error || (isRTL ? "مطلوبہ کتاب موجود نہیں ہے یا ہٹا دی گئی ہے۔" : "The requested book does not exist or has been removed.")}
         </p>
         <Link
-          to="/articles"
+          to="/publications"
           className="px-6 py-2.5 rounded-xl font-bold text-white text-sm shadow-md transition-transform hover:scale-105"
           style={{ backgroundColor: COLORS.primary }}
         >
-          {isRTL ? "تمام مقالات دیکھیں" : "View All Articles"}
+          {isRTL ? "تمام کتب دیکھیں" : "View All Books"}
         </Link>
       </div>
     );
@@ -192,21 +199,24 @@ export default function ArticleDetail() {
     _id,
     title,
     summary,
-    content,
     category,
+    blanguage = "Urdu",
     author = "مفتی فیضان سرور مصباحی",
     publishDate,
-    featuredImage,
+    coverImage,
     pdf,
+    pageCount,
     tags = [],
     references = [],
     viewCount = 0,
-  } = article;
+  } = book;
 
   const pdfUrl = pdf?.url || (typeof pdf === "string" ? pdf : null);
-  const featuredImageSrc = getImageSrc(featuredImage);
+  const coverImageSrc = getCoverImageSrc(coverImage);
   const categoryLabel =
-    ARTICLE_CATEGORY_TRANSLATIONS[category] || category || (isRTL ? "مضامین" : "Articles");
+    PUBLICATION_CATEGORY_TRANSLATIONS[category] || category || (isRTL ? "کتب و رسائل" : "Books");
+  const languageLabel =
+    BOOK_LANGUAGE_TRANSLATIONS[blanguage] || blanguage || (isRTL ? "اردو" : "Urdu");
 
   const formattedDate = publishDate
     ? new Date(publishDate).toLocaleDateString(isRTL ? "ur-PK" : "en-US", {
@@ -235,15 +245,15 @@ export default function ArticleDetail() {
             </Link>
             <span style={{ color: COLORS.border }}>/</span>
             <Link
-              to="/articles"
+              to="/publications"
               className="hover:underline transition-colors"
               style={{ color: COLORS.textSecondary }}
             >
-              {isRTL ? "مضامین و مقالات" : "Articles"}
+              {isRTL ? "کتب و مطبوعات" : "Publications"}
             </Link>
             <span style={{ color: COLORS.border }}>/</span>
             <Link
-              to={`/articles?category=${encodeURIComponent(category || "")}`}
+              to={`/publications?category=${encodeURIComponent(category || "")}`}
               className="hover:underline transition-colors font-semibold"
               style={{ color: COLORS.accent }}
             >
@@ -256,7 +266,7 @@ export default function ArticleDetail() {
           </nav>
 
           <Link
-            to="/articles"
+            to="/publications"
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold border transition-colors hover:bg-white shadow-xs"
             style={{
               borderColor: COLORS.border,
@@ -267,12 +277,12 @@ export default function ArticleDetail() {
             {isRTL ? (
               <>
                 <ArrowRight className="w-3.5 h-3.5" />
-                <span>تمام مقالات</span>
+                <span>تمام کتب</span>
               </>
             ) : (
               <>
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>All Articles</span>
+                <span>All Books</span>
               </>
             )}
           </Link>
@@ -284,7 +294,7 @@ export default function ArticleDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
           
           {/* ══════════════════════════════════════════════════════════════
-              RIGHT COLUMN (in RTL): Sticky Presentation & Metadata Card
+              RIGHT COLUMN (in RTL): Sticky Book Presentation & Metadata Card
           ══════════════════════════════════════════════════════════════ */}
           <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
             <div
@@ -294,18 +304,18 @@ export default function ArticleDetail() {
                 borderColor: COLORS.border,
               }}
             >
-              {/* Featured Image Presentation Frame */}
+              {/* High-Resolution Book Cover Frame */}
               <div
-                className="relative w-full max-w-[280px] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border p-2.5 flex items-center justify-center select-none group"
+                className="relative w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border p-3 flex items-center justify-center select-none group"
                 style={{
                   backgroundColor: COLORS.primary,
                   borderColor: `${COLORS.accent}60`,
                 }}
               >
-                {featuredImageSrc ? (
+                {coverImageSrc ? (
                   <div className="relative w-full h-full rounded-xl overflow-hidden shadow-inner border border-white/20">
                     <img
-                      src={featuredImageSrc}
+                      src={coverImageSrc}
                       alt={title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
@@ -321,34 +331,37 @@ export default function ArticleDetail() {
                       borderColor: COLORS.border,
                     }}
                   >
-                    <div className="space-y-2">
-                      <FileText className="w-14 h-14 mx-auto opacity-70" style={{ color: COLORS.accent }} />
-                      <span className="font-bold text-sm block line-clamp-2 font-serif" style={{ color: COLORS.primary }}>
+                    <div className="space-y-3">
+                      <BookOpen className="w-16 h-16 mx-auto opacity-70" style={{ color: COLORS.primary }} />
+                      <span className="font-bold text-lg block line-clamp-2 font-serif" style={{ color: COLORS.primary }}>
                         {title}
+                      </span>
+                      <span className="text-xs font-semibold block" style={{ color: COLORS.accent }}>
+                        {author}
                       </span>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Action Buttons: PDF (if available) / Quick Actions */}
+              {/* Action Buttons: Read & Download */}
               <div className="w-full mt-6 space-y-3">
-                {pdfUrl && (
+                {pdfUrl ? (
                   <>
                     <button
                       type="button"
                       onClick={() => setIsPdfModalOpen(true)}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-white rounded-xl shadow-md cursor-pointer hover:opacity-95 hover:shadow-lg transition-all"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-bold text-white rounded-xl shadow-md cursor-pointer hover:opacity-95 hover:shadow-lg transition-all"
                       style={{ backgroundColor: COLORS.primary }}
                     >
-                      <ExternalLink className="w-4 h-4" style={{ color: COLORS.accent }} />
-                      <span>{isRTL ? "پی ڈی ایف مطالعہ کریں" : "Read PDF (Modal)"}</span>
+                      <ExternalLink className="w-5 h-5" style={{ color: COLORS.accent }} />
+                      <span>{isRTL ? "آن لائن مطالعہ کریں" : "Read Online (Modal)"}</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setShowEmbeddedPdf(!showEmbeddedPdf)}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer hover:bg-slate-50 text-center"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold rounded-xl border transition-all cursor-pointer hover:bg-slate-50 text-center"
                       style={{
                         borderColor: COLORS.accent,
                         color: COLORS.primary,
@@ -357,13 +370,13 @@ export default function ArticleDetail() {
                     >
                       {showEmbeddedPdf ? (
                         <>
-                          <Minimize2 className="w-3.5 h-3.5 text-accent" />
-                          <span>{isRTL ? "پی ڈی ایف بند کریں" : "Hide PDF"}</span>
+                          <Minimize2 className="w-4 h-4 text-accent" />
+                          <span>{isRTL ? "صفحہ پر قاری بند کریں" : "Hide In-Page Reader"}</span>
                         </>
                       ) : (
                         <>
-                          <Maximize2 className="w-3.5 h-3.5 text-accent" />
-                          <span>{isRTL ? "صفحہ پر پی ڈی ایف دیکھیں" : "View PDF on Page"}</span>
+                          <Maximize2 className="w-4 h-4 text-accent" />
+                          <span>{isRTL ? "صفحہ پر پڑھیں (Full Reader)" : "Read on This Page"}</span>
                         </>
                       )}
                     </button>
@@ -373,22 +386,33 @@ export default function ArticleDetail() {
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer hover:bg-slate-50 text-center"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl border transition-all cursor-pointer hover:bg-slate-50 text-center"
                       style={{
                         borderColor: COLORS.border,
                         color: COLORS.primary,
                         backgroundColor: "transparent",
                       }}
                     >
-                      <Download className="w-3.5 h-3.5" style={{ color: COLORS.accent }} />
+                      <Download className="w-4 h-4" style={{ color: COLORS.accent }} />
                       <span>{isRTL ? "پی ڈی ایف ڈاؤن لوڈ کریں" : "Download PDF"}</span>
                     </a>
                   </>
+                ) : (
+                  <div
+                    className="w-full py-3 px-4 rounded-xl border text-center text-xs italic font-medium"
+                    style={{
+                      borderColor: COLORS.border,
+                      color: COLORS.textSecondary,
+                      backgroundColor: `${COLORS.background}80`,
+                    }}
+                  >
+                    {isRTL ? "پی ڈی ایف جلد دستیاب ہوگی" : "PDF will be available soon"}
+                  </div>
                 )}
               </div>
 
               {/* Quick Actions Bar */}
-              <div className="w-full pt-4 mt-4 border-t flex items-center justify-between gap-2" style={{ borderColor: `${COLORS.border}70` }}>
+              <div className="w-full pt-5 mt-5 border-t flex items-center justify-between gap-2" style={{ borderColor: `${COLORS.border}70` }}>
                 <button
                   type="button"
                   onClick={copyToClipboard}
@@ -421,7 +445,7 @@ export default function ArticleDetail() {
               </div>
 
               {/* Metadata Table */}
-              <div className="w-full mt-5 space-y-2.5 pt-4 border-t text-xs" style={{ borderColor: `${COLORS.border}70` }}>
+              <div className="w-full mt-6 space-y-2.5 pt-5 border-t text-xs" style={{ borderColor: `${COLORS.border}70` }}>
                 <div className="flex items-center justify-between py-1.5 border-b border-dashed" style={{ borderColor: `${COLORS.border}50` }}>
                   <span style={{ color: COLORS.textSecondary }}>{isRTL ? "مصنف" : "Author"}</span>
                   <span className="font-bold text-right" style={{ color: COLORS.primary }}>{author}</span>
@@ -432,9 +456,21 @@ export default function ArticleDetail() {
                   <span className="font-bold" style={{ color: COLORS.primary }}>{categoryLabel}</span>
                 </div>
 
+                <div className="flex items-center justify-between py-1.5 border-b border-dashed" style={{ borderColor: `${COLORS.border}50` }}>
+                  <span style={{ color: COLORS.textSecondary }}>{isRTL ? "زبان" : "Language"}</span>
+                  <span className="font-bold" style={{ color: COLORS.primary }}>{languageLabel}</span>
+                </div>
+
+                {pageCount && (
+                  <div className="flex items-center justify-between py-1.5 border-b border-dashed" style={{ borderColor: `${COLORS.border}50` }}>
+                    <span style={{ color: COLORS.textSecondary }}>{isRTL ? "کل صفحات" : "Total Pages"}</span>
+                    <span className="font-bold" style={{ color: COLORS.primary }}>{pageCount}</span>
+                  </div>
+                )}
+
                 {formattedDate && (
                   <div className="flex items-center justify-between py-1.5 border-b border-dashed" style={{ borderColor: `${COLORS.border}50` }}>
-                    <span style={{ color: COLORS.textSecondary }}>{isRTL ? "تاریخ اشاعت" : "Published"}</span>
+                    <span style={{ color: COLORS.textSecondary }}>{isRTL ? "اشاعت" : "Published"}</span>
                     <span className="font-bold" style={{ color: COLORS.primary }}>{formattedDate}</span>
                   </div>
                 )}
@@ -450,11 +486,11 @@ export default function ArticleDetail() {
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
-              LEFT / MAIN COLUMN (in RTL): Full Article Content, Overview, Comments
+              LEFT / MAIN COLUMN (in RTL): Full Content, Overview, Embedded PDF, Comments
           ══════════════════════════════════════════════════════════════ */}
           <div className="lg:col-span-8 space-y-8">
             
-            {/* Main Header & Article Card */}
+            {/* Main Header & Overview Card */}
             <div
               className="rounded-3xl border shadow-sm p-6 sm:p-8 md:p-10 space-y-6"
               style={{
@@ -482,7 +518,7 @@ export default function ArticleDetail() {
                   }}
                 >
                   <Globe className="w-3 h-3 inline-block me-1 -mt-0.5" />
-                  {isRTL ? "اردو" : "Urdu"}
+                  {languageLabel}
                 </span>
               </div>
 
@@ -511,7 +547,7 @@ export default function ArticleDetail() {
                   </div>
                   <div>
                     <span className="text-[11px] block font-medium" style={{ color: COLORS.textSecondary }}>
-                      {isRTL ? "نگارش و تحقیق" : "Author / Scholar"}
+                      {isRTL ? "مصنف / تالیف" : "Author / Compiler"}
                     </span>
                     <span className="text-base font-bold" style={{ color: COLORS.textPrimary }}>
                       {author}
@@ -520,45 +556,27 @@ export default function ArticleDetail() {
                 </div>
               )}
 
-              {/* Summary Synopsis Box */}
-              {summary && (
-                <div
-                  className="p-5 rounded-2xl border text-sm sm:text-base leading-relaxed font-medium italic"
-                  style={{
-                    backgroundColor: `${COLORS.secondary}30`,
-                    borderColor: `${COLORS.accent}40`,
-                    color: COLORS.primary,
-                    borderRight: isRTL ? `4px solid ${COLORS.accent}` : undefined,
-                    borderLeft: !isRTL ? `4px solid ${COLORS.accent}` : undefined,
-                  }}
-                >
-                  {summary}
-                </div>
-              )}
-
-              {/* Full Article Content / Body */}
-              <div className="space-y-4 pt-2">
+              {/* Full Description / Overview */}
+              <div className="space-y-3 pt-2">
                 <h3 className="text-lg font-bold font-serif flex items-center gap-2" style={{ color: COLORS.primary }}>
                   <Sparkles className="w-4 h-4 text-accent" />
-                  <span>{isRTL ? "متنِ مضمون" : "Article Body"}</span>
+                  <span>{isRTL ? "کتاب کا تعارف و خلاصہ" : "Book Overview & Synopsis"}</span>
                 </h3>
-                
-                {content ? (
-                  <div
-                    className="prose prose-lg max-w-none text-base sm:text-lg leading-loose font-light whitespace-pre-line"
-                    style={{ color: COLORS.textPrimary }}
-                    dangerouslySetInnerHTML={{ __html: content }}
-                  />
-                ) : (
-                  <p className="text-sm font-light text-slate-500 italic">
-                    {isRTL ? "اس مضمون کا مکمل متن جلد شائع کیا جائے گا۔" : "Full text will be published soon."}
-                  </p>
-                )}
+                <div
+                  className="p-6 rounded-2xl border text-base leading-relaxed whitespace-pre-line font-light"
+                  style={{
+                    backgroundColor: `${COLORS.background}50`,
+                    borderColor: `${COLORS.border}70`,
+                    color: COLORS.textPrimary,
+                  }}
+                >
+                  {summary || (isRTL ? "اس کتاب کا کوئی تفصیلی تعارف دستیاب نہیں ہے۔" : "No summary available for this book.")}
+                </div>
               </div>
 
-              {/* References & Sources */}
+              {/* References & Sources if available */}
               {references && references.length > 0 && (
-                <div className="space-y-2 pt-4 border-t" style={{ borderColor: `${COLORS.border}70` }}>
+                <div className="space-y-2 pt-2">
                   <h4 className="text-sm font-bold font-serif" style={{ color: COLORS.primary }}>
                     {isRTL ? "مراجع و مصادر" : "References & Sources"}
                   </h4>
@@ -595,7 +613,9 @@ export default function ArticleDetail() {
               )}
             </div>
 
-            {/* Embedded PDF Viewer if toggled */}
+            {/* ══════════════════════════════════════════════════════════════
+                IN-PAGE EMBEDDED PDF READER (Optional full width in page)
+            ══════════════════════════════════════════════════════════════ */}
             {showEmbeddedPdf && pdfUrl && (
               <div
                 className="rounded-3xl border shadow-lg overflow-hidden p-6 sm:p-8 transition-all space-y-4"
@@ -606,7 +626,7 @@ export default function ArticleDetail() {
               >
                 <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: COLORS.border }}>
                   <h3 className="text-lg font-bold font-serif" style={{ color: COLORS.primary }}>
-                    {isRTL ? "پی ڈی ایف قاری (In-Page Reader)" : "PDF Reader"}
+                    {isRTL ? "آن لائن مطالعہ (In-Page Reader)" : "Online Reading"}
                   </h3>
                   <button
                     type="button"
@@ -625,7 +645,7 @@ export default function ArticleDetail() {
             )}
 
             {/* ══════════════════════════════════════════════════════════════
-                INSTAGRAM-STYLE COMMENTS SECTION
+                COMMENTS SECTION
             ══════════════════════════════════════════════════════════════ */}
             <div
               className="rounded-3xl border shadow-sm p-6 sm:p-8"
@@ -635,7 +655,7 @@ export default function ArticleDetail() {
               }}
             >
               <CommentsSection
-                contentType="article"
+                contentType="publication"
                 contentId={_id}
                 language={language}
               />
@@ -645,21 +665,21 @@ export default function ArticleDetail() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            RELATED ARTICLES SECTION
+            RELATED PUBLICATIONS SECTION
         ══════════════════════════════════════════════════════════════ */}
-        {relatedArticles.length > 0 && (
+        {relatedBooks.length > 0 && (
           <div className="mt-14 pt-8 border-t" style={{ borderColor: COLORS.border }}>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-widest block mb-0.5" style={{ color: COLORS.accent }}>
-                  {isRTL ? "متعلقہ مقالات" : "EXPLORE MORE"}
+                  {isRTL ? "متعلقہ کتب" : "EXPLORE MORE"}
                 </span>
                 <h2 className="text-xl sm:text-2xl font-bold font-serif" style={{ color: COLORS.primary }}>
-                  {isRTL ? "مزید متعلقہ علمی و تحقیقی مضامین" : "Related Articles"}
+                  {isRTL ? "مزید مفید علمی و اصلاحی کتب" : "Related Publications"}
                 </h2>
               </div>
               <Link
-                to="/articles"
+                to="/publications"
                 className="text-xs sm:text-sm font-bold hover:underline"
                 style={{ color: COLORS.accent }}
               >
@@ -668,12 +688,12 @@ export default function ArticleDetail() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {relatedArticles.map((relArt) => {
-                const relImgSrc = getImageSrc(relArt.featuredImage);
+              {relatedBooks.map((relBook) => {
+                const relCoverSrc = getCoverImageSrc(relBook.coverImage);
                 return (
                   <Link
-                    key={relArt._id}
-                    to={`/articles/${relArt.slug || relArt._id}`}
+                    key={relBook._id}
+                    to={`/publications/slug/${relBook.slug || relBook._id}`}
                     className="p-5 rounded-2xl border shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                     style={{
                       backgroundColor: COLORS.white,
@@ -682,13 +702,13 @@ export default function ArticleDetail() {
                   >
                     <div className="flex items-start gap-4 mb-3">
                       <div
-                        className="w-16 h-20 rounded-lg overflow-hidden shrink-0 shadow-sm border flex items-center justify-center p-1"
+                        className="w-16 h-22 rounded-lg overflow-hidden shrink-0 shadow-sm border flex items-center justify-center p-1"
                         style={{ backgroundColor: COLORS.primary }}
                       >
-                        {relImgSrc ? (
-                          <img src={relImgSrc} alt={relArt.title} className="w-full h-full object-cover rounded" />
+                        {relCoverSrc ? (
+                          <img src={relCoverSrc} alt={relBook.title} className="w-full h-full object-cover rounded" />
                         ) : (
-                          <FileText className="w-6 h-6 text-white/80" />
+                          <BookOpen className="w-6 h-6 text-white/80" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -696,22 +716,22 @@ export default function ArticleDetail() {
                           className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mb-1"
                           style={{ backgroundColor: COLORS.secondary, color: COLORS.primary }}
                         >
-                          {ARTICLE_CATEGORY_TRANSLATIONS[relArt.category] || relArt.category}
+                          {PUBLICATION_CATEGORY_TRANSLATIONS[relBook.category] || relBook.category}
                         </span>
                         <h4
                           className="font-bold text-sm line-clamp-2 group-hover:text-accent transition-colors font-serif"
                           style={{ color: COLORS.primary }}
                         >
-                          {relArt.title}
+                          {relBook.title}
                         </h4>
                         <span className="text-[11px] block mt-1 truncate" style={{ color: COLORS.textSecondary }}>
-                          {relArt.author || "مفتی فیضان سرور مصباحی"}
+                          {relBook.author}
                         </span>
                       </div>
                     </div>
 
                     <div className="pt-3 border-t flex items-center justify-between text-xs font-bold" style={{ borderColor: `${COLORS.border}60`, color: COLORS.accent }}>
-                      <span>{isRTL ? "مضمون پڑھیں" : "Read Article"}</span>
+                      <span>{isRTL ? "تفصیلات دیکھیں" : "View Details"}</span>
                       <span>{isRTL ? "←" : "→"}</span>
                     </div>
                   </Link>

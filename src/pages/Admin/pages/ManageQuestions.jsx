@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { getAdminQuestions, answerQuestion, deleteQuestion } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, Table } from '@/components';
+import { Input, Table, ConfirmationBox } from '@/components';
 import {
   CATEGORY_MAP,
   FATWA_CATEGORY_TRANSLATIONS as categoryTranslations,
@@ -27,7 +27,11 @@ import {
 
 export default function ManageQuestions() {
   const { language } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: '' });
   const isUrdu = language === 'ur';
+
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -150,24 +154,34 @@ export default function ManageQuestions() {
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmMsg = isUrdu
-      ? 'کیا آپ واقعی اس سوال کو حذف کرنا چاہتے ہیں؟'
-      : 'Are you sure you want to delete this question?';
-    if (window.confirm(confirmMsg)) {
-      setActionError(null);
-      try {
-        await deleteQuestion(id);
-        if (activeQuestion?._id === id) closeAnswerModal();
-        setSuccessMsg(isUrdu ? 'سوال کامیابی سے حذف کر دیا گیا ہے۔' : 'Question deleted successfully.');
-        setSuccess(true);
-        loadQuestions(page, statusFilter, categoryFilter, searchTerm);
-        setTimeout(() => setSuccess(false), 3000);
-      } catch (err) {
-        alert(err.response?.data?.message || err.message || 'Failed to delete question');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deleteQuestion(id);
+      if (activeQuestion?._id === id) closeAnswerModal();
+      setSuccessMsg(isUrdu ? 'سوال کامیابی سے حذف کر دیا گیا ہے۔' : 'Question deleted successfully.');
+      setSuccess(true);
+      loadQuestions(page, statusFilter, categoryFilter, searchTerm);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      setErrorModal({
+        isOpen: true,
+        message: err.response?.data?.message || err.message || 'Failed to delete question'
+      });
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   return (
     <div
@@ -593,6 +607,32 @@ export default function ManageQuestions() {
           </div>
         </div>
       )}
+
+      {/* Delete Question Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={isUrdu ? 'سوال حذف کرنے کی تصدیق' : 'Delete Question'}
+        message={isUrdu ? 'کیا آپ واقعی اس سوال کو حذف کرنا چاہتے ہیں؟' : 'Are you sure you want to delete this question?'}
+        type="danger"
+        confirmText={isUrdu ? 'ہاں، حذف کریں' : 'Delete'}
+        cancelText={isUrdu ? 'منسوخ کریں' : 'Cancel'}
+      />
+
+      {/* Error Alert Box */}
+      <ConfirmationBox
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: '' })}
+        title={isUrdu ? 'خرابی' : 'Error'}
+        message={errorModal.message}
+        type="danger"
+        confirmText={isUrdu ? 'ٹھیک ہے' : 'OK'}
+        showCancel={false}
+      />
     </div>
   );
-}
+}

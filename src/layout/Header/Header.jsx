@@ -170,7 +170,7 @@ export default function Header() {
           </div>
 
           {/* Drawer Content */}
-          <nav className="overflow-y-auto h-[calc(100%-80px)] p-4 text-right">
+          <nav className="overflow-y-auto h-[calc(100%-80px)] p-4 text-right custom-drawer-scrollbar">
             <ul className="space-y-2">
               {NAV_ITEMS.map((item, index) => {
                 const isActive = location.pathname === item.href || 

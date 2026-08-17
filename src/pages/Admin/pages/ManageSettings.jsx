@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Save, AlertTriangle, Settings, CheckCircle, Info, PhoneCall, Globe, Search, User } from 'lucide-react';
 import { useSettings } from '@/hooks/useSettings';
 import { Input } from '../../../components/Input';
-import { ImageViewer } from '@/components';
+import { ImageViewer, ConfirmationBox } from '@/components';
 
 export default function ManageSettings() {
   const { settings, loading, error, updateSuccess, updateSettings, clearErrors } = useSettings();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   const [activeTab, setActiveTab] = useState('bio');
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [modalStep, setModalStep] = useState('confirm'); // 'confirm' or 'success'
+
+
 
 
   // Form states mapping WebsiteSettings schema
@@ -107,16 +108,14 @@ export default function ManageSettings() {
     }
   }, [settings]);
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     clearErrors();
-    setModalStep('confirm');
     setShowConfirmModal(true);
   };
 
-  const confirmAndSave = async () => {
-    setModalStep('success');
-
+  const handleConfirmSave = async () => {
+    setShowConfirmModal(false);
     const splitHelper = (str) =>
       str
         ? str
@@ -153,13 +152,9 @@ export default function ManageSettings() {
     } catch (err) {
       console.error(err);
     }
-
-    // Shows 2-second animated success state
-    setTimeout(() => {
-      setShowConfirmModal(false);
-      setModalStep('confirm');
-    }, 2000);
   };
+
+
 
   if (loading && !settings) {
     return (
@@ -651,127 +646,24 @@ export default function ManageSettings() {
 
       </div>
 
-      {/* Confirmation & Success Modal */}
-      {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs animate-backdrop-fade cursor-pointer"
-            onClick={() => modalStep !== 'success' && setShowConfirmModal(false)}
-          />
-
-          {/* Modal Box */}
-          <div
-            className={`relative bg-white dark:bg-slate-900 border border-border dark:border-slate-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full z-10 transition-all duration-300 transform animate-modal-entrance ${language === 'ur' ? 'text-right' : 'text-left'}`}
-            dir={language === 'ur' ? 'rtl' : 'ltr'}
-          >
-            {modalStep === 'confirm' ? (
-              <div className="space-y-6">
-                <div className={`flex items-start gap-4 ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-amber-600 shrink-0">
-                    <AlertTriangle className="w-6 h-6" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 font-serif">
-                      {language === 'en' ? 'Confirm Website Settings Update' : 'ویب سائٹ کی ترتیبات اپ ڈیٹ کی تصدیق'}
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {language === 'en'
-                        ? 'Are you sure you want to save the new biography, contact and SEO configuration?'
-                        : 'کیا آپ واقعی سوانح، رابطے اور SEO کی نئی ترتیبات محفوظ کرنا چاہتے ہیں؟'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className={`flex items-center gap-2.5 justify-end ${language === 'ur' ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmModal(false)}
-                    className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded transition-colors uppercase tracking-wider font-serif"
-                  >
-                    {language === 'en' ? 'Cancel' : 'منسوخ کریں'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={confirmAndSave}
-                    className="px-5 py-2 text-xs font-bold text-white bg-primary hover:bg-primary/90 rounded shadow transition-colors flex items-center gap-2 uppercase tracking-wider font-serif"
-                  >
-                    <Save className="w-4 h-4 text-accent" />
-                    {language === 'en' ? 'Save Settings' : 'ترتیبات محفوظ کریں'}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-6 space-y-4">
-                <div className="success-checkmark-wrapper relative w-20 h-20">
-                  <div className="success-circle absolute inset-0 rounded-full border-4 border-emerald-500/20" />
-                  <div className="success-circle-draw absolute inset-0 rounded-full border-4 border-emerald-500 animate-draw-circle" />
-                  <div className="success-check-icon absolute inset-0 flex items-center justify-center text-emerald-500">
-                    <svg className="w-10 h-10 stroke-current stroke-3 fill-none" viewBox="0 0 24 24">
-                      <path
-                        className="animate-draw-check"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 font-serif">
-                  {language === 'en' ? 'Settings Saved Successfully!' : 'ترتیبات کامیابی سے محفوظ ہو گئیں!'}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 text-center font-light">
-                  {language === 'en'
-                    ? 'The website layout and metadata have been updated.'
-                    : 'ویب سائٹ کی ظاہری شکل اور معلومات کامیابی سے تبدیل ہو چکی ہیں۔'}
-                </p>
-
-                {/* Custom style for 2-second draw/rotation animations */}
-                <style dangerouslySetInnerHTML={{
-                  __html: `
-                  @keyframes draw-circle {
-                    0% { clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%); }
-                    25% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%); }
-                    50% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%); }
-                    75% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 100%); }
-                    100% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%); }
-                  }
-                  @keyframes draw-check {
-                    0% { stroke-dashoffset: 24; }
-                    100% { stroke-dashoffset: 0; }
-                  }
-                  @keyframes backdrop-fade {
-                    0% { opacity: 0; }
-                    100% { opacity: 1; }
-                  }
-                  @keyframes modal-entrance {
-                    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
-                    100% { opacity: 1; transform: scale(1) translateY(0); }
-                  }
-                  .animate-draw-circle {
-                    animation: draw-circle 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                  }
-                  .animate-draw-check {
-                    stroke-dasharray: 24;
-                    stroke-dashoffset: 24;
-                    animation: draw-check 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
-                  }
-                  .animate-backdrop-fade {
-                    animation: backdrop-fade 0.25s ease-out forwards;
-                  }
-                  .animate-modal-entrance {
-                    animation: modal-entrance 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-                  }
-                  .stroke-3 {
-                    stroke-width: 3.5px;
-                  }
-                `}} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Save Settings Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSave}
+        title={language === 'en' ? 'Confirm Website Settings Update' : 'ویب سائٹ کی ترتیبات اپ ڈیٹ کی تصدیق'}
+        message={
+          language === 'en'
+            ? 'Are you sure you want to save the new biography, contact and SEO configuration?'
+            : 'کیا آپ واقعی سوانح، رابطے اور SEO کی نئی ترتیبات محفوظ کرنا چاہتے ہیں؟'
+        }
+        type="warning"
+        confirmText={language === 'en' ? 'Save Settings' : 'ترتیبات محفوظ کریں'}
+        cancelText={language === 'en' ? 'Cancel' : 'منسوخ کریں'}
+      />
     </div>
   );
 }
+
+
 

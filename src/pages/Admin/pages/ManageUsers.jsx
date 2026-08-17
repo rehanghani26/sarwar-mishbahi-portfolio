@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Save, Trash2, Edit2, CheckCircle, AlertTriangle, User, Search, Shield, X, HelpCircle } from 'lucide-react';
 import { getAdminUsers, updateUser, deleteUser } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, ImageViewer, Table } from '@/components';
+import { Input, ImageViewer, Table, ConfirmationBox } from '@/components';
 import { COLORS } from '@/utils/themeColors';
+
+
 
 const TRANSLATIONS = {
   en: {
@@ -79,8 +81,12 @@ const TRANSLATIONS = {
 
 export default function ManageUsers() {
   const { settings } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: '' });
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
   const t = TRANSLATIONS[language];
+
 
   // Users and Pagination State
   const [users, setUsers] = useState([]);
@@ -225,18 +231,31 @@ export default function ManageUsers() {
     }
   };
 
-  const handleDeleteClick = async (id) => {
-    if (window.confirm(t.deleteConfirm)) {
-      try {
-        const res = await deleteUser(id);
-        if (res.success) {
-          showSuccess(t.successDelete);
-        }
-      } catch (err) {
-        alert(err.response?.data?.message || err.message || 'Failed to deactivate user');
+  const handleDeleteClick = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    try {
+      const res = await deleteUser(id);
+      if (res.success) {
+        showSuccess(t.successDelete);
       }
+    } catch (err) {
+      setErrorModal({
+        isOpen: true,
+        message: err.response?.data?.message || err.message || 'Failed to deactivate user'
+      });
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -597,6 +616,33 @@ export default function ManageUsers() {
           </div>
         </div>
       )}
+
+      {/* Delete User Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={language === 'ur' ? 'صارف کو غیر فعال کرنے کی تصدیق' : 'Deactivate User'}
+        message={t.deleteConfirm}
+        type="danger"
+        confirmText={language === 'ur' ? 'غیر فعال کریں' : 'Deactivate'}
+        cancelText={t.cancel}
+      />
+
+      {/* Error Alert Box */}
+      <ConfirmationBox
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: '' })}
+        title={language === 'ur' ? 'خرابی' : 'Error'}
+        message={errorModal.message}
+        type="danger"
+        confirmText={language === 'ur' ? 'ٹھیک ہے' : 'OK'}
+        showCancel={false}
+      />
     </div>
   );
 }
+

@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Book, CheckCircle, Eye, Search } from 'lucide-react';
 import { getPublications, createPublication, updatePublication, deletePublication } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, PdfViewer, Table } from '@/components';
+import { Input, PdfViewer, Table, ConfirmationBox } from '@/components';
 import { BACKEND_URL } from '@/constants/urls';
+
 
 import { CATEGORY_MAP, PUBLICATION_TRANSLATIONS, BOOK_LANGUAGE_TRANSLATIONS } from '@/utils/categories';
 
@@ -16,7 +17,10 @@ const BOOK_LANGUAGES = [
 
 export default function ManagePublications() {
   const { settings } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
 
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -213,17 +217,27 @@ export default function ManagePublications() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm(language === 'en' ? 'Are you sure you want to delete this publication?' : 'کیا آپ واقعی اس مطبوعہ کو حذف کرنا چاہتے ہیں؟')) {
-      setActionError(null);
-      try {
-        await deletePublication(id);
-        showSuccess(language === 'en' ? 'Publication deleted successfully.' : 'مطبوعہ کامیابی سے حذف کر دی گئی۔');
-      } catch (err) {
-        setActionError(err.response?.data?.message || err.message || 'Failed to delete publication');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deletePublication(id);
+      showSuccess(language === 'en' ? 'Publication deleted successfully.' : 'مطبوعہ کامیابی سے حذف کر دی گئی۔');
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to delete publication');
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -735,6 +749,21 @@ export default function ManagePublications() {
           }}
         />
       )}
+
+      {/* Delete Publication Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={language === 'en' ? 'Delete Publication' : 'مطبوعہ حذف کرنے کی تصدیق'}
+        message={language === 'en' ? 'Are you sure you want to delete this publication?' : 'کیا آپ واقعی اس مطبوعہ کو حذف کرنا چاہتے ہیں؟'}
+        type="danger"
+        confirmText={language === 'en' ? 'Delete' : 'ہاں، حذف کریں'}
+        cancelText={language === 'en' ? 'Cancel' : 'منسوخ کریں'}
+      />
     </div>
   );
-}
+}

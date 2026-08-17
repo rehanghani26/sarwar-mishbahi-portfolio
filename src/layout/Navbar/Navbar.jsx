@@ -111,7 +111,7 @@ export default function Navbar() {
     { label: language === "en" ? "Publications" : "کتب و رسائل", href: "/publications", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.publications },
     { label: language === "en" ? "Articles" : "مضامین و مقالات", href: "/articles", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.articles },
     { label: language === "en" ? "Lectures" : "خطبات", href: "/lectures", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.lectures },
-    { label: language === "en" ? "Videos" : "ویڈیوز", href: "/youtube-videos", hasDropdown: false },
+    // { label: language === "en" ? "Videos" : "ویڈیوز", href: "/youtube-videos", hasDropdown: false },
     { label: language === "en" ? "Q&A" : "سوال و جواب", href: "/qa", hasDropdown: true, hasCategories: true, categories: CATEGORY_MAP.qa },
     { label: language === "en" ? "Events" : "پروگرام", href: "/events", hasDropdown: false },
     { label: language === "en" ? "Contact" : "رابطہ", href: "/contact", hasDropdown: false }
@@ -385,138 +385,149 @@ export default function Navbar() {
         >
           <div
             style={{ backgroundColor: COLORS.white, borderColor: COLORS.border }}
-            className={`fixed top-0 ${language === "ur" ? "left-0 border-r" : "right-0 border-l"} h-full w-[280px] shadow-2xl p-6 flex flex-col justify-between`}
+            className={`fixed top-0 ${language === "ur" ? "left-0 border-r" : "right-0 border-l"} h-full w-[290px] max-w-[85vw] shadow-2xl p-5 flex flex-col overflow-hidden`}
             onClick={(e) => e.stopPropagation()}
             dir={language === "ur" ? "rtl" : "ltr"}
           >
-            <div>
-              <div className="flex items-center justify-between pb-6 border-b" style={{ borderColor: COLORS.border }}>
-                <span className="font-bold text-md" style={{ color: COLORS.textPrimary }}>
-                  {language === "en" ? "Navigation" : "نیویگیشن"}
-                </span>
-                <button onClick={closeMenu} className="p-1 rounded text-textSecondary hover:bg-slate-100">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b shrink-0" style={{ borderColor: COLORS.border }}>
+              <span className="font-bold text-lg" style={{ color: COLORS.textPrimary }}>
+                {language === "en" ? "Navigation" : "نیویگیشن"}
+              </span>
+              <button
+                onClick={closeMenu}
+                className="p-1.5 rounded-full text-textSecondary hover:bg-slate-100 hover:text-slate-800 transition-colors"
+                aria-label="Close navigation"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-              <nav className="mt-6 flex flex-col gap-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-                {allItems.map((item, index) => {
-                  const isActive =
-                    location.pathname === item.href ||
-                    (item.href !== "/" && location.pathname.startsWith(item.href));
+            {/* Scrollable Nav List */}
+            <nav className="flex-1 overflow-y-auto my-3 py-1 pe-1 custom-drawer-scrollbar flex flex-col gap-1.5">
+              {allItems.map((item, index) => {
+                const isActive =
+                  location.pathname === item.href ||
+                  (item.href !== "/" && location.pathname.startsWith(item.href));
 
-                  if (!item.hasDropdown) {
-                    return (
-                      <Link
-                        key={item.label}
-                        to={item.href}
-                        onClick={closeMenu}
-                        style={isActive ? { backgroundColor: COLORS.secondary, color: COLORS.primary } : { color: COLORS.textSecondary }}
-                        className={`px-3 py-2.5 rounded text-base font-medium transition-all ${isActive ? "font-bold" : "hover:bg-slate-50"}`}
-                      >
-                        {item.label}
-                      </Link>
-                    );
-                  }
-
-                  const isDropdownOpen = mobileOpenDropdown === index;
+                if (!item.hasDropdown) {
                   return (
-                    <div key={item.label} className="flex flex-col">
-                      <button
-                        onClick={() => setMobileOpenDropdown(isDropdownOpen ? null : index)}
-                        style={{ color: COLORS.textSecondary }}
-                        className="flex items-center justify-between px-3 py-2.5 rounded text-base font-medium transition-all hover:bg-slate-50"
-                      >
-                        <span>{item.label}</span>
+                    <Link
+                      key={item.label}
+                      to={item.href}
+                      onClick={closeMenu}
+                      style={isActive ? { backgroundColor: COLORS.secondary, color: COLORS.primary } : { color: COLORS.textSecondary }}
+                      className={`px-3.5 py-2.5 rounded-lg text-base font-medium transition-all ${isActive ? "font-bold shadow-xs" : "hover:bg-slate-100/80 hover:text-slate-900"}`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                }
 
-                      </button>
-                      <AnimatePresence>
-                        {isDropdownOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
+                const isDropdownOpen = mobileOpenDropdown === index;
+                return (
+                  <div key={item.label} className="flex flex-col">
+                    <button
+                      onClick={() => setMobileOpenDropdown(isDropdownOpen ? null : index)}
+                      style={{ color: COLORS.textSecondary }}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-base font-medium transition-all hover:bg-slate-100/80 hover:text-slate-900 ${isDropdownOpen ? "bg-slate-50 font-semibold" : ""}`}
+                    >
+                      <span>{item.label}</span>
+                      <span
+                        className={`text-[10px] transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                        style={{ color: COLORS.accent }}
+                      >
+                        ▼
+                      </span>
+                    </button>
+                    <AnimatePresence>
+                      {isDropdownOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <ul
+                            style={{
+                              backgroundColor: COLORS.primary,
+                              borderColor: COLORS.accent
+                            }}
+                            className="mt-1.5 mx-1 rounded-lg border overflow-hidden divide-y divide-[rgba(184,156,125,0.18)] shadow-sm"
                           >
-                            <ul
-                              style={{
-                                backgroundColor: COLORS.primary,
-                                borderColor: COLORS.accent
-                              }}
-                              className="mt-2 rounded border overflow-hidden divide-y divide-[rgba(184,156,125,0.18)]"
-                            >
-                              {item.hasCategories ? (
-                                <>
-                                  <li>
-                                    <Link
-                                      to={item.href}
-                                      onClick={closeMenu}
-                                      className={`block py-2.5 px-4 text-sm font-semibold text-white transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                                    >
-                                      {'تمام موضوعات'}
-                                    </Link>
-                                  </li>
-                                  {item.categories.map((cat) => {
-                                    const isSubActive = location.search.includes(cat.value);
-                                    return (
-                                      <li key={cat.value}>
-                                        <Link
-                                          to={`${item.href}?category=${encodeURIComponent(cat.value)}`}
-                                          onClick={closeMenu}
-                                          style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
-                                          className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
-                                        >
-                                          {language === "ur" ? cat.labelUr : cat.labelEn}
-                                        </Link>
-                                      </li>
-                                    );
-                                  })}
-                                </>
-                              ) : (
-                                item.dropdownItems.map((sub) => {
-                                  const isSubActive = location.pathname === sub.href;
+                            {item.hasCategories ? (
+                              <>
+                                <li>
+                                  <Link
+                                    to={item.href}
+                                    onClick={closeMenu}
+                                    className={`block py-2.5 px-4 text-sm font-semibold text-white transition-colors hover:bg-[rgba(255,255,255,0.08)] ${language === "ur" ? "text-right" : "text-left"}`}
+                                  >
+                                    {"تمام موضوعات"}
+                                  </Link>
+                                </li>
+                                {item.categories.map((cat) => {
+                                  const isSubActive = location.search.includes(cat.value);
                                   return (
-                                    <li key={sub.label}>
+                                    <li key={cat.value}>
                                       <Link
-                                        to={sub.href}
+                                        to={`${item.href}?category=${encodeURIComponent(cat.value)}`}
                                         onClick={closeMenu}
                                         style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
-                                        className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.06)] ${language === 'ur' ? 'text-right' : 'text-left'}`}
+                                        className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.08)] ${language === "ur" ? "text-right" : "text-left"}`}
                                       >
-                                        {sub.label}
+                                        {language === "ur" ? cat.labelUr : cat.labelEn}
                                       </Link>
                                     </li>
                                   );
-                                })
-                              )}
-                            </ul>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </nav>
-            </div>
-            <div className="pt-6 border-t flex flex-col gap-3" style={{ borderColor: COLORS.border }}>
+                                })}
+                              </>
+                            ) : (
+                              item.dropdownItems?.map((sub) => {
+                                const isSubActive = location.pathname === sub.href;
+                                return (
+                                  <li key={sub.label}>
+                                    <Link
+                                      to={sub.href}
+                                      onClick={closeMenu}
+                                      style={{ color: isSubActive ? COLORS.accent : COLORS.white }}
+                                      className={`block py-2.5 px-4 text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.08)] ${language === "ur" ? "text-right" : "text-left"}`}
+                                    >
+                                      {sub.label}
+                                    </Link>
+                                  </li>
+                                );
+                              })
+                            )}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </nav>
+
+            {/* Bottom Auth / Profile Section */}
+            <div className="pt-4 border-t flex flex-col gap-2.5 shrink-0 mt-auto" style={{ borderColor: COLORS.border }}>
               {(isAuthenticated || userRole === "admin") ? (
                 <>
                   {/* User Profile Info inside Mobile Menu */}
-                  <div className="bg-slate-50 border border-slate-200 rounded p-3 text-slate-700 flex flex-col gap-1">
-                    <span className="font-bold text-xs">{loggedInUser?.name}</span>
-                    <span className="text-[10px] text-slate-400 font-mono">{loggedInUser?.loginEmail || loggedInUser?.loginPhone || "-"}</span>
-                    <span className="self-start mt-1 px-2 py-0.2 text-[9px] font-bold uppercase bg-primary/10 text-primary rounded">
+                  <div className="bg-slate-50/90 border border-slate-200/80 rounded-lg p-3 text-slate-700 flex flex-col gap-1 shadow-xs">
+                    <span className="font-bold text-sm text-slate-800">{loggedInUser?.name}</span>
+                    <span className="text-xs text-slate-500 font-mono break-all">{loggedInUser?.loginEmail || loggedInUser?.loginPhone || "-"}</span>
+                    <span className="self-start mt-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary rounded">
                       {loggedInUser?.role || "user"}
                     </span>
                   </div>
 
                   {userRole === "admin" && (
                     <>
-                      <Link to="/admin/dashboard" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-white rounded hover:opacity-90" style={{ backgroundColor: COLORS.primary }}>
+                      <Link to="/admin/dashboard" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-semibold text-white rounded-lg shadow-sm hover:opacity-95 transition-opacity" style={{ backgroundColor: COLORS.primary }}>
                         <LayoutDashboard className="w-4 h-4" style={{ color: COLORS.accent }} />
                         {language === "en" ? "Admin Dashboard" : "انتظامی ڈیش بورڈ"}
                       </Link>
-                      <Link to="/admin/settings" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded border border-slate-200 transition-colors">
+                      <Link to="/admin/settings" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
                         <Settings className="w-4 h-4 text-slate-500" />
                         {language === "en" ? "Website Settings" : "ویب سائٹ کی ترتیبات"}
                       </Link>
@@ -527,15 +538,15 @@ export default function Navbar() {
                   <Link
                     to="/my-details"
                     onClick={closeMenu}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 rounded border border-primary/20 transition-colors"
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 rounded-lg border border-primary/20 transition-colors"
                   >
                     <User className="w-4 h-4 text-primary" />
                     {language === "en" ? "My Details" : "میری تفصیلات"}
                   </Link>
 
                   <button
-                    onClick={() => { handleLogout }}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded border border-red-200 animate-fade-in"
+                    onClick={handleLogout}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                     {language === "en" ? "Logout" : "لاگ آؤٹ"}
@@ -546,7 +557,7 @@ export default function Navbar() {
                   to="/login"
                   onClick={closeMenu}
                   style={{ backgroundColor: COLORS.background, color: COLORS.textSecondary, borderColor: COLORS.border }}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold rounded border hover:bg-slate-200 hover:text-[var(--color-primary)] transition-colors"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-semibold rounded-lg border hover:bg-slate-200 hover:text-[var(--color-primary)] transition-colors shadow-xs"
                 >
                   <User className="w-4 h-4" />
                   {language === "en" ? "Login / Signup" : "لاگ ان / سائن اپ"}

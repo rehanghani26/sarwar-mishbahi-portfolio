@@ -34,6 +34,9 @@ import {
   updateYoutubeVideo,
   deleteYoutubeVideo,
 } from '@/services';
+import { ConfirmationBox } from '@/components';
+
+
 
 // ─── Design Tokens ─────────────────────────────────────────────────────────
 // A single source of truth for borders/radii/colors so every card in this
@@ -442,6 +445,7 @@ function UploadVideoModal({ onClose, onUploaded }) {
 
 // ─── Video Card ───────────────────────────────────────────────────────────
 function VideoCard({ video, onDelete, onUpdate }) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ title: video.title, description: video.description });
   const [saving, setSaving] = useState(false);
@@ -465,8 +469,8 @@ function VideoCard({ video, onDelete, onUpdate }) {
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm(`Delete "${video.title}" from YouTube and the database?`)) return;
+  const handleConfirmDelete = async () => {
+    setShowDeleteConfirm(false);
     setDeleting(true);
     try {
       await deleteYoutubeVideo(video._id);
@@ -572,7 +576,7 @@ function VideoCard({ video, onDelete, onUpdate }) {
                 <Edit2 size={9.5} /> Edit
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteConfirm(true)}
                 disabled={deleting}
                 className="flex items-center gap-1 text-[9px] font-extrabold px-2.5 py-1.5 rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors ml-auto disabled:opacity-50"
                 style={{ border: '1px solid #fecdd3' }}
@@ -584,9 +588,22 @@ function VideoCard({ video, onDelete, onUpdate }) {
           </>
         )}
       </div>
+
+      {/* Delete YouTube Video Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete YouTube Video"
+        message={`Delete "${video.title}" from YouTube and the database? This action cannot be undone.`}
+        type="danger"
+        confirmText="Delete Video"
+        cancelText="Cancel"
+      />
     </div>
   );
 }
+
 
 // ─── Video Grid ─────────────────────────────────────────────────────────────
 function VideoGrid({ videos, onDelete, onUpdate, loading }) {
@@ -628,6 +645,7 @@ function VideoGrid({ videos, onDelete, onUpdate, loading }) {
 // ─── Main Page ────────────────────────────────────────────────────────────
 export default function YouTubeManager() {
   const [searchParams] = useSearchParams();
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
 
   const [connection, setConnection] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -689,8 +707,8 @@ export default function YouTubeManager() {
     }
   };
 
-  const handleDisconnect = async () => {
-    if (!window.confirm('Are you sure you want to disconnect this YouTube channel?')) return;
+  const handleConfirmDisconnect = async () => {
+    setShowDisconnectModal(false);
     setActionLoading(true);
     try {
       await disconnectYoutube();
@@ -703,6 +721,8 @@ export default function YouTubeManager() {
       setActionLoading(false);
     }
   };
+
+
 
   const handleUploaded = (newVideo) => setVideos((prev) => [newVideo, ...prev]);
   const handleDeleted = (id) => setVideos((prev) => prev.filter((v) => v._id !== id));
@@ -788,7 +808,7 @@ export default function YouTubeManager() {
             </div>
           </div>
         ) : (
-          <ConnectionPanel connection={connection} onConnect={handleConnect} onDisconnect={handleDisconnect} loading={actionLoading} />
+          <ConnectionPanel connection={connection} onConnect={handleConnect} onDisconnect={() => setShowDisconnectModal(true)} loading={actionLoading} />
         )}
 
         {/* Video gallery */}
@@ -830,6 +850,18 @@ export default function YouTubeManager() {
       {showUploadModal && (
         <UploadVideoModal onClose={() => setShowUploadModal(false)} onUploaded={handleUploaded} />
       )}
+
+      {/* Disconnect YouTube Channel Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDisconnectModal}
+        onClose={() => setShowDisconnectModal(false)}
+        onConfirm={handleConfirmDisconnect}
+        title="Disconnect YouTube Channel"
+        message="Are you sure you want to disconnect this YouTube channel? All synchronization will stop."
+        type="warning"
+        confirmText="Disconnect Channel"
+        cancelText="Keep Connected"
+      />
     </div>
   );
-}
+}

@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Play, CheckCircle, Eye } from 'lucide-react';
 import { getLectures, createLecture, updateLecture, deleteLecture } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, Table } from '@/components';
+import { Input, Table, ConfirmationBox } from '@/components';
 
 import { CATEGORY_MAP, LECTURE_TRANSLATIONS } from '@/utils/categories';
 
 export default function ManageLectures() {
   const { settings } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
 
   const [lectures, setLectures] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -101,17 +104,27 @@ export default function ManageLectures() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm(language === 'en' ? 'Are you sure you want to delete this lecture?' : 'کیا آپ واقعی اس بیان کو حذف کرنا چاہتے ہیں؟')) {
-      setActionError(null);
-      try {
-        await deleteLecture(id);
-        showSuccess(language === 'en' ? 'Lecture deleted successfully.' : 'بیان کامیابی سے حذف کر دیا گیا۔');
-      } catch (err) {
-        setActionError(err.response?.data?.message || err.message || 'Failed to delete lecture');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deleteLecture(id);
+      showSuccess(language === 'en' ? 'Lecture deleted successfully.' : 'بیان کامیابی سے حذف کر دیا گیا۔');
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to delete lecture');
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -354,7 +367,23 @@ export default function ManageLectures() {
         )}
 
       </div>
+
+      {/* Delete Lecture Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={language === 'en' ? 'Delete Lecture' : 'بیان حذف کرنے کی تصدیق'}
+        message={language === 'en' ? 'Are you sure you want to delete this lecture?' : 'کیا آپ واقعی اس بیان کو حذف کرنا چاہتے ہیں؟'}
+        type="danger"
+        confirmText={language === 'en' ? 'Delete' : 'ہاں، حذف کریں'}
+        cancelText={language === 'en' ? 'Cancel' : 'منسوخ کریں'}
+      />
     </div>
   );
 }
+
 

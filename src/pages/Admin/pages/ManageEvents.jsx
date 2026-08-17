@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, Calendar, CheckCircle } from 'lucide-react';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, Table } from '@/components';
+import { Input, Table, ConfirmationBox } from '@/components';
 
 export default function ManageEvents() {
   const { settings } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -103,17 +106,27 @@ export default function ManageEvents() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm(language === 'en' ? 'Are you sure you want to delete this event?' : 'کیا آپ واقعی اس پروگرام کو حذف کرنا چاہتے ہیں؟')) {
-      setActionError(null);
-      try {
-        await deleteEvent(id);
-        showSuccess(language === 'en' ? 'Event deleted successfully.' : 'پروگرام کامیابی سے حذف کر دیا گیا۔');
-      } catch (err) {
-        setActionError(err.response?.data?.message || err.message || 'Failed to delete event');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deleteEvent(id);
+      showSuccess(language === 'en' ? 'Event deleted successfully.' : 'پروگرام کامیابی سے حذف کر دیا گیا۔');
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to delete event');
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -334,7 +347,23 @@ export default function ManageEvents() {
         )}
 
       </div>
+
+      {/* Delete Event Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={language === 'en' ? 'Delete Event' : 'پروگرام حذف کرنے کی تصدیق'}
+        message={language === 'en' ? 'Are you sure you want to delete this event?' : 'کیا آپ واقعی اس پروگرام کو حذف کرنا چاہتے ہیں؟'}
+        type="danger"
+        confirmText={language === 'en' ? 'Delete' : 'ہاں، حذف کریں'}
+        cancelText={language === 'en' ? 'Cancel' : 'منسوخ کریں'}
+      />
     </div>
   );
 }
+
 

@@ -25,6 +25,8 @@ import {
 import { logout } from '@/store/slices/authSlice';
 import { logoutUser } from '@/services';
 import toast from 'react-hot-toast';
+import { ConfirmationBox } from '@/components';
+
 
 
 const NAV_LINKS = [
@@ -38,7 +40,7 @@ const NAV_LINKS = [
   { to: '/admin/events', label: 'پروگرامات', icon: CalendarDays },
   { to: '/admin/users', label: 'صارفین', icon: Users },
   { to: '/admin/settings', label: 'ترتیبات', icon: Settings },
-  { to: '/admin/youtube', label: 'یوٹیوب', icon: Youtube },
+  // { to: '/admin/youtube', label: 'یوٹیوب', icon: Youtube },
 ];
 
 // Premium gradient sidebar palette
@@ -59,6 +61,7 @@ const SB = {
 export default function AdminLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { loggedInUser } = useSelector((state) => state.auth);
 
   const [collapsed, setCollapsed] = useState(false); // desktop collapse
@@ -84,12 +87,18 @@ export default function AdminLayout() {
     }
   };
 
-  const handleLogout = async () => {
-    await logoutUser();
-    // dispatch(logout());
+  const handleConfirmLogout = async () => {
+    setShowLogoutModal(false);
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.warn('Logout request failed:', err);
+    }
+    dispatch(logout());
     toast.success('کامیابی سے لاگ آؤٹ ہو گئے');
-    // navigate('/login');
+    navigate('/admin/login');
   };
+
 
   const sidebarW = collapsed ? 'w-[68px]' : 'w-64';
 
@@ -218,7 +227,7 @@ export default function AdminLayout() {
             </div>
           )}
           <button
-            onClick={() => { handleLogout() }}
+            onClick={() => setShowLogoutModal(true)}
             title={collapsed ? 'لاگ آؤٹ' : ''}
             className="flex items-center gap-2 w-full px-3 py-2 rounded-xl text-sm font-medium"
             style={{
@@ -259,58 +268,44 @@ export default function AdminLayout() {
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm" dir="rtl">
             <Shield className="w-4 h-4 text-indigo-400" />
-            <span className="hidden sm:inline text-slate-400">ایڈمن</span>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 rotate-180" />
-            <span className="font-semibold text-slate-800">مینجمنٹ کنسول</span>
+            <span className="font-bold text-slate-800">ایڈمن پورٹل</span>
+            <span className="text-slate-300">/</span>
+            <span className="text-slate-500 font-light">جامعہ بنوری ٹاؤن</span>
           </div>
 
-          <div className="ml-auto flex items-center gap-4 relative">
-
-            {/* Profile badge */}
-            <span
-              className="hidden sm:inline text-xs font-bold px-3 py-1.5 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg,#4f46e5,#7c3aed)',
-                color: '#fff',
-                boxShadow: '0 2px 8px rgba(79,70,229,0.3)',
-              }}
+          <div className="mr-auto flex items-center gap-3">
+            {/* View Live Website Quick Button */}
+            <NavLink
+              to="/"
+              target="_blank"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors border border-indigo-200"
             >
-              {loggedInUser?.role === 'admin' ? '⚙ سپر ایڈمن' : '👤 ' + (loggedInUser?.name || 'صارف')}
-            </span>
+              <Globe className="w-3.5 h-3.5" />
+              <span>لائیو ویب سائٹ</span>
+            </NavLink>
 
             {/* Notification Bell */}
             <div className="relative">
               <button
                 onClick={() => setShowNotifDropdown(!showNotifDropdown)}
-                className="p-2 text-slate-500 hover:text-slate-800 rounded-full hover:bg-slate-100 transition-colors relative cursor-pointer flex items-center justify-center"
+                className="relative p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               >
                 <Bell className="w-5 h-5" />
                 {notifications.length > 0 && (
-                  <span className="absolute top-1 left-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-bounce">
-                    {notifications.length}
-                  </span>
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
                 )}
               </button>
 
-              {/* Dropdown Menu */}
+              {/* Notification dropdown */}
               {showNotifDropdown && (
                 <div
-                  style={{ zIndex: 99999 }}
-                  className="absolute left-0 top-full mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl py-3 px-4 transition-all"
+                  className="absolute left-0 mt-2 w-80 rounded-2xl bg-white shadow-2xl p-4 z-50 border border-slate-100"
                   dir="rtl"
                 >
-                  <div className="flex items-center justify-between border-b pb-2 mb-3">
-                    <span className="text-xs font-bold text-slate-800">تبصرے کے نوٹیفیکیشنز</span>
-                    {notifications.length > 0 && (
-                      <button
-                        onClick={() => setNotifications([])}
-                        className="text-[10px] text-red-500 hover:underline bg-transparent border-0 cursor-pointer"
-                      >
-                        تمام صاف کریں
-                      </button>
-                    )}
+                  <div className="flex justify-between items-center pb-3 border-b border-slate-100 mb-3">
+                    <span className="text-xs font-bold text-slate-800">اطلاعات (Notifications)</span>
+                    <span className="text-[10px] text-accent font-semibold px-2 py-0.5 rounded-full bg-amber-50">{notifications.length} نئی</span>
                   </div>
-
                   {notifications.length === 0 ? (
                     <p className="text-center py-6 text-xs text-slate-400 font-bold">کوئی نیا نوٹیفیکیشن نہیں ہے</p>
                   ) : (
@@ -341,6 +336,18 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Logout Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleConfirmLogout}
+        title="لاگ آؤٹ کی تصدیق"
+        message="کیا آپ واقعی ایڈمن پینل سے لاگ آؤٹ کرنا چاہتے ہیں؟"
+        type="warning"
+        confirmText="ہاں، لاگ آؤٹ کریں"
+        cancelText="منسوخ کریں"
+      />
     </div>
   );
 }

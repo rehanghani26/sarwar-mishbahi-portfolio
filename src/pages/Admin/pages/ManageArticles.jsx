@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ArrowRight, Save, AlertTriangle, FileText, CheckCircle, Eye, Upload } from 'lucide-react';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '@/services';
 import { useSettings } from '@/hooks/useSettings';
-import { Input, PdfViewer, Table } from '@/components';
+import { Input, PdfViewer, Table, ConfirmationBox } from '@/components';
 
 import { ARTICLE_CATEGORIES, ARTICLE_TRANSLATIONS } from '@/utils/categories';
 
 export default function ManageArticles() {
   const { settings } = useSettings();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
+
 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -164,17 +167,27 @@ export default function ManageArticles() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm(language === 'en' ? 'Are you sure you want to delete this article?' : 'کیا آپ واقعی اس مضمون کو حذف کرنا چاہتے ہیں؟')) {
-      setActionError(null);
-      try {
-        await deleteArticle(id);
-        showSuccess(language === 'en' ? 'Article deleted successfully.' : 'مضمون کامیابی کے ساتھ حذف کر دیا گیا۔');
-      } catch (err) {
-        setActionError(err.response?.data?.message || err.message || 'Failed to delete article');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deleteArticle(id);
+      showSuccess(language === 'en' ? 'Article deleted successfully.' : 'مضمون کامیابی کے ساتھ حذف کر دیا گیا۔');
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'Failed to delete article');
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -573,6 +586,22 @@ export default function ManageArticles() {
           }}
         />
       )}
+
+      {/* Delete Article Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title={language === 'en' ? 'Delete Article' : 'مضمون حذف کرنے کی تصدیق'}
+        message={language === 'en' ? 'Are you sure you want to delete this article?' : 'کیا آپ واقعی اس مضمون کو حذف کرنا چاہتے ہیں؟'}
+        type="danger"
+        confirmText={language === 'en' ? 'Delete' : 'ہاں، حذف کریں'}
+        cancelText={language === 'en' ? 'Cancel' : 'منسوخ کریں'}
+      />
     </div>
   );
 }
+

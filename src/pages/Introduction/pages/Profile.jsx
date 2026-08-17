@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PageContainer from '../../../components/PageContainer/PageContainer'
+import { ConfirmationBox } from '@/components'
 
 export default function Profile() {
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+
   return (
     <PageContainer
       title="تعارف جامعہ (پروفائل)"
@@ -46,14 +49,27 @@ export default function Profile() {
             href="#download-mock"
             onClick={(e) => {
               e.preventDefault();
-              alert("تعارف نامہ (دلیل الجامعہ) کی پی ڈی ایف فائل ڈاؤن لوڈ ہونا شروع ہو گئی ہے۔");
+              setShowDownloadModal(true);
             }}
-            className="inline-flex items-center gap-2 bg-primary text-white font-bold py-3.5 px-7 rounded shadow-md hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-primary text-white font-bold py-3.5 px-7 rounded shadow-md hover:bg-primary/90 transition-colors cursor-pointer"
           >
             📂 تعارف جامعہ (پی ڈی ایف گائیڈ) ڈاؤن لوڈ کریں
           </a>
         </div>
       </div>
+
+      {/* Confirmation / Alert Box */}
+      <ConfirmationBox
+        isOpen={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+        title="ڈاؤن لوڈ گائیڈ"
+        message="تعارف نامہ (دلیل الجامعہ) کی پی ڈی ایف فائل ڈاؤن لوڈ ہونا شروع ہو گئی ہے۔"
+        type="success"
+        confirmText="ٹھیک ہے"
+        showCancel={false}
+      />
     </PageContainer>
   )
 }
+
+

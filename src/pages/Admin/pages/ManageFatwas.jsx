@@ -13,11 +13,14 @@ import {
 } from 'lucide-react';
 import { getFatwas, createFatwa, updateFatwa, deleteFatwa } from '@/services';
 import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
-import { Table } from '@/components';
+import { Table, ConfirmationBox } from '@/components';
 import { FATWA_CATEGORIES, FATWA_TRANSLATIONS } from '@/utils/categories';
 
 export default function ManageFatwas() {
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [fatwas, setFatwas] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState(null);
@@ -158,17 +161,27 @@ export default function ManageFatwas() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('کیا آپ واقعی اس فتویٰ کو حذف کرنا چاہتے ہیں؟')) {
-      setActionError(null);
-      try {
-        await deleteFatwa(id);
-        showSuccess('فتویٰ کامیابی کے ساتھ حذف کر دیا گیا۔');
-      } catch (err) {
-        setActionError(err.response?.data?.message || err.message || 'فتویٰ حذف نہیں ہو سکا');
-      }
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setShowDeleteModal(false);
+    setActionError(null);
+    try {
+      await deleteFatwa(id);
+      showSuccess('فتویٰ کامیابی کے ساتھ حذف کر دیا گیا۔');
+    } catch (err) {
+      setActionError(err.response?.data?.message || err.message || 'فتویٰ حذف نہیں ہو سکا');
+    } finally {
+      setDeleteTargetId(null);
     }
   };
+
+
 
   const showSuccess = (msg) => {
     setSuccess(true);
@@ -500,6 +513,22 @@ export default function ManageFatwas() {
           </div>
         )}
       </div>
+
+      {/* Delete Fatwa Confirmation Box */}
+      <ConfirmationBox
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteTargetId(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="فتویٰ حذف کرنے کی تصدیق"
+        message="کیا آپ واقعی اس فتویٰ کو حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں کیا جا سکتا۔"
+        type="danger"
+        confirmText="ہاں، حذف کریں"
+        cancelText="منسوخ کریں"
+      />
     </div>
   );
 }
+

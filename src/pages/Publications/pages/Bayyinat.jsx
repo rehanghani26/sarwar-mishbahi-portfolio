@@ -1,10 +1,11 @@
-import React from 'react'
-import { PageContainer } from '@/components';
+import React, { useState } from 'react'
+import { PageContainer, ConfirmationBox } from '@/components';
 import { ARTICLES } from '@/data/siteData';
 import { useSettings } from '@/hooks/useSettings';
 
 export default function Bayyinat() {
   const { settings } = useSettings();
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -59,13 +60,30 @@ export default function Bayyinat() {
 
         <div className="text-center pt-6">
           <button
-            onClick={() => alert(language === 'en' ? 'The annual subscription form is disabled in this demo version.' : 'سالانہ خریدار بننے کا فارم ڈیمو ورژن میں غیر فعال ہے۔')}
-            className="bg-primary text-white py-3 px-6 text-[16px] font-bold hover:bg-primary transition-colors"
+            onClick={() => setShowSubscriptionModal(true)}
+            className="bg-primary text-white py-3 px-6 text-[16px] font-bold hover:bg-primary transition-colors cursor-pointer"
           >
             {language === 'en' ? '✍️ Become an Annual Subscriber (Get printed copies home-delivered)' : '✍️ سالانہ خریدار بنیں (پرنٹڈ کاپی گھر منگوائیں)'}
           </button>
         </div>
+
       </div>
+
+      {/* Confirmation / Alert Box */}
+      <ConfirmationBox
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+        title={language === 'en' ? 'Annual Subscription' : 'سالانہ خریدار بنیں'}
+        message={
+          language === 'en'
+            ? 'The annual subscription form is disabled in this demo version.'
+            : 'سالانہ خریدار بننے کا فارم ڈیمو ورژن میں غیر فعال ہے۔'
+        }
+        type="info"
+        confirmText={language === 'en' ? 'OK' : 'ٹھیک ہے'}
+        showCancel={false}
+      />
     </PageContainer>
   )
 }
+

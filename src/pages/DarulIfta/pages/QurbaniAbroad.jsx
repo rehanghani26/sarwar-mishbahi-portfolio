@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PageContainer from '../../../components/PageContainer/PageContainer'
+import { ConfirmationBox } from '@/components'
 
 export default function QurbaniAbroad() {
+  const [showBookingModal, setShowBookingModal] = useState(false);
+
   return (
     <PageContainer
       title="بیرون ملک سے گیا انڈیا میں قربانی"
@@ -29,14 +32,27 @@ export default function QurbaniAbroad() {
           </p>
           <div className="text-center">
             <button
-              onClick={() => alert('اجتماعی قربانی کے لیے بکنگ کا عمل عید الاضحیٰ سے ایک ماہ قبل شروع ہو جاتا ہے۔')}
-              className="bg-primary text-white py-2.5 px-6 font-bold hover:bg-primary transition-colors rounded shadow"
+              onClick={() => setShowBookingModal(true)}
+              className="bg-primary text-white py-2.5 px-6 font-bold hover:bg-primary transition-colors rounded shadow cursor-pointer"
             >
               🐏 قربانی کے حصوں کی بکنگ معلوم کریں
             </button>
           </div>
         </div>
       </div>
+
+      {/* Confirmation / Alert Box */}
+      <ConfirmationBox
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        title="قربانی بکنگ کی تفصیلات"
+        message="اجتماعی قربانی کے لیے بکنگ کا عمل عید الاضحیٰ سے ایک ماہ قبل شروع ہو جاتا ہے۔"
+        type="info"
+        confirmText="ٹھیک ہے"
+        showCancel={false}
+      />
     </PageContainer>
   )
 }
+
+

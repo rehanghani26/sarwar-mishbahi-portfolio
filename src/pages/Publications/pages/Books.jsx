@@ -1,11 +1,13 @@
 import { COLORS } from '@/utils/themeColors';
-import React from 'react'
-import { PageContainer } from '@/components';
+import React, { useState } from 'react'
+import { PageContainer, ConfirmationBox } from '@/components';
 import { BOOKS } from '@/data/siteData';
 import { useSettings } from '@/hooks/useSettings';
 
 export default function Books() {
   const { settings } = useSettings();
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [showConfirmBox, setShowConfirmBox] = useState(false);
   const language = settings?.language === 'ur' || settings?.language === 'Urdu' ? 'ur' : 'en';
 
   return (
@@ -46,8 +48,11 @@ export default function Books() {
                   {language === 'en' ? 'Publishing Department, Jamia Banuri Town' : 'شعبہ نشر و اشاعت، جامعہ بنوری ٹاؤن'}
                 </span>
                 <button
-                  onClick={() => alert(language === 'en' ? `Reading of "${book.title}" will be available on the website soon.` : `"${book.title}" کا مطالعہ جلد ہی ویب سائٹ پر میسر ہوگا۔`)}
-                  className="mt-2 bg-primary hover:bg-primary text-white py-1.5 text-[14px] font-bold transition-colors shadow-sm"
+                  onClick={() => {
+                    setSelectedBook(book);
+                    setShowConfirmBox(true);
+                  }}
+                  className="mt-2 bg-primary hover:bg-primary text-white py-1.5 text-[14px] font-bold transition-colors shadow-sm cursor-pointer"
                 >
                   {language === 'en' ? '📖 Read Free Online' : '📖 مفت آن لائن پڑھیں'}
                 </button>
@@ -56,6 +61,22 @@ export default function Books() {
           ))}
         </div>
       </div>
+
+      {/* Confirmation / Alert Box */}
+      <ConfirmationBox
+        isOpen={showConfirmBox}
+        onClose={() => setShowConfirmBox(false)}
+        title={language === 'en' ? 'Online Reading' : 'آن لائن مطالعہ'}
+        message={
+          language === 'en'
+            ? `Reading of "${selectedBook?.title}" will be available on the website soon.`
+            : `"${selectedBook?.title}" کا مطالعہ جلد ہی ویب سائٹ پر میسر ہوگا۔`
+        }
+        type="info"
+        confirmText={language === 'en' ? 'OK' : 'ٹھیک ہے'}
+        showCancel={false}
+      />
     </PageContainer>
   )
 }
+

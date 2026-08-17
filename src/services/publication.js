@@ -21,6 +21,17 @@ export const getPublications = async (params) => {
   }
 };
 
+export const getPublicationBySlug = async (slug) => {
+  try {
+    const response = await API.get(`${PUBLICATIONS}/slug/${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error("Get Publication By Slug Error:", error);
+    toast.error(error.response?.data?.message || error.message);
+    throw error;
+  }
+};
+
 export const createPublication = async (data) => {
   try {
     const response = await API.post(PUBLICATIONS, data, {
