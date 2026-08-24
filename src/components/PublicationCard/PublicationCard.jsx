@@ -62,10 +62,9 @@ export default function PublicationCard({ publication }) {
   const languageLabel =
     BOOK_LANGUAGE_TRANSLATIONS[blanguage] || blanguage || "اردو";
 
-  // Truncate summary to 50 characters with ellipsis
   const truncatedSummary = summary
-    ? summary.length > 50
-      ? `${summary.slice(0, 50)}...`
+    ? summary.length > 200
+      ? `${summary.slice(0, 200)}...`
       : summary
     : "";
 
@@ -75,7 +74,7 @@ export default function PublicationCard({ publication }) {
         dir="rtl"
         className="rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 text-right border group"
         style={{
-          backgroundColor: COLORS.background || "#FAF6F0",
+          backgroundColor: COLORS.background || "FAF6F0",
           borderColor: COLORS.border || "#EBDCCB",
         }}
       >
@@ -255,22 +254,6 @@ export default function PublicationCard({ publication }) {
                 <button
                   type="button"
                   onClick={() => setIsPdfOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer border transition-colors hover:bg-white shadow-xs"
-                  style={{
-                    borderColor: COLORS.border,
-                    color: COLORS.primary,
-                    backgroundColor: "rgba(255,255,255,0.7)",
-                  }}
-                >
-                  <ExternalLink
-                    className="w-3.5 h-3.5"
-                    style={{ color: COLORS.accent }}
-                  />
-                  <span>آن لائن مطالعہ</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsPdfOpen(true)}
                   className="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-white rounded-xl cursor-pointer border-0 hover:opacity-90 transition-opacity shadow-sm"
                   style={{ backgroundColor: COLORS.primary }}
                 >
@@ -305,4 +288,3 @@ export default function PublicationCard({ publication }) {
     </>
   );
 }
-

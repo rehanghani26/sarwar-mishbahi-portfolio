@@ -46,3 +46,45 @@ export const deleteComment = async (commentId) => {
     throw error;
   }
 };
+
+/* ── Admin-only comment APIs ── */
+export const getAllAdminComments = async ({ status = 'all', page = 1, limit = 15 } = {}) => {
+  try {
+    const response = await API.get('/comments/admin', { params: { status, page, limit } });
+    return response.data;
+  } catch (error) {
+    console.error("Get All Admin Comments Error:", error);
+    throw error;
+  }
+};
+
+export const getCommentStats = async () => {
+  try {
+    const response = await API.get('/comments/admin/stats');
+    return response.data;
+  } catch (error) {
+    console.error("Get Comment Stats Error:", error);
+    throw error;
+  }
+};
+
+export const approveAdminComment = async (commentId) => {
+  try {
+    const response = await API.patch(`/comments/admin/${commentId}/approve`);
+    return response.data;
+  } catch (error) {
+    console.error("Approve Comment Error:", error);
+    throw error;
+  }
+};
+
+export const restoreAdminComment = async (commentId) => {
+  try {
+    const response = await API.patch(`/comments/admin/${commentId}/restore`);
+    return response.data;
+  } catch (error) {
+    console.error("Restore Comment Error:", error);
+    throw error;
+  }
+};
+

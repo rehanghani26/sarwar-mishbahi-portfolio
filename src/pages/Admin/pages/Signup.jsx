@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import {
-  Lock, Eye, EyeOff, Mail, Phone, User, AlertTriangle,
-  ArrowRight, UserPlus, CheckCircle2,
-} from 'lucide-react';
-import { register, clearAuthError } from '../../../store/slices/authSlice';
+  Lock,
+  Eye,
+  EyeOff,
+  Mail,
+  Phone,
+  User,
+  AlertTriangle,
+  ArrowRight,
+  UserPlus,
+  CheckCircle2,
+} from "lucide-react";
+import { register, clearAuthError } from "../../../store/slices/authSlice";
 
 /* ─── Animated required asterisk ─────────────────────────────────────── */
 function RequiredStar() {
   return (
     <span
       className="ml-1 text-red-500 font-black text-sm"
-      style={{ animation: 'pulse-star 1.6s ease-in-out infinite' }}
+      style={{ animation: "pulse-star 1.6s ease-in-out infinite" }}
       aria-hidden="true"
     >
       *
@@ -36,16 +44,20 @@ function Field({ label, required, hint, error, icon: Icon, children }) {
       <div
         className={`relative flex items-center gap-3 rounded-xl px-4 py-3 border-2 bg-white
           transition-all duration-200 group
-          ${error
-            ? 'border-red-400 bg-red-50/30 shadow-sm shadow-red-100'
-            : 'border-slate-200 focus-within:border-primary focus-within:shadow-md focus-within:shadow-primary/10'
+          ${
+            error
+              ? "border-red-400 bg-red-50/30 shadow-sm shadow-red-100"
+              : "border-slate-200 focus-within:border-primary focus-within:shadow-md focus-within:shadow-primary/10"
           }`}
       >
         {Icon && (
           <Icon
             size={17}
-            className={`shrink-0 transition-colors duration-200 ${error ? 'text-red-400' : 'text-slate-400 group-focus-within:text-primary'
-              }`}
+            className={`shrink-0 transition-colors duration-200 ${
+              error
+                ? "text-red-400"
+                : "text-slate-400 group-focus-within:text-primary"
+            }`}
           />
         )}
         {children}
@@ -72,8 +84,15 @@ function PasswordStrength({ password }) {
   if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
-  const labels = ['', 'Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
-  const colors = ['', 'bg-red-500', 'bg-orange-400', 'bg-yellow-400', 'bg-green-400', 'bg-emerald-500'];
+  const labels = ["", "Very Weak", "Weak", "Fair", "Strong", "Very Strong"];
+  const colors = [
+    "",
+    "bg-red-500",
+    "bg-orange-400",
+    "bg-yellow-400",
+    "bg-green-400",
+    "bg-emerald-500",
+  ];
 
   return (
     <div className="px-1 pt-1 space-y-1">
@@ -81,12 +100,15 @@ function PasswordStrength({ password }) {
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-slate-200'
-              }`}
+            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+              i <= score ? colors[score] : "bg-slate-200"
+            }`}
           />
         ))}
       </div>
-      <p className={`text-[10px] font-semibold ${score <= 2 ? 'text-red-400' : score <= 3 ? 'text-yellow-500' : 'text-emerald-600'}`}>
+      <p
+        className={`text-[10px] font-semibold ${score <= 2 ? "text-red-400" : score <= 3 ? "text-yellow-500" : "text-emerald-600"}`}
+      >
         {labels[score]}
       </p>
     </div>
@@ -96,24 +118,29 @@ function PasswordStrength({ password }) {
 export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, loading, error, userRole } = useSelector((s) => s.auth);
+  const { isAuthenticated, loading, error, userRole } = useSelector(
+    (s) => s.auth
+  );
 
-  const [name, setName] = useState('');
-  const [identifier, setIdentifier] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [identifier, setIdentifier] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [localError, setLocalError] = useState(null);
   const [touched, setTouched] = useState({
-    name: false, identifier: false, password: false, confirmPassword: false,
+    name: false,
+    identifier: false,
+    password: false,
+    confirmPassword: false,
   });
 
   useEffect(() => {
     dispatch(clearAuthError());
     if (isAuthenticated) {
-      navigate('/');
+      navigate("/");
     }
   }, [isAuthenticated, navigate, dispatch]);
 
@@ -121,17 +148,26 @@ export default function Signup() {
   const phoneRx = /^[6-9]\d{9}$/;
 
   const fieldErrors = {
-    name: touched.name && name.trim().length < 2
-      ? 'Full name must be at least 2 characters.' : null,
-    identifier: touched.identifier && !identifier.trim()
-      ? 'Email or phone is required.'
-      : touched.identifier && !emailRx.test(identifier.trim()) && !phoneRx.test(identifier.trim())
-        ? 'Enter a valid email or 10-digit phone (starts 6-9).'
+    name:
+      touched.name && name.trim().length < 2
+        ? "Full name must be at least 2 characters."
         : null,
-    password: touched.password && password.length < 6
-      ? 'Password must be at least 6 characters.' : null,
-    confirmPassword: touched.confirmPassword && password !== confirmPassword
-      ? 'Passwords do not match.' : null,
+    identifier:
+      touched.identifier && !identifier.trim()
+        ? "Email or phone is required."
+        : touched.identifier &&
+            !emailRx.test(identifier.trim()) &&
+            !phoneRx.test(identifier.trim())
+          ? "Enter a valid email or 10-digit phone (starts 6-9)."
+          : null,
+    password:
+      touched.password && password.length < 6
+        ? "Password must be at least 6 characters."
+        : null,
+    confirmPassword:
+      touched.confirmPassword && password !== confirmPassword
+        ? "Passwords do not match."
+        : null,
   };
 
   const handleBlur = (f) => setTouched((p) => ({ ...p, [f]: true }));
@@ -140,31 +176,56 @@ export default function Signup() {
     e.preventDefault();
     setLocalError(null);
     dispatch(clearAuthError());
-    setTouched({ name: true, identifier: true, password: true, confirmPassword: true });
+    setTouched({
+      name: true,
+      identifier: true,
+      password: true,
+      confirmPassword: true,
+    });
 
-    if (!name || name.trim().length < 2) { setLocalError('Full name must be at least 2 characters.'); return; }
-    if (!identifier.trim()) { setLocalError('Email or phone is required.'); return; }
+    if (!name || name.trim().length < 2) {
+      setLocalError("Full name must be at least 2 characters.");
+      return;
+    }
+    if (!identifier.trim()) {
+      setLocalError("Email or phone is required.");
+      return;
+    }
     if (!emailRx.test(identifier.trim()) && !phoneRx.test(identifier.trim())) {
-      setLocalError('Enter a valid email or 10-digit phone number starting with 6-9.');
+      setLocalError(
+        "Enter a valid email or 10-digit phone number starting with 6-9."
+      );
       return;
     }
     if (contactPhone && !phoneRx.test(contactPhone.trim())) {
-      setLocalError('Contact phone must be a 10-digit number starting with 6-9.');
+      setLocalError(
+        "Contact phone must be a 10-digit number starting with 6-9."
+      );
       return;
     }
-    if (password.length < 6) { setLocalError('Password must be at least 6 characters.'); return; }
-    if (password !== confirmPassword) { setLocalError('Passwords do not match.'); return; }
+    if (password.length < 6) {
+      setLocalError("Password must be at least 6 characters.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setLocalError("Passwords do not match.");
+      return;
+    }
 
-    dispatch(register({
-      name: name.trim(),
-      identifier: identifier.trim(),
-      contactPhone: contactPhone.trim(),
-      password,
-    }));
+    dispatch(
+      register({
+        name: name.trim(),
+        identifier: identifier.trim(),
+        contactPhone: contactPhone.trim(),
+        password,
+      })
+    );
   };
 
   if (isAuthenticated) {
-    return <Navigate to={userRole === 'admin' ? '/admin/dashboard' : '/'} replace />;
+    return (
+      <Navigate to={userRole === "admin" ? "/admin/dashboard" : "/"} replace />
+    );
   }
 
   const displayError = localError || error;
@@ -194,47 +255,67 @@ export default function Signup() {
       `}</style>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4 py-10 relative overflow-hidden">
-
         {/* BG blobs */}
         <div className="absolute top-[-8%] right-[-8%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[110px] pointer-events-none" />
         <div className="absolute bottom-[-8%] left-[-8%] w-[400px] h-[400px] bg-accent/7 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Card — wider to fit 2-column grid */}
         <div className="w-full max-w-2xl relative signup-card">
-
           {/* Header */}
           <div className="text-center mb-7">
             <div className="inline-flex items-center justify-center w-20 h-20 mb-4 relative">
-              <svg className="absolute inset-0 w-full h-full orbit-ring" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="36"
-                  fill="none" stroke="#10b981" strokeWidth="2.5"
-                  strokeDasharray="20 206" strokeLinecap="round"
+              <svg
+                className="absolute inset-0 w-full h-full orbit-ring"
+                viewBox="0 0 80 80"
+              >
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="36"
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth="2.5"
+                  strokeDasharray="20 206"
+                  strokeLinecap="round"
                 />
               </svg>
               <div className="w-[68px] h-[68px] rounded-full bg-gradient-to-br from-primary to-primary/70 shadow-xl shadow-primary/30 flex items-center justify-center icon-float">
                 <UserPlus className="w-7 h-7 text-white" strokeWidth={2.2} />
               </div>
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Create Account</h1>
-            <p className="text-slate-500 text-sm mt-1 font-light">Register to access the Scholar Portal</p>
+            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">
+              Create Account
+            </h1>
+            <p className="text-slate-500 text-sm mt-1 font-light">
+              Register to access the Scholar Portal
+            </p>
           </div>
 
           {/* Card body */}
           <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-slate-200/80 border border-white/70 p-8 sm:p-10">
-
             {/* Global error */}
             {displayError && (
               <div className="mb-6 bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex items-start gap-2.5 text-red-700 text-xs">
-                <AlertTriangle size={15} className="shrink-0 mt-0.5 text-red-500" />
-                <div><span className="font-bold">Error: </span>{displayError}</div>
+                <AlertTriangle
+                  size={15}
+                  className="shrink-0 mt-0.5 text-red-500"
+                />
+                <div>
+                  <span className="font-bold">Error: </span>
+                  {displayError}
+                </div>
               </div>
             )}
 
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
-
               {/* ── Row 1: Full Name + Contact Phone ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Full Name" required error={fieldErrors.name} icon={User}>
+                <Field
+                  label="Full Name"
+                  required
+                  error={fieldErrors.name}
+                  icon={User}
+                >
                   <input
                     id="signup-name"
                     type="text"
@@ -242,7 +323,7 @@ export default function Signup() {
                     placeholder="Your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    onBlur={() => handleBlur('name')}
+                    onBlur={() => handleBlur("name")}
                     className="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 outline-none border-none ring-0 min-w-0"
                   />
                 </Field>
@@ -274,7 +355,7 @@ export default function Signup() {
                   placeholder="Email address or 10-digit phone number"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  onBlur={() => handleBlur('identifier')}
+                  onBlur={() => handleBlur("identifier")}
                   className="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 outline-none border-none ring-0 min-w-0"
                 />
               </Field>
@@ -283,22 +364,27 @@ export default function Signup() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Password */}
                 <div className="space-y-1">
-                  <Field label="Password" required error={fieldErrors.password} icon={Lock}>
+                  <Field
+                    label="Password"
+                    required
+                    error={fieldErrors.password}
+                    icon={Lock}
+                  >
                     <input
                       id="signup-password"
-                      type={showPass ? 'text' : 'password'}
+                      type={showPass ? "text" : "password"}
                       autoComplete="new-password"
                       placeholder="Min 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      onBlur={() => handleBlur('password')}
+                      onBlur={() => handleBlur("password")}
                       className="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 outline-none border-none ring-0 min-w-0"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPass(!showPass)}
                       className="text-slate-400 hover:text-primary transition-colors shrink-0 focus:outline-none"
-                      aria-label={showPass ? 'Hide password' : 'Show password'}
+                      aria-label={showPass ? "Hide password" : "Show password"}
                     >
                       {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -312,23 +398,29 @@ export default function Signup() {
                     label="Confirm Password"
                     required
                     error={fieldErrors.confirmPassword}
-                    icon={confirmPassword && password === confirmPassword ? CheckCircle2 : Lock}
+                    icon={
+                      confirmPassword && password === confirmPassword
+                        ? CheckCircle2
+                        : Lock
+                    }
                   >
                     <input
                       id="signup-confirm-password"
-                      type={showConfirm ? 'text' : 'password'}
+                      type={showConfirm ? "text" : "password"}
                       autoComplete="new-password"
                       placeholder="Re-type password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      onBlur={() => handleBlur('confirmPassword')}
+                      onBlur={() => handleBlur("confirmPassword")}
                       className="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 outline-none border-none ring-0 min-w-0"
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirm(!showConfirm)}
                       className="text-slate-400 hover:text-primary transition-colors shrink-0 focus:outline-none"
-                      aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                      aria-label={
+                        showConfirm ? "Hide password" : "Show password"
+                      }
                     >
                       {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -350,9 +442,24 @@ export default function Signup() {
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4z" />
+                    <svg
+                      className="animate-spin h-4 w-4 text-white"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4z"
+                      />
                     </svg>
                     <span>Creating Account...</span>
                   </>
@@ -363,12 +470,11 @@ export default function Signup() {
                   </>
                 )}
               </button>
-
             </form>
 
             {/* Login link */}
             <p className="mt-6 text-center text-xs text-slate-500">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link
                 to="/login"
                 className="text-primary hover:text-primary/80 font-bold transition-colors underline underline-offset-2"
@@ -385,10 +491,12 @@ export default function Signup() {
               className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-primary transition-colors group font-medium"
             >
               <span>Back to Official Portal</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                size={13}
+                className="group-hover:translate-x-1 transition-transform"
+              />
             </Link>
           </div>
-
         </div>
       </div>
     </>

@@ -35,6 +35,7 @@ import ManageLectures from '../pages/Admin/pages/ManageLectures';
 import ManageEvents from '../pages/Admin/pages/ManageEvents';
 import ManageSettings from '../pages/Admin/pages/ManageSettings';
 import ManageUsers from '../pages/Admin/pages/ManageUsers';
+import ManageComments from '../pages/Admin/pages/ManageComments';
 // import YouTubeManager from '../pages/Admin/pages/YouTubeManager';
 
 // Route Guard
@@ -91,6 +92,7 @@ export default function AppRoutes() {
           <Route path="/admin/events" element={<ManageEvents />} />
           <Route path="/admin/settings" element={<ManageSettings />} />
           <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/comments" element={<ManageComments />} />
           {/* <Route path="/admin/youtube" element={<YouTubeManager />} /> */}
         </Route>
       </Route>
